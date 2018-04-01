@@ -1,0 +1,17 @@
+plugins:
+  - fp
+env:
+  es6: true
+  node: true
+extends:
+ - airbnb-base
+ - plugin:fp/recommended
+rules:
+  semi:
+    - error
+    - never
+  fp/no-let: warn
+  fp/no-unused-expression: off
+  fp/no-nil: warn
+  fp/no-loops: warn
+  fp/no-mutation: warn
