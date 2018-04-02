@@ -1,5 +1,11 @@
 {
   "name": "backend",
   "version": "0.0.1",
-  "main": "index.js"
+  "main": "index.js",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-fp": "^2.3.0",
+    "eslint-plugin-import": "^2.10.0"
+  }
 }
