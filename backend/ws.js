@@ -41,14 +41,58 @@ const onGameCreate = client => () => {
   log(`Game created: ${gameCode}`)
 }
 
+const onOffer = client => (event, { gameCode, offer }) => {
+  const gameClient = clients.find(c => c.type === TYPE.GAME && c.gameCode === gameCode)
+  if (!gameClient) {
+    return
+  }
+
+  emit(gameClient, event, { offer, controllerId: client.id })
+  log(`Controller client ${client.id} sending offer to game client ${gameClient.id} with game code ${gameCode}`)
+}
+
+const onAnswer = client => (event, { answer, controllerId }) => {
+  const controllerClient = clients.find(c => c.id === controllerId)
+  if (!controllerClient) {
+    return
+  }
+
+  emit(controllerClient, event, { answer })
+  log(`Game client ${client.id} with game code ${client.gameCode} sending answer to controller client ${controllerClient.id}`)
+}
+
+const onControllerCandidate = client => (event, { candidate, gameCode }) => {
+  const gameClient = clients.find(c => c.type === TYPE.GAME && c.gameCode === gameCode)
+  if (!gameClient) {
+    return
+  }
+
+  emit(gameClient, event, { candidate, controllerId: client.id })
+  log(`Controller client ${client.id} sending candidate to game client ${gameClient.id} with game code ${gameCode}`)
+}
+
+const onGameCandidate = client => (event, { candidate, controllerId }) => {
+  const controllerClient = clients.find(c => c.id === controllerId)
+  if (!controllerClient) {
+    return
+  }
+
+  emit(controllerClient, event, { candidate })
+  log(`Game client ${client.id} with game code ${client.gameCode} sending candidate to controller client ${controllerClient.id}`)
+}
+
 const events = {
-  [EVENT.CREATE]: onGameCreate,
+  [EVENT.CREATE]:               onGameCreate,
+  [EVENT.ANSWER]:               onAnswer,
+  [EVENT.CONTROLLER_CANDIDATE]: onControllerCandidate,
+  [EVENT.GAME_CANDIDATE]:       onGameCandidate,
+  [EVENT.OFFER]:                onOffer,
 }
 
 const onMessage = client => (message) => {
-  const { event } = JSON.parse(message)
-  const f = events[event]
-  if (f) f(client)()
+  const { event, payload } = JSON.parse(message)
+  const f = events[event.event]
+  if (f) f(client)(event, payload)
 }
 
 const onClose = client => () => {
