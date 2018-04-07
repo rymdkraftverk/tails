@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
 
   socket.on(EVENT.GAME_CANDIDATE, ({ controllerId, candidate }) => {
     const client = getClient(controllerId)
-    client.emit(EVENT.GAME_CANDIDATE, { candidate, controllerId: socket.id })
+    client.emit(EVENT.GAME_CANDIDATE, { candidate })
   })
 })
 
