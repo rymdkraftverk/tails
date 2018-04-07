@@ -8,11 +8,12 @@ const TYPE = {
 }
 
 const EVENT = {
-  CREATE:    'game.create',
-  CREATED:   'game.created',
-  ANSWER:    'game.join.answer',
-  OFFER:     'game.join.offer',
-  CANDIDATE: 'game.join.controller.candidate',
+  CREATE:               'game.create',
+  CREATED:              'game.created',
+  ANSWER:               'game.join.answer',
+  OFFER:                'game.join.offer',
+  CONTROLLER_CANDIDATE: 'game.join.controller.candidate',
+  GAME_CANDIDATE:       'game.join.game.candidate',
 }
 
 const makeGameCode = () => Math.random().toString(36).substring(2, 6)
@@ -50,9 +51,14 @@ io.on('connection', (socket) => {
     game.emit(EVENT.OFFER, { offer, controllerId: socket.id })
   })
 
-  socket.on(EVENT.CANDIDATE, ({ gameCode, candidate }) => {
+  socket.on(EVENT.CONTROLLER_CANDIDATE, ({ gameCode, candidate }) => {
     const game = getGameClient(gameCode)
-    game.emit(EVENT.CANDIDATE, { candidate, controllerId: socket.id })
+    game.emit(EVENT.CONTROLLER_CANDIDATE, { candidate, controllerId: socket.id })
+  })
+
+  socket.on(EVENT.GAME_CANDIDATE, ({ controllerId, candidate }) => {
+    const client = getClient(controllerId)
+    client.emit(EVENT.GAME_CANDIDATE, { candidate, controllerId: socket.id })
   })
 })
 
