@@ -20,6 +20,9 @@ const configuration = {
   ],
 }
 
+const LEFT = 'left'
+const RIGHT = 'right'
+
 Game.init(1200, 600, sprites, { debug: true }).then(() => {
   const ws = io(ADDRESS)
   ws.emit('game.create', '')
@@ -74,13 +77,46 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       return emptyList
     }, [])
   })
+  Key.add('up')
+  Key.add('down')
+  Key.add('left')
+  Key.add('right')
+  createPlayer()
 })
 
+function createPlayer() {
+  const square = Entity.create('square-red')
+  const sprite = Entity.addSprite(square, 'square-red')
+  sprite.scale.set(5)
+  sprite.x = 100
+  sprite.y = 100
+  square.behaviors.move = move()
+  square.behaviors.player1Keyboard = player1Keyboard()
 
-// function createPlayer(index) {
-//   const square = Entity.create('square-red')
-//   const sprite = Entity.addSprite(square, 'square-red')
-//   sprite.scale.set(5)
-//   sprite.x = 100
-//   sprite.y = 100
-// }
+  const player1controller = Entity.create('player1controller')
+  player1controller.direction = null
+}
+
+const move = () => ({
+  run: (b, e) => {
+    if (Entity.get('player1controller').direction === RIGHT) {
+      console.log('RIGHT')
+    } else if (Entity.get('player1controller').direction === LEFT) {
+      console.log('LEFT')
+    } else {
+      console.log('STRAIGHT')
+    }
+  },
+})
+
+const player1Keyboard = () => ({
+  run: () => {
+    if (Key.isDown('left')) {
+      Entity.get('player1controller').direction = LEFT
+    } else if (Key.isDown('right')) {
+      Entity.get('player1controller').direction = RIGHT
+    } else {
+      Entity.get('player1controller').direction = null
+    }
+  },
+})
