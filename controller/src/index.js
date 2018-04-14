@@ -50,10 +50,10 @@ function onSubmitClick() {
   const code = document.getElementById('code-input').value
   const ws = io(ADDRESS)
 
-
   dataChannel.onopen = () => {
     console.log('data chanel on open')
   }
+
   ws.emit(EVENTS.OFFER, {
     gameCode: code,
     offer:    controller.offer,
@@ -64,9 +64,9 @@ function onSubmitClick() {
     rtc
       .setRemoteDescription(answer)
       .then(() => {
-        console.log('controller.candidates', controller.candidates)
         controller.candidates.forEach((candidate) => {
-          ws.emit(EVENTS.CONTROLLER_CANDIDATE, { gameId: code, candidate })
+          console.log('emitting candidate', candidate)
+          ws.emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode: code, candidate })
         })
       })
   })
