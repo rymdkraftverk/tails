@@ -30,6 +30,9 @@ const getGameClient = gameCode =>
 io.on('connection', (socket) => {
   socket.on(EVENT.ANSWER, ({ controllerId, answer }) => {
     const controller = getClient(controllerId)
+    if (!controller) {
+      return
+    }
     controller.emit(EVENT.ANSWER, { answer })
   })
 
@@ -48,16 +51,25 @@ io.on('connection', (socket) => {
 
   socket.on(EVENT.OFFER, ({ gameCode, offer }) => {
     const game = getGameClient(gameCode)
+    if (!game) {
+      return
+    }
     game.emit(EVENT.OFFER, { offer, controllerId: socket.id })
   })
 
   socket.on(EVENT.CONTROLLER_CANDIDATE, ({ gameCode, candidate }) => {
     const game = getGameClient(gameCode)
+    if (!game) {
+      return
+    }
     game.emit(EVENT.CONTROLLER_CANDIDATE, { candidate, controllerId: socket.id })
   })
 
   socket.on(EVENT.GAME_CANDIDATE, ({ controllerId, candidate }) => {
     const controller = getClient(controllerId)
+    if (!controller) {
+      return
+    }
     controller.emit(EVENT.GAME_CANDIDATE, { candidate })
   })
 })

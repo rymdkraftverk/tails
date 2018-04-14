@@ -13,6 +13,8 @@ rules:
   fp/no-nil: off
   fp/no-unused-expression: off
   fp/no-mutation: off
+  import/prefer-default-export: off
+  no-use-before-define: off
   key-spacing:
     - error
     -

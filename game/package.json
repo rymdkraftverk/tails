@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
-    "start": "cd public && python -m SimpleHTTPServer",
+    "start": "cd public && python -m SimpleHTTPServer 8001",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
   "devDependencies": {
