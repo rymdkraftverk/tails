@@ -38,6 +38,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       candidates: [],
     }
     controller.onicecandidate = (event) => {
+      console.log('onicecandidate', event)
       if (!event.candidate) {
         return
       }

@@ -21,23 +21,35 @@ const controller = {
 const button = document.createElement('button')
 button.addEventListener('click', onSubmitClick)
 button.innerHTML = 'submit'
+button.classList.add('code-submit-button')
 document.getElementById('body').appendChild(button)
 
 const rtc = new RTCPeerConnection(configuration)
+const dataChannel = rtc.createDataChannel('channel.data')
+
+rtc.onicecandidate = (event) => {
+  console.log('onicecandidate ', event)
+  if (!event.candidate) {
+    return
+  }
+  controller.candidates = controller.candidates.concat(event.candidate)
+}
 
 rtc
   .createOffer()
   .then((offer) => {
     console.log('offer: ', offer)
-    rtc.setLocalDescription(offer)
     controller.offer = offer
+    return rtc.setLocalDescription(offer)
+  })
+  .then(() => {
+    console.log('local description is set')
   })
 
 function onSubmitClick() {
   const code = document.getElementById('code-input').value
   const ws = io(ADDRESS)
 
-  const dataChannel = rtc.createDataChannel('channel.data')
 
   dataChannel.onopen = () => {
     console.log('data chanel on open')
@@ -58,14 +70,6 @@ function onSubmitClick() {
         })
       })
   })
-
-  rtc.onicecandidate = (event) => {
-    console.log('onicecandidate ', event)
-    if (!event.candidate) {
-      return
-    }
-    controller.candidates = controller.candidates.concat(event.candidate)
-  }
 
   ws.on(EVENTS.GAME_CANDIDATE, ({ candidate }) => {
     console.log('received EVENTS.GAME_CANDIDATE: ', candidate)
