@@ -5,9 +5,11 @@ import uuid from 'uuid/v4'
 import EVENTS from '../../common/events'
 import sprites from './sprites.json'
 import lobby, { addPlayerToLobby, players } from './lobby'
+import { gameState } from './game'
 
 const ADDRESS = 'http://localhost:3000'
 const game = {
+  started:     false,
   gameCode:    '',
   controllers: {
 
@@ -60,6 +62,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         ws.emit(EVENTS.ANSWER, { answer, controllerId })
       })
     controller.ondatachannel = (event) => {
+      const playerId = uuid()
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
         // Add logic for when player has joined here
@@ -74,9 +77,12 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         if (data.event === 'player.movement') {
           const {
             command,
-            playerId,
           } = data.payload
-          if (command === LEFT) {
+          // Temporary solution to start game
+          if (!game.started) {
+            gameState()
+            game.started = true
+          } else if (command === LEFT) {
             Entity.get(`${playerId}controller`).direction = LEFT
           } else if (command === RIGHT) {
             Entity.get(`${playerId}controller`).direction = RIGHT
@@ -86,13 +92,15 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         } else if (data.event === 'player.joined') {
           console.log('Object.keys(players)', Object.keys(players))
           if (Object.keys(players).length < 4) {
-            const playerId = uuid()
             addPlayerToLobby({ playerId })
             event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
           } else {
             event.channel.close()
             controller.close()
           }
+        } else if (data.event === 'game.start') {
+          // TODO Add event to start game
+          // game()
         }
       }
       console.log('on datachannel')

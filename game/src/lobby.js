@@ -35,12 +35,12 @@ function createGameCodeText(gameCode) {
 export function addPlayerToLobby(player) {
   const playerCount = Object.keys(players).length
   const color = COLORS[playerCount]
-  console.log('color', color)
+
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
   sprite.x = 500
   sprite.y = 10 + (playerCount * 100)
-
   players[player.playerId] = player
+  players[player.playerId].spriteId = `square-${color}`
 }

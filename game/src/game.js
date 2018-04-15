@@ -2,26 +2,27 @@ import { Entity } from 'l1'
 import { LEFT, RIGHT } from '.'
 import { players } from './lobby'
 
-export function game() {
+export function gameState() {
   Entity.getAll()
     .forEach(Entity.destroy)
 
-  players.entries()
-    .forEach(([playerId, player]) => createPlayer(playerId))
+  Object.keys(players)
+    .map(key => players[key])
+    .forEach(createPlayer)
 }
 
-function createPlayer(playerId, spriteId) {
+function createPlayer({ playerId, spriteId }, index) {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   sprite.scale.set(1)
-  sprite.x = 10
+  sprite.x = 10 + (index * 100)
   sprite.y = 10
-  square.behaviors.pivot = pivot()
+  square.behaviors.pivot = pivot(playerId)
   square.behaviors.move = move()
 
   // Enable the following behaviour for keyboard debugging
   // square.behaviors.player1Keyboard = player1Keyboard()
-
+  console.log('`${playerId}controller`', `${playerId}controller`)
   const controller = Entity.create(`${playerId}controller`)
   controller.direction = null
 }
@@ -43,15 +44,15 @@ const move = () => ({
   },
 })
 
-const pivot = () => ({
+const pivot = playerId => ({
   run: (b, e) => {
-    if (Entity.get('player1controller').direction === LEFT) {
+    if (Entity.get(`${playerId}controller`).direction === LEFT) {
       if (e.degrees >= 360) {
         e.degrees = 0
         return
       }
       e.degrees += 3
-    } else if (Entity.get('player1controller').direction === RIGHT) {
+    } else if (Entity.get(`${playerId}controller`).direction === RIGHT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return
