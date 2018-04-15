@@ -1,7 +1,14 @@
 import io from 'socket.io-client'
 import EVENTS from '../../common/events'
 
-const WS_ADDRESS = 'http://192.168.0.109:3000'
+const noop = () => {}
+
+navigator.vibrate = (navigator.vibrate ||
+  navigator.webkitVibrate ||
+  navigator.mozVibrate ||
+  navigator.msVibrate || noop)
+
+const WS_ADDRESS = 'http://192.168.0.104:3000'
 
 const RTC_CONFIGURATION = {
   iceServers: [
@@ -96,9 +103,10 @@ const connectionCleanUp = ({ ws, peer, channel }) => {
 
 const connectToGame = (gameCode, cb) => {
   const state = {
-    candidates: [],
-    error:      false,
-    connected:  false,
+    candidates:        [],
+    error:             false,
+    connected:         false,
+    hasReceivedAnswer: false,
   }
 
   console.log('creating: ws | peer | channel')
@@ -120,7 +128,7 @@ const connectToGame = (gameCode, cb) => {
   setTimeout(() => {
     if (state.connected) { return }
     cleanUp('failed to connect, timeout')
-  }, 10 * 1000)
+  }, 100 * 1000)
 
 
   ws.on('connect_error', cleanUp)
@@ -141,6 +149,8 @@ const connectToGame = (gameCode, cb) => {
 
   ws.on(EVENTS.ANSWER, ({ answer }) => {
     console.log('ws answer')
+    state.hasReceivedAnswer = true
+
     peer
       .setRemoteDescription(answer)
       .then(() =>
@@ -159,6 +169,10 @@ const connectToGame = (gameCode, cb) => {
     }
     console.log('peer ice candidate')
     state.candidates = state.candidates.concat(e.candidate)
+    if (state.hasReceivedAnswer) {
+      console.log('emitting')
+      ws.emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: e.candidate })
+    }
   }
 
   channel.onopen = () => {
@@ -290,7 +304,8 @@ const ready = () => {
         emit({ event: 'player.joined', payload: {} })
         return
       }
-      const { payload, event } = JSON.parse(data)
+
+      const { payload, event } = JSON.parse(data.data)
       if (event === 'player.joined') {
         state.playerId = payload.playerId
       }
