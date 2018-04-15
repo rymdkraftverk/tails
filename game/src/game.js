@@ -21,6 +21,7 @@ function createPlayer({ playerId, spriteId }, index) {
   square.behaviors.pivot = pivot(playerId)
   square.behaviors.trail = trail(spriteId)
   square.behaviors.move = move()
+  square.behaviors.collisionChecker = collisionChecker()
 
   // Enable the following behaviour for keyboard debugging
   // square.behaviors.player1Keyboard = player1Keyboard()
@@ -70,11 +71,40 @@ const trail = spriteId => ({
   run:   (b, e) => {
     if (b.timer.run()) {
       const trailE = Entity.create(`trail${uuid()}`)
+      trailE.active = false
+      Entity.addType(trailE, 'trail')
       const sprite = Entity.addSprite(trailE, spriteId)
-      sprite.x = e.sprite.x + (sprite.width / 2)
-      sprite.y = e.sprite.y + (sprite.height / 2)
-      sprite.anchor.set(0.5)
       sprite.scale.set(0.5)
+      sprite.x = e.sprite.x + ((e.sprite.width / 2) - (sprite.width / 2))
+      sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
+      b.timer.reset()
+
+      trailE.behaviors.activate = activate()
+    }
+  },
+})
+
+const activate = () => ({
+  timer: Timer.create(60),
+  run:   (b, e) => {
+    if (b.timer.run()) {
+      e.active = true
+    }
+  },
+})
+
+
+const collisionChecker = () => ({
+  timer: Timer.create(10),
+  run:   (b, e) => {
+    if (b.timer.run()) {
+      const allTrails = Entity
+        .getByType('trail')
+        .filter(t => t.active)
+
+      if (allTrails.some(t => Entity.isColliding(t, e))) {
+        Entity.destroy(e)
+      }
       b.timer.reset()
     }
   },
