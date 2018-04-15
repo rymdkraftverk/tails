@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text } from 'l1'
+import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
 import io from 'socket.io-client'
 import EVENTS from '../../common/events'
 import sprites from './sprites.json'
@@ -87,9 +87,10 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
 function createPlayer() {
   const square = Entity.create('square-red')
   const sprite = Entity.addSprite(square, 'square-red')
-  sprite.scale.set(5)
+  sprite.scale.set(1)
   sprite.x = 100
   sprite.y = 100
+  square.behaviors.pivot = pivot()
   square.behaviors.move = move()
   square.behaviors.player1Keyboard = player1Keyboard()
 
@@ -97,14 +98,39 @@ function createPlayer() {
   player1controller.direction = null
 }
 
+function toRadians(angle) {
+  return angle * (Math.PI / 180)
+}
+
 const move = () => ({
+  init: (b, e) => {
+    e.degrees = 0
+  },
   run: (b, e) => {
-    if (Entity.get('player1controller').direction === RIGHT) {
-      console.log('RIGHT')
-    } else if (Entity.get('player1controller').direction === LEFT) {
-      console.log('LEFT')
+    const radians = toRadians(e.degrees)
+    const y = Math.cos(radians)
+    const x = Math.sin(radians)
+    e.sprite.x += x
+    e.sprite.y += y
+  },
+})
+
+const pivot = () => ({
+  run: (b, e) => {
+    if (Entity.get('player1controller').direction === LEFT) {
+      if (e.degrees >= 360) {
+        e.degrees = 0
+        return
+      }
+      e.degrees += 3
+    } else if (Entity.get('player1controller').direction === RIGHT) {
+      if (e.degrees < 0) {
+        e.degrees = 360
+        return
+      }
+      e.degrees -= 3
     } else {
-      console.log('STRAIGHT')
+      // Do nothing
     }
   },
 })
