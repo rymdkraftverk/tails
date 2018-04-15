@@ -247,6 +247,8 @@ const ready = () => {
       return
     }
 
+    toggleFullScreen()
+
     state.joining = true
     document.getElementById(UI.LOBBY_GAME_CODE_INPUT).disabled = true
     document.getElementById(UI.LOBBY_JOIN_BUTTON).disabled = true

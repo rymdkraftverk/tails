@@ -6,9 +6,12 @@
 body {
   font-family: 'patchy-robots';
   background: #414844;
+  margin: 0px;
 }
 
 #controller-left {
+  padding-top: 15px;
+  letter-spacing: 0.3em;
   text-align: center;
   flex: 1;
   background: rgb(177, 40, 40);
@@ -21,6 +24,8 @@ body {
 }
 
 #controller-right{
+  padding-top: 15px;
+  letter-spacing: 0.3em;
   text-align: center;
   flex: 1;
   background: rgb(35, 160, 35);
