@@ -1,8 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
 import io from 'socket.io-client'
+import uuid from 'uuid/v4'
 import EVENTS from '../../common/events'
 import sprites from './sprites.json'
+import lobby, { addPlayerToLobby, players } from './lobby'
 
 const ADDRESS = 'http://localhost:3000'
 const game = {
@@ -20,8 +22,8 @@ const configuration = {
   ],
 }
 
-const LEFT = 'left'
-const RIGHT = 'right'
+export const LEFT = 'left'
+export const RIGHT = 'right'
 
 Game.init(1200, 600, sprites, { debug: true }).then(() => {
   const ws = io(ADDRESS)
@@ -30,6 +32,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
   ws.on(EVENTS.CREATED, ({ gameCode }) => {
     console.log('gameId', gameCode)
     game.gameCode = gameCode
+    lobby(game.gameCode)
   })
 
   ws.on(EVENTS.OFFER, ({ offer, controllerId }) => {
@@ -57,24 +60,38 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         ws.emit(EVENTS.ANSWER, { answer, controllerId })
       })
     controller.ondatachannel = (event) => {
-      // Add logic for when player has joined here
-
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
+        // Add logic for when player has joined here
+
         console.log('channel: on open')
       }
 
       // eslint-disable-next-line no-param-reassign
       event.channel.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        console.log('data', data)
+
         if (data.event === 'player.movement') {
-          if (data.payload.command === LEFT) {
-            Entity.get('player1controller').direction = LEFT
-          } else if (data.payload.command === RIGHT) {
-            Entity.get('player1controller').direction = RIGHT
-          } else if (data.payload.command === 'none') {
-            Entity.get('player1controller').direction = null
+          const {
+            command,
+            playerId,
+          } = data.payload
+          if (command === LEFT) {
+            Entity.get(`${playerId}controller`).direction = LEFT
+          } else if (command === RIGHT) {
+            Entity.get(`${playerId}controller`).direction = RIGHT
+          } else if (command === 'none') {
+            Entity.get(`${playerId}controller`).direction = null
+          }
+        } else if (data.event === 'player.joined') {
+          console.log('Object.keys(players)', Object.keys(players))
+          if (Object.keys(players).length < 4) {
+            const playerId = uuid()
+            addPlayerToLobby({ playerId })
+            event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
+          } else {
+            event.channel.close()
+            controller.close()
           }
         }
       }
@@ -99,60 +116,6 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
   Key.add('down')
   Key.add('left')
   Key.add('right')
-  createPlayer()
-})
-
-function createPlayer() {
-  const square = Entity.create('square-red')
-  const sprite = Entity.addSprite(square, 'square-red')
-  sprite.scale.set(1)
-  sprite.x = 10
-  sprite.y = 10
-  square.behaviors.pivot = pivot()
-  square.behaviors.move = move()
-
-  // Enable the following behaviour for keyboard debugging
-  // square.behaviors.player1Keyboard = player1Keyboard()
-
-  const player1controller = Entity.create('player1controller')
-  player1controller.direction = null
-}
-
-function toRadians(angle) {
-  return angle * (Math.PI / 180)
-}
-
-const move = () => ({
-  init: (b, e) => {
-    e.degrees = 0
-  },
-  run: (b, e) => {
-    const radians = toRadians(e.degrees)
-    const y = Math.cos(radians)
-    const x = Math.sin(radians)
-    e.sprite.x += x
-    e.sprite.y += y
-  },
-})
-
-const pivot = () => ({
-  run: (b, e) => {
-    if (Entity.get('player1controller').direction === LEFT) {
-      if (e.degrees >= 360) {
-        e.degrees = 0
-        return
-      }
-      e.degrees += 3
-    } else if (Entity.get('player1controller').direction === RIGHT) {
-      if (e.degrees < 0) {
-        e.degrees = 360
-        return
-      }
-      e.degrees -= 3
-    } else {
-      // Do nothing
-    }
-  },
 })
 
 // Enable the following behaviour for keyboard debugging
