@@ -18,7 +18,7 @@ window.handleState = function handleState() {
 document.onreadystatechange = window.handleState;
 /* eslint-enable */
 
-const WS_ADDRESS = 'http://localhost:3000'
+const WS_ADDRESS = 'http://192.168.0.109:3000'
 const DIRECTION = { NONE: 'none', LEFT: 'left', RIGHT: 'right' }
 
 const UI_CONTROLLER_LEFT_ID = 'controller-left'
@@ -135,6 +135,7 @@ const UI = {
   LOBBY_CONTAINER:       'lobby-container',
   LOBBY_GAME_CODE_INPUT: 'lobby-game-code-input',
   LOBBY_JOIN_BUTTON:     'lobby-join-button',
+  CONTROLLER_CONTAINER:  'controller-container',
 }
 
 const rtcCleanUP = ({ peer, channel }) => {
@@ -229,7 +230,7 @@ const connectToGame = (gameCode, cb) => {
     state.candidates = state.candidates.concat(e.candidate)
   }
 
-  channel.onopen = (e) => {
+  channel.onopen = () => {
     console.log('channel open')
     state.connected = true
     wsCleanUp({ ws })
@@ -245,12 +246,39 @@ const connectToGame = (gameCode, cb) => {
 
   return data => channel.send(JSON.stringify(data))
 }
+const toggleFullScreen = () => {
+  const doc = window.document
+  const docEl = doc.documentElement
+
+  const requestFullScreen =
+    docEl.requestFullscreen
+    || docEl.mozRequestFullScreen
+    || docEl.webkitRequestFullScreen
+    || docEl.msRequestFullscreen
+
+  const cancelFullScreen =
+    doc.exitFullscreen
+    || doc.mozCancelFullScreen
+    || doc.webkitExitFullscreen
+    || doc.msExitFullscreen
+
+  if (!doc.fullscreenElement
+    && !doc.mozFullScreenElement
+    && !doc.webkitFullscreenElement
+    && !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl)
+  } else {
+    cancelFullScreen.call(doc)
+  }
+}
 
 const ready = () => {
   const state = {
     joining: false,
+    ingame:  false,
   }
 
+  toggleFullScreen()
   document.getElementById(UI.LOBBY_CONTAINER).style.display = 'flex'
   document.getElementById(UI.LOBBY_GAME_CODE_INPUT).addEventListener('input', (e) => {
     if (e.target.value.length === 4) {
@@ -283,7 +311,10 @@ const ready = () => {
       }
 
       if (!data) {
+        state.ingame = true
         console.log('connected to game')
+        document.getElementById(UI.LOBBY_CONTAINER).style.display = 'none'
+        document.getElementById(UI.CONTROLLER_CONTAINER).style.display = 'flex'
         return
       }
 

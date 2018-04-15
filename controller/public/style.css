@@ -11,15 +11,13 @@ body {
 #controller-left {
   text-align: center;
   flex: 1;
-  background: red;
-  height: 80vh;
+  background: rgb(177, 40, 40);
 }
 
 #controller-right{
   text-align: center;
   flex: 1;
-  background: green;
-  height: 80vh;
+  background: rgb(35, 160, 35);
 }
 
 #controller-container {
@@ -28,7 +26,8 @@ body {
 }
 
 #lobby-container {
-  display: none;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
