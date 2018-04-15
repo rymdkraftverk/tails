@@ -187,6 +187,12 @@ const ready = () => {
     send:    () => { },
   }
 
+  const gameCode = localStorage.getItem('gameCode')
+  if (gameCode) {
+    document.getElementById(UI.LOBBY_GAME_CODE_INPUT).value = gameCode
+    document.getElementById(UI.LOBBY_JOIN_BUTTON).style.display = 'flex'
+  }
+
   setInterval(() => {
     if (state.command === COMMANDS.NONE) { return }
     console.log('command:', state.command)
@@ -260,6 +266,7 @@ const ready = () => {
       }
 
       if (!data) {
+        localStorage.setItem('gameCode', gameCode)
         state.ingame = true
         state.send = emit
         console.log('connected to game')
