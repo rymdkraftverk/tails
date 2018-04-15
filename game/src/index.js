@@ -91,7 +91,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
           }
         } else if (data.event === 'player.joined') {
           console.log('Object.keys(players)', Object.keys(players))
-          if (Object.keys(players).length < 4) {
+          if (Object.keys(players).length < 4 && !game.started) {
             addPlayerToLobby({ playerId })
             event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
           } else {
