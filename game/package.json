@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
-    "start": "cd public && python -m SimpleHTTPServer",
+    "start": "cd public && python -m SimpleHTTPServer 8001",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
   "devDependencies": {
@@ -20,6 +20,8 @@
     "watchify": "^3.11.0"
   },
   "dependencies": {
-    "l1": "^0.2.12"
+    "l1": "^0.2.12",
+    "socket.io-client": "^2.1.0",
+    "webrtc-adapter": "^6.1.5"
   }
 }

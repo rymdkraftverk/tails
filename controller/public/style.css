@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'patchy-robots';
+  src: url('assets/patchy-robots.ttf');
+}
+
+body {
+  font-family: 'patchy-robots';
+  background: #414844;
+  margin: 0px;
+}
+
+#controller-left {
+  padding-top: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  flex: 1;
+  background: rgb(177, 40, 40);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#controller-right{
+  padding-top: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  flex: 1;
+  background: rgb(35, 160, 35);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#controller-container {
+  display: none;
+  height: 100vh;
+}
+
+#lobby-container {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  display: none;
+  letter-spacing: 0.1em;
+  font-size: 8vw;
+  border: none;
+  background: transparent;
+  color: #4085AF;
+  font-family:'patchy-robots' 
+}
+
+.flex-box {
+  height: 30vh;
+  font-family : inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-join-input {
+  letter-spacing: 0.5em;
+  font-size: 4vw; 
+  text-align: center;
+  text-decoration: none;
+  font-family: 'patchy-robots';
+  max-width: 100%;
+  outline: none;
+  border: 0px;
+  background: transparent;
+  border-bottom: 3px solid #4085AF;
+  width: 40%;
+  caret-color: #4085AF;
+  color: #4085AF
+}
