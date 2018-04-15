@@ -25,9 +25,9 @@ const RIGHT = 'right'
 
 Game.init(1200, 600, sprites, { debug: true }).then(() => {
   const ws = io(ADDRESS)
-  ws.emit('game.create', '')
+  ws.emit(EVENTS.CREATE, '')
 
-  ws.on('game.created', ({ gameCode }) => {
+  ws.on(EVENTS.CREATED, ({ gameCode }) => {
     console.log('gameId', gameCode)
     game.gameCode = gameCode
   })
@@ -58,6 +58,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       })
     controller.ondatachannel = (event) => {
       // Add logic for when player has joined here
+
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
         console.log('channel: on open')
@@ -77,7 +78,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
           }
         }
       }
-      console.log('on fucking datachannel')
+      console.log('on datachannel')
     }
   })
 
@@ -93,6 +94,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       return emptyList
     }, [])
   })
+
   Key.add('up')
   Key.add('down')
   Key.add('left')
@@ -108,6 +110,8 @@ function createPlayer() {
   sprite.y = 10
   square.behaviors.pivot = pivot()
   square.behaviors.move = move()
+
+  // Enable the following behaviour for keyboard debugging
   // square.behaviors.player1Keyboard = player1Keyboard()
 
   const player1controller = Entity.create('player1controller')
@@ -151,14 +155,16 @@ const pivot = () => ({
   },
 })
 
-const player1Keyboard = () => ({
-  run: () => {
-    if (Key.isDown('left')) {
-      Entity.get('player1controller').direction = LEFT
-    } else if (Key.isDown('right')) {
-      Entity.get('player1controller').direction = RIGHT
-    } else {
-      Entity.get('player1controller').direction = null
-    }
-  },
-})
+// Enable the following behaviour for keyboard debugging
+
+// const player1Keyboard = () => ({
+//   run: () => {
+//     if (Key.isDown('left')) {
+//       Entity.get('player1controller').direction = LEFT
+//     } else if (Key.isDown('right')) {
+//       Entity.get('player1controller').direction = RIGHT
+//     } else {
+//       Entity.get('player1controller').direction = null
+//     }
+//   },
+// })
