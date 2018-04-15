@@ -199,29 +199,41 @@ const ready = () => {
     window.navigator.vibrate(10)
   }, 100)
 
-  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchstart', () => {
+  const leftStart = () => {
     state.command = COMMANDS.LEFT
     console.log('command:', state.command)
     window.navigator.vibrate(10)
     state.send({ event: 'player.movement', payload: { command: state.command } })
-  })
+  }
 
-  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchstart', () => {
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchstart', leftStart)
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('mousedown', leftStart)
+
+  const rightDown = () => {
     state.command = COMMANDS.RIGHT
     console.log('command:', state.command)
     window.navigator.vibrate(10)
     state.send({ event: 'player.movement', payload: { command: state.command } })
-  })
+  }
 
-  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchend', () => {
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchstart', rightDown)
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('mousedown', rightDown)
+
+  const leftUp = () => {
     state.command = COMMANDS.NONE
     state.send({ event: 'player.movement', payload: { command: state.command } })
-  })
+  }
 
-  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchend', () => {
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchend', leftUp)
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('mouseup', leftUp)
+
+  const rightUp = () => {
     state.command = COMMANDS.NONE
     state.send({ event: 'player.movement', payload: { command: state.command } })
-  })
+  }
+
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchend', rightUp)
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('mouseup', rightUp)
 
   document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchcancel', () => {
     state.command = COMMANDS.NONE
