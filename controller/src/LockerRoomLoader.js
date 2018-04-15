@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 
 class LockerRoomLoader extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
