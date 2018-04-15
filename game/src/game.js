@@ -1,4 +1,5 @@
-import { Entity } from 'l1'
+import { Entity, Timer } from 'l1'
+import uuid from 'uuid/v4'
 import { LEFT, RIGHT } from '.'
 import { players } from './lobby'
 
@@ -18,6 +19,7 @@ function createPlayer({ playerId, spriteId }, index) {
   sprite.x = 10 + (index * 100)
   sprite.y = 10
   square.behaviors.pivot = pivot(playerId)
+  square.behaviors.trail = trail(spriteId)
   square.behaviors.move = move()
 
   // Enable the following behaviour for keyboard debugging
@@ -59,6 +61,21 @@ const pivot = playerId => ({
       e.degrees -= 3
     } else {
       // Do nothing
+    }
+  },
+})
+
+const trail = spriteId => ({
+  timer: Timer.create(5),
+  run:   (b, e) => {
+    if (b.timer.run()) {
+      const trailE = Entity.create(`trail${uuid()}`)
+      const sprite = Entity.addSprite(trailE, spriteId)
+      sprite.x = e.sprite.x + (sprite.width / 2)
+      sprite.y = e.sprite.y + (sprite.height / 2)
+      sprite.anchor.set(0.5)
+      sprite.scale.set(0.5)
+      b.timer.reset()
     }
   },
 })
