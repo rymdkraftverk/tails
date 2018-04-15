@@ -1,4 +1,5 @@
 import { Entity } from 'l1'
+import { big, small } from './util/text'
 
 export const players = {
 
@@ -18,18 +19,16 @@ export default function (gameCode) {
 
 function createLobbyTitle() {
   const text = Entity.create('lobbyText')
-  const sprite = Entity.addText(text, 'LOBBY')
+  const sprite = Entity.addText(text, 'LOBBY', big('white'))
   sprite.x = 10
   sprite.y = 10
-  sprite.scale.set(5)
 }
 
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
-  const sprite = Entity.addText(text, gameCode)
+  const sprite = Entity.addText(text, gameCode, small('white'))
   sprite.x = 10
   sprite.y = 200
-  sprite.scale.set(3)
 }
 
 export function addPlayerToLobby(player) {

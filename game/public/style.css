@@ -1,4 +1,11 @@
 body {
-  background-color: #222;
-  font-family: 'Press Start 2P';
+  font-family: 'patchy-robots';
+  background: #414844;
+  margin: 0px;
+}
+
+
+@font-face {
+  font-family: 'patchy-robots';
+  src: url('assets/patchy-robots.ttf');
 }

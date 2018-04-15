@@ -22,7 +22,6 @@ function createPlayer({ playerId, spriteId }, index) {
 
   // Enable the following behaviour for keyboard debugging
   // square.behaviors.player1Keyboard = player1Keyboard()
-  console.log('`${playerId}controller`', `${playerId}controller`)
   const controller = Entity.create(`${playerId}controller`)
   controller.direction = null
 }
