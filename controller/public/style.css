@@ -14,7 +14,7 @@ body {
   letter-spacing: 0.3em;
   text-align: center;
   flex: 1;
-  background: rgb(177, 40, 40);
+  background: #be5d4b;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -28,7 +28,7 @@ body {
   letter-spacing: 0.3em;
   text-align: center;
   flex: 1;
-  background: rgb(35, 160, 35);
+  background: #839870;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
