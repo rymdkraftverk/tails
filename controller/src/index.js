@@ -236,7 +236,7 @@ const connectToGame = (gameCode, cb) => {
     cb(null, null)
   }
 
-  channel.ondata = (e) => {
+  channel.onmessage = (e) => {
     cb(null, e)
   }
 
