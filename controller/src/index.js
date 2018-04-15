@@ -1,6 +1,31 @@
 import io from 'socket.io-client'
 import EVENTS from '../../common/events'
 
+const WS_ADDRESS = 'http://192.168.0.109:3000'
+
+const RTC_CONFIGURATION = {
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:19302',
+    },
+  ],
+}
+
+const UI = {
+  LOBBY_CONTAINER:       'lobby-container',
+  LOBBY_GAME_CODE_INPUT: 'lobby-game-code-input',
+  LOBBY_JOIN_BUTTON:     'lobby-join-button',
+  CONTROLLER_CONTAINER:  'controller-container',
+  CONTROLLER_LEFT:       'controller-left',
+  CONTROLLER_RIGHT:      'controller-right',
+}
+
+const COMMANDS = {
+  NONE:  'none',
+  RIGHT: 'right',
+  LEFT:  'left',
+}
+
 /* eslint-disable */
 window.readyHandlers = []
 window.ready = function ready(handler) {
@@ -18,124 +43,30 @@ window.handleState = function handleState() {
 document.onreadystatechange = window.handleState;
 /* eslint-enable */
 
-const WS_ADDRESS = 'http://192.168.0.109:3000'
-const DIRECTION = { NONE: 'none', LEFT: 'left', RIGHT: 'right' }
+const toggleFullScreen = () => {
+  const doc = window.document
+  const docEl = doc.documentElement
 
-const UI_CONTROLLER_LEFT_ID = 'controller-left'
-const UI_CONTROLLER_RIGHT_ID = 'controller-right'
+  const requestFullScreen =
+    docEl.requestFullscreen
+    || docEl.mozRequestFullScreen
+    || docEl.webkitRequestFullScreen
+    || docEl.msRequestFullscreen
 
-const uiInitController = ({ id, onStart, onEnd }) => {
-  document.getElementById(id).addEventListener('touchstart', onStart)
-  document.getElementById(id).addEventListener('touchend', onEnd)
-  document.getElementById(id).addEventListener('touchcancel', onEnd)
-}
+  const cancelFullScreen =
+    doc.exitFullscreen
+    || doc.mozCancelFullScreen
+    || doc.webkitExitFullscreen
+    || doc.msExitFullscreen
 
-const uiInitInput = ({ id, onComplete }) => {
-  document.getElementById(id).value = ''
-  document.getElementById(id).addEventListener('input', (e) => {
-    console.log('e:', e)
-  })
-}
-
-/* eslint-disable */
-const setDirectionNone = state => () => { state.direction = DIRECTION.NONE }
-const setDirectionRight = state => () => { state.direction = DIRECTION.RIGHT }
-const setDirectionLeft = state => () => { state.direction = DIRECTION.LEFT }
-/* eslint-enable */
-
-const uiInit = (state) => {
-  uiInitController({
-    id:      UI_CONTROLLER_LEFT_ID,
-    onStart: setDirectionLeft(state),
-    onEnd:   setDirectionNone(state),
-  })
-
-  uiInitController({
-    id:      UI_CONTROLLER_RIGHT_ID,
-    onStart: setDirectionRight(state),
-    onEnd:   setDirectionNone(state),
-  })
-}
-
-const configuration = {
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302',
-    },
-  ],
-}
-
-
-const start = () => {
-  const controller = {
-    offer:      null,
-    candidates: [],
+  if (!doc.fullscreenElement
+    && !doc.mozFullScreenElement
+    && !doc.webkitFullscreenElement
+    && !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl)
+  } else {
+    cancelFullScreen.call(doc)
   }
-
-  const button = document.createElement('button')
-  button.addEventListener('click', onSubmitClick)
-  button.innerHTML = 'submit'
-  button.classList.add('code-submit-button')
-  document.getElementById('body').appendChild(button)
-
-  const rtc = new RTCPeerConnection(configuration)
-  const dataChannel = rtc.createDataChannel('channel.data')
-
-  rtc.onicecandidate = (event) => {
-    console.log('onicecandidate', event)
-    if (!event.candidate) {
-      return
-    }
-    controller.candidates = controller.candidates.concat(event.candidate)
-  }
-
-  rtc
-    .createOffer()
-    .then((offer) => {
-      console.log('offer:', offer)
-      controller.offer = offer
-      return rtc.setLocalDescription(offer)
-    })
-    .then(() => {
-      console.log('local description is set')
-    })
-
-  function onSubmitClick() {
-    const code = document.getElementById('code-input').value
-
-    dataChannel.onopen = () => {
-      console.log('data chanel on open')
-    }
-
-    ws.emit(EVENTS.OFFER, {
-      gameCode: code,
-      offer:    controller.offer,
-    })
-
-    ws.on(EVENTS.ANSWER, ({ answer }) => {
-      console.log('received EVENTS.ANSWER:', answer)
-      rtc
-        .setRemoteDescription(answer)
-        .then(() => {
-          controller.candidates.forEach((candidate) => {
-            console.log('emitting candidate', candidate)
-            ws.emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode: code, candidate })
-          })
-        })
-    })
-
-    ws.on(EVENTS.GAME_CANDIDATE, ({ candidate }) => {
-      console.log('received EVENTS.GAME_CANDIDATE:', candidate)
-      rtc.addIceCandidate(new RTCIceCandidate(candidate))
-    })
-  }
-}
-
-const UI = {
-  LOBBY_CONTAINER:       'lobby-container',
-  LOBBY_GAME_CODE_INPUT: 'lobby-game-code-input',
-  LOBBY_JOIN_BUTTON:     'lobby-join-button',
-  CONTROLLER_CONTAINER:  'controller-container',
 }
 
 const rtcCleanUP = ({ peer, channel }) => {
@@ -172,7 +103,7 @@ const connectToGame = (gameCode, cb) => {
 
   console.log('creating: ws | peer | channel')
   const ws = io(WS_ADDRESS)
-  const peer = new RTCPeerConnection(configuration)
+  const peer = new RTCPeerConnection(RTC_CONFIGURATION)
   const channel = peer.createDataChannel('channel.data')
   const cleanUp = (err) => {
     if (state.error) {
@@ -246,39 +177,56 @@ const connectToGame = (gameCode, cb) => {
 
   return data => channel.send(JSON.stringify(data))
 }
-const toggleFullScreen = () => {
-  const doc = window.document
-  const docEl = doc.documentElement
 
-  const requestFullScreen =
-    docEl.requestFullscreen
-    || docEl.mozRequestFullScreen
-    || docEl.webkitRequestFullScreen
-    || docEl.msRequestFullscreen
-
-  const cancelFullScreen =
-    doc.exitFullscreen
-    || doc.mozCancelFullScreen
-    || doc.webkitExitFullscreen
-    || doc.msExitFullscreen
-
-  if (!doc.fullscreenElement
-    && !doc.mozFullScreenElement
-    && !doc.webkitFullscreenElement
-    && !doc.msFullscreenElement) {
-    requestFullScreen.call(docEl)
-  } else {
-    cancelFullScreen.call(doc)
-  }
-}
 
 const ready = () => {
   const state = {
     joining: false,
     ingame:  false,
+    command: COMMANDS.NONE,
+    send:    () => { },
   }
 
-  toggleFullScreen()
+  setInterval(() => {
+    if (state.command === COMMANDS.NONE) { return }
+    console.log('command:', state.command)
+    window.navigator.vibrate(10)
+  }, 100)
+
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchstart', () => {
+    state.command = COMMANDS.LEFT
+    console.log('command:', state.command)
+    window.navigator.vibrate(10)
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchstart', () => {
+    state.command = COMMANDS.RIGHT
+    console.log('command:', state.command)
+    window.navigator.vibrate(10)
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchend', () => {
+    state.command = COMMANDS.NONE
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchend', () => {
+    state.command = COMMANDS.NONE
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
+  document.getElementById(UI.CONTROLLER_LEFT).addEventListener('touchcancel', () => {
+    state.command = COMMANDS.NONE
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
+  document.getElementById(UI.CONTROLLER_RIGHT).addEventListener('touchcancel', () => {
+    state.command = COMMANDS.NONE
+    state.send({ event: 'player.movement', payload: { command: state.command } })
+  })
+
   document.getElementById(UI.LOBBY_CONTAINER).style.display = 'flex'
   document.getElementById(UI.LOBBY_GAME_CODE_INPUT).addEventListener('input', (e) => {
     if (e.target.value.length === 4) {
@@ -304,22 +252,20 @@ const ready = () => {
       console.log('data:', data, '\n-----')
       if (err) {
         state.joining = false
+        state.ingame = false
+        state.send = () => { }
         document.getElementById(UI.LOBBY_GAME_CODE_INPUT).disabled = false
         document.getElementById(UI.LOBBY_JOIN_BUTTON).disabled = false
-
         return
       }
 
       if (!data) {
         state.ingame = true
+        state.send = emit
         console.log('connected to game')
         document.getElementById(UI.LOBBY_CONTAINER).style.display = 'none'
         document.getElementById(UI.CONTROLLER_CONTAINER).style.display = 'flex'
-        return
       }
-
-      const response = emit({ event: 'EVENT.TEST' })
-      console.log('response:', response)
     })
   })
 }

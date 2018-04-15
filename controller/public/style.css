@@ -12,12 +12,24 @@ body {
   text-align: center;
   flex: 1;
   background: rgb(177, 40, 40);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #controller-right{
   text-align: center;
   flex: 1;
   background: rgb(35, 160, 35);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #controller-container {

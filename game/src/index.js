@@ -61,6 +61,11 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       event.channel.onopen = () => {
         console.log('chanel on open')
       }
+
+      // eslint-disable-next-line no-param-reassign
+      event.channel.onmessage = (e) => {
+        console.log('onmessage:', e.data)
+      }
       console.log('on fucking datachannel')
     }
   })
