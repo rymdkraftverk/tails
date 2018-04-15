@@ -57,14 +57,25 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         ws.emit(EVENTS.ANSWER, { answer, controllerId })
       })
     controller.ondatachannel = (event) => {
+      // Add logic for when player has joined here
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
-        console.log('chanel on open')
+        console.log('channel: on open')
       }
 
       // eslint-disable-next-line no-param-reassign
       event.channel.onmessage = (e) => {
-        console.log('onmessage:', e.data)
+        const data = JSON.parse(e.data)
+        console.log('data', data)
+        if (data.event === 'player.movement') {
+          if (data.payload.command === LEFT) {
+            Entity.get('player1controller').direction = LEFT
+          } else if (data.payload.command === RIGHT) {
+            Entity.get('player1controller').direction = RIGHT
+          } else if (data.payload.command === 'none') {
+            Entity.get('player1controller').direction = null
+          }
+        }
       }
       console.log('on fucking datachannel')
     }
@@ -93,11 +104,11 @@ function createPlayer() {
   const square = Entity.create('square-red')
   const sprite = Entity.addSprite(square, 'square-red')
   sprite.scale.set(1)
-  sprite.x = 100
-  sprite.y = 100
+  sprite.x = 10
+  sprite.y = 10
   square.behaviors.pivot = pivot()
   square.behaviors.move = move()
-  square.behaviors.player1Keyboard = player1Keyboard()
+  // square.behaviors.player1Keyboard = player1Keyboard()
 
   const player1controller = Entity.create('player1controller')
   player1controller.direction = null
