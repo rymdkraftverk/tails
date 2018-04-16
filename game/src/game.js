@@ -1,6 +1,6 @@
 import { Entity, Timer } from 'l1'
 import uuid from 'uuid/v4'
-import { LEFT, RIGHT } from '.'
+import { LEFT, RIGHT, WIDTH, HEIGHT } from '.'
 import { players } from './lobby'
 
 export function gameState() {
@@ -105,6 +105,9 @@ const collisionChecker = () => ({
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         Entity.destroy(e)
+      } else if (e.sprite.x < 0 || e.sprite.x > WIDTH || e.sprite.y < 0 || e.sprite.y > HEIGHT) {
+        Entity.destroy(e)
+        console.log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       b.timer.reset()
     }

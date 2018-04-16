@@ -28,7 +28,10 @@ const configuration = {
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
-Game.init(1200, 600, sprites, { debug: true }).then(() => {
+export const WIDTH = 1200
+export const HEIGHT = 600
+
+Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
   const ws = io(ADDRESS)
   ws.emit(EVENTS.CREATE, '')
 
