@@ -16,8 +16,8 @@ function createPlayer({ playerId, spriteId }, index) {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   sprite.scale.set(1)
-  sprite.x = 10 + (index * 100)
-  sprite.y = 10
+  sprite.x = 50 + (index * 200)
+  sprite.y = 50
   sprite.scale.set(0.4)
   square.behaviors.pivot = pivot(playerId)
   square.behaviors.trail = trail(spriteId)
