@@ -4,10 +4,10 @@ import io from 'socket.io-client'
 import uuid from 'uuid/v4'
 import EVENTS from '../../common/events'
 import sprites from './sprites.json'
-import lobby, { addPlayerToLobby, players } from './lobby'
+import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
-const ADDRESS = 'http://localhost:3000'
+const ADDRESS = 'http://192.168.0.104:3000'
 const game = {
   started:     false,
   gameCode:    '',
@@ -34,7 +34,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
   ws.on(EVENTS.CREATED, ({ gameCode }) => {
     console.log('gameId', gameCode)
     game.gameCode = gameCode
-    lobby(game.gameCode)
+    createLobby(game.gameCode)
   })
 
   ws.on(EVENTS.OFFER, ({ offer, controllerId }) => {
@@ -61,12 +61,12 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
         controller.setLocalDescription(answer)
         ws.emit(EVENTS.ANSWER, { answer, controllerId })
       })
+
     controller.ondatachannel = (event) => {
       const playerId = uuid()
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
         // Add logic for when player has joined here
-
         console.log('channel: on open')
       }
 
@@ -74,23 +74,36 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       event.channel.onmessage = (e) => {
         const data = JSON.parse(e.data)
 
-        if (data.event === 'player.movement') {
+        const moveLeft = () => {
+          Entity.get(`${playerId}controller`).direction = LEFT
+        }
+
+        const moveRight = () => {
+          Entity.get(`${playerId}controller`).direction = RIGHT
+        }
+
+        const moveStraight = () => {
+          Entity.get(`${playerId}controller`).direction = null
+        }
+
+        const playerMovement = () => {
           const {
             command,
           } = data.payload
+
           // Temporary solution to start game
           if (!game.started) {
             gameState()
             game.started = true
-          } else if (command === LEFT) {
-            Entity.get(`${playerId}controller`).direction = LEFT
-          } else if (command === RIGHT) {
-            Entity.get(`${playerId}controller`).direction = RIGHT
-          } else if (command === 'none') {
-            Entity.get(`${playerId}controller`).direction = null
+          } else {
+            const commandFn = commands[command]
+            if (commandFn) {
+              commandFn()
+            }
           }
-        } else if (data.event === 'player.joined') {
-          console.log('Object.keys(players)', Object.keys(players))
+        }
+
+        const playerJoined = () => {
           if (Object.keys(players).length < 4 && !game.started) {
             addPlayerToLobby({ playerId })
             event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
@@ -98,9 +111,28 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
             event.channel.close()
             controller.close()
           }
-        } else if (data.event === 'game.start') {
+        }
+
+        const gameStart = () => {
           // TODO Add event to start game
           // game()
+        }
+
+        const events = {
+          [EVENTS.PLAYER_MOVEMENT]: playerMovement,
+          [EVENTS.PLAYER_JOINED]:   playerJoined,
+          [EVENTS.GAME_START]:      gameStart,
+        }
+
+        const commands = {
+          [LEFT]:  moveLeft,
+          [RIGHT]: moveRight,
+          none:    moveStraight,
+        }
+
+        const eventFn = events[data.event]
+        if (eventFn) {
+          eventFn()
         }
       }
       console.log('on datachannel')

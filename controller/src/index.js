@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import EVENTS from '../../common/events'
 
-const WS_ADDRESS = 'http://192.168.0.109:3000'
+const WS_ADDRESS = 'http://192.168.0.104:3000'
 
 const RTC_CONFIGURATION = {
   iceServers: [

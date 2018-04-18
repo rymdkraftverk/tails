@@ -6,8 +6,7 @@ export function gameState() {
   Entity.getAll()
     .forEach(Entity.destroy)
 
-  Object.keys(players)
-    .map(key => players[key])
+  Object.values(players)
     .forEach(createPlayer)
 }
 
