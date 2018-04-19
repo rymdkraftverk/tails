@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
-    "start": "cd public && python -m SimpleHTTPServer",
+    "start": "http-server -p 8080",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.10.0",
+    "http-server": "^0.11.1",
     "watchify": "^3.11.0"
   },
   "dependencies": {

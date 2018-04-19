@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import EVENTS from '../../common/events'
 
-const WS_ADDRESS = 'http://192.168.0.109:3000'
+const WS_ADDRESS = 'http://192.168.0.104:3000'
 
 const RTC_CONFIGURATION = {
   iceServers: [
@@ -181,10 +181,11 @@ const connectToGame = (gameCode, cb) => {
 
 const ready = () => {
   const state = {
-    joining: false,
-    ingame:  false,
-    command: COMMANDS.NONE,
-    send:    () => { },
+    joining:  false,
+    ingame:   false,
+    command:  COMMANDS.NONE,
+    send:     () => { },
+    playerId: null,
   }
 
   const gameCode = localStorage.getItem('gameCode')
@@ -259,7 +260,7 @@ const ready = () => {
       return
     }
 
-    toggleFullScreen()
+    // toggleFullScreen()
 
     state.joining = true
     document.getElementById(UI.LOBBY_GAME_CODE_INPUT).disabled = true
@@ -286,6 +287,12 @@ const ready = () => {
         console.log('connected to game')
         document.getElementById(UI.LOBBY_CONTAINER).style.display = 'none'
         document.getElementById(UI.CONTROLLER_CONTAINER).style.display = 'flex'
+        emit({ event: 'player.joined', payload: {} })
+        return
+      }
+      const { payload, event } = JSON.parse(data)
+      if (event === 'player.joined') {
+        state.playerId = payload.playerId
       }
     })
   })
