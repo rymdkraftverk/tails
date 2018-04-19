@@ -1,6 +1,14 @@
 const app = require('http').createServer()
 const io = require('socket.io')(app)
 
+const parseArgs = require('./parse-args')
+const { prepareMakeGameCode, prepareDeleteGameCode } = require('./make-game-code')
+
+const args = parseArgs(process.argv)
+
+const makeGameCode = prepareMakeGameCode(args.redis)
+const deleteGameCode = prepareDeleteGameCode(args.redis)
+
 const PORT = 3000
 
 const TYPE = {
@@ -16,7 +24,6 @@ const EVENT = {
   GAME_CANDIDATE:       'game.join.game.candidate',
 }
 
-const makeGameCode = () => Math.random().toString(36).substring(2, 6)
 const { log } = console
 
 // Stateful
@@ -36,18 +43,20 @@ io.on('connection', (socket) => {
     controller.emit(EVENT.ANSWER, { answer })
   })
 
-  socket.on(EVENT.CREATE, () => {
-    const gameCode = makeGameCode()
+  socket.on(EVENT.CREATE, () =>
+    makeGameCode()
+      .then((gameCode) => {
+        /* eslint-disable */
+        socket.type = TYPE.GAME
+        socket.gameCode = gameCode
+        /* eslint-enable */
 
-    /* eslint-disable */
-    socket.type = TYPE.GAME
-    socket.gameCode = gameCode
-    /* eslint-enable */
+        socket.emit(EVENT.CREATED, { gameCode })
 
-    socket.emit(EVENT.CREATED, { gameCode })
+        socket.on('disconnect', () => deleteGameCode(gameCode))
 
-    log(`Game created: ${gameCode}`)
-  })
+        log(`Game created: ${gameCode}`)
+      }))
 
   socket.on(EVENT.OFFER, ({ gameCode, offer }) => {
     const game = getGameClient(gameCode)

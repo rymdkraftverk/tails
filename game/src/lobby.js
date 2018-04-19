@@ -12,7 +12,7 @@ const COLORS = [
   'green',
 ]
 
-export default function (gameCode) {
+export function createLobby(gameCode) {
   createLobbyTitle()
   createGameCodeText(gameCode)
 }
