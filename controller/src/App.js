@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import io from 'socket.io-client'
-import './App.css';
-
 import EVENTS from 'common'
+import './App.css'
+
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
@@ -21,14 +21,14 @@ const RTC = {
 }
 
 const APP_STATE = {
-  LOCKER_ROOM: 'locker-room',
+  LOCKER_ROOM:     'locker-room',
   GAME_CONNECTING: 'game-connecting',
-  GAME_LOBBY: 'game-lobby',
+  GAME_LOBBY:      'game-lobby',
 }
 
 const getLastGameCode = () => {
   const gameCode = localStorage.getItem('gameCode')
-  return gameCode ? gameCode : ''
+  return gameCode || ''
 }
 
 const setLastGameCode = (gameCode) => {
@@ -38,19 +38,16 @@ const setLastGameCode = (gameCode) => {
 
 const rtcCleanUP = ({ peer, channel }) => {
   if (channel) {
-    console.log('cleaning up channel')
     channel.close()
   }
 
   if (peer) {
-    console.log('cleaning up peer')
     peer.close()
   }
 }
 
 const wsCleanUp = ({ ws }) => {
   if (ws) {
-    console.log('cleaning up ws')
     ws.disconnect()
     ws.close()
   }
@@ -61,6 +58,7 @@ const connectionCleanUp = ({ ws, peer, channel }) => {
   wsCleanUp({ ws })
 }
 
+/* eslint-disable-next-line */
 class App extends Component {
   constructor(props) {
     super(props)
@@ -77,16 +75,14 @@ class App extends Component {
 
     const state = {
       candidates: [],
-      error: false,
-      connected: false,
+      error:      false,
+      connected:  false,
     }
 
-    const cleanUp = (err) => {
+    const cleanUp = () => {
       if (state.error) {
         return
       }
-
-      console.log('cleaning up')
 
       state.error = true
       connectionCleanUp({ ws, peer, channel })
@@ -94,21 +90,13 @@ class App extends Component {
     }
 
     ws.on('connect', () => {
-      console.log('WS | connect')
       peer
         .createOffer()
-        .then(offer =>
-          Promise
-            .all([
-              offer,
-              peer
-                .setLocalDescription(offer),
-            ]))
+        .then(offer => Promise.all([offer, peer.setLocalDescription(offer)]))
         .then(([offer]) => ws.emit(EVENTS.OFFER, { gameCode, offer }))
     })
 
     ws.on(EVENTS.ANSWER, ({ answer }) => {
-      console.log('ws answer')
       peer
         .setRemoteDescription(answer)
         .then(() =>
@@ -117,7 +105,6 @@ class App extends Component {
     })
 
     ws.on(EVENTS.GAME_CANDIDATE, ({ candidate }) => {
-      console.log('ws game candidate')
       peer.addIceCandidate(new RTCIceCandidate(candidate))
     })
 
@@ -125,20 +112,17 @@ class App extends Component {
       if (!e.candidate) {
         return
       }
-      console.log('peer ice candidate')
       state.candidates = state.candidates.concat(e.candidate)
     }
 
     channel.onopen = () => {
-      console.log('channel open')
       state.connected = true
       wsCleanUp({ ws })
       this.setState({ appState: APP_STATE.GAME_LOBBY })
     }
 
-    channel.onmessage = (e) => {
-      console.log('message:', e)
-      //cb(null, e)
+    channel.onmessage = () => {
+      // cb(null, e)
     }
 
     channel.onerror = cleanUp
@@ -152,31 +136,38 @@ class App extends Component {
 
   gameCodeChange = ({ target: { value } }) => {
     this.setState({ gameCode: value })
-  }
+  };
 
   checkConnectionTimeout = () => {
     if (this.state.appState === APP_STATE.GAME_CONNECTING) {
       this.setState({ appState: APP_STATE.LOCKER_ROOM })
     }
-  }
+  };
 
   onJoin = () => {
-    console.log('on join')
     this.setState({ appState: APP_STATE.GAME_CONNECTING })
     setLastGameCode(this.state.gameCode)
     setTimeout(this.checkConnectionTimeout, 5 * 1000)
     this.connectToGame(this.state.gameCode)
-  }
+  };
 
   render() {
     return (
       <div>
-        {this.state.appState === APP_STATE.LOCKER_ROOM ? <LockerRoom gameCodeChange={this.gameCodeChange} gameCode={this.state.gameCode} onJoin={this.onJoin} /> : null}
-        {this.state.appState === APP_STATE.GAME_CONNECTING ? <LockerRoomLoader /> : null}
+        {this.state.appState === APP_STATE.LOCKER_ROOM ? (
+          <LockerRoom
+            gameCodeChange={this.gameCodeChange}
+            gameCode={this.state.gameCode}
+            onJoin={this.onJoin}
+          />
+        ) : null}
+        {this.state.appState === APP_STATE.GAME_CONNECTING ? (
+          <LockerRoomLoader />
+        ) : null}
         {this.state.appState === APP_STATE.GAME_LOBBY ? <GameLobby /> : null}
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

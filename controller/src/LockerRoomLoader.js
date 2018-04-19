@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
+/* eslint-disable-next-line */
 class LockerRoomLoader extends Component {
-
   render() {
     return (
       <div>

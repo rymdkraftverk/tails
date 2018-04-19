@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
+/* eslint-disable-next-line */
 class LockerRoom extends Component {
-
   render() {
     return (
       <div id="lobby-container">
@@ -34,4 +34,4 @@ class LockerRoom extends Component {
   }
 }
 
-export default LockerRoom;
+export default LockerRoom

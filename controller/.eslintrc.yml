@@ -1,0 +1,29 @@
+plugins:
+  - fp
+  - import
+  - react
+parser: babel-eslint
+env:
+  es6: true
+  node: true
+  browser: true
+extends:
+  - airbnb-base
+  - plugin:fp/recommended
+rules:
+  react/jsx-uses-vars: error
+  react/jsx-uses-react: error
+  react/no-this-in-sfc: error
+  fp/no-nil: off
+  fp/no-this: off
+  fp/no-unused-expression: off
+  fp/no-mutation: off
+  import/prefer-default-export: off
+  no-use-before-define: off
+  key-spacing:
+    - error
+    -
+      align: value
+  semi:
+    - error
+    - never
