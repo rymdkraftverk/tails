@@ -6,8 +6,9 @@ import './App.css'
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
+import GamePlaying from './GamePlaying'
 
-const WS_ADDRESS = 'http://localhost:3000'
+const WS_ADDRESS = 'http://192.168.1.55:3000'
 
 const RTC = {
   SERVERS: {
@@ -24,6 +25,7 @@ const APP_STATE = {
   LOCKER_ROOM:     'locker-room',
   GAME_CONNECTING: 'game-connecting',
   GAME_LOBBY:      'game-lobby',
+  GAME_PLAYING:    'game-playing',
 }
 
 const getLastGameCode = () => {
@@ -63,8 +65,11 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      appState: APP_STATE.LOCKER_ROOM,
-      gameCode: '',
+      appState:    APP_STATE.LOCKER_ROOM,
+      gameCode:    '',
+      channel:     null,
+      playerId:    null,
+      playerColor: null,
     }
   }
 
@@ -86,7 +91,7 @@ class App extends Component {
 
       state.error = true
       connectionCleanUp({ ws, peer, channel })
-      this.setState({ appState: APP_STATE.LOCKER_ROOM })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null })
     }
 
     ws.on('connect', () => {
@@ -118,11 +123,24 @@ class App extends Component {
     channel.onopen = () => {
       state.connected = true
       wsCleanUp({ ws })
-      this.setState({ appState: APP_STATE.GAME_LOBBY })
+      this.setState({ channel })
+      this.send({ event: EVENTS.PLAYER_JOINED })
     }
 
-    channel.onmessage = () => {
-      // cb(null, e)
+    channel.onmessage = ({ data }) => {
+      const event = JSON.parse(data)
+
+      if (event.event === EVENTS.PLAYER_JOINED) {
+        this.setState({
+          appState:    APP_STATE.GAME_LOBBY,
+          playerColor: '#42a1f4',
+          playerId:    event.playerId,
+        })
+      } else if (event.event === EVENTS.GAME_START) {
+        this.setState({
+          appState: APP_STATE.GAME_PLAYING,
+        })
+      }
     }
 
     channel.onerror = cleanUp
@@ -135,7 +153,7 @@ class App extends Component {
   }
 
   gameCodeChange = ({ target: { value } }) => {
-    this.setState({ gameCode: value })
+    this.setState({ gameCode: value.toUpperCase() })
   };
 
   checkConnectionTimeout = () => {
@@ -151,20 +169,47 @@ class App extends Component {
     this.connectToGame(this.state.gameCode)
   };
 
+  send = (data) => {
+    if (!this.state.channel) {
+      return
+    }
+
+    this.state.channel.send(JSON.stringify(data))
+  }
+
+  startGame = () => {
+    this.send({ event: EVENTS.GAME_START })
+    this.setState({ appState: APP_STATE.GAME_PLAYING })
+  }
+
   render() {
     return (
       <div>
-        {this.state.appState === APP_STATE.LOCKER_ROOM ? (
-          <LockerRoom
-            gameCodeChange={this.gameCodeChange}
-            gameCode={this.state.gameCode}
-            onJoin={this.onJoin}
-          />
-        ) : null}
-        {this.state.appState === APP_STATE.GAME_CONNECTING ? (
-          <LockerRoomLoader />
-        ) : null}
-        {this.state.appState === APP_STATE.GAME_LOBBY ? <GameLobby /> : null}
+        {
+          this.state.appState === APP_STATE.LOCKER_ROOM
+            ? <LockerRoom
+                gameCodeChange={this.gameCodeChange}
+                gameCode={this.state.gameCode}
+                onJoin={this.onJoin} />
+            : null
+        }
+        {
+          this.state.appState === APP_STATE.GAME_CONNECTING
+            ? <LockerRoomLoader />
+            : null
+        }
+        {
+          this.state.appState === APP_STATE.GAME_LOBBY
+            ? <GameLobby
+                startGame={this.startGame}
+                playerColor={this.state.playerColor} />
+            : null
+        }
+        {
+          this.state.appState === APP_STATE.GAME_PLAYING
+            ? <GamePlaying send={this.send}/>
+            : null
+        }
       </div>
     )
   }
