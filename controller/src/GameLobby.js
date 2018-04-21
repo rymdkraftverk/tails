@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
-import EVENTS from 'common'
 
-/* eslint-disable-next-line */
+/* eslint-disable-next-line fp/no-class */
 class GameLobby extends Component {
-  /* eslint-disable-next-line */
-  componentDidMount() {
-    // this.props.send({ event: EVENTS.PLAYER_JOINED })
-  }
-
   render() {
     return (
       <div style={{ backgroundColor: this.props.playerColor }}>

@@ -7,7 +7,7 @@ const MOVES = {
   RIGHT: 'right',
 }
 
-/* eslint-disable-next-line */
+/* eslint-disable-next-line fp/no-class */
 class GamePlaying extends Component {
   sendRight = () => {
     this.props.send({ event: EVENTS.PLAYER_MOVEMENT, payload: { command: MOVES.RIGHT } })

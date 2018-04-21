@@ -59,7 +59,7 @@ const connectionCleanUp = ({ ws, peer, channel }) => {
   wsCleanUp({ ws })
 }
 
-/* eslint-disable-next-line */
+/* eslint-disable-next-line fp/no-class */
 class App extends Component {
   state = {
     appState:    APP_STATE.LOCKER_ROOM,

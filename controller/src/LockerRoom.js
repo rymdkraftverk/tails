@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-/* eslint-disable-next-line */
+/* eslint-disable-next-line fp/no-class */
 class LockerRoom extends Component {
   render() {
     return (
