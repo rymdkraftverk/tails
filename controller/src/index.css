@@ -8,6 +8,7 @@ body {
   font-family: 'patchy-robots';
   background: #414844;
   margin: 0px;
+  touch-action: manipulation;
 }
 
 @font-face {
