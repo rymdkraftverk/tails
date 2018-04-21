@@ -128,7 +128,7 @@ const connectToGame = (gameCode, cb) => {
   setTimeout(() => {
     if (state.connected) { return }
     cleanUp('failed to connect, timeout')
-  }, 100 * 1000)
+  }, 10 * 1000)
 
 
   ws.on('connect_error', cleanUp)
