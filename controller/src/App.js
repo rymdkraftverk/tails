@@ -8,7 +8,7 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
-const WS_ADDRESS = 'http://192.168.1.55:3000'
+const WS_ADDRESS = 'http://10.0.201.123:3000'
 
 const RTC = {
   SERVERS: {
