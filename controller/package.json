@@ -26,6 +26,7 @@
     "eslint-plugin-fp": "^2.3.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-full-screen": "^0.2.2",
     "react-scripts": "1.1.4",
     "rxjs": "^5.5.10",
     "socket.io": "^2.1.0",
