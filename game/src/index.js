@@ -9,9 +9,10 @@ import { gameState } from './game'
 
 const ADDRESS = 'http://localhost:3000'
 const game = {
-  started:     false,
-  gameCode:    '',
-  controllers: {
+  started:                        false,
+  gameCode:                       '',
+  hasReceivedControllerCandidate: false,
+  controllers:                    {
 
   },
 }
@@ -27,7 +28,10 @@ const configuration = {
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
-Game.init(1200, 600, sprites, { debug: true }).then(() => {
+export const WIDTH = 1200
+export const HEIGHT = 600
+
+Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
   const ws = io(ADDRESS)
   ws.emit(EVENTS.CREATE, '')
 
@@ -52,6 +56,9 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
       }
       const { candidates } = game.controllers[controllerId]
       game.controllers[controllerId].candidates = candidates.concat(event.candidate)
+      if (game.hasReceivedControllerCandidate) {
+        ws.emit(EVENTS.GAME_CANDIDATE, { candidate: event.candidate, controllerId })
+      }
     }
 
     controller
@@ -141,6 +148,7 @@ Game.init(1200, 600, sprites, { debug: true }).then(() => {
 
   ws.on(EVENTS.CONTROLLER_CANDIDATE, ({ controllerId, candidate }) => {
     console.log('received EVENTS.CONTROLLER_CANDIDATE offer: ', candidate)
+    game.hasReceivedControllerCandidate = true
     const controller = game.controllers[controllerId]
     if (!controller) {
       return
