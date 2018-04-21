@@ -7,7 +7,7 @@ import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
-const ADDRESS = 'http://192.168.0.104:3000'
+const ADDRESS = 'http://localhost:3000'
 const game = {
   started:                        false,
   gameCode:                       '',

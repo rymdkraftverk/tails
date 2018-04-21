@@ -3,27 +3,34 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
-    "start": "http-server -p 8080",
-    "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "dependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
     "browserify": "^16.1.1",
-    "eslint": "^4.19.1",
+    "common": "file:../common",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "^2.10.0",
-    "http-server": "^0.11.1",
-    "watchify": "^3.11.0"
-  },
-  "dependencies": {
-    "l1": "^0.2.12",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-scripts": "1.1.4",
     "rxjs": "^5.5.10",
+    "socket.io": "^2.1.0",
     "socket.io-client": "^2.1.0",
+    "watchify": "^3.11.0",
     "webrtc-adapter": "^6.1.5"
   }
 }
