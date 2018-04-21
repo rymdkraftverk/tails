@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
 import EVENTS from 'common'
-import './App.css'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
@@ -62,15 +61,12 @@ const connectionCleanUp = ({ ws, peer, channel }) => {
 
 /* eslint-disable-next-line */
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      appState:    APP_STATE.LOCKER_ROOM,
-      gameCode:    '',
-      channel:     null,
-      playerId:    null,
-      playerColor: null,
-    }
+  state = {
+    appState:    APP_STATE.LOCKER_ROOM,
+    gameCode:    '',
+    channel:     null,
+    playerId:    null,
+    playerColor: null,
   }
 
   connectToGame(gameCode) {
