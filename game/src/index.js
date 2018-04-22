@@ -112,8 +112,8 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
 
         const playerJoined = () => {
           if (Object.keys(players).length < 4 && !game.started) {
-            addPlayerToLobby({ playerId })
-            event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
+            const { color } = addPlayerToLobby({ playerId })
+            event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
           } else {
             event.channel.close()
             controller.close()

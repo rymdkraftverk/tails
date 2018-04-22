@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 class GameLobby extends Component {
   render() {
     return (
-      <div style={{ backgroundColor: this.props.playerColor }}>
+      <div id="game-lobby-container" style={{ backgroundColor: this.props.playerColor }}>
         <div className="flex-box" onClick={this.props.startGame}>Start Game!</div>
       </div>
     )

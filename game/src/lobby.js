@@ -42,4 +42,7 @@ export function addPlayerToLobby(player) {
   sprite.y = 10 + (playerCount * 100)
   players[player.playerId] = player
   players[player.playerId].spriteId = `square-${color}`
+  players[player.playerId].color = color
+
+  return players[player.playerId]
 }
