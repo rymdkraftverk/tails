@@ -7,7 +7,7 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
-const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'http://localhost:3000
+const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'http://localhost:3000'
 
 const RTC = {
   SERVERS: {
