@@ -7,7 +7,7 @@ import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
-const ADDRESS = process.env.WS_ADDRESS
+const ADDRESS = process.env.WS_ADDRESS || 'http://localhost:3000'
 const game = {
   started:                        false,
   gameCode:                       '',
