@@ -121,8 +121,11 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         }
 
         const gameStart = () => {
-          // TODO Add event to start game
-          // game()
+          if (!game.started) {
+            event.channel.send(JSON.stringify({ event: EVENTS.GAME_STARTED, payload: {} }))
+            gameState()
+            game.started = true
+          }
         }
 
         const events = {

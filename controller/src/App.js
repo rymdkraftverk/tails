@@ -136,6 +136,10 @@ class App extends Component {
         this.setState({
           appState: APP_STATE.GAME_PLAYING,
         })
+      } else if (event.event === EVENTS.GAME_STARTED) {
+        this.setState({
+          appState: APP_STATE.GAME_PLAYING,
+        })
       }
     }
 
