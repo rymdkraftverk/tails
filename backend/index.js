@@ -8,10 +8,7 @@ const args = parseArgs(process.argv)
 
 const makeGameCode = prepareMakeGameCode(args.redis)
 const deleteGameCode = prepareDeleteGameCode(args.redis)
-const pruneGameCode = g => g
-  .trim()
-  .substring(0, 4)
-  .toUpperCase()
+const pruneGameCode = g => g.toUpperCase()
 
 const PORT = 3000
 
