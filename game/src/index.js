@@ -49,7 +49,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
       rtc:           controller,
       candidates:    [],
       lastMoveOrder: -1,
-      channel:    null,
+      channel:       null,
     }
     controller.onicecandidate = (event) => {
       console.log('onicecandidate', event)
@@ -117,10 +117,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         const playerJoined = () => {
           if (Object.keys(players).length < 4 && !game.started) {
             const { color } = addPlayerToLobby({ playerId })
-            event.
-              
-              
-              .send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
+            event.send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
           } else {
             event.channel.close()
             controller.close()
