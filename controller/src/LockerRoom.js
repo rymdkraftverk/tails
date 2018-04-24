@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
+import Notifications, { notify } from 'react-notify-toast'
 
 /* eslint-disable-next-line fp/no-class */
 class LockerRoom extends Component {
+  componentDidMount() {
+    if (this.props.showError) {
+      notify.show('Failed to connect, try again!', 'error')
+    }
+  }
+
   render() {
     return (
       <div id="lobby-container">
@@ -29,6 +36,7 @@ class LockerRoom extends Component {
             autoCapitalize="off"
             maxLength="4" />
         </div>
+        <Notifications />
       </div>
     )
   }

@@ -71,6 +71,7 @@ class App extends Component {
     channel:     null,
     playerId:    null,
     playerColor: null,
+    error:       false,
   }
 
   connectToGame(gameCode) {
@@ -91,7 +92,7 @@ class App extends Component {
 
       state.error = true
       connectionCleanUp({ ws, peer, channel })
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: true })
     }
 
     ws.on('connect', () => {
@@ -158,16 +159,20 @@ class App extends Component {
 
   checkConnectionTimeout = () => {
     if (this.state.appState === APP_STATE.GAME_CONNECTING) {
-      this.setState({ appState: APP_STATE.LOCKER_ROOM })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: true })
     }
   };
 
   onJoin = () => {
-    this.setState({ appState: APP_STATE.GAME_CONNECTING, fullscreen: true })
+    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: false, fullscreen: true })
     setLastGameCode(this.state.gameCode)
     setTimeout(this.checkConnectionTimeout, 5 * 1000)
     this.connectToGame(this.state.gameCode)
   };
+
+  clearError = () => {
+    this.setState({ error: false })
+  }
 
   send = (data) => {
     if (!this.state.channel) {
@@ -192,6 +197,8 @@ class App extends Component {
         {
           this.state.appState === APP_STATE.LOCKER_ROOM
             ? <LockerRoom
+                clearError={this.clearError}
+                showError={this.state.error}
                 gameCodeChange={this.gameCodeChange}
                 gameCode={this.state.gameCode}
                 onJoin={this.onJoin} />
