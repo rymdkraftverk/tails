@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Fullscreen from 'react-full-screen'
 import io from 'socket.io-client'
 import EVENTS from 'common'
 
@@ -7,7 +8,7 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
-const WS_ADDRESS = 'http://localhost:3000'
+const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'http://localhost:3000'
 
 const RTC = {
   SERVERS: {
@@ -26,6 +27,8 @@ const APP_STATE = {
   GAME_LOBBY:      'game-lobby',
   GAME_PLAYING:    'game-playing',
 }
+
+const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
 
 const getLastGameCode = () => {
   const gameCode = localStorage.getItem('gameCode')
@@ -63,6 +66,7 @@ const connectionCleanUp = ({ ws, peer, channel }) => {
 class App extends Component {
   state = {
     appState:    APP_STATE.LOCKER_ROOM,
+    fullscreen:  false,
     gameCode:    '',
     channel:     null,
     playerId:    null,
@@ -159,7 +163,7 @@ class App extends Component {
   };
 
   onJoin = () => {
-    this.setState({ appState: APP_STATE.GAME_CONNECTING })
+    this.setState({ appState: APP_STATE.GAME_CONNECTING, fullscreen: true })
     setLastGameCode(this.state.gameCode)
     setTimeout(this.checkConnectionTimeout, 5 * 1000)
     this.connectToGame(this.state.gameCode)
@@ -178,9 +182,13 @@ class App extends Component {
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 
+  enableFullscreen = () => this.state.fullscreen && isMobileDevice()
+
   render() {
     return (
-      <div>
+      <Fullscreen
+        enabled={this.enableFullscreen()}
+        onChange={fullscreen => this.setState({ fullscreen })}>
         {
           this.state.appState === APP_STATE.LOCKER_ROOM
             ? <LockerRoom
@@ -206,7 +214,7 @@ class App extends Component {
             ? <GamePlaying send={this.send}/>
             : null
         }
-      </div>
+      </Fullscreen>
     )
   }
 }
