@@ -7,18 +7,61 @@ const MOVES = {
   RIGHT: 'right',
 }
 
+const noop = () => {}
+
+navigator.vibrate = (navigator.vibrate ||
+  navigator.webkitVibrate ||
+  navigator.mozVibrate ||
+  navigator.msVibrate || noop)
+
+const createCommand = (ordering, command) => ({ command, ordering })
+
 /* eslint-disable-next-line fp/no-class */
 class GamePlaying extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      ordering: 0,
+      lastMove: MOVES.NONE,
+    }
+
+    this.state.intervalId = setInterval(() => {
+      this.props.send({
+        event:   EVENTS.PLAYER_MOVEMENT,
+        payload: createCommand(this.state.ordering, this.state.lastMove),
+      })
+      this.setState({ ordering: (this.state.ordering + 1) })
+    }, 10)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId)
+  }
+
   sendRight = () => {
-    this.props.send({ event: EVENTS.PLAYER_MOVEMENT, payload: { command: MOVES.RIGHT } })
+    navigator.vibrate(100)
+    this.props.send({
+      event:   EVENTS.PLAYER_MOVEMENT,
+      payload: createCommand(this.state.ordering, MOVES.RIGHT),
+    })
+    this.setState({ lastMove: MOVES.RIGHT, ordering: (this.state.ordering + 1) })
   }
 
   sendLeft = () => {
-    this.props.send({ event: EVENTS.PLAYER_MOVEMENT, payload: { command: MOVES.LEFT } })
+    navigator.vibrate(100)
+    this.props.send({
+      event:   EVENTS.PLAYER_MOVEMENT,
+      payload: createCommand(this.state.ordering, MOVES.LEFT),
+    })
+    this.setState({ lastMove: MOVES.LEFT, ordering: (this.state.ordering + 1) })
   }
 
   sendNone = () => {
-    this.props.send({ event: EVENTS.PLAYER_MOVEMENT, payload: { command: MOVES.NONE } })
+    this.props.send({
+      event:   EVENTS.PLAYER_MOVEMENT,
+      payload: createCommand(this.state.ordering, MOVES.NONE),
+    })
+    this.setState({ lastMove: MOVES.NONE, ordering: (this.state.ordering + 1) })
   }
 
   render() {

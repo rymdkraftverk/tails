@@ -46,8 +46,9 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
     console.log('received EVENTS.OFFER controllerId: ', controllerId)
     const controller = new RTCPeerConnection(configuration)
     game.controllers[controllerId] = {
-      rtc:        controller,
-      candidates: [],
+      rtc:           controller,
+      candidates:    [],
+      lastMoveOrder: -1,
       channel:    null,
     }
     controller.onicecandidate = (event) => {
@@ -98,8 +99,15 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         const playerMovement = () => {
           const {
             command,
+            ordering,
           } = data.payload
 
+          if (game.controllers[controllerId].lastOrder >= ordering) {
+            console.log(`dropping old move: ${ordering}`)
+            return
+          }
+          console.log(`ordering: ${ordering}`)
+          game.controllers[controllerId].lastMoveOrder = ordering
           const commandFn = commands[command]
           if (commandFn) {
             commandFn()
@@ -109,7 +117,10 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         const playerJoined = () => {
           if (Object.keys(players).length < 4 && !game.started) {
             const { color } = addPlayerToLobby({ playerId })
-            event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
+            event.
+              
+              
+              .send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
           } else {
             event.channel.close()
             controller.close()

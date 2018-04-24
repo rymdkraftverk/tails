@@ -76,7 +76,14 @@ class App extends Component {
 
   connectToGame(gameCode) {
     const peer = new RTCPeerConnection(RTC.SERVERS)
-    const channel = peer.createDataChannel(RTC.CHANNEL_NAME)
+    const channel = peer.createDataChannel(
+      RTC.CHANNEL_NAME,
+      {
+        ordered:           false,
+        maxRetransmits:    0,
+        maxPacketLifeTime: null,
+      },
+    )
     const ws = io(WS_ADDRESS)
 
     const state = {
