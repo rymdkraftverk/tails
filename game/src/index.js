@@ -46,8 +46,9 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
     console.log('received EVENTS.OFFER controllerId: ', controllerId)
     const controller = new RTCPeerConnection(configuration)
     game.controllers[controllerId] = {
-      rtc:        controller,
-      candidates: [],
+      rtc:           controller,
+      candidates:    [],
+      lastMoveOrder: -1,
     }
     controller.onicecandidate = (event) => {
       console.log('onicecandidate', event)
@@ -96,7 +97,16 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         const playerMovement = () => {
           const {
             command,
+            ordering,
           } = data.payload
+
+          if (game.controllers[controllerId].lastOrder >= ordering) {
+            console.log(`dropping old move: ${ordering}`)
+            return
+          }
+          console.log(`ordering: ${ordering}`)
+          game.controllers[controllerId].lastMoveOrder = ordering
+
 
           // Temporary solution to start game
           if (!game.started) {
