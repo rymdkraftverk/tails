@@ -8,6 +8,7 @@ const args = parseArgs(process.argv)
 
 const makeGameCode = prepareMakeGameCode(args.redis)
 const deleteGameCode = prepareDeleteGameCode(args.redis)
+const pruneGameCode = g => g.toUpperCase()
 
 const PORT = 3000
 
@@ -59,7 +60,7 @@ io.on('connection', (socket) => {
       }))
 
   socket.on(EVENT.OFFER, ({ gameCode, offer }) => {
-    const game = getGameClient(gameCode)
+    const game = getGameClient(pruneGameCode(gameCode))
     if (!game) {
       return
     }
@@ -67,7 +68,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on(EVENT.CONTROLLER_CANDIDATE, ({ gameCode, candidate }) => {
-    const game = getGameClient(gameCode)
+    const game = getGameClient(pruneGameCode(gameCode))
     if (!game) {
       return
     }

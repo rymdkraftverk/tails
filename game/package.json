@@ -22,6 +22,7 @@
     "watchify": "^3.11.0"
   },
   "dependencies": {
+    "babel-plugin-transform-inline-environment-variables": "^0.4.0",
     "l1": "^0.2.12",
     "socket.io-client": "^2.1.0",
     "uuid": "^3.2.1",

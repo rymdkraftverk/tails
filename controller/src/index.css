@@ -8,6 +8,7 @@ body {
   font-family: 'patchy-robots';
   background: #414844;
   margin: 0px;
+  touch-action: manipulation;
 }
 
 @font-face {
@@ -45,6 +46,12 @@ body {
 
 #controller-container {
   display: flex;
+  height: 100vh;
+}
+
+#game-lobby-container {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
@@ -101,6 +108,18 @@ button {
   height: 120px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
+}
+
+.my-component {
+  background: #414844;
+}
+
+.fullscreen {
+  background: #414844;
+}
+ 
+.fullscreen-enabled .my-component {
+  background: #414844;
 }
 
 @-webkit-keyframes spin {
