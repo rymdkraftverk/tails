@@ -49,6 +49,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
       rtc:           controller,
       candidates:    [],
       lastMoveOrder: -1,
+      channel:    null,
     }
     controller.onicecandidate = (event) => {
       console.log('onicecandidate', event)
@@ -72,6 +73,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
 
     controller.ondatachannel = (event) => {
       const playerId = uuid()
+      game.controllers[controllerId].channel = event.channel
       // eslint-disable-next-line no-param-reassign
       event.channel.onopen = () => {
         // Add logic for when player has joined here
@@ -106,24 +108,19 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
           }
           console.log(`ordering: ${ordering}`)
           game.controllers[controllerId].lastMoveOrder = ordering
-
-
-          // Temporary solution to start game
-          if (!game.started) {
-            gameState()
-            game.started = true
-          } else {
-            const commandFn = commands[command]
-            if (commandFn) {
-              commandFn()
-            }
+          const commandFn = commands[command]
+          if (commandFn) {
+            commandFn()
           }
         }
 
         const playerJoined = () => {
           if (Object.keys(players).length < 4 && !game.started) {
-            addPlayerToLobby({ playerId })
-            event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId } }))
+            const { color } = addPlayerToLobby({ playerId })
+            event.
+              
+              
+              .send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
           } else {
             event.channel.close()
             controller.close()
@@ -131,8 +128,15 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         }
 
         const gameStart = () => {
-          // TODO Add event to start game
-          // game()
+          if (!game.started) {
+            Object
+              .values(game.controllers)
+              .forEach(({ channel }) =>
+                channel.send(JSON.stringify({ event: EVENTS.GAME_STARTED, payload: {} })))
+
+            gameState()
+            game.started = true
+          }
         }
 
         const events = {
