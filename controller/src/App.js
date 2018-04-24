@@ -128,13 +128,13 @@ class App extends Component {
     }
 
     channel.onmessage = ({ data }) => {
-      const event = JSON.parse(data)
+      const { event, payload } = JSON.parse(data)
 
-      if (event.event === EVENTS.PLAYER_JOINED) {
+      if (event === EVENTS.PLAYER_JOINED) {
         this.setState({
           appState:    APP_STATE.GAME_LOBBY,
-          playerColor: '#42a1f4',
-          playerId:    event.playerId,
+          playerColor: payload.color,
+          playerId:    payload.playerId,
         })
       } else if (event.event === EVENTS.GAME_START) {
         this.setState({
