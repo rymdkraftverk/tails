@@ -1,4 +1,4 @@
-import { Entity, Timer } from 'l1'
+import { Entity, Util, Timer } from 'l1'
 import uuid from 'uuid/v4'
 import { LEFT, RIGHT, WIDTH, HEIGHT } from '.'
 import { players } from './lobby'
@@ -15,12 +15,12 @@ function createPlayer({ playerId, spriteId }, index) {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   sprite.scale.set(1)
-  sprite.x = 50 + (index * 200)
-  sprite.y = 50
+  sprite.x = 200 + ((index % 4) * 250)
+  sprite.y = 200 + (index > 3 ? 200 : 0)
   sprite.scale.set(0.4)
   square.behaviors.pivot = pivot(playerId)
   square.behaviors.trail = trail(spriteId)
-  square.behaviors.move = move()
+  square.behaviors.move = move(Util.getRandomInRange(0, 360))
   square.behaviors.collisionChecker = collisionChecker()
 
   // Enable the following behaviour for keyboard debugging
@@ -33,9 +33,9 @@ function toRadians(angle) {
   return angle * (Math.PI / 180)
 }
 
-const move = () => ({
+const move = startingDegrees => ({
   init: (b, e) => {
-    e.degrees = 0
+    e.degrees = startingDegrees
   },
   run: (b, e) => {
     const radians = toRadians(e.degrees)

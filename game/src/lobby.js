@@ -10,6 +10,10 @@ const COLORS = [
   'black',
   'yellow',
   'green',
+  'pink',
+  'brown',
+  'lightblue',
+  'orange',
 ]
 
 export function createLobby(gameCode) {
@@ -38,8 +42,8 @@ export function addPlayerToLobby(player) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
-  sprite.x = 500
-  sprite.y = 10 + (playerCount * 100)
+  sprite.x = 400 + (playerCount > 3 ? 200 : 0)
+  sprite.y = 10 + ((playerCount % 4) * 100)
   players[player.playerId] = player
   players[player.playerId].spriteId = `square-${color}`
   players[player.playerId].color = color
