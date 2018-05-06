@@ -20,7 +20,7 @@ function createPlayer({ playerId, spriteId, color }, index) {
   sprite.scale.set(1)
   sprite.x = 200 + ((index % 4) * 250)
   sprite.y = 200 + (index > 3 ? 200 : 0)
-  sprite.scale.set(0.4)
+  sprite.scale.set(0.3)
   square.behaviors.pivot = pivot(playerId)
   square.behaviors.trail = trail(spriteId)
   square.color = color
@@ -46,8 +46,8 @@ const move = startingDegrees => ({
     const radians = toRadians(e.degrees)
     const y = Math.cos(radians)
     const x = Math.sin(radians)
-    e.sprite.x += x * 1.3
-    e.sprite.y += y * 1.3
+    e.sprite.x += x * 1.2
+    e.sprite.y += y * 1.2
   },
 })
 
@@ -72,14 +72,14 @@ const pivot = playerId => ({
 })
 
 const trail = spriteId => ({
-  timer: Timer.create(5),
+  timer: Timer.create(2),
   run:   (b, e) => {
     if (b.timer.run()) {
       const trailE = Entity.create(`trail${uuid()}`)
       trailE.active = false
       Entity.addType(trailE, 'trail')
       const sprite = Entity.addSprite(trailE, spriteId)
-      sprite.scale.set(0.4)
+      sprite.scale.set(0.2)
       sprite.x = e.sprite.x + ((e.sprite.width / 2) - (sprite.width / 2))
       sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
       b.timer.reset()
