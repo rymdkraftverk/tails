@@ -111,8 +111,8 @@ const collisionChecker = () => ({
         Entity.destroy(e)
         console.log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
-      if (Entity.getByType('player').length === 1 && !game.hasEnded) {
-        game.hasEnded = true
+      if (Entity.getByType('player').length === 1 && game.started) {
+        game.started = false
         game.lastResult.winner = Entity.getByType('player')[0].color
         transitionToGameover()
       }

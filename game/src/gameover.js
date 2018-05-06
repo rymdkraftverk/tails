@@ -1,5 +1,5 @@
 import { Entity, Timer } from 'l1'
-import { createLobby } from './lobby'
+import { createLobby, players } from './lobby'
 import { game } from '.'
 import { big } from './util/text'
 
@@ -17,7 +17,7 @@ const pause = () => ({
   timer: Timer.create(100),
   run:   (b) => {
     if (b.timer.run()) {
-      createLobby(game.gameCode)
+      createLobby(game.gameCode, Object.values(players))
     }
   },
 })

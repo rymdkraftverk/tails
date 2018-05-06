@@ -18,7 +18,6 @@ export const game = {
   lastResult: {
     winner: null,
   },
-  hasEnded: false,
 }
 
 const configuration = {
@@ -105,6 +104,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
             command,
             ordering,
           } = data.payload
+          if (!game.started) return
 
           if (game.controllers[controllerId].lastOrder >= ordering) {
             console.log(`dropping old move: ${ordering}`)
