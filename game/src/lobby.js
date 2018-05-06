@@ -7,17 +7,20 @@ export const players = {
 
 const COLORS = [
   'red',
-  'black',
+  'purple',
   'yellow',
   'green',
   'pink',
   'brown',
-  'lightblue',
+  'turqouise',
   'orange',
+  'blue',
+  'white',
 ]
 
 export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   Entity.getAll()
+    .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
   createLobbyTitle()

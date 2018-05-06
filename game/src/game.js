@@ -6,6 +6,7 @@ import { transitionToGameover } from './gameover'
 
 export function gameState() {
   Entity.getAll()
+    .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
   Object.values(players)

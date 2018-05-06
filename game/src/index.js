@@ -8,6 +8,9 @@ import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
 const ADDRESS = process.env.WS_ADDRESS || 'http://localhost:3000'
+
+const MAX_PLAYERS_ALLOWED = 10
+
 export const game = {
   started:                        false,
   gameCode:                       '',
@@ -34,9 +37,12 @@ export const RIGHT = 'right'
 export const WIDTH = 1200
 export const HEIGHT = 600
 
-Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
+Game.init(WIDTH, HEIGHT, sprites, { debug: false }).then(() => {
   const ws = io(ADDRESS)
   ws.emit(EVENTS.CREATE, '')
+
+  const background = Entity.create('background')
+  Entity.addSprite(background, 'background', { zIndex: -999 })
 
   ws.on(EVENTS.CREATED, ({ gameCode }) => {
     console.log('gameId', gameCode)
@@ -119,7 +125,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
         }
 
         const playerJoined = () => {
-          if (Object.keys(players).length < 8 && !game.started) {
+          if (Object.keys(players).length < MAX_PLAYERS_ALLOWED && !game.started) {
             const { color } = addPlayerToLobby({ playerId })
             event.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
           } else {
