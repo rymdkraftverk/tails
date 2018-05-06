@@ -8,13 +8,17 @@ import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
 const ADDRESS = process.env.WS_ADDRESS || 'http://localhost:3000'
-const game = {
+export const game = {
   started:                        false,
   gameCode:                       '',
   hasReceivedControllerCandidate: false,
   controllers:                    {
 
   },
+  lastResult: {
+    winner: null,
+  },
+  hasEnded: false,
 }
 
 const configuration = {
@@ -106,7 +110,7 @@ Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
             console.log(`dropping old move: ${ordering}`)
             return
           }
-          console.log(`ordering: ${ordering}`)
+          // console.log(`ordering: ${ordering}`)
           game.controllers[controllerId].lastMoveOrder = ordering
           const commandFn = commands[command]
           if (commandFn) {

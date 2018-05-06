@@ -17,6 +17,9 @@ const COLORS = [
 ]
 
 export function createLobby(gameCode) {
+  Entity.getAll()
+    .forEach(Entity.destroy)
+
   createLobbyTitle()
   createGameCodeText(gameCode)
 }
