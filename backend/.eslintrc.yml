@@ -9,10 +9,9 @@ extends:
 rules:
   fp/no-nil: off
   fp/no-unused-expression: off
-  fp/no-mutation:
-    - error
-    -
-      commonjs: true
+  fp/no-mutation: off
+  fp/no-mutating-methods: off
+  no-param-reassign: off
   key-spacing:
     - error
     -
