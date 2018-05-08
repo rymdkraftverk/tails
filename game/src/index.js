@@ -7,12 +7,18 @@ import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
-const game = {
+
+const MAX_PLAYERS_ALLOWED = 10
+
+export const game = {
   started:                        false,
   gameCode:                       '',
   hasReceivedControllerCandidate: false,
   controllers:                    {
 
+  },
+  lastResult: {
+    winner: null,
   },
 }
 
@@ -108,7 +114,7 @@ const onOffer = ws => (event, { offer, controllerId }) => {
           log(`dropping old move: ${ordering}`)
           return
         }
-        log(`ordering: ${ordering}`)
+        // log(`ordering: ${ordering}`)
         game.controllers[controllerId].lastMoveOrder = ordering
         const commandFn = commands[command]
         if (commandFn) {
@@ -117,7 +123,7 @@ const onOffer = ws => (event, { offer, controllerId }) => {
       }
 
       const playerJoined = () => {
-        if (Object.keys(players).length < 8 && !game.started) {
+        if (Object.keys(players).length < MAX_PLAYERS_ALLOWED && !game.started) {
           const { color } = addPlayerToLobby({ playerId })
           rtcEvent.channel.send(JSON.stringify({ event: 'player.joined', payload: { playerId, color } }))
         } else {
@@ -189,13 +195,16 @@ const onMessage = ws => (message) => {
   f(ws)(event, payload)
 }
 
-Game.init(WIDTH, HEIGHT, sprites, { debug: true }).then(() => {
+Game.init(WIDTH, HEIGHT, sprites, { debug: false }).then(() => {
   const ws = new WebSocket(WS_ADDRESS)
 
   ws.onopen = () => {
     emit(ws, EVENTS.CREATE)
   }
   ws.onmessage = onMessage(ws)
+
+  const background = Entity.create('background')
+  Entity.addSprite(background, 'background', { zIndex: -999 })
 
   Key.add('up')
   Key.add('down')

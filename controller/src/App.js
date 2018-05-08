@@ -164,13 +164,17 @@ class App extends Component {
           playerColor: payload.color,
           playerId:    payload.playerId,
         })
-      } else if (event.event === EVENTS.GAME_START) {
+      } else if (event === EVENTS.GAME_START) {
         this.setState({
           appState: APP_STATE.GAME_PLAYING,
         })
-      } else if (event.event === EVENTS.GAME_STARTED) {
+      } else if (event === EVENTS.GAME_STARTED) {
         this.setState({
           appState: APP_STATE.GAME_PLAYING,
+        })
+      } else if (event === EVENTS.GAME_OVER) {
+        this.setState({
+          appState: APP_STATE.GAME_LOBBY,
         })
       }
     }
