@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import io from 'socket.io-client'
 import EVENTS from 'common'
 
 import LockerRoom from './LockerRoom'
@@ -8,7 +7,7 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
-const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'http://localhost:3000'
+const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'ws://localhost:3000'
 
 const RTC = {
   SERVERS: {
@@ -27,6 +26,8 @@ const APP_STATE = {
   GAME_LOBBY:      'game-lobby',
   GAME_PLAYING:    'game-playing',
 }
+
+const { warn } = console
 
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
 
@@ -52,7 +53,6 @@ const rtcCleanUP = ({ peer, channel }) => {
 
 const wsCleanUp = ({ ws }) => {
   if (ws) {
-    ws.disconnect()
     ws.close()
   }
 }
@@ -84,7 +84,7 @@ class App extends Component {
         maxPacketLifeTime: null,
       },
     )
-    const ws = io(WS_ADDRESS)
+    const ws = new WebSocket(WS_ADDRESS)
 
     const state = {
       candidates: [],
@@ -102,24 +102,44 @@ class App extends Component {
       this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: true })
     }
 
-    ws.on('connect', () => {
+    ws.onopen = () => {
       peer
         .createOffer()
         .then(offer => Promise.all([offer, peer.setLocalDescription(offer)]))
-        .then(([offer]) => ws.emit(EVENTS.OFFER, { gameCode, offer }))
-    })
+        .then(([offer]) => emit(EVENTS.OFFER, { gameCode, offer }))
+    }
 
-    ws.on(EVENTS.ANSWER, ({ answer }) => {
+    const emit = (event, payload) => {
+      const message = JSON.stringify({ event, payload })
+      ws.send(message)
+    }
+
+    const onAnswer = (event, { answer }) => {
       peer
         .setRemoteDescription(answer)
         .then(() =>
           state.candidates.forEach(c =>
-            ws.emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: c })))
-    })
+            emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: c })))
+    }
 
-    ws.on(EVENTS.GAME_CANDIDATE, ({ candidate }) => {
+    const onGameCandidate = (event, { candidate }) => {
       peer.addIceCandidate(new RTCIceCandidate(candidate))
-    })
+    }
+
+    const events = {
+      [EVENTS.ANSWER]:         onAnswer,
+      [EVENTS.GAME_CANDIDATE]: onGameCandidate,
+    }
+
+    ws.onmessage = (wsEvent) => {
+      const { event, payload } = JSON.parse(wsEvent.data)
+      const f = events[event]
+      if (!f) {
+        warn(`Unhandled event for message: ${wsEvent.data}`)
+        return
+      }
+      f(event, payload)
+    }
 
     peer.onicecandidate = (e) => {
       if (!e.candidate) {
