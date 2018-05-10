@@ -30,19 +30,29 @@ function createPlayer({ playerId, spriteId, color }, index) {
   sprite.x = 150 + ((index % 5) * 200)
   sprite.y = 150 + (index > 4 ? 300 : 0)
   sprite.scale.set(0.3)
-  square.behaviors.pivot = pivot(playerId)
-  square.behaviors.holeGenerator = holeGenerator()
-  square.behaviors.createTrail = createTrail(playerId, spriteId, square.behaviors.holeGenerator)
   square.color = color
-  square.behaviors.move = move(Util.getRandomInRange(0, 360))
-  square.behaviors.collisionChecker = collisionChecker(playerId)
   square.isAlive = true
-
-  // Enable the following behaviour for keyboard debugging
-  // square.behaviors.player1Keyboard = player1Keyboard()
-  const controller = Entity.create(`${playerId}controller`)
-  controller.direction = null
+  square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
 }
+
+const startPlayerMovement = (player, playerId, spriteId) => ({
+  timer: Timer.create(60),
+  run:   (b) => {
+    if (b.timer.run()) {
+      player.behaviors.pivot = pivot(playerId)
+      player.behaviors.holeGenerator = holeGenerator()
+      player.behaviors.createTrail = createTrail(playerId, spriteId, player.behaviors.holeGenerator)
+      player.behaviors.move = move(Util.getRandomInRange(0, 360))
+      player.behaviors.collisionChecker = collisionChecker(playerId)
+
+      // Enable the following behaviour for keyboard debugging
+      // square.behaviors.player1Keyboard = player1Keyboard()
+      const controller = Entity.create(`${playerId}controller`)
+      controller.direction = null
+    }
+  },
+})
+
 
 function toRadians(angle) {
   return angle * (Math.PI / 180)
