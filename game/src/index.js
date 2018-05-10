@@ -92,7 +92,7 @@ const onOffer = ws => (event, { offer, controllerId }) => {
     rtcEvent.channel.onmessage = (e) => {
       const data = JSON.parse(e.data)
 
-      const movePlayer = (player, direction) => {
+      const movePlayer = (playerEntity, direction) => {
         const playerEntity = Entity.get(`${playerId}controller`)
         if (playerEntity) {
           playerEntity.direction = direction
