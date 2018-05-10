@@ -58,6 +58,6 @@ function createPlayerEntity({ color }, playerCount) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
-  sprite.x = 400 + (playerCount > 3 ? 200 : 0)
-  sprite.y = 10 + ((playerCount % 4) * 100)
+  sprite.x = 400 + (playerCount > 4 ? 200 : 0)
+  sprite.y = 10 + ((playerCount % 5) * 100)
 }

@@ -4,6 +4,9 @@ import { LEFT, RIGHT, WIDTH, HEIGHT, game } from '.'
 import { players } from './lobby'
 import { transitionToGameover } from './gameover'
 
+const TURN_RADIUS = 3
+const SPEED_MULTIPLIER = 1.2
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -18,8 +21,8 @@ function createPlayer({ playerId, spriteId, color }, index) {
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
   sprite.scale.set(1)
-  sprite.x = 200 + ((index % 4) * 250)
-  sprite.y = 200 + (index > 3 ? 200 : 0)
+  sprite.x = 150 + ((index % 5) * 200)
+  sprite.y = 150 + (index > 4 ? 300 : 0)
   sprite.scale.set(0.3)
   square.behaviors.pivot = pivot(playerId)
   square.behaviors.createTrail = createTrail(playerId, spriteId)
@@ -46,8 +49,8 @@ const move = startingDegrees => ({
     const radians = toRadians(e.degrees)
     const y = Math.cos(radians)
     const x = Math.sin(radians)
-    e.sprite.x += x * 1.2
-    e.sprite.y += y * 1.2
+    e.sprite.x += x * SPEED_MULTIPLIER
+    e.sprite.y += y * SPEED_MULTIPLIER
   },
 })
 
@@ -58,13 +61,13 @@ const pivot = playerId => ({
         e.degrees = 0
         return
       }
-      e.degrees += 3
+      e.degrees += TURN_RADIUS
     } else if (Entity.get(`${playerId}controller`).direction === RIGHT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return
       }
-      e.degrees -= 3
+      e.degrees -= TURN_RADIUS
     } else {
       // Do nothing
     }
