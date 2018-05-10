@@ -8,6 +8,9 @@ import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
 const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'ws://localhost:3000'
+const TIMEOUT_SECONDS = 20
+
+console.log('WS_ADDRESS', WS_ADDRESS)
 
 const RTC = {
   SERVERS: {
@@ -197,7 +200,7 @@ class App extends Component {
   onJoin = () => {
     this.setState({ appState: APP_STATE.GAME_CONNECTING, error: false, fullscreen: true })
     setLastGameCode(this.state.gameCode)
-    setTimeout(this.checkConnectionTimeout, 5 * 1000)
+    setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     this.connectToGame(this.state.gameCode)
   };
 
