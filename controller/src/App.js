@@ -30,6 +30,7 @@ const APP_STATE = {
 const { warn } = console
 
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
+const isSafari = () => navigator.userAgent.search('Safari') >= 0 && navigator.userAgent.search('Chrome') >= 0
 
 const getLastGameCode = () => {
   const gameCode = localStorage.getItem('gameCode')
@@ -76,14 +77,9 @@ class App extends Component {
 
   connectToGame(gameCode) {
     const peer = new RTCPeerConnection(RTC.SERVERS)
-    const channel = peer.createDataChannel(
-      RTC.CHANNEL_NAME,
-      {
-        ordered:           false,
-        maxRetransmits:    0,
-        maxPacketLifeTime: null,
-      },
-    )
+    const channel = isSafari()
+      ? peer.createDataChannel(RTC.CHANNEL_NAME)
+      : peer.createDataChannel(RTC.CHANNEL_NAME, { ordered: false, maxRetransmits: 0 })
     const ws = new WebSocket(WS_ADDRESS)
 
     const state = {
