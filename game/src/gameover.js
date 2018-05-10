@@ -4,6 +4,8 @@ import { createLobby, players } from './lobby'
 import { game } from '.'
 import { big } from './util/text'
 
+const TIME_UNTIL_GAME_RESTARTS = 200
+
 export function transitionToGameover() {
   const gameover = Entity.create('game-over')
   const { winner } = game.lastResult
@@ -15,7 +17,7 @@ export function transitionToGameover() {
 }
 
 const pause = () => ({
-  timer: Timer.create(100),
+  timer: Timer.create(TIME_UNTIL_GAME_RESTARTS),
   run:   (b) => {
     if (b.timer.run()) {
       Object
