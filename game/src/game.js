@@ -7,6 +7,12 @@ import { transitionToGameover } from './gameover'
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 1.2
 
+const GENERATE_HOLE_MAX_TIME = 300
+const GENERATE_HOLE_MIN_TIME = 60
+
+const HOLE_LENGTH_MAX_TIME = 30
+const HOLE_LENGTH_MIN_TIME = 10
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -25,7 +31,8 @@ function createPlayer({ playerId, spriteId, color }, index) {
   sprite.y = 150 + (index > 4 ? 300 : 0)
   sprite.scale.set(0.3)
   square.behaviors.pivot = pivot(playerId)
-  square.behaviors.createTrail = createTrail(playerId, spriteId)
+  square.behaviors.holeGenerator = holeGenerator()
+  square.behaviors.createTrail = createTrail(playerId, spriteId, square.behaviors.holeGenerator)
   square.color = color
   square.behaviors.move = move(Util.getRandomInRange(0, 360))
   square.behaviors.collisionChecker = collisionChecker(playerId)
@@ -74,9 +81,12 @@ const pivot = playerId => ({
   },
 })
 
-const createTrail = (playerId, spriteId) => ({
+const createTrail = (playerId, spriteId, holeGenerator) => ({
   timer: Timer.create(2),
   run:   (b, e) => {
+    if (holeGenerator.preventTrail) {
+      return
+    }
     if (b.timer.run()) {
       const trailE = Entity.create(`trail${uuid()}`)
       trailE.active = false
@@ -92,6 +102,28 @@ const createTrail = (playerId, spriteId) => ({
     }
   },
 })
+
+const holeGenerator = () => ({
+  preventTrail:      false,
+  generateHoleTimer: Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
+  holeLengthTimer:   null,
+  run:               (b) => {
+    if (b.generateHoleTimer && b.generateHoleTimer.run()) {
+      b.preventTrail = true
+
+      b.holeLengthTimer = Timer.create(Util.getRandomInRange(HOLE_LENGTH_MIN_TIME, HOLE_LENGTH_MAX_TIME))
+
+      b.generateHoleTimer = null
+    } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
+      b.preventTrail = false
+
+      b.generateHoleTimer = Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME))
+
+      b.holeLengthTimer = null
+    }
+  },
+})
+
 
 /* This behavior is needed so that the player wont immediately collide with its own tail */
 const activate = () => ({
