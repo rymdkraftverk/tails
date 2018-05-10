@@ -13,16 +13,6 @@ class LockerRoom extends Component {
     return (
       <div id="lobby-container">
         <div className="flex-box">
-          {this.props.gameCode.length === 4
-            ? <button
-              id="lobby-join-button"
-              onClick={this.props.onJoin}>
-              Join
-                </button>
-            : null}
-        </div>
-
-        <div className="flex-box">
           <input
             id="lobby-game-code-input"
             type="text"
@@ -35,6 +25,15 @@ class LockerRoom extends Component {
             autoCorrect="off"
             autoCapitalize="off"
             maxLength="4" />
+        </div>
+        <div className="flex-box">
+          {this.props.gameCode.length === 4
+            ? <button
+              id="lobby-join-button"
+              onClick={this.props.onJoin}>
+              Join
+                </button>
+            : null}
         </div>
         <Notifications />
       </div>
