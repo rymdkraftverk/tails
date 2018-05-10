@@ -30,15 +30,15 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
 
 function createLobbyTitle() {
   const text = Entity.create('lobbyText')
-  const sprite = Entity.addText(text, 'LOBBY', big('white'))
-  sprite.x = 10
-  sprite.y = 10
+  const sprite = Entity.addText(text, 'LOBBY', small('white'))
+  sprite.x = 50
+  sprite.y = 50
 }
 
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
-  const sprite = Entity.addText(text, gameCode, small('white'))
-  sprite.x = 10
+  const sprite = Entity.addText(text, gameCode, big('white'))
+  sprite.x = 50
   sprite.y = 200
 }
 
