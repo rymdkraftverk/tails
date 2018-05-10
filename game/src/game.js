@@ -22,10 +22,10 @@ function createPlayer({ playerId, spriteId, color }, index) {
   sprite.y = 200 + (index > 3 ? 200 : 0)
   sprite.scale.set(0.3)
   square.behaviors.pivot = pivot(playerId)
-  square.behaviors.trail = trail(spriteId)
+  square.behaviors.createTrail = createTrail(playerId, spriteId)
   square.color = color
   square.behaviors.move = move(Util.getRandomInRange(0, 360))
-  square.behaviors.collisionChecker = collisionChecker()
+  square.behaviors.collisionChecker = collisionChecker(playerId)
   square.isAlive = true
 
   // Enable the following behaviour for keyboard debugging
@@ -71,12 +71,13 @@ const pivot = playerId => ({
   },
 })
 
-const trail = spriteId => ({
+const createTrail = (playerId, spriteId) => ({
   timer: Timer.create(2),
   run:   (b, e) => {
     if (b.timer.run()) {
       const trailE = Entity.create(`trail${uuid()}`)
       trailE.active = false
+      trailE.player = playerId
       Entity.addType(trailE, 'trail')
       const sprite = Entity.addSprite(trailE, spriteId)
       sprite.scale.set(0.2)
@@ -89,8 +90,9 @@ const trail = spriteId => ({
   },
 })
 
+/* This behavior is needed so that the player wont immediately collide with its own tail */
 const activate = () => ({
-  timer: Timer.create(60),
+  timer: Timer.create(5),
   run:   (b, e) => {
     if (b.timer.run()) {
       e.active = true
@@ -98,13 +100,13 @@ const activate = () => ({
   },
 })
 
-const collisionChecker = () => ({
-  timer: Timer.create(10),
+const collisionChecker = playerId => ({
+  timer: Timer.create(2),
   run:   (b, e) => {
     if (b.timer.run()) {
       const allTrails = Entity
         .getByType('trail')
-        .filter(t => t.active)
+        .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         Entity.destroy(e)
