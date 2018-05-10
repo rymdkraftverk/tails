@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
 const style = {
-  '-webkit-touch-callout': 'none',
-  '-webkit-user-select':   'none',
-  '-khtml-user-select':    'none',
-  '-moz-user-select':      'none',
-  '-ms-user-select':       'none',
-  'user-select':           'none',
+  WebkitTouchCallout: 'none',
+  WebkitUserSelect:   'none',
+  khtmlUserSelect:    'none',
+  MozUserSelect:      'none',
+  msUserSelect:       'none',
+  userSelect:         'none',
 }
 
 const playerBackgroundColors = {
