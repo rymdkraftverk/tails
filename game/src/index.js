@@ -92,13 +92,13 @@ const onOffer = ws => (event, { offer, controllerId }) => {
     rtcEvent.channel.onmessage = (e) => {
       const data = JSON.parse(e.data)
 
-      const movePlayer = (playerEntity, direction) => {
-        const playerEntity = Entity.get(`${playerId}controller`)
+      const movePlayer = (pId, direction) => {
+        const playerEntity = Entity.get(`${pId}controller`)
         if (playerEntity) {
           playerEntity.direction = direction
         } else {
           /* eslint-disable-next-line no-console */
-          console.log(`failed to move player ${playerEntity} with direction ${direction}`)
+          console.log(`failed to move player ${pId} with direction ${direction}`)
         }
       }
 
