@@ -102,9 +102,9 @@ const onOffer = ws => (event, { offer, controllerId }) => {
         }
       }
 
-      const moveLeft = () => movePlayer(`${playerId}controller`, LEFT)
-      const moveRight = () => movePlayer(`${playerId}controller`, RIGHT)
-      const moveStraight = () => movePlayer(`${playerId}controller`, null)
+      const moveLeft = () => movePlayer(playerId, LEFT)
+      const moveRight = () => movePlayer(playerId, RIGHT)
+      const moveStraight = () => movePlayer(playerId, null)
 
       const playerMovement = () => {
         const {
