@@ -30,7 +30,7 @@ const APP_STATE = {
 const { warn } = console
 
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
-const isSafari = () => navigator.userAgent.search('Safari') >= 0 && navigator.userAgent.search('Chrome') >= 0
+const isSafari = () => navigator.userAgent.indexOf('Safari') > -1
 
 const getLastGameCode = () => {
   const gameCode = localStorage.getItem('gameCode')
