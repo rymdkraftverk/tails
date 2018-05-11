@@ -47,24 +47,40 @@ const onGameCreate = client => () => {
 
 const onOffer = client => (event, { gameCode, offer }) => {
   const game = getGameClient(gameCode)
+  if (!game) {
+    return
+  }
+
   emit(game, event, { offer, controllerId: client.id })
   log(`Controller client ${client.id} sending offer to game client ${game.id} with game code ${gameCode}`)
 }
 
 const onAnswer = client => (event, { answer, controllerId }) => {
   const controller = getClient(controllerId)
+  if (!controller) {
+    return
+  }
+
   emit(controller, event, { answer })
   log(`Game client ${client.id} with game code ${client.gameCode} sending answer to controller client ${controller.id}`)
 }
 
 const onControllerCandidate = client => (event, { candidate, gameCode }) => {
   const game = getGameClient(gameCode)
+  if (!game) {
+    return
+  }
+
   emit(game, event, { candidate, controllerId: client.id })
   log(`Controller client ${client.id} sending candidate to game client ${game.id} with game code ${gameCode}`)
 }
 
 const onGameCandidate = client => (event, { candidate, controllerId }) => {
   const controller = getClient(controllerId)
+  if (!controller) {
+    return
+  }
+
   emit(controller, event, { candidate })
   log(`Game client ${client.id} with game code ${client.gameCode} sending candidate to controller client ${controller.id}`)
 }
