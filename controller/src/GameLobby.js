@@ -7,6 +7,8 @@ const style = {
   MozUserSelect:      'none',
   msUserSelect:       'none',
   userSelect:         'none',
+
+  touchAction: 'manipulation',
 }
 
 const playerBackgroundColors = {
@@ -31,7 +33,7 @@ const playerColorToBackgroundColor = (player) => {
 class GameLobby extends Component {
   render() {
     return (
-      <div id="game-lobby-container" style={{ backgroundColor: playerColorToBackgroundColor(this.props.playerColor) }}>
+      <div id="game-lobby-container" style={{ touchAction: 'manipulation', backgroundColor: playerColorToBackgroundColor(this.props.playerColor) }}>
         <div style={style} className="flex-box" onClick={this.props.startGame}>Start Game!</div>
       </div>
     )

@@ -226,6 +226,7 @@ class App extends Component {
   render() {
     return (
       <Fullscreen
+        style={{ touchAction: 'manipulation' }}
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}>
         {

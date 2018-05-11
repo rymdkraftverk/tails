@@ -66,9 +66,9 @@ class GamePlaying extends Component {
 
   render() {
     return (
-  <div id="controller-container">
-  <div id="controller-left" onMouseDown={this.sendLeft} onMouseUp={this.sendNone} onTouchStart={this.sendLeft} onTouchEnd={this.sendNone}>LEFT</div>
-  <div id="controller-right" onMouseDown={this.sendRight} onMouseUp={this.sendNone} onTouchStart={this.sendRight} onTouchEnd={this.sendNone}>RIGHT</div>
+  <div id="controller-container" style={{ touchAction: 'manipulation' }}>
+    <div id="controller-left" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendLeft} onMouseUp={this.sendNone} onTouchStart={this.sendLeft} onTouchEnd={this.sendNone}>LEFT</div>
+    <div id="controller-right" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendRight} onMouseUp={this.sendNone} onTouchStart={this.sendRight} onTouchEnd={this.sendNone}>RIGHT</div>
   </div>
     )
   }
