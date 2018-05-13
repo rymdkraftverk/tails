@@ -54,9 +54,9 @@ const onGameCreate = client => () => {
 const onOffer = client => (event, { gameCode, offer }) => {
   const game = getGameClient(gameCode)
   if (!game) {
+    warn(`Game with code ${gameCode} not found`)
     return
   }
-
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(game)}`)
   emit(game, event, { offer, controllerId: client.id })
 }
@@ -64,9 +64,9 @@ const onOffer = client => (event, { gameCode, offer }) => {
 const onAnswer = client => (event, { answer, controllerId }) => {
   const controller = getClient(controllerId)
   if (!controller) {
+    warn(`Controller with id ${controllerId} not found`)
     return
   }
-
   log(`[Answer] ${prettyClient(client)} -> ${prettyClient(controller)}`)
   emit(controller, event, { answer })
 }
@@ -74,9 +74,9 @@ const onAnswer = client => (event, { answer, controllerId }) => {
 const onControllerCandidate = client => (event, { candidate, gameCode }) => {
   const game = getGameClient(gameCode)
   if (!game) {
+    warn(`Game with code ${gameCode} not found`)
     return
   }
-
   log(`[Controller Candidate] ${prettyClient(client)} -> ${prettyClient(game)}`)
   emit(game, event, { candidate, controllerId: client.id })
 }
@@ -84,9 +84,9 @@ const onControllerCandidate = client => (event, { candidate, gameCode }) => {
 const onGameCandidate = client => (event, { candidate, controllerId }) => {
   const controller = getClient(controllerId)
   if (!controller) {
+    warn(`Controller with id ${controllerId} not found`)
     return
   }
-
   log(`[Game Candidate] ${prettyClient(client)} -> ${prettyClient(controller)}`)
   emit(controller, event, { candidate })
 }
