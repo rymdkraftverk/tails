@@ -3,6 +3,8 @@ import EVENTS from '../../common/events'
 import { createLobby, players } from './lobby'
 import { game } from '.'
 import { big } from './util/text'
+import { connSend } from './conn'
+
 
 const TIME_UNTIL_GAME_RESTARTS = 200
 
@@ -22,8 +24,8 @@ const pause = () => ({
     if (b.timer.run()) {
       Object
         .values(game.controllers)
-        .forEach(({ channel }) =>
-          channel.send(JSON.stringify({ event: EVENTS.GAME_OVER, payload: {} })))
+        .forEach(({ controllerId }) =>
+          connSend(game.conn, controllerId, { event: EVENTS.GAME_OVER, payload: {} }))
 
       createLobby(game.gameCode, Object.values(players))
     }
