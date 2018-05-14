@@ -4,6 +4,15 @@ import { LEFT, RIGHT, WIDTH, HEIGHT, game } from '.'
 import { players } from './lobby'
 import { transitionToGameover } from './gameover'
 
+const TURN_RADIUS = 3
+const SPEED_MULTIPLIER = 1.2
+
+const GENERATE_HOLE_MAX_TIME = 300
+const GENERATE_HOLE_MIN_TIME = 60
+
+const HOLE_LENGTH_MAX_TIME = 30
+const HOLE_LENGTH_MIN_TIME = 10
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -18,21 +27,32 @@ function createPlayer({ playerId, spriteId, color }, index) {
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
   sprite.scale.set(1)
-  sprite.x = 200 + ((index % 4) * 250)
-  sprite.y = 200 + (index > 3 ? 200 : 0)
+  sprite.x = 150 + ((index % 5) * 200)
+  sprite.y = 150 + (index > 4 ? 300 : 0)
   sprite.scale.set(0.3)
-  square.behaviors.pivot = pivot(playerId)
-  square.behaviors.trail = trail(spriteId)
   square.color = color
-  square.behaviors.move = move(Util.getRandomInRange(0, 360))
-  square.behaviors.collisionChecker = collisionChecker()
   square.isAlive = true
-
-  // Enable the following behaviour for keyboard debugging
-  // square.behaviors.player1Keyboard = player1Keyboard()
-  const controller = Entity.create(`${playerId}controller`)
-  controller.direction = null
+  square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
 }
+
+const startPlayerMovement = (player, playerId, spriteId) => ({
+  timer: Timer.create(60),
+  run:   (b) => {
+    if (b.timer.run()) {
+      player.behaviors.pivot = pivot(playerId)
+      player.behaviors.holeGenerator = holeGenerator()
+      player.behaviors.createTrail = createTrail(playerId, spriteId, player.behaviors.holeGenerator)
+      player.behaviors.move = move(Util.getRandomInRange(0, 360))
+      player.behaviors.collisionChecker = collisionChecker(playerId)
+
+      // Enable the following behaviour for keyboard debugging
+      // square.behaviors.player1Keyboard = player1Keyboard()
+      const controller = Entity.create(`${playerId}controller`)
+      controller.direction = null
+    }
+  },
+})
+
 
 function toRadians(angle) {
   return angle * (Math.PI / 180)
@@ -46,8 +66,8 @@ const move = startingDegrees => ({
     const radians = toRadians(e.degrees)
     const y = Math.cos(radians)
     const x = Math.sin(radians)
-    e.sprite.x += x * 1.2
-    e.sprite.y += y * 1.2
+    e.sprite.x += x * SPEED_MULTIPLIER
+    e.sprite.y += y * SPEED_MULTIPLIER
   },
 })
 
@@ -58,25 +78,29 @@ const pivot = playerId => ({
         e.degrees = 0
         return
       }
-      e.degrees += 3
+      e.degrees += TURN_RADIUS
     } else if (Entity.get(`${playerId}controller`).direction === RIGHT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return
       }
-      e.degrees -= 3
+      e.degrees -= TURN_RADIUS
     } else {
       // Do nothing
     }
   },
 })
 
-const trail = spriteId => ({
+const createTrail = (playerId, spriteId, holeGenerator) => ({
   timer: Timer.create(2),
   run:   (b, e) => {
+    if (holeGenerator.preventTrail) {
+      return
+    }
     if (b.timer.run()) {
       const trailE = Entity.create(`trail${uuid()}`)
       trailE.active = false
+      trailE.player = playerId
       Entity.addType(trailE, 'trail')
       const sprite = Entity.addSprite(trailE, spriteId)
       sprite.scale.set(0.2)
@@ -89,8 +113,31 @@ const trail = spriteId => ({
   },
 })
 
+const holeGenerator = () => ({
+  preventTrail:      false,
+  generateHoleTimer: Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
+  holeLengthTimer:   null,
+  run:               (b) => {
+    if (b.generateHoleTimer && b.generateHoleTimer.run()) {
+      b.preventTrail = true
+
+      b.holeLengthTimer = Timer.create(Util.getRandomInRange(HOLE_LENGTH_MIN_TIME, HOLE_LENGTH_MAX_TIME))
+
+      b.generateHoleTimer = null
+    } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
+      b.preventTrail = false
+
+      b.generateHoleTimer = Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME))
+
+      b.holeLengthTimer = null
+    }
+  },
+})
+
+
+/* This behavior is needed so that the player wont immediately collide with its own tail */
 const activate = () => ({
-  timer: Timer.create(60),
+  timer: Timer.create(5),
   run:   (b, e) => {
     if (b.timer.run()) {
       e.active = true
@@ -98,13 +145,13 @@ const activate = () => ({
   },
 })
 
-const collisionChecker = () => ({
-  timer: Timer.create(10),
+const collisionChecker = playerId => ({
+  timer: Timer.create(2),
   run:   (b, e) => {
     if (b.timer.run()) {
       const allTrails = Entity
         .getByType('trail')
-        .filter(t => t.active)
+        .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         Entity.destroy(e)

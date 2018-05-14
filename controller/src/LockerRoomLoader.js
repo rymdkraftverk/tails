@@ -4,11 +4,12 @@ import React, { Component } from 'react'
 class LockerRoomLoader extends Component {
   render() {
     return (
-      <div>
-        {!this.props.error ? <div id="loader"></div> : null}
+      <div style={{ touchAction: 'manipulation' }}>
+        {!this.props.error ? <div id="loader" style={{ touchAction: 'manipulation' }}></div> : null}
         {this.props.error ?
           <button
             id="lobby-join-button"
+            style={{ touchAction: 'manipulation' }}
             onClick={this.joinGame}>Join</button>
           : null}
       </div>

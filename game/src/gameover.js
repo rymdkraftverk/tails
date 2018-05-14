@@ -5,7 +5,10 @@ import { game } from '.'
 import { big } from './util/text'
 import { connSend } from './conn'
 
-export function transitionToGameover(conn) {
+
+const TIME_UNTIL_GAME_RESTARTS = 200
+
+export function transitionToGameover() {
   const gameover = Entity.create('game-over')
   const { winner } = game.lastResult
   const text = Entity.addText(gameover, `Winner is ${winner}!`, big(winner), { zIndex: 100 })
@@ -16,7 +19,7 @@ export function transitionToGameover(conn) {
 }
 
 const pause = () => ({
-  timer: Timer.create(100),
+  timer: Timer.create(TIME_UNTIL_GAME_RESTARTS),
   run:   (b) => {
     if (b.timer.run()) {
       Object

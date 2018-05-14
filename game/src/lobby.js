@@ -30,15 +30,15 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
 
 function createLobbyTitle() {
   const text = Entity.create('lobbyText')
-  const sprite = Entity.addText(text, 'LOBBY', big('white'))
-  sprite.x = 10
-  sprite.y = 10
+  const sprite = Entity.addText(text, 'LOBBY', small('white'))
+  sprite.x = 50
+  sprite.y = 50
 }
 
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
-  const sprite = Entity.addText(text, gameCode, small('white'))
-  sprite.x = 10
+  const sprite = Entity.addText(text, gameCode, big('white'))
+  sprite.x = 50
   sprite.y = 200
 }
 
@@ -58,6 +58,6 @@ function createPlayerEntity({ color }, playerCount) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
-  sprite.x = 400 + (playerCount > 3 ? 200 : 0)
-  sprite.y = 10 + ((playerCount % 4) * 100)
+  sprite.x = 400 + (playerCount > 4 ? 200 : 0)
+  sprite.y = 10 + ((playerCount % 5) * 100)
 }
