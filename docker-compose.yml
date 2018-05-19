@@ -1,0 +1,27 @@
+version: '3'
+services:
+    redis:
+        image: 'redis:latest'
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        ports:
+            - '3000:3000'
+        depends_on:
+            - redis
+
+    game:
+        build:
+            context: ./
+            dockerfile: ./game/Dockerfile
+        ports:
+            - '8081:8081'
+
+    controller:
+        build:
+            context: ./
+            dockerfile: ./controller/Dockerfile
+        ports:
+            - '3001:3001'
