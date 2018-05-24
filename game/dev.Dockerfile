@@ -7,4 +7,4 @@ RUN npm install
 RUN npm run build
 EXPOSE 8081
 
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npm run watch & npm run start"]

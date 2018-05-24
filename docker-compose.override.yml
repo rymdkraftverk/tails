@@ -1,0 +1,22 @@
+version: '3'
+services:
+    backend:
+        build:
+            context: ./
+            dockerfile: ./backend/dev.Dockerfile
+        volumes:
+            - ./backend:/novelty/backend
+            - ./common:/novelty/common
+
+    game:
+        build:
+            context: ./
+            dockerfile: ./game/dev.Dockerfile
+        volumes:
+            - ./game:/novelty/game
+            - ./common:/novelty/common
+
+    controller:
+        volumes:
+            - ./controller:/novelty/controller
+            - ./common:/novelty/common
