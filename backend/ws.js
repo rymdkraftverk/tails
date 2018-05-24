@@ -2,11 +2,9 @@ const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
 const parseArgs = require('./parse-args')
-const { prepareMakeGameCode, prepareDeleteGameCode } = require('./make-game-code')
+const { prepareDeleteGameCode } = require('./make-game-code')
 
 const EVENTS = require('../common/events')
-
-const PORT = 3000
 
 const TYPE = {
   CONTROLLER: 'controller',
@@ -16,7 +14,6 @@ const TYPE = {
 const { log, warn } = console
 
 const args = parseArgs(process.argv)
-const makeGameCode = prepareMakeGameCode(args.redis)
 const deleteGameCode = prepareDeleteGameCode(args.redis)
 
 const getClient = id => clients.find(x => x.id === id)
@@ -39,16 +36,10 @@ const emit = (client, event, payload) => {
   client.socket.send(message)
 }
 
-const onGameCreate = client => () => {
-  makeGameCode()
-    .then((gameCode) => {
-      client.type = TYPE.GAME
-      client.gameCode = gameCode
-      log(`[Controller upgraded] ${prettyClient(client)}`)
-
-      emit(client, EVENTS.CREATED, { gameCode })
-      log(`[Game created] ${gameCode}`)
-    })
+const onGameUpgrade = client => (event, { gameCode }) => {
+  client.type = TYPE.GAME
+  client.gameCode = gameCode
+  log(`[Game upgrade] ${prettyClient(client)}`)
 }
 
 const onOffer = client => (event, { gameCode, offer }) => {
@@ -92,7 +83,7 @@ const onGameCandidate = client => (event, { candidate, controllerId }) => {
 }
 
 const events = {
-  [EVENTS.CREATE]:               onGameCreate,
+  [EVENTS.GAME_UPGRADE]:         onGameUpgrade,
   [EVENTS.ANSWER]:               onAnswer,
   [EVENTS.CONTROLLER_CANDIDATE]: onControllerCandidate,
   [EVENTS.GAME_CANDIDATE]:       onGameCandidate,
@@ -118,9 +109,9 @@ const onClose = client => () => {
   }
 }
 
-const init = () => {
-  const server = new WebSocket.Server({ port: PORT })
-  log(`listening on port ${PORT}`)
+const init = (port) => {
+  const server = new WebSocket.Server({ port })
+  log(`ws listening on port ${port}`)
 
   server.on('connection', (socket) => {
     const client = createClient(socket)

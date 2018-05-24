@@ -1,5 +1,5 @@
 const EVENTS = {
-  CREATE:                'game.create',
+  GAME_UPGRADE:          'game.upgrade',
   CREATED:               'game.created',
   GAME_START:            'game.start',
   GAME_STARTED:          'game.started',

@@ -7,6 +7,7 @@ import { gameState } from './game'
 import { connCreate, connSend, connClose } from './conn'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
+const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
 
 const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
@@ -110,6 +111,7 @@ const onData = (conn, controllerId, { event, payload }) => {
 Game.init(WIDTH, HEIGHT, sprites, { debug: false }).then(() => {
   const conn = connCreate(
     WS_ADDRESS,
+    HTTP_ADDRESS,
     {
       onGameCreated,
       onData,

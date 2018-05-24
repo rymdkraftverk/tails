@@ -1,7 +1,7 @@
 import uuid from 'uuid/v4'
 import EVENTS from '../../common/events'
 
-const { log, warn } = console
+const { error, log, warn } = console
 
 const configuration = {
   iceServers: [
@@ -52,11 +52,6 @@ const onClientDataChannel = (conn, controllerId) => (rtcEvent) => {
   /* eslint-disable-next-line */
   rtcEvent.channel.onmessage = onClientData(conn, controllerId)
   log(`client ${controllerId} on data channel`)
-}
-
-const onGameCreated = conn => (event, { gameCode }) => {
-  log('gameId', gameCode)
-  conn.callbacks.onGameCreated({ gameCode })
 }
 
 const createClient = (controllerId, rtc) => ({
@@ -119,6 +114,17 @@ const emit = (ws, event, payload) => {
   ws.send(message)
 }
 
+const createGame = (httpAddress, ws, onGameCreated) => {
+  fetch(`${httpAddress}/game`, { method: 'POST' })
+    .then(res => res.json())
+    .then(({ gameCode }) => {
+      emit(ws, EVENTS.GAME_UPGRADE, { gameCode })
+      onGameCreated({ gameCode })
+      log('gameId', gameCode)
+    })
+    .catch(error)
+}
+
 const onMessage = (events, conn) => (message) => {
   const { event, payload } = JSON.parse(message.data)
   const f = events[event]
@@ -150,8 +156,8 @@ const close = (c, controllerId) => {
   return true
 }
 
-const create = (address, callbacks) => {
-  const ws = new WebSocket(address)
+const create = (wsAdress, httpAddress, callbacks) => {
+  const ws = new WebSocket(wsAdress)
   const conn = {
     gameCode: null,
     callbacks,
@@ -160,12 +166,11 @@ const create = (address, callbacks) => {
   }
 
   const events = {
-    [EVENTS.CREATED]:              onGameCreated,
     [EVENTS.OFFER]:                onOffer,
     [EVENTS.CONTROLLER_CANDIDATE]: onControllerCandidate,
   }
 
-  ws.onopen = () => emit(ws, EVENTS.CREATE)
+  ws.onopen = () => createGame(httpAddress, ws, callbacks.onGameCreated)
   ws.onmessage = onMessage(events, conn)
 
   return conn
