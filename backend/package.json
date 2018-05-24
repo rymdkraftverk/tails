@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
     "ramda": "^0.25.0",
     "redis": "^2.8.0",
     "uuid": "^3.2.1",
