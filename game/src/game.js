@@ -4,6 +4,8 @@ import { LEFT, RIGHT, WIDTH, HEIGHT, game } from '.'
 import { players } from './lobby'
 import { transitionToGameover } from './gameover'
 
+const { log } = console
+
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 1.2
 
@@ -115,19 +117,22 @@ const createTrail = (playerId, spriteId, holeGenerator) => ({
 
 const holeGenerator = () => ({
   preventTrail:      false,
-  generateHoleTimer: Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
-  holeLengthTimer:   null,
-  run:               (b) => {
+  generateHoleTimer: Timer
+    .create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
+  holeLengthTimer: null,
+  run:             (b) => {
     if (b.generateHoleTimer && b.generateHoleTimer.run()) {
       b.preventTrail = true
 
-      b.holeLengthTimer = Timer.create(Util.getRandomInRange(HOLE_LENGTH_MIN_TIME, HOLE_LENGTH_MAX_TIME))
+      const rand = Util.getRandomInRange(HOLE_LENGTH_MIN_TIME, HOLE_LENGTH_MAX_TIME)
+      b.holeLengthTimer = Timer.create(rand)
 
       b.generateHoleTimer = null
     } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
       b.preventTrail = false
 
-      b.generateHoleTimer = Timer.create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME))
+      const rand = Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)
+      b.generateHoleTimer = Timer.create(rand)
 
       b.holeLengthTimer = null
     }
@@ -157,7 +162,7 @@ const collisionChecker = playerId => ({
         Entity.destroy(e)
       } else if (e.sprite.x < 0 || e.sprite.x > WIDTH || e.sprite.y < 0 || e.sprite.y > HEIGHT) {
         Entity.destroy(e)
-        console.log('PLAYER DIED DUE TO OUT OF BOUNDS!')
+        log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       if (Entity.getByType('player').length === 1 && game.started) {
         game.started = false

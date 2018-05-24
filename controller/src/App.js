@@ -7,10 +7,12 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 
+const { log } = console
+
 const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'ws://localhost:3000'
 const TIMEOUT_SECONDS = 20
 
-console.log('WS_ADDRESS', WS_ADDRESS)
+log('WS_ADDRESS', WS_ADDRESS)
 
 const RTC = {
   SERVERS: {

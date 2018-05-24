@@ -48,8 +48,6 @@ const prepareDeleteGameCode = (redisPath) => {
     return () => new Promise(res => res())
   }
 
-  console.log('test')
-
   const url = new URL(redisPath)
 
   const { del } = connectClient(url.port, url.hostname)
