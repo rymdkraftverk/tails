@@ -1,4 +1,3 @@
-import uuid from 'uuid/v4'
 import EVENTS from '../../common/events'
 
 const { error, log, warn } = console
@@ -19,7 +18,7 @@ const onClientICECandidate = (conn, controllerId) => (rtcEvent) => {
 
   const client = conn.clients.get(controllerId)
   if (!client) {
-    console.log(`client ${controllerId} was not found in conn.clients`)
+    log(`client ${controllerId} was not found in conn.clients`)
     return
   }
 
@@ -97,7 +96,7 @@ const onControllerCandidate = conn => (event, { controllerId, candidate }) => {
 
   const client = conn.clients.get(controllerId)
   if (!client) {
-    console.log(`failed to find client ${controllerId} in conn.clients`)
+    log(`failed to find client ${controllerId} in conn.clients`)
     return
   }
 
