@@ -1,9 +1,22 @@
-version: '3'
+version: '2'
 services:
     redis:
         image: 'redis:latest'
+        logging:
+          driver: awslogs
+          options: 
+            awslogs-group: tutorial
+            awslogs-region: us-east-1
+            awslogs-stream-prefix: wordpress
 
     backend:
+        image: 'rymdkraftverk/novelty_backend'
+        logging:
+          driver: awslogs
+          options: 
+            awslogs-group: tutorial
+            awslogs-region: us-east-1
+            awslogs-stream-prefix: wordpress
         build:
             context: .
             dockerfile: ./backend/Dockerfile
@@ -13,6 +26,13 @@ services:
             - redis
 
     game:
+        image: 'rymdkraftverk/novelty_game'
+        logging:
+          driver: awslogs
+          options: 
+            awslogs-group: tutorial
+            awslogs-region: us-east-1
+            awslogs-stream-prefix: wordpress
         build:
             context: ./
             dockerfile: ./game/Dockerfile
@@ -20,6 +40,13 @@ services:
             - '8081:8081'
 
     controller:
+        image: 'rymdkraftverk/novelty_controller'
+        logging:
+          driver: awslogs
+          options: 
+            awslogs-group: tutorial
+            awslogs-region: us-east-1
+            awslogs-stream-prefix: wordpress
         build:
             context: ./
             dockerfile: ./controller/Dockerfile
