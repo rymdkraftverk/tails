@@ -1,22 +1,25 @@
 version: '3'
 services:
     backend:
-        build:
-            context: ./
-            dockerfile: ./backend/dev.Dockerfile
+        image: 'node:carbon'
+        working_dir: /novelty/backend
+        command: ["sh", "./run-dev.sh"]
         volumes:
             - ./backend:/novelty/backend
             - ./common:/novelty/common
 
     game:
-        build:
-            context: ./
-            dockerfile: ./game/dev.Dockerfile
+        image: 'node:carbon'
+        working_dir: /novelty/game
+        command: ["sh", "./run-dev.sh"]
         volumes:
             - ./game:/novelty/game
             - ./common:/novelty/common
 
     controller:
+        image: 'node:carbon'
+        working_dir: /novelty/controller
+        command: ["sh", "./run-dev.sh"]
         volumes:
             - ./controller:/novelty/controller
             - ./common:/novelty/common

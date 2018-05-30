@@ -15,14 +15,16 @@ services:
 
     game:
         build:
-            context: ./
+            context: .
             dockerfile: ./game/Dockerfile
         ports:
             - '8081:8081'
 
     controller:
+        environment:
+            - REACT_APP_WS_ADDRESS=ws://localhost:3000
         build:
-            context: ./
+            context: .
             dockerfile: ./controller/Dockerfile
         ports:
             - '4001:4001'
