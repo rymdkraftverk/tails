@@ -1,7 +1,8 @@
 import { Entity, Util, Timer, Game } from 'l1'
 import uuid from 'uuid/v4'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
-import { players } from './lobby'
+import { players, COLORS_HEX } from './lobby'
+import config from './emitter.json'
 import { transitionToGameover } from './gameover'
 
 const { log } = console
@@ -40,6 +41,7 @@ function createPlayer({ playerId, spriteId, color }, index) {
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
+  Game.addEmitter(playerId, [Game.getTexture('particle')], config)
 }
 
 const startPlayerMovement = (player, playerId, spriteId) => ({
@@ -71,8 +73,8 @@ const move = startingDegrees => ({
   },
   run: (b, e) => {
     const radians = toRadians(e.degrees)
-    const y = Math.cos(radians)
-    const x = Math.sin(radians)
+    const y = Math.sin(radians)
+    const x = Math.cos(radians)
     e.sprite.x += x * SPEED_MULTIPLIER
     e.sprite.y += y * SPEED_MULTIPLIER
   },
@@ -80,13 +82,13 @@ const move = startingDegrees => ({
 
 const pivot = playerId => ({
   run: (b, e) => {
-    if (Entity.get(`${playerId}controller`).direction === LEFT) {
+    if (Entity.get(`${playerId}controller`).direction === RIGHT) {
       if (e.degrees >= 360) {
         e.degrees = 0
         return
       }
       e.degrees += TURN_RADIUS
-    } else if (Entity.get(`${playerId}controller`).direction === RIGHT) {
+    } else if (Entity.get(`${playerId}controller`).direction === LEFT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return
@@ -154,6 +156,29 @@ const activate = () => ({
   },
 })
 
+const killPlayer = (e, playerId) => {
+  const emitter = Game.getEmitter(playerId)
+
+  const updatedConfig = {
+    ...config,
+    emit: true,
+    pos:  {
+      x: e.sprite.position.x,
+      y: e.sprite.position.y,
+    },
+    startRotation: {
+      min: e.degrees - 30,
+      max: e.degrees + 30,
+    },
+    color: {
+      start: COLORS_HEX[e.color],
+      end:   COLORS_HEX[e.color],
+    },
+  }
+  emitter.init([Game.getTexture('particle')], updatedConfig)
+  Entity.destroy(e)
+}
+
 const collisionChecker = playerId => ({
   timer: Timer.create(2),
   run:   (b, e) => {
@@ -163,13 +188,13 @@ const collisionChecker = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        Entity.destroy(e)
+        killPlayer(e, playerId)
       } else if (
         e.sprite.x < WALL_THICKNESS ||
         e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
         e.sprite.y < WALL_THICKNESS ||
         e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
-        Entity.destroy(e)
+        killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       if (Entity.getByType('player').length === 1 && game.started) {
