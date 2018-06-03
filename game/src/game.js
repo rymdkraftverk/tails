@@ -1,4 +1,4 @@
-import { Entity, Util, Timer, Game } from 'l1'
+import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
 import { players, COLORS_HEX } from './lobby'
@@ -175,6 +175,8 @@ const killPlayer = (e, playerId) => {
       end:   COLORS_HEX[e.color],
     },
   }
+  const explosion = Sound.getSound('./sounds/explosion.wav', { volume: 0.6 })
+  explosion.play()
   emitter.init([Game.getTexture('particle')], updatedConfig)
   Entity.destroy(e)
 }
