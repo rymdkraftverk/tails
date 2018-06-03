@@ -4,6 +4,8 @@ services:
         image: 'redis:latest'
 
     backend:
+        environment:
+            - REDIS_PATH=rs://redis:6379
         build:
             context: .
             dockerfile: ./backend/Dockerfile

@@ -5,7 +5,7 @@ const redis = require('redis')
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
-  client.on('error', err => console.log(`Error ${err}`)) // eslint-disable-line no-console
+  client.on('error', err => console.error(`Error ${err}`)) // eslint-disable-line no-console
 
   const set = util.promisify(client.set).bind(client)
   const exists = util.promisify(client.exists).bind(client)
@@ -19,31 +19,34 @@ const connectClient = (port, hostname) => {
 }
 
 const makeGameCode = (set, exists) => {
-  const potentialId = Math
+  const candidateCode = Math
     .random()
     .toString(36)
     .substring(2, 6)
     .toUpperCase()
 
-  return exists(potentialId)
+  return exists(candidateCode)
     .then(doesExist => (doesExist
-      ? makeGameCode()
-      : set(potentialId, potentialId).then(() => potentialId)))
+      ? makeGameCode(set, exists)
+      : set(candidateCode, candidateCode).then(() => candidateCode)))
 }
 
-const prepareMakeGameCode = (redisPath) => {
+const prepareMakeGameCode = () => {
+  const redisPath = process.env.REDIS_PATH
+
   if (!redisPath) {
-    return () => new Promise(res => res(Math.random().toString(36).substring(2, 6).toUpperCase()))
+    return () => Promise.resolve(Math.random().toString(36).substring(2, 6).toUpperCase())
   }
 
-  const url = new URL(redisPath)
-
-  const { set, exists } = connectClient(url.port, url.hostname)
+  const { port, hostname } = new URL(redisPath)
+  const { set, exists } = connectClient(port, hostname)
 
   return () => makeGameCode(set, exists)
 }
 
-const prepareDeleteGameCode = (redisPath) => {
+const prepareDeleteGameCode = () => {
+  const redisPath = process.env.REDIS_PATH
+
   if (!redisPath) {
     return () => new Promise(res => res())
   }

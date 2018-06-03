@@ -1,7 +1,6 @@
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
-const parseArgs = require('./parse-args')
 const { prepareDeleteGameCode } = require('./make-game-code')
 
 const EVENTS = require('../common/events')
@@ -13,8 +12,7 @@ const TYPE = {
 
 const { log, warn } = console
 
-const args = parseArgs(process.argv)
-const deleteGameCode = prepareDeleteGameCode(args.redis)
+const deleteGameCode = prepareDeleteGameCode()
 
 const getClient = id => clients.find(x => x.id === id)
 const getGameClient = gameCode =>

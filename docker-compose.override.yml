@@ -1,5 +1,9 @@
 version: '3'
 services:
+    redis:
+        ports:
+            - '6379:6379'
+
     backend:
         image: 'node:carbon'
         working_dir: /novelty/backend

@@ -1,2 +1,2 @@
 npm i
-npm run nodemon --redis rs://redis:6379
+npm run nodemon
