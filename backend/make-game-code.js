@@ -18,12 +18,14 @@ const connectClient = (port, hostname) => {
   }
 }
 
+const randomizeCode = () => Math
+  .random()
+  .toString(36)
+  .substring(2, 6)
+  .toUpperCase()
+
 const makeGameCode = (set, exists) => {
-  const candidateCode = Math
-    .random()
-    .toString(36)
-    .substring(2, 6)
-    .toUpperCase()
+  const candidateCode = randomizeCode()
 
   return exists(candidateCode)
     .then(doesExist => (doesExist
@@ -31,30 +33,21 @@ const makeGameCode = (set, exists) => {
       : set(candidateCode, candidateCode).then(() => candidateCode)))
 }
 
-const prepareMakeGameCode = () => {
-  const redisPath = process.env.REDIS_PATH
-
+const connectToRedis = (redisPath) => {
   if (!redisPath) {
-    return () => Promise.resolve(Math.random().toString(36).substring(2, 6).toUpperCase())
+    return {
+      createGameCode: () => Promise.resolve(randomizeCode()),
+      deleteGameCode: Promise.resolve,
+    }
   }
 
   const { port, hostname } = new URL(redisPath)
-  const { set, exists } = connectClient(port, hostname)
+  const { set, exists, del } = connectClient(port, hostname)
 
-  return () => makeGameCode(set, exists)
-}
-
-const prepareDeleteGameCode = () => {
-  const redisPath = process.env.REDIS_PATH
-
-  if (!redisPath) {
-    return () => new Promise(res => res())
+  return {
+    createGameCode: () => makeGameCode(set, exists),
+    deleteGameCode: del,
   }
-
-  const url = new URL(redisPath)
-
-  const { del } = connectClient(url.port, url.hostname)
-  return del
 }
 
-module.exports = { prepareMakeGameCode, prepareDeleteGameCode }
+module.exports = connectToRedis
