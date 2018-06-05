@@ -1,5 +1,6 @@
 import { Entity } from 'l1'
 import { code, big, small } from './util/textStyles'
+import { createParabola } from './magic'
 
 export const players = {
 
@@ -70,15 +71,35 @@ export function addPlayerToLobby(player) {
   players[player.playerId] = player
   players[player.playerId].spriteId = `square-${color}`
   players[player.playerId].color = color
-  createPlayerEntity(player, playerCount)
+  createPlayerEntity(player, playerCount, true)
 
   return players[player.playerId]
 }
 
-function createPlayerEntity({ color }, playerCount) {
+function createPlayerEntity({ color }, playerCount, animateEntrance = false) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
   sprite.x = 400 + (playerCount > 4 ? 200 : 0)
-  sprite.y = 10 + ((playerCount % 5) * 100)
+  sprite.y = 100 + ((playerCount % 5) * 100)
+  sprite.anchor.set(0.5)
+  if (animateEntrance) {
+    square.behaviors.animateEntrance = animateEntranceBehaviour()
+  }
 }
+
+const animateEntranceBehaviour = () => ({
+  init: (b, e) => {
+    b.tick = 0
+    b.animation = createParabola(0, 20, -1 * e.sprite.scale.x, 0.08)
+  },
+  run: (b, e) => {
+    b.tick += 1
+    console.log('b.animation(b.tick)', -1 * b.animation(b.tick))
+    e.sprite.scale.set(-1 * b.animation(b.tick))
+    if (b.tick >= 20) {
+      // eslint-disable-next-line fp/no-delete
+      delete e.behaviors.animateEntrance
+    }
+  },
+})
