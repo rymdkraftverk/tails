@@ -32,7 +32,7 @@ const APP_STATE = {
   GAME_PLAYING:    'game-playing',
 }
 
-const { warn } = console
+const { warn, error } = console
 
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
 const isSafari = () => navigator.userAgent.indexOf('Safari') > -1
@@ -103,6 +103,11 @@ class App extends Component {
       state.error = true
       connectionCleanUp({ ws, peer, channel })
       this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: true })
+    }
+
+    const onError = (event) => {
+      error(event)
+      cleanUp()
     }
 
     ws.onopen = () => {
@@ -191,7 +196,7 @@ class App extends Component {
       }
     }
 
-    channel.onerror = cleanUp
+    channel.onerror = onError
     channel.onclose = cleanUp
   }
 
