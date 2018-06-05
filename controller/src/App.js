@@ -88,9 +88,11 @@ class App extends Component {
     const ws = new WebSocket(WS_ADDRESS)
 
     const state = {
-      candidates: [],
-      error:      false,
-      connected:  false,
+      candidates:        [],
+      error:             false,
+      connected:         false,
+      hasReceivedAnswer: false,
+      gameCandidates:    [],
     }
 
     const cleanUp = () => {
@@ -116,15 +118,24 @@ class App extends Component {
     }
 
     const onAnswer = (event, { answer }) => {
+      state.hasReceivedAnswer = true
+
       peer
         .setRemoteDescription(answer)
-        .then(() =>
+        .then(() => {
+          state.gameCandidates.forEach(c =>
+            peer.addIceCandidate(new RTCIceCandidate(c)))
           state.candidates.forEach(c =>
-            emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: c })))
+            emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: c }))
+        })
     }
 
     const onGameCandidate = (event, { candidate }) => {
-      peer.addIceCandidate(new RTCIceCandidate(candidate))
+      if (!state.hasReceivedAnswer) {
+        state.gameCandidates = state.gameCandidates.concat(candidate)
+      } else {
+        peer.addIceCandidate(new RTCIceCandidate(candidate))
+      }
     }
 
     const events = {

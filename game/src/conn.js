@@ -23,16 +23,14 @@ const onClientICECandidate = (conn, controllerId) => (rtcEvent) => {
   }
 
   client.candidates = client.candidates.concat(rtcEvent.candidate)
-  if (client.hasSentICECandidate) {
-    emit(
-      conn.ws,
-      EVENTS.GAME_CANDIDATE,
-      {
-        candidate:    rtcEvent.candidate,
-        controllerId: client.controllerId,
-      },
-    )
-  }
+  emit(
+    conn.ws,
+    EVENTS.GAME_CANDIDATE,
+    {
+      candidate:    rtcEvent.candidate,
+      controllerId: client.controllerId,
+    },
+  )
 }
 
 const onClientData = (conn, controllerId) => (e) => {
@@ -54,10 +52,9 @@ const onClientDataChannel = (conn, controllerId) => (rtcEvent) => {
 }
 
 const createClient = (controllerId, rtc) => ({
-  rtcClient:           rtc,
+  rtcClient:  rtc,
   controllerId,
-  hasSentICECandidate: false,
-  candidates:          [],
+  candidates: [],
 })
 
 const setLocalDescriptor = rtc => (answer) => {
@@ -100,7 +97,6 @@ const onControllerCandidate = conn => (event, { controllerId, candidate }) => {
     return
   }
 
-  client.hasSentICECandidate = true
   client.rtcClient.addIceCandidate(new RTCIceCandidate(candidate))
   client
     .candidates
