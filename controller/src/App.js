@@ -9,10 +9,10 @@ import GamePlaying from './GamePlaying'
 
 const { log } = console
 
-const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS || 'ws://localhost:3000'
+const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
 
-log('WS_ADDRESS', WS_ADDRESS)
+log('REACT_APP_WS_ADDRESS', WS_ADDRESS)
 
 const RTC = {
   SERVERS: {
@@ -51,7 +51,6 @@ const rtcCleanUP = ({ peer, channel }) => {
   if (channel) {
     channel.close()
   }
-
   if (peer) {
     peer.close()
   }
@@ -242,6 +241,11 @@ class App extends Component {
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
   render() {
+    if (!WS_ADDRESS) {
+      // eslint-disable-next-line fp/no-throw
+      throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
+    }
+
     return (
       <Fullscreen
         style={{ touchAction: 'manipulation' }}
