@@ -22,7 +22,7 @@ services:
 
     controller:
         environment:
-            - REACT_APP_WS_ADDRESS=ws://localhost:3000
+            - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
         build:
             context: .
             dockerfile: ./controller/Dockerfile
