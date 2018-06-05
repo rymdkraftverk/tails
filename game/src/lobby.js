@@ -1,4 +1,4 @@
-import { Entity } from 'l1'
+import { Entity, Sound, Util } from 'l1'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 
@@ -76,15 +76,23 @@ export function addPlayerToLobby(player) {
   return players[player.playerId]
 }
 
-function createPlayerEntity({ color }, playerCount, animateEntrance = false) {
+function createPlayerEntity({ color }, playerCount, newPlayer = false) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
   sprite.x = 400 + (playerCount > 4 ? 200 : 0)
   sprite.y = 100 + ((playerCount % 5) * 100)
   sprite.anchor.set(0.5)
-  if (animateEntrance) {
+  if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
+    const joinSounds = [
+      'join1',
+      'join2',
+      'join3',
+    ]
+    const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
+    const join = Sound.getSound(`./sounds/${joinSound}.wav`, { volume: 0.6 })
+    join.play()
   }
 }
 
@@ -95,7 +103,6 @@ const animateEntranceBehaviour = () => ({
   },
   run: (b, e) => {
     b.tick += 1
-    console.log('b.animation(b.tick)', -1 * b.animation(b.tick))
     e.sprite.scale.set(-1 * b.animation(b.tick))
     if (b.tick >= 20) {
       // eslint-disable-next-line fp/no-delete
