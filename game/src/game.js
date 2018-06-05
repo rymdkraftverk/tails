@@ -139,7 +139,6 @@ const holeGenerator = () => ({
   },
 })
 
-
 /* This behavior is needed so that the player wont immediately collide with its own tail */
 const activate = () => ({
   timer: Timer.create(5),
