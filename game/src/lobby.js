@@ -40,7 +40,7 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   createLobbyTitle()
   createGameCodeLabel()
   createGameCodeText(gameCode)
-  alreadyConnectedPlayers.forEach(createPlayerEntity)
+  alreadyConnectedPlayers.forEach(((player, index) => { createPlayerEntity(player, index, false) }))
 }
 
 function createLobbyTitle() {
@@ -76,7 +76,7 @@ export function addPlayerToLobby(player) {
   return players[player.playerId]
 }
 
-function createPlayerEntity({ color }, playerCount, newPlayer = false) {
+function createPlayerEntity({ color }, playerCount, newPlayer) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
