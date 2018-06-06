@@ -2,7 +2,7 @@ import { Entity, Timer } from 'l1'
 import EVENTS from '../../common/events'
 import { createLobby, players } from './lobby'
 import { game } from '.'
-import { big } from './util/text'
+import { big } from './util/textStyles'
 import { connSend } from './conn'
 
 
@@ -11,7 +11,7 @@ const TIME_UNTIL_GAME_RESTARTS = 200
 export function transitionToGameover() {
   const gameover = Entity.create('game-over')
   const { winner } = game.lastResult
-  const text = Entity.addText(gameover, `Winner is ${winner}!`, big(winner), { zIndex: 100 })
+  const text = Entity.addText(gameover, `Winner is ${winner}!`, { ...big, fill: winner }, { zIndex: 100 })
   text.position.x = 200
   text.position.y = 200
 

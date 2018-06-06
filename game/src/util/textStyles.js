@@ -2,10 +2,14 @@ const defaultStyle = {
   fontFamily: 'patchy-robots',
 }
 
-export const big = color => ({
+/*
+  Text style options are described here:
+  http://pixijs.download/dev/docs/PIXI.TextStyle.html
+*/
+
+export const big = {
   ...defaultStyle,
   fontSize:           48,
-  fill:               color,
   stroke:             '#4a1850',
   strokeThickness:    5,
   dropShadow:         true,
@@ -13,12 +17,11 @@ export const big = color => ({
   dropShadowBlur:     4,
   dropShadowAngle:    Math.PI / 6,
   dropShadowDistance: 6,
-})
+}
 
-export const small = color => ({
+export const small = {
   ...defaultStyle,
   fontSize:           28,
-  fill:               color,
   stroke:             '#4a1850',
   strokeThickness:    3,
   dropShadow:         true,
@@ -26,4 +29,17 @@ export const small = color => ({
   dropShadowBlur:     4,
   dropShadowAngle:    Math.PI / 6,
   dropShadowDistance: 3,
-})
+}
+
+export const code = {
+  fontfamily:         'helvetica',
+  fontSize:           72,
+  fill:               'white',
+  stroke:             '#4a1850',
+  strokeThickness:    5,
+  dropShadow:         true,
+  dropShadowColor:    '#000000',
+  dropShadowBlur:     4,
+  dropShadowAngle:    Math.PI / 6,
+  dropShadowDistance: 6,
+}
