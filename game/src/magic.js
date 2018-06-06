@@ -17,12 +17,14 @@ export const createParabolaAngle = (x1, x2, modifier = 1) => (x) => {
   return Math.atan((Math.abs(x1 - x2) * modifier) * normalizer * ((2 * x) - x1 - x2))
 }
 
-const easeOut = (endX, x, minSpeed) => Math.max(Math.abs((endX - x)) * 0.1, minSpeed)
 export const createEaseOut = (endX, minSpeed = 0.5) => x => easeOut(endX, x, minSpeed)
 
-const easeIn = (endX, x, maxSpeed, modifier) => Math.min(modifier / Math.abs((endX - x)), maxSpeed)
+const easeOut = (endX, x, minSpeed) => Math.max(Math.abs((endX - x)) * 0.1, minSpeed)
+
 export const createEaseIn =
   (endX, modifier = 1, maxSpeed = 10) => x => easeIn(endX, x, maxSpeed, modifier)
+
+const easeIn = (endX, x, maxSpeed, modifier) => Math.min(modifier / Math.abs((endX - x)), maxSpeed)
 
 // export const createEaseInOut = (startX, endX, minSpeed = 0.5) => (x) => Math.max(Math.abs((endX - x)) * 0.1, minSpeed);
 
