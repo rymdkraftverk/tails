@@ -1,6 +1,6 @@
-import { Entity, Util, Timer } from 'l1'
+import { Entity, Util, Timer, Game } from 'l1'
 import uuid from 'uuid/v4'
-import { LEFT, RIGHT, WIDTH, HEIGHT, game } from '.'
+import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
 import { players } from './lobby'
 import { transitionToGameover } from './gameover'
 
@@ -15,6 +15,8 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+const WALL_THICKNESS = 6
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -22,13 +24,15 @@ export function gameState() {
 
   Object.values(players)
     .forEach(createPlayer)
+
+  const walls = Entity.create('walls')
+  walls.behaviors.renderWalls = renderWalls()
 }
 
 function createPlayer({ playerId, spriteId, color }, index) {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
-  sprite.scale.set(1)
   sprite.x = 150 + ((index % 5) * 200)
   sprite.y = 150 + (index > 4 ? 300 : 0)
   sprite.scale.set(0.3)
@@ -159,7 +163,11 @@ const collisionChecker = playerId => ({
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         Entity.destroy(e)
-      } else if (e.sprite.x < 0 || e.sprite.x > WIDTH || e.sprite.y < 0 || e.sprite.y > HEIGHT) {
+      } else if (
+        e.sprite.x < WALL_THICKNESS ||
+        e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
+        e.sprite.y < WALL_THICKNESS ||
+        e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
         Entity.destroy(e)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
@@ -170,5 +178,18 @@ const collisionChecker = playerId => ({
       }
       b.timer.reset()
     }
+  },
+})
+
+const renderWalls = () => ({
+  run: () => {
+    const graphics = Game.getGraphics()
+    graphics.lineStyle(WALL_THICKNESS, 0xffffff, 1)
+
+    graphics.moveTo(0, 0)
+    graphics.lineTo(GAME_WIDTH, 0)
+    graphics.lineTo(GAME_WIDTH, GAME_HEIGHT)
+    graphics.lineTo(0, GAME_HEIGHT)
+    graphics.lineTo(0, 0)
   },
 })
