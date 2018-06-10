@@ -108,7 +108,7 @@ const onData = (conn, controllerId, { event, payload }) => {
   }
 }
 
-Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: true }).then(() => {
+Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
   const conn = connCreate(
     WS_ADDRESS,
     HTTP_ADDRESS,
