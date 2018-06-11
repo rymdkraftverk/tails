@@ -1,8 +1,6 @@
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
-const parseArgs = require('./parse-args')
-const { prepareDeleteGameCode } = require('./make-game-code')
 
 const EVENTS = require('../common/events')
 
@@ -12,9 +10,6 @@ const TYPE = {
 }
 
 const { log, warn } = console
-
-const args = parseArgs(process.argv)
-const deleteGameCode = prepareDeleteGameCode(args.redis)
 
 const getClient = id => clients.find(x => x.id === id)
 const getGameClient = gameCode =>
@@ -100,7 +95,7 @@ const onMessage = client => (message) => {
   f(client)(event, payload)
 }
 
-const onClose = client => () => {
+const onClose = (deleteGameCode, client) => () => {
   const i = clients.indexOf(client)
   clients.splice(i, 1)
 
@@ -109,7 +104,7 @@ const onClose = client => () => {
   }
 }
 
-const init = (port) => {
+const init = (port, deleteGameCode) => {
   const server = new WebSocket.Server({ port })
   log(`ws listening on port ${port}`)
 
@@ -119,7 +114,7 @@ const init = (port) => {
     log(`[Client connected] ${prettyClient(client)}`)
 
     socket.on('message', onMessage(client))
-    socket.on('close', onClose(client))
+    socket.on('close', onClose(deleteGameCode, client))
   })
 }
 

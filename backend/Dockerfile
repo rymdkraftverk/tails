@@ -6,4 +6,4 @@ COPY ./common /novelty/common
 RUN npm install
 EXPOSE 3000
 
-CMD ["node", "./index.js", "--redis", "rs://redis:6379"]
+CMD ["node", "./index.js"]
