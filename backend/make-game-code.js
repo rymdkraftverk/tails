@@ -1,3 +1,4 @@
+const R = require('ramda')
 const { URL } = require('url')
 const util = require('util')
 
@@ -18,11 +19,26 @@ const connectClient = (port, hostname) => {
   }
 }
 
-const randomizeCode = () => Math
-  .random()
-  .toString(36)
-  .substring(2, 6)
-  .toUpperCase()
+const randomizeCode = () => {
+  const forbiddenChars = [
+    '0',
+    'O',
+  ]
+
+  const candidateCode = Math
+    .random()
+    .toString(36)
+    .substring(2, 6)
+    .toUpperCase()
+
+  const invalidCode = forbiddenChars
+    .map(str => candidateCode.indexOf(str) !== -1)
+    .reduce(R.or, false)
+
+  return invalidCode
+    ? randomizeCode()
+    : candidateCode
+}
 
 const makeGameCode = (set, exists) => {
   const candidateCode = randomizeCode()
