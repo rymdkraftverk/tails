@@ -13,8 +13,8 @@ const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
-export const WIDTH = 1200
-export const HEIGHT = 600
+export const GAME_WIDTH = 1200
+export const GAME_HEIGHT = 600
 
 export const game = {
   started:                        false,
@@ -108,7 +108,7 @@ const onData = (conn, controllerId, { event, payload }) => {
   }
 }
 
-Game.init(WIDTH, HEIGHT, sprites, { debug: false }).then(() => {
+Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
   const conn = connCreate(
     WS_ADDRESS,
     HTTP_ADDRESS,
