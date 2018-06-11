@@ -16,6 +16,7 @@ const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
 const WALL_THICKNESS = 6
+const WALL_COLOR = 0xffffff
 
 export function gameState() {
   Entity.getAll()
@@ -184,7 +185,7 @@ const collisionChecker = playerId => ({
 const renderWalls = () => ({
   run: () => {
     const graphics = Game.getGraphics()
-    graphics.lineStyle(WALL_THICKNESS, 0xffffff, 1)
+    graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
 
     graphics.moveTo(0, 0)
     graphics.lineTo(GAME_WIDTH, 0)
