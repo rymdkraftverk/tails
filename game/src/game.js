@@ -18,12 +18,26 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+const shuffleList = (list) => {
+  if (list.length === 0) {
+    return []
+  }
+
+  const index = Math.floor(Math.random() * list.length)
+  const value = list[index]
+  const remaining = list.filter((_, i) => i !== index)
+
+  return [value].concat(shuffleList(remaining))
+}
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  Object.values(players)
+  const randomizedPlayers = shuffleList(Object.values(players))
+
+  randomizedPlayers
     .forEach(createPlayer)
 
   const walls = Entity.create('walls')
