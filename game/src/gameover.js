@@ -1,8 +1,8 @@
 import { Entity, Timer } from 'l1'
-import { createEaseOut, createEaseIn, createEaseInAndOut } from './magic'
+import { createEaseInAndOut } from './magic'
 import EVENTS from '../../common/events'
 import { createLobby, players } from './lobby'
-import { game, WIDTH } from '.'
+import { game, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'
 import { connSend } from './conn'
 
@@ -34,7 +34,7 @@ const pause = () => ({
 })
 
 const winnerTextAnimation = () => ({
-  animation: createEaseInAndOut(120, 0.15, WIDTH / 2),
+  animation: createEaseInAndOut(120, 0.15, GAME_WIDTH / 2),
   // animation: createEaseInAndOut(0, 1200, 0, 240),
   tick:      0,
   run:       (b, e) => {
