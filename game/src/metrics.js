@@ -9,34 +9,34 @@ const convertCommandToNumber = (command) => {
   return number !== undefined ? number : 0
 }
 
-const mapPlayerAndGameCommand = (playerCommand, gameCommand) => ({
+const mapControllerAndGameCommand = (controllerCommand, gameCommand) => ({
   gameCommand,
-  playerCommand,
+  controllerCommand,
   metrics: gameCommand
-    ? { latency: calculateLatency(gameCommand, playerCommand) }
+    ? { latency: calculateLatency(gameCommand, controllerCommand) }
     : { latency: -1 },
 })
 
 const orderingEqual = ({ ordering: o1 }) => ({ ordering: o2 }) => o1 === o2
 
-const zipControllerAndGameCommands = (playerCommands, gameCommands) =>
-  playerCommands.map((playerCommand) => {
-    const gameCommand = gameCommands.find(orderingEqual(playerCommand))
-    return mapPlayerAndGameCommand(playerCommand, gameCommand)
+const zipControllerAndGameCommands = (controllerCommands, gameCommands) =>
+  controllerCommands.map((controllerCommand) => {
+    const gameCommand = gameCommands.find(orderingEqual(controllerCommand))
+    return mapControllerAndGameCommand(controllerCommand, gameCommand)
   })
 
-const mapZippedCommandToMetric = (gameCode, playerId, color) => m => ({
+const mapZippedCommandToMetric = (gameCode, controllerId, color) => m => ({
   measurement: 'game',
   fields:      {
     latency: m.metrics.latency,
-    command: convertCommandToNumber(m.playerCommand.command),
+    command: convertCommandToNumber(m.controllerCommand.command),
   },
   tags: {
-    playerId,
+    controllerId,
     gameCode,
     color,
   },
-  timestamp: m.playerCommand.timestamp,
+  timestamp: m.controllerCommand.timestamp,
 })
 
 
@@ -54,7 +54,7 @@ const save = (datapoints) => {
           command: Influx.FieldType.INTEGER,
         },
         tags: [
-          'playerId',
+          'controllerId',
           'gameCode',
           'color',
         ],
@@ -72,13 +72,13 @@ const save = (datapoints) => {
     .catch(err => log(`failed to save metrics to db: ${err}`))
 }
 
-module.exports = (gameCode, playerId, color, playerCommands, gameCommands) => {
+module.exports = (gameCode, controllerId, color, controllerCommands, gameCommands) => {
   const zippedMoves = zipControllerAndGameCommands(
     /* eslint-disable-next-line fp/no-mutating-methods */
-    [...playerCommands].sort(sortByOrderingAsc),
+    [...controllerCommands].sort(sortByOrderingAsc),
     /* eslint-disable-next-line fp/no-mutating-methods */
     [...gameCommands].sort(sortByOrderingAsc),
   )
-  const metrics = zippedMoves.map(mapZippedCommandToMetric(gameCode, playerId, color))
+  const metrics = zippedMoves.map(mapZippedCommandToMetric(gameCode, controllerId, color))
   save(metrics)
 }
