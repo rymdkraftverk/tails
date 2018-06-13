@@ -10,7 +10,7 @@ const EVENTS = {
   GAME_CANDIDATE:                  'game.join.game.candidate',
   PLAYER_MOVEMENT:                 'player.movement',
   PLAYER_JOINED:                   'player.joined',
-  METRICS_PLAYER_COMMANDS:         'metrics.player.commands',
+  METRICS_CONTROLLER_COMMANDS:     'metrics.controller.commands',
 }
 
 module.exports = EVENTS;

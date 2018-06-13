@@ -192,12 +192,12 @@ class App extends Component {
         })
       } else if (event === EVENTS.GAME_OVER) {
         this.send({
-          event:   EVENTS.METRICS_PLAYER_COMMANDS,
+          event:   EVENTS.METRICS_CONTROLLER_COMMANDS,
           payload: {
-            clientId: this.state.playerId,
-            gameCode: this.state.gameCode,
-            color:    this.state.playerColor,
-            commands: this.state.commands,
+            controllerId: this.state.playerId,
+            gameCode:     this.state.gameCode,
+            color:        this.state.playerColor,
+            commands:     this.state.commands,
           },
         })
 
