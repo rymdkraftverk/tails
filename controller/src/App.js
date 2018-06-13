@@ -244,11 +244,11 @@ class App extends Component {
     }
 
     if (data.event === EVENTS.PLAYER_MOVEMENT) {
-      this.state.commands.push({
+      this.state.commands = this.state.commands.concat([{
         ordering:  data.payload.ordering,
         command:   data.payload.command,
         timestamp: new Date().getTime(),
-      })
+      }])
     }
 
     this.state.channel.send(JSON.stringify(data))
