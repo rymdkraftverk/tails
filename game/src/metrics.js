@@ -42,9 +42,9 @@ const mapZippedCommandToMetric = (gameCode, controllerId, color) => m => ({
 
 const sortByOrderingAsc = ({ ordering: ord1 }, { ordering: ord2 }) => ord1 - ord2
 
-const save = (datapoints) => {
+const save = (host, datapoints) => {
   const influx = new Influx.InfluxDB({
-    host:     'localhost',
+    host,
     database: 'novelty',
     schema:   [
       {
@@ -72,7 +72,7 @@ const save = (datapoints) => {
     .catch(err => log(`failed to save metrics to db: ${err}`))
 }
 
-module.exports = (gameCode, controllerId, color, controllerCommands, gameCommands) => {
+module.exports = host => (gameCode, controllerId, color, controllerCommands, gameCommands) => {
   const zippedMoves = zipControllerAndGameCommands(
     /* eslint-disable-next-line fp/no-mutating-methods */
     [...controllerCommands].sort(sortByOrderingAsc),
@@ -80,5 +80,5 @@ module.exports = (gameCode, controllerId, color, controllerCommands, gameCommand
     [...gameCommands].sort(sortByOrderingAsc),
   )
   const metrics = zippedMoves.map(mapZippedCommandToMetric(gameCode, controllerId, color))
-  save(metrics)
+  save(host, metrics)
 }
