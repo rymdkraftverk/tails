@@ -37,18 +37,19 @@ export const createEaseIn =
 
 const easeIn = (endX, x, maxSpeed, modifier) => Math.min(modifier / Math.abs((endX - x)), maxSpeed)
 
-// export const createEaseInOut = (startX, endX, minSpeed = 0.5) => (x) => Math.max(Math.abs((endX - x)) * 0.1, minSpeed);
+export const createEaseInAndOut = ({
+  start, end, duration, startTime = 0,
+}) => {
+  if (duration <= 0) {
+    console.error('createEaseInAndOut: duration has to be positive')
+  }
+  const endTime = startTime + duration
+  const speed = 4 * ((start - end) / ((startTime - endTime) ** 3))
+  const positionOffset = (end + start) / 2
+  const timeOffset = (endTime + startTime) / 2
 
-export const createEaseInAndOut = (offset, factor, middle) => t =>
-  middle + ((factor * (t - offset)) ** 3)
-
-// export const createEaseInAndOut = (x1, x2, t1, t2) => {
-//   const speed = ((2 * (2 / 3)) * (((3 * x1) - x2) ** (1 / 3))) / ((3 * t1) - t2)
-//   const timeOffset = (t2 - t1) / 2
-//   const positionOffset = (x2 - x1) / 2
-
-//   return t => ((speed * (t - timeOffset)) ** 3) + positionOffset
-// }
+  return t => (speed * ((t - timeOffset) ** 3)) + positionOffset
+}
 
 /**
  *

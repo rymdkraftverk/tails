@@ -34,10 +34,15 @@ const pause = () => ({
 })
 
 const winnerTextAnimation = () => ({
-  animation: createEaseInAndOut(120, 0.15, GAME_WIDTH / 2),
-  // animation: createEaseInAndOut(0, 1200, 0, 240),
-  tick:      0,
-  run:       (b, e) => {
+  tick: 0,
+  init: (b, e) => {
+    b.animation = createEaseInAndOut({
+      start:    -(e.text.width / 2),
+      end:      GAME_WIDTH + (e.text.width / 2),
+      duration: 120,
+    })
+  },
+  run: (b, e) => {
     e.text.position.x = b.animation(b.tick)
     b.tick += 1
   },
