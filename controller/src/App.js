@@ -171,9 +171,6 @@ class App extends Component {
       wsCleanUp({ ws })
       this.setState({ channel })
       this.send({ event: EVENTS.PLAYER_JOINED })
-      peer.getStats(x => log('old method:', x.packetsLost)).then(x => log('stats:', x))
-      log('receivers:', peer.getReceivers())
-      log('senders:', peer.getSenders())
     }
 
     channel.onmessage = ({ data }) => {
