@@ -194,7 +194,6 @@ class App extends Component {
         this.send({
           event:   EVENTS.METRICS_PLAYER_COMMANDS,
           payload: {
-            browser:  '',
             clientId: this.state.playerId,
             gameCode: this.state.gameCode,
             color:    this.state.playerColor,

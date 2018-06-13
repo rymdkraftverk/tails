@@ -30,9 +30,8 @@ class GamePlaying extends Component {
         event:   EVENTS.PLAYER_MOVEMENT,
         payload: createCommand(this.state.ordering, this.state.lastMove),
       })
-      this.state.ordering += 1
-      // this.setState({ ordering: (this.state.ordering + 1) })
-    }, 300)
+      this.setState({ ordering: (this.state.ordering + 1) })
+    }, 100)
   }
 
   componentWillUnmount() {
