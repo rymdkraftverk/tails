@@ -68,7 +68,6 @@ const save = (host, datapoints) => {
   }))
 
   influx.writePoints(metrics, { precision: 'ms' })
-    .then(() => log(`saved ${metrics.length} to db`))
     .catch(err => log(`failed to save metrics to db: ${err}`))
 }
 
