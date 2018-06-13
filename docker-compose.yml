@@ -3,6 +3,24 @@ services:
     redis:
         image: 'redis:latest'
 
+    influxdb:
+        image: 'influxdb:latest'
+        ports:
+            - '8086:8086'
+        environment:
+            - INFLUXDB_DB=novelty
+        volumes:
+            - $PWD/docker/influxdb/data:/var/lib/influxdb
+
+    grafana:
+        image: 'grafana/grafana:latest'
+        ports:
+            - '5000:3000'
+        environment:
+            - -e 'GF_INSTALL_PLUGINS=briangann-gauge-panel, grafana-piechart-panel, natel-plotly-panel, natel-influx-admin-panel, vonage-status-panel'
+        volumes:
+            - $PWD/docker/grafana/data:/var/lib/grafana
+
     backend:
         environment:
             - REDIS_PATH=rs://redis:6379

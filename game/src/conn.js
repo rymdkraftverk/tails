@@ -34,8 +34,14 @@ const onClientICECandidate = (conn, controllerId) => (rtcEvent) => {
 }
 
 const onClientData = (conn, controllerId) => (e) => {
-  const data = JSON.parse(e.data)
-  conn.callbacks.onData(conn, controllerId, data)
+  try {
+    const now = new Date().getTime()
+    const data = JSON.parse(e.data)
+    console.log('time to parse:', now - new Date().getTime())
+    conn.callbacks.onData(conn, controllerId, data)
+  } catch (ex) {
+    log('error:', ex)
+  }
 }
 
 const onClientDataChannel = (conn, controllerId) => (rtcEvent) => {
@@ -45,6 +51,10 @@ const onClientDataChannel = (conn, controllerId) => (rtcEvent) => {
     return
   }
   client.channel = rtcEvent.channel
+
+  client.rtcClient.getStats(x => log('old method:', x.packetsLost)).then(x => log('stats:', x))
+  log('receivers:', client.rtcClient.getReceivers())
+  log('senders:', client.rtcClient.getSenders())
 
   /* eslint-disable-next-line */
   rtcEvent.channel.onmessage = onClientData(conn, controllerId)
