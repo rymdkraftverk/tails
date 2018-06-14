@@ -34,8 +34,12 @@ const onClientICECandidate = (conn, controllerId) => (rtcEvent) => {
 }
 
 const onClientData = (conn, controllerId) => (e) => {
-  const data = JSON.parse(e.data)
-  conn.callbacks.onData(conn, controllerId, data)
+  try {
+    const data = JSON.parse(e.data)
+    conn.callbacks.onData(conn, controllerId, data)
+  } catch (ex) {
+    log('error:', ex)
+  }
 }
 
 const onClientDataChannel = (conn, controllerId) => (rtcEvent) => {

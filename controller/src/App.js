@@ -77,6 +77,7 @@ class App extends Component {
     playerId:    null,
     playerColor: null,
     error:       false,
+    commands:    [],
   }
 
   connectToGame(gameCode) {
@@ -164,6 +165,7 @@ class App extends Component {
       state.candidates = state.candidates.concat(e.candidate)
     }
 
+
     channel.onopen = () => {
       state.connected = true
       wsCleanUp({ ws })
@@ -189,8 +191,19 @@ class App extends Component {
           appState: APP_STATE.GAME_PLAYING,
         })
       } else if (event === EVENTS.GAME_OVER) {
+        this.send({
+          event:   EVENTS.METRICS_CONTROLLER_COMMANDS,
+          payload: {
+            controllerId: this.state.playerId,
+            gameCode:     this.state.gameCode,
+            color:        this.state.playerColor,
+            commands:     this.state.commands,
+          },
+        })
+
         this.setState({
           appState: APP_STATE.GAME_LOBBY,
+          commands: [],
         })
       }
     }
@@ -228,6 +241,14 @@ class App extends Component {
   send = (data) => {
     if (!this.state.channel) {
       return
+    }
+
+    if (data.event === EVENTS.PLAYER_MOVEMENT) {
+      this.state.commands = this.state.commands.concat([{
+        ordering:  data.payload.ordering,
+        command:   data.payload.command,
+        timestamp: new Date().getTime(),
+      }])
     }
 
     this.state.channel.send(JSON.stringify(data))

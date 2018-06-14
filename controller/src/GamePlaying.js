@@ -14,7 +14,7 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.mozVibrate ||
   navigator.msVibrate || noop)
 
-const createCommand = (ordering, command) => ({ command, ordering })
+const createCommand = (ordering, command) => ({ command, ordering, timestamp: new Date().getTime() })
 
 /* eslint-disable-next-line fp/no-class */
 class GamePlaying extends Component {
@@ -31,7 +31,7 @@ class GamePlaying extends Component {
         payload: createCommand(this.state.ordering, this.state.lastMove),
       })
       this.setState({ ordering: (this.state.ordering + 1) })
-    }, 10)
+    }, 100)
   }
 
   componentWillUnmount() {

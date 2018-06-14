@@ -8,6 +8,9 @@ import { connCreate, connSend, connClose } from './conn'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
+const INFLUX_HOST = process.env.INFLUX_HOST || 'localhost'
+
+const saveMetrics = require('./metrics')(INFLUX_HOST)
 
 const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
@@ -26,6 +29,7 @@ export const game = {
   lastResult: {
     winner: null,
   },
+  recordedCommands: {},
 }
 
 const movePlayer = (pId, direction) => {
@@ -42,7 +46,15 @@ const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const playerMovement = (conn, controllerId, { command, ordering }) => {
+const playerMovement = (conn, controllerId, { command, ordering, timestamp }) => {
+  const move = {
+    ordering,
+    command,
+    timestamp: new Date().getTime(),
+  }
+
+  game.recordedCommands[controllerId] = game.recordedCommands[controllerId].concat([move])
+
   if (game.controllers[controllerId].lastOrder >= ordering) {
     log(`dropping old move: ${ordering}`)
     return
@@ -69,11 +81,15 @@ const playerJoined = (conn, controllerId) => {
 }
 
 const gameStart = (conn) => {
+  game.recordedCommands = {}
+
   if (!game.started) {
     Object
       .values(game.controllers)
-      .forEach(({ controllerId }) =>
-        connSend(conn, controllerId, { event: EVENTS.GAME_STARTED, payload: {} }))
+      .forEach(({ controllerId }) => {
+        game.recordedCommands[controllerId] = []
+        connSend(conn, controllerId, { event: EVENTS.GAME_STARTED, payload: {} })
+      })
 
     gameState()
     game.started = true
@@ -82,10 +98,20 @@ const gameStart = (conn) => {
 
 const { log } = console
 
+const controllerCommandMetrics = (conn, controllerId, payload) =>
+  saveMetrics(
+    game.gameCode,
+    controllerId,
+    payload.color,
+    payload.commands,
+    game.recordedCommands[controllerId],
+  )
+
 const rtcEvents = {
-  [EVENTS.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.PLAYER_JOINED]:   playerJoined,
-  [EVENTS.GAME_START]:      gameStart,
+  [EVENTS.PLAYER_MOVEMENT]:             playerMovement,
+  [EVENTS.PLAYER_JOINED]:               playerJoined,
+  [EVENTS.GAME_START]:                  gameStart,
+  [EVENTS.METRICS_CONTROLLER_COMMANDS]: controllerCommandMetrics,
 }
 
 const commands = {
