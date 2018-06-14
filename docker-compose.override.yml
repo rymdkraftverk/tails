@@ -27,3 +27,5 @@ services:
         volumes:
             - ./controller:/novelty/controller
             - ./common:/novelty/common
+        environment:
+            - REACT_APP_WS_ADDRESS=ws://localhost:3000
