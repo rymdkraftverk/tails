@@ -21,6 +21,9 @@ services:
             dockerfile: ./game/Dockerfile
         ports:
             - '8081:8081'
+        environment:
+            - WS_ADDRESS=${WS_ADDRESS}
+            - HTTP_ADDRESS=${HTTP_ADDRESS}
 
     controller:
         environment:
