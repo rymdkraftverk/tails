@@ -25,7 +25,7 @@ const onClientICECandidate = (conn, controllerId) => (rtcEvent) => {
   client.candidates = client.candidates.concat(rtcEvent.candidate)
   emit(
     conn.ws,
-    EVENTS.GAME_CANDIDATE,
+    EVENTS.WS.GAME_CANDIDATE,
     {
       candidate:    rtcEvent.candidate,
       controllerId: client.controllerId,
@@ -63,7 +63,7 @@ const setLocalDescriptor = rtc => (answer) => {
 }
 
 const sendAnswer = (conn, controllerId) => (answer) => {
-  emit(conn.ws, EVENTS.ANSWER, { answer, controllerId })
+  emit(conn.ws, EVENTS.WS.ANSWER, { answer, controllerId })
 }
 
 const createRtcClient = (config, conn, controllerId) => {
@@ -80,8 +80,8 @@ const convertOfferToAnswer = (rtc, offer) => rtc
 
 
 const onOffer = conn => (event, { offer, controllerId }) => {
-  log('received EVENTS.OFFER offer: ', offer)
-  log('received EVENTS.OFFER controllerId: ', controllerId)
+  log('received EVENTS.WS.OFFER offer: ', offer)
+  log('received EVENTS.WS.OFFER controllerId: ', controllerId)
 
   const rtc = createRtcClient(configuration, conn, controllerId)
   conn.clients.set(controllerId, createClient(controllerId, rtc))
@@ -89,7 +89,7 @@ const onOffer = conn => (event, { offer, controllerId }) => {
 }
 
 const onControllerCandidate = conn => (event, { controllerId, candidate }) => {
-  log('received EVENTS.CONTROLLER_CANDIDATE offer: ', candidate)
+  log('received EVENTS.WS.CONTROLLER_CANDIDATE offer: ', candidate)
 
   const client = conn.clients.get(controllerId)
   if (!client) {
@@ -100,7 +100,7 @@ const onControllerCandidate = conn => (event, { controllerId, candidate }) => {
   client.rtcClient.addIceCandidate(new RTCIceCandidate(candidate))
   client
     .candidates
-    .forEach(c => emit(conn.ws, EVENTS.GAME_CANDIDATE, { candidate: c, controllerId }))
+    .forEach(c => emit(conn.ws, EVENTS.WS.GAME_CANDIDATE, { candidate: c, controllerId }))
   client.candidate = []
 }
 
@@ -113,7 +113,7 @@ const createGame = (httpAddress, ws, onGameCreated) => {
   fetch(`${httpAddress}/game`, { method: 'POST' })
     .then(res => res.json())
     .then(({ gameCode }) => {
-      emit(ws, EVENTS.GAME_UPGRADE, { gameCode })
+      emit(ws, EVENTS.WS.GAME_UPGRADE, { gameCode })
       onGameCreated({ gameCode })
       log('gameId', gameCode)
     })
@@ -161,8 +161,8 @@ const create = (wsAdress, httpAddress, callbacks) => {
   }
 
   const events = {
-    [EVENTS.OFFER]:                onOffer,
-    [EVENTS.CONTROLLER_CANDIDATE]: onControllerCandidate,
+    [EVENTS.WS.OFFER]:                onOffer,
+    [EVENTS.WS.CONTROLLER_CANDIDATE]: onControllerCandidate,
   }
 
   ws.onopen = () => createGame(httpAddress, ws, callbacks.onGameCreated)

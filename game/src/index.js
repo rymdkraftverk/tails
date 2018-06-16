@@ -73,7 +73,7 @@ const gameStart = (conn) => {
     Object
       .values(game.controllers)
       .forEach(({ controllerId }) =>
-        connSend(conn, controllerId, { event: EVENTS.GAME_STARTED, payload: {} }))
+        connSend(conn, controllerId, { event: EVENTS.RTC.GAME_STARTED, payload: {} }))
 
     gameState()
     game.started = true
@@ -83,9 +83,9 @@ const gameStart = (conn) => {
 const { log } = console
 
 const rtcEvents = {
-  [EVENTS.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.PLAYER_JOINED]:   playerJoined,
-  [EVENTS.GAME_START]:      gameStart,
+  [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
+  [EVENTS.RTC.PLAYER_JOINED]:   playerJoined,
+  [EVENTS.RTC.GAME_START]:      gameStart,
 }
 
 const commands = {

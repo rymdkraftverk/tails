@@ -25,7 +25,7 @@ const pause = () => ({
       Object
         .values(game.controllers)
         .forEach(({ controllerId }) =>
-          connSend(game.conn, controllerId, { event: EVENTS.GAME_OVER, payload: {} }))
+          connSend(game.conn, controllerId, { event: EVENTS.RTC.GAME_OVER, payload: {} }))
 
       createLobby(game.gameCode, Object.values(players))
     }

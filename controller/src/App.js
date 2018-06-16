@@ -113,7 +113,7 @@ class App extends Component {
       peer
         .createOffer()
         .then(offer => Promise.all([offer, peer.setLocalDescription(offer)]))
-        .then(([offer]) => emit(EVENTS.OFFER, { gameCode, offer }))
+        .then(([offer]) => emit(EVENTS.WS.OFFER, { gameCode, offer }))
     }
 
     const emit = (event, payload) => {
@@ -130,7 +130,7 @@ class App extends Component {
           state.gameCandidates.forEach(c =>
             peer.addIceCandidate(new RTCIceCandidate(c)))
           state.candidates.forEach(c =>
-            emit(EVENTS.CONTROLLER_CANDIDATE, { gameCode, candidate: c }))
+            emit(EVENTS.WS.CONTROLLER_CANDIDATE, { gameCode, candidate: c }))
         })
     }
 
@@ -143,8 +143,8 @@ class App extends Component {
     }
 
     const events = {
-      [EVENTS.ANSWER]:         onAnswer,
-      [EVENTS.GAME_CANDIDATE]: onGameCandidate,
+      [EVENTS.WS.ANSWER]:         onAnswer,
+      [EVENTS.WS.GAME_CANDIDATE]: onGameCandidate,
     }
 
     ws.onmessage = (wsEvent) => {
@@ -168,27 +168,27 @@ class App extends Component {
       state.connected = true
       wsCleanUp({ ws })
       this.setState({ channel })
-      this.send({ event: EVENTS.PLAYER_JOINED })
+      this.send({ event: EVENTS.RTC.PLAYER_JOINED })
     }
 
     channel.onmessage = ({ data }) => {
       const { event, payload } = JSON.parse(data)
 
-      if (event === EVENTS.PLAYER_JOINED) {
+      if (event === EVENTS.RTC.PLAYER_JOINED) {
         this.setState({
           appState:    APP_STATE.GAME_LOBBY,
           playerColor: payload.color,
           playerId:    payload.playerId,
         })
-      } else if (event === EVENTS.GAME_START) {
+      } else if (event === EVENTS.RTC.GAME_START) {
         this.setState({
           appState: APP_STATE.GAME_PLAYING,
         })
-      } else if (event === EVENTS.GAME_STARTED) {
+      } else if (event === EVENTS.RTC.GAME_STARTED) {
         this.setState({
           appState: APP_STATE.GAME_PLAYING,
         })
-      } else if (event === EVENTS.GAME_OVER) {
+      } else if (event === EVENTS.RTC.GAME_OVER) {
         this.setState({
           appState: APP_STATE.GAME_LOBBY,
         })
@@ -234,7 +234,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.send({ event: EVENTS.GAME_START })
+    this.send({ event: EVENTS.RTC.GAME_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 
