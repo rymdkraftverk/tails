@@ -3,6 +3,7 @@ const uuid = require('uuid/v4')
 const { clients } = require('./state')
 
 const EVENTS = require('../common/events')
+const { prettyId } = require('../common/index')
 
 const TYPE = {
   CONTROLLER: 'controller',
@@ -17,7 +18,6 @@ const getGameClient = gameCode =>
     x.type === TYPE.GAME &&
     x.gameCode === gameCode.toUpperCase())
 
-const prettyId = id => id.substring(0, 4)
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
 const createClient = socket => ({
