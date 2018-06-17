@@ -1,4 +1,4 @@
-import EVENTS from '../../common/events'
+import { EVENTS } from 'common'
 
 const { error, log, warn } = console
 

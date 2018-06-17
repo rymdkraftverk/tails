@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
-import EVENTS from '../../common/events'
+import { EVENTS } from 'common'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
@@ -119,7 +119,7 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
   )
   game.conn = conn
   const background = Entity.create('background')
-  Entity.addSprite(background, 'background', { zIndex: -999 })
+  Entity.addSprite(background, 'background', { zIndex: -999999 })
 
   Key.add('up')
   Key.add('down')

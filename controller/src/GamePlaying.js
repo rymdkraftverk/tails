@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import EVENTS from 'common'
+import { EVENTS } from 'common'
 
 const MOVES = {
   NONE:  'none',
