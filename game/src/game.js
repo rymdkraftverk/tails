@@ -3,7 +3,7 @@ import uuid from 'uuid/v4'
 import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
 import { players } from './lobby'
-import config from './emitter.json'
+import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
 
 const { log } = console
@@ -42,7 +42,7 @@ function createPlayer({ playerId, spriteId, color }, index) {
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
-  Game.addEmitter(playerId, [Game.getTexture('particle')], config)
+  Game.addEmitter(playerId, [Game.getTexture('particle')], deathExplosion)
 }
 
 const startPlayerMovement = (player, playerId, spriteId) => ({
@@ -160,8 +160,8 @@ const activate = () => ({
 const killPlayer = (e, playerId) => {
   const emitter = Game.getEmitter(playerId)
 
-  const updatedConfig = {
-    ...config,
+  const updatedDeathExplosion = {
+    ...deathExplosion,
     emit: true,
     pos:  {
       x: e.sprite.position.x,
@@ -178,7 +178,7 @@ const killPlayer = (e, playerId) => {
   }
   const explosion = Sound.getSound('./sounds/explosion.wav', { volume: 0.6 })
   explosion.play()
-  emitter.init([Game.getTexture('particle')], updatedConfig)
+  emitter.init([Game.getTexture('particle')], updatedDeathExplosion)
   Entity.destroy(e)
 }
 
