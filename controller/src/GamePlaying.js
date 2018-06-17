@@ -27,7 +27,7 @@ class GamePlaying extends Component {
 
     this.state.intervalId = setInterval(() => {
       this.props.send({
-        event:   EVENTS.PLAYER_MOVEMENT,
+        event:   EVENTS.RTC.PLAYER_MOVEMENT,
         payload: createCommand(this.state.ordering, this.state.lastMove),
       })
       this.setState({ ordering: (this.state.ordering + 1) })
@@ -41,7 +41,7 @@ class GamePlaying extends Component {
   sendRight = () => {
     navigator.vibrate(100)
     this.props.send({
-      event:   EVENTS.PLAYER_MOVEMENT,
+      event:   EVENTS.RTC.PLAYER_MOVEMENT,
       payload: createCommand(this.state.ordering, MOVES.RIGHT),
     })
     this.setState({ lastMove: MOVES.RIGHT, ordering: (this.state.ordering + 1) })
@@ -50,7 +50,7 @@ class GamePlaying extends Component {
   sendLeft = () => {
     navigator.vibrate(100)
     this.props.send({
-      event:   EVENTS.PLAYER_MOVEMENT,
+      event:   EVENTS.RTC.PLAYER_MOVEMENT,
       payload: createCommand(this.state.ordering, MOVES.LEFT),
     })
     this.setState({ lastMove: MOVES.LEFT, ordering: (this.state.ordering + 1) })
@@ -58,7 +58,7 @@ class GamePlaying extends Component {
 
   sendNone = () => {
     this.props.send({
-      event:   EVENTS.PLAYER_MOVEMENT,
+      event:   EVENTS.RTC.PLAYER_MOVEMENT,
       payload: createCommand(this.state.ordering, MOVES.NONE),
     })
     this.setState({ lastMove: MOVES.NONE, ordering: (this.state.ordering + 1) })
