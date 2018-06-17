@@ -119,7 +119,7 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
   )
   game.conn = conn
   const background = Entity.create('background')
-  Entity.addSprite(background, 'background', { zIndex: -999 })
+  Entity.addSprite(background, 'background', { zIndex: -999999 })
 
   Key.add('up')
   Key.add('down')

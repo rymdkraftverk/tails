@@ -42,7 +42,10 @@ function createPlayer({ playerId, spriteId, color }, index) {
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
-  Game.addEmitter(playerId, [Game.getTexture('particle')], deathExplosion)
+  Entity.addEmitter(square, {
+    id:       playerId,
+    textures: [Game.getTexture('particle')],
+  })
 }
 
 const startPlayerMovement = (player, playerId, spriteId) => ({
@@ -158,12 +161,9 @@ const activate = () => ({
 })
 
 const killPlayer = (e, playerId) => {
-  const emitter = Game.getEmitter(playerId)
-
   const updatedDeathExplosion = {
     ...deathExplosion,
-    emit: true,
-    pos:  {
+    pos: {
       x: e.sprite.position.x,
       y: e.sprite.position.y,
     },
@@ -176,10 +176,23 @@ const killPlayer = (e, playerId) => {
       end:   COLORS[e.color],
     },
   }
+
+  Entity.emitEmitter(e, {
+    id:     playerId,
+    config: updatedDeathExplosion,
+  })
+
   const explosion = Sound.getSound('./sounds/explosion.wav', { volume: 0.6 })
   explosion.play()
-  emitter.init([Game.getTexture('particle')], updatedDeathExplosion)
-  Entity.destroy(e)
+
+  e.killed = true
+  /* eslint-disable fp/no-delete */
+  delete e.behaviors.collisionChecker
+  delete e.behaviors.holeGenerator
+  delete e.behaviors.createTrail
+  delete e.behaviors.move
+  delete e.behaviors.pivot
+  /* eslint-enable fp/no-delete */
 }
 
 const collisionChecker = playerId => ({
@@ -200,7 +213,7 @@ const collisionChecker = playerId => ({
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
-      if (Entity.getByType('player').length === 1 && game.started) {
+      if (Entity.getByType('player').filter(p => !p.killed).length === 1 && game.started) {
         game.started = false
         game.lastResult.winner = Entity.getByType('player')[0].color
         transitionToGameover()

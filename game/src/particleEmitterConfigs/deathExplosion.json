@@ -39,7 +39,7 @@
 	"frequency": 0.02,
 	"emitterLifetime": 0.2,
 	"maxParticles": 500,
-	"emit": false,
+	"emit": true,
 	"pos": {
 		"x": 200,
 		"y": 200
