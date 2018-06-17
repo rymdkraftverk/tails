@@ -1,13 +1,16 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
-import { EVENTS } from 'common'
+import { EVENTS, prettyId } from '../../common'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
-import { connCreate, connSend, connClose } from './conn'
+import initHttp from './http'
+import signal from './signal'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
+
+const http = initHttp(HTTP_ADDRESS)
 
 const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
@@ -20,9 +23,9 @@ export const game = {
   started:                        false,
   gameCode:                       '',
   hasReceivedControllerCandidate: false,
+  // TODO: change to array
   controllers:                    {
   },
-  conn:       null,
   lastResult: {
     winner: null,
   },
@@ -33,8 +36,8 @@ const movePlayer = (pId, direction) => {
   if (playerEntity) {
     playerEntity.direction = direction
   } else {
-    /* eslint-disable-next-line no-console */
-    console.log(`failed to move player ${pId} with direction ${direction}`)
+    // TODO: stop sending useless movements events
+    warn(`Failed to move player ${prettyId(pId)} with direction ${direction}`)
   }
 }
 
@@ -42,49 +45,39 @@ const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const playerMovement = (conn, controllerId, { command, ordering }) => {
-  if (game.controllers[controllerId].lastOrder >= ordering) {
+const playerMovement = (id, { command, ordering }) => {
+  if (game.controllers[id].lastOrder >= ordering) {
     log(`dropping old move: ${ordering}`)
     return
   }
 
-  game.controllers[controllerId].lastMoveOrder = ordering
+  game.controllers[id].lastMoveOrder = ordering
   const commandFn = commands[command]
   if (commandFn) {
-    commandFn(controllerId)
+    commandFn(id)
   }
 }
 
-const playerJoined = (conn, controllerId) => {
-  if (Object.keys(players).length < MAX_PLAYERS_ALLOWED && !game.started) {
-    game.controllers[controllerId] = {
-      controllerId,
-      lastMoveOrder: -1,
-    }
-    const { color } = addPlayerToLobby({ playerId: controllerId })
-    connSend(conn, controllerId, { event: 'player.joined', payload: { playerId: controllerId, color } })
-  } else {
-    connClose(conn, controllerId)
-  }
-}
-
-const gameStart = (conn) => {
+const gameStart = () => {
   if (!game.started) {
     Object
       .values(game.controllers)
-      .forEach(({ controllerId }) =>
-        connSend(conn, controllerId, { event: EVENTS.RTC.GAME_STARTED, payload: {} }))
+      .forEach(({ id }) => {
+        game.controllers[id].send({
+          event:   EVENTS.RTC.GAME_STARTED,
+          payload: {},
+        })
+      })
 
     gameState(MAX_PLAYERS_ALLOWED)
     game.started = true
   }
 }
 
-const { log } = console
+const { log, warn } = console
 
 const rtcEvents = {
   [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.RTC.PLAYER_JOINED]:   playerJoined,
   [EVENTS.RTC.GAME_START]:      gameStart,
 }
 
@@ -94,30 +87,76 @@ const commands = {
   none:    moveStraight,
 }
 
-const onGameCreated = ({ gameCode }) => {
+const createGame = ({ gameCode }) => {
   game.gameCode = gameCode
   createLobby(game.gameCode)
 }
 
-const onData = (conn, controllerId, { event, payload }) => {
-  log('onData =>', 'controllerId:', controllerId, 'data:', { event, payload })
+// TODO: extract event switch logic to common function
+const onControllerData = id => (message) => {
+  const { event, payload } = message
 
-  const eventFn = rtcEvents[event]
-  if (eventFn) {
-    eventFn(conn, controllerId, payload)
+  const f = rtcEvents[event]
+  if (!f) {
+    warn(`Unhandled event for message: ${message.data}`)
+    return
   }
+
+  f(id, payload)
+}
+
+const moreControllersAllowed = () =>
+  Object.keys(players).length < MAX_PLAYERS_ALLOWED && !game.started
+
+const onControllerJoin = ({
+  id,
+  onOnData,
+  send,
+  close,
+}) => {
+  if (moreControllersAllowed()) {
+    game.controllers[id] = {
+      id,
+      lastMoveOrder: -1,
+      send,
+    }
+    const { color } = addPlayerToLobby({ playerId: id })
+
+    send({
+      event:   EVENTS.RTC.CONTROLLER_COLOR,
+      payload: {
+        playerId: id,
+        color,
+      },
+    })
+  } else {
+    close()
+  }
+
+  // TODO: rambdify
+  onOnData(onControllerData(id))
+}
+
+const onControllerLeave = (id) => {
+  log(`[Controller Leave] ${id}`)
+  // delete game.controllers[id]
+  // TODO: remove from controllers and lobby
 }
 
 Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
-  const conn = connCreate(
-    WS_ADDRESS,
-    HTTP_ADDRESS,
-    {
-      onGameCreated,
-      onData,
-    },
-  )
-  game.conn = conn
+  http.createGame()
+    .then(({ gameCode }) => {
+      createGame({ gameCode })
+      log(`[Game created] ${gameCode}`)
+
+      signal({
+        wsAdress: WS_ADDRESS,
+        gameCode,
+        onControllerJoin,
+        onControllerLeave,
+      })
+    })
+
   const background = Entity.create('background')
   Entity.addSprite(background, 'background', { zIndex: -999999 })
 

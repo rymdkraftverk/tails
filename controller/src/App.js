@@ -168,13 +168,12 @@ class App extends Component {
       state.connected = true
       wsCleanUp({ ws })
       this.setState({ channel })
-      this.send({ event: EVENTS.RTC.PLAYER_JOINED })
     }
 
     channel.onmessage = ({ data }) => {
       const { event, payload } = JSON.parse(data)
 
-      if (event === EVENTS.RTC.PLAYER_JOINED) {
+      if (event === EVENTS.RTC.CONTROLLER_COLOR) {
         this.setState({
           appState:    APP_STATE.GAME_LOBBY,
           playerColor: payload.color,
