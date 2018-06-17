@@ -213,9 +213,10 @@ const collisionChecker = playerId => ({
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
-      if (Entity.getByType('player').filter(p => !p.killed).length === 1 && game.started) {
+      const playersAlive = Entity.getByType('player').filter(p => !p.killed)
+      if (playersAlive.length === 1 && game.started) {
         game.started = false
-        game.lastResult.winner = Entity.getByType('player')[0].color
+        game.lastResult.winner = playersAlive[0].color
         transitionToGameover()
       }
       b.timer.reset()
