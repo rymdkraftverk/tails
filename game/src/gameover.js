@@ -1,6 +1,6 @@
 import { Entity, Timer } from 'l1'
+import { EVENTS } from 'common'
 import { createEaseInAndOut } from './magic'
-import EVENTS from '../../common/events'
 import { createLobby, players } from './lobby'
 import { game, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'

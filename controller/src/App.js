@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import EVENTS from 'common'
+import { EVENTS } from 'common'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'

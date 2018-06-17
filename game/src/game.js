@@ -1,7 +1,8 @@
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
+import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
-import { players, COLORS_HEX } from './lobby'
+import { players } from './lobby'
 import config from './emitter.json'
 import { transitionToGameover } from './gameover'
 
@@ -171,8 +172,8 @@ const killPlayer = (e, playerId) => {
       max: e.degrees + 30,
     },
     color: {
-      start: COLORS_HEX[e.color],
-      end:   COLORS_HEX[e.color],
+      start: COLORS[e.color],
+      end:   COLORS[e.color],
     },
   }
   const explosion = Sound.getSound('./sounds/explosion.wav', { volume: 0.6 })

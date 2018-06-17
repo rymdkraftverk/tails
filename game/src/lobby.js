@@ -1,35 +1,10 @@
 import { Entity, Sound, Util } from 'l1'
+import { COLORS } from 'common'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 
 export const players = {
 
-}
-
-const COLORS = [
-  'red',
-  'purple',
-  'yellow',
-  'green',
-  'pink',
-  'brown',
-  'turqouise',
-  'orange',
-  'blue',
-  'white',
-]
-
-export const COLORS_HEX = {
-  blue:      '#3E5AFF',
-  brown:     '#945200',
-  green:     '#95A783',
-  orange:    '#FF9201',
-  pink:      '#FF85FF',
-  purple:    '#A73D8D',
-  red:       '#CB725D',
-  turqouise: '#009B9D',
-  white:     '#EEEDEF',
-  yellow:    '#ECF257',
 }
 
 export function createLobby(gameCode, alreadyConnectedPlayers = []) {
@@ -66,7 +41,7 @@ function createGameCodeText(gameCode) {
 
 export function addPlayerToLobby(player) {
   const playerCount = Object.keys(players).length
-  const color = COLORS[playerCount]
+  const color = Object.keys(COLORS)[playerCount]
 
   players[player.playerId] = player
   players[player.playerId].spriteId = `square-${color}`
