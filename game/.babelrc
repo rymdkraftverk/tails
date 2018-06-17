@@ -3,7 +3,8 @@
   "plugins": [
     ["transform-inline-environment-variables", {
       "include": [
-        "WS_ADDRESS"
+        "WS_ADDRESS",
+        "HTTP_ADDRESS"
       ]
     }]
   ]
