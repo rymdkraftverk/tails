@@ -1,3 +1,5 @@
+import { shuffle } from 'lodash/fp'
+import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
@@ -20,13 +22,18 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+const initSnakes = R.compose(
+  R.addIndex(R.forEach)(createPlayer),
+  shuffle,
+  Object.values,
+)
+
 export function gameState() {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  Object.values(players)
-    .forEach(createPlayer)
+  initSnakes(players)
 
   const walls = Entity.create('walls')
   walls.behaviors.renderWalls = renderWalls()
