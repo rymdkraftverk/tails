@@ -78,11 +78,11 @@ const onGameCandidate = client => (event, { candidate, controllerId }) => {
 }
 
 const events = {
-  [EVENTS.GAME_UPGRADE]:         onGameUpgrade,
-  [EVENTS.ANSWER]:               onAnswer,
-  [EVENTS.CONTROLLER_CANDIDATE]: onControllerCandidate,
-  [EVENTS.GAME_CANDIDATE]:       onGameCandidate,
-  [EVENTS.OFFER]:                onOffer,
+  [EVENTS.WS.GAME_UPGRADE]:         onGameUpgrade,
+  [EVENTS.WS.ANSWER]:               onAnswer,
+  [EVENTS.WS.CONTROLLER_CANDIDATE]: onControllerCandidate,
+  [EVENTS.WS.GAME_CANDIDATE]:       onGameCandidate,
+  [EVENTS.WS.OFFER]:                onOffer,
 }
 
 const onMessage = client => (message) => {

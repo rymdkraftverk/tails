@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
-import EVENTS from '../../common/events'
+import { EVENTS } from 'common'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
@@ -73,7 +73,7 @@ const gameStart = (conn) => {
     Object
       .values(game.controllers)
       .forEach(({ controllerId }) =>
-        connSend(conn, controllerId, { event: EVENTS.GAME_STARTED, payload: {} }))
+        connSend(conn, controllerId, { event: EVENTS.RTC.GAME_STARTED, payload: {} }))
 
     gameState()
     game.started = true
@@ -83,9 +83,9 @@ const gameStart = (conn) => {
 const { log } = console
 
 const rtcEvents = {
-  [EVENTS.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.PLAYER_JOINED]:   playerJoined,
-  [EVENTS.GAME_START]:      gameStart,
+  [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
+  [EVENTS.RTC.PLAYER_JOINED]:   playerJoined,
+  [EVENTS.RTC.GAME_START]:      gameStart,
 }
 
 const commands = {
@@ -119,7 +119,7 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
   )
   game.conn = conn
   const background = Entity.create('background')
-  Entity.addSprite(background, 'background', { zIndex: -999 })
+  Entity.addSprite(background, 'background', { zIndex: -999999 })
 
   Key.add('up')
   Key.add('down')
