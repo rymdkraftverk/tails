@@ -18,13 +18,12 @@ const outputEvents = {
   onControllerLeave: null,
 }
 
-const controllers = []
+let controllers = []
 // end state
 
 const getController = id => controllers.find(x => x.id === id)
 const removeController = (id) => {
-  const i = controllers.indexOf(getController(id))
-  controllers.splice(i, 1)
+  controllers = controllers.filter(c => c.id !== id)
 }
 
 const emit = (event, payload) => {
