@@ -14,6 +14,7 @@ rules:
   fp/no-unused-expression: off
   fp/no-mutation: off
   fp/no-let: off
+  fp/no-mutating-methods: off
   no-use-before-define: off
   import/prefer-default-export: off
   no-param-reassign: off

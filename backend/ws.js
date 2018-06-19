@@ -2,7 +2,7 @@ const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
 
-const EVENTS = require('../common/events')
+const { EVENTS, prettyId } = require('common')
 
 const TYPE = {
   CONTROLLER: 'controller',
@@ -17,7 +17,6 @@ const getGameClient = gameCode =>
     x.type === TYPE.GAME &&
     x.gameCode === gameCode.toUpperCase())
 
-const prettyId = id => id.substring(0, 4)
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
 const createClient = socket => ({
@@ -31,7 +30,7 @@ const emit = (client, event, payload) => {
   client.socket.send(message)
 }
 
-const onGameUpgrade = client => (event, { gameCode }) => {
+const onGameUpgrade = client => (event, gameCode) => {
   client.type = TYPE.GAME
   client.gameCode = gameCode
   log(`[Game upgrade] ${prettyClient(client)}`)

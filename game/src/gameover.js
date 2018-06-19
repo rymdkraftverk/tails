@@ -4,7 +4,6 @@ import { createEaseInAndOut } from './magic'
 import { createLobby, players } from './lobby'
 import { game, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'
-import { connSend } from './conn'
 
 const TIME_UNTIL_GAME_RESTARTS = 240
 
@@ -25,8 +24,9 @@ const pause = () => ({
     if (b.timer.run()) {
       Object
         .values(game.controllers)
-        .forEach(({ controllerId }) =>
-          connSend(game.conn, controllerId, { event: EVENTS.RTC.GAME_OVER, payload: {} }))
+        .forEach((controller) => {
+          controller.send({ event: EVENTS.RTC.GAME_OVER, payload: {} })
+        })
 
       createLobby(game.gameCode, Object.values(players))
     }
