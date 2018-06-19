@@ -2,7 +2,7 @@ const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
 
-const { EVENTS, prettyId } = require('../common')
+const { EVENTS, prettyId } = require('common')
 
 const TYPE = {
   CONTROLLER: 'controller',

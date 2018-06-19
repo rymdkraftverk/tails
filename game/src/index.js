@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
-import { EVENTS, prettyId } from '../../common'
+import { EVENTS, prettyId } from 'common'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'

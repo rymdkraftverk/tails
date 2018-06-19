@@ -1,5 +1,4 @@
-import EVENTS from '../../common/events'
-import { prettyId } from '../../common/index'
+import { EVENTS, prettyId } from 'common'
 
 const WEB_RTC_CONFIG = {
   iceServers: [
