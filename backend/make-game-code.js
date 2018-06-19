@@ -1,7 +1,32 @@
+const R = require('ramda')
+const { sample } = require('lodash/fp')
 const { URL } = require('url')
 const util = require('util')
 
 const redis = require('redis')
+
+const CODE_LENGTH = 4
+
+const validChars = [
+  '4',
+  '6',
+  '9',
+  'A',
+  'C',
+  'G',
+  'H',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'P',
+  'Q',
+  'R',
+  'U',
+  'X',
+  'Y',
+]
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
@@ -18,11 +43,10 @@ const connectClient = (port, hostname) => {
   }
 }
 
-const randomizeCode = () => Math
-  .random()
-  .toString(36)
-  .substring(2, 6)
-  .toUpperCase()
+const randomizeCode = () => R
+  .range(0, CODE_LENGTH)
+  .map(() => sample(validChars))
+  .reduce(R.concat, '')
 
 const makeGameCode = (set, exists) => {
   const candidateCode = randomizeCode()
