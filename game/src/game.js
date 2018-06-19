@@ -27,10 +27,8 @@ export function gameState(maxPlayers) {
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  const positionIndices = shuffle(R.range(0, maxPlayers))
-
   R.compose(
-    R.zipWith(createPlayer, positionIndices),
+    R.zipWith(createPlayer, shuffle(R.range(0, maxPlayers))),
     shuffle,
     Object.values,
   )(players)
