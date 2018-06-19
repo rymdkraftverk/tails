@@ -110,7 +110,7 @@ const moreControllersAllowed = () =>
 
 const onControllerJoin = ({
   id,
-  onOnData,
+  setOnData,
   send,
   close,
 }) => {
@@ -134,7 +134,7 @@ const onControllerJoin = ({
   }
 
   // TODO: rambdify
-  onOnData(onControllerData(id))
+  setOnData(onControllerData(id))
 }
 
 const onControllerLeave = (id) => {

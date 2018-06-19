@@ -47,7 +47,7 @@ const onDataChannel = controller => ({ channel }) => {
   channel.onopen = () => {
     outputEvents.onControllerJoin({
       id:       controller.id,
-      onOnData: (onData) => {
+      setOnData: (onData) => {
         channel.onmessage = ({ data }) => {
           onData(JSON.parse(data))
         }
