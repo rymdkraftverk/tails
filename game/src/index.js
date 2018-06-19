@@ -75,7 +75,7 @@ const gameStart = (conn) => {
       .forEach(({ controllerId }) =>
         connSend(conn, controllerId, { event: EVENTS.RTC.GAME_STARTED, payload: {} }))
 
-    gameState()
+    gameState(MAX_PLAYERS_ALLOWED)
     game.started = true
   }
 }

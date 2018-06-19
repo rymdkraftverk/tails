@@ -22,24 +22,22 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-const initSnakes = R.compose(
-  R.addIndex(R.forEach)(createPlayer),
-  shuffle,
-  Object.values,
-)
-
-export function gameState() {
+export function gameState(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  initSnakes(players)
+  R.compose(
+    R.zipWith(createPlayer, shuffle(R.range(0, maxPlayers))),
+    shuffle,
+    Object.values,
+  )(players)
 
   const walls = Entity.create('walls')
   walls.behaviors.renderWalls = renderWalls()
 }
 
-function createPlayer({ playerId, spriteId, color }, index) {
+function createPlayer(index, { playerId, spriteId, color }) {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
