@@ -22,15 +22,6 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-const MAX_PLAYERS = 10
-
-const initSnakes = R.compose(
-  // can't curry because shuffle needs to be rerun each round
-  ps => R.zipWith(createPlayer, ps, shuffle(R.range(0, MAX_PLAYERS))),
-  shuffle,
-  Object.values,
-)
-
 export function gameState(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
