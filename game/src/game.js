@@ -44,7 +44,6 @@ export function gameState(maxPlayers) {
     Object.values,
   )(players)
 
-
   const walls = Entity.create('walls')
   walls.behaviors.renderWalls = renderWalls()
 }
