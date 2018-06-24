@@ -2,7 +2,6 @@ const EVENTS = {
   WS: {
     ANSWER:              'receiver.join.answer',
     INITIATOR_CANDIDATE: 'receiver.join.controller.candidate',
-    CREATED:             'receiver.created',
     RECEIVER_CANDIDATE:  'receiver.join.receiver.candidate',
     RECEIVER_UPGRADE:    'receiver.upgrade',
     OFFER:               'receiver.join.offer',
