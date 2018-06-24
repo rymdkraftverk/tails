@@ -113,7 +113,7 @@ class App extends Component {
       peer
         .createOffer()
         .then(offer => Promise.all([offer, peer.setLocalDescription(offer)]))
-        .then(([offer]) => emit(EVENTS.WS.OFFER, { gameCode, offer }))
+        .then(([offer]) => emit(EVENTS.WS.OFFER, { receiverId: gameCode, offer }))
     }
 
     const emit = (event, payload) => {
@@ -130,7 +130,7 @@ class App extends Component {
           state.gameCandidates.forEach(c =>
             peer.addIceCandidate(new RTCIceCandidate(c)))
           state.candidates.forEach(c =>
-            emit(EVENTS.WS.CONTROLLER_CANDIDATE, { gameCode, candidate: c }))
+            emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId: gameCode, candidate: c }))
         })
     }
 
@@ -142,7 +142,8 @@ class App extends Component {
       }
     }
 
-    const onGameNotFound = (event, { message }) => {
+    const onGameNotFound = (event, { receiverId }) => {
+      const message = `Game with code ${receiverId} not found`
       log(message)
       this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
     }

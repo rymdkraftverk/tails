@@ -1,12 +1,12 @@
 const EVENTS = {
   WS: {
-    ANSWER:                'game.join.answer',
-    CONTROLLER_CANDIDATE:  'game.join.controller.candidate',
-    CREATED:               'game.created',
-    GAME_CANDIDATE:        'game.join.game.candidate',
-    GAME_UPGRADE:          'game.upgrade',
-    OFFER:                 'game.join.offer',
-    NOT_FOUND:             'game.join.controller.notfound',
+    ANSWER:              'receiver.join.answer',
+    INITIATOR_CANDIDATE: 'receiver.join.controller.candidate',
+    CREATED:             'receiver.created',
+    RECEIVER_CANDIDATE:  'receiver.join.receiver.candidate',
+    RECEIVER_UPGRADE:    'receiver.upgrade',
+    OFFER:               'receiver.join.offer',
+    NOT_FOUND:           'receiver.join.controller.notfound',
   },
   RTC: {
     GAME_OVER:             'game.over',

@@ -14,16 +14,16 @@ const { log, warn } = console
 let ws
 
 const outputEvents = {
-  onControllerJoin:  null,
-  onControllerLeave: null,
+  onInitiatorJoin:  null,
+  onInitiatorLeave: null,
 }
 
-let controllers = []
+let initiators = []
 // end state
 
-const getController = id => controllers.find(x => x.id === id)
-const removeController = (id) => {
-  controllers = controllers.filter(c => c.id !== id)
+const getInitiator = id => initiators.find(x => x.id === id)
+const removeInitiator = (id) => {
+  initiators = initiators.filter(c => c.id !== id)
 }
 
 const emit = (event, payload) => {
@@ -31,22 +31,22 @@ const emit = (event, payload) => {
   ws.send(message)
 }
 
-const onIceCandidate = controller => ({ candidate }) => {
+const onIceCandidate = initiator => ({ candidate }) => {
   if (!candidate) {
-    log(`[Ice Candidate] ${prettyId(controller.id)} Last candidate retrieved`)
+    log(`[Ice Candidate] ${prettyId(initiator.id)} Last candidate retrieved`)
     return
   }
 
-  log(`[Ice Candidate] ${prettyId(controller.id)} ${candidate}`)
-  emit(EVENTS.WS.GAME_CANDIDATE, { candidate, controllerId: controller.id })
+  log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
+  emit(EVENTS.WS.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
 }
 
-const onDataChannel = controller => ({ channel }) => {
-  log(`[Data Channel] ${prettyId(controller.id)} ${channel}`)
+const onDataChannel = initiator => ({ channel }) => {
+  log(`[Data Channel] ${prettyId(initiator.id)} ${channel}`)
 
   channel.onopen = () => {
-    outputEvents.onControllerJoin({
-      id:       controller.id,
+    outputEvents.onInitiatorJoin({
+      id:        initiator.id,
       setOnData: (onData) => {
         channel.onmessage = ({ data }) => {
           onData(JSON.parse(data))
@@ -55,19 +55,19 @@ const onDataChannel = controller => ({ channel }) => {
       send: (data) => {
         channel.send(JSON.stringify(data))
       },
-      close: controller.rtc.close,
+      close: initiator.rtc.close,
     })
 
-    removeController(controller.id)
+    removeInitiator(initiator.id)
   }
 
   channel.onclose = () => {
-    outputEvents.onControllerLeave(controller.id)
+    outputEvents.onInitiatorLeave(initiator.id)
   }
 }
 
-const createController = (controllerId, offer) => ({
-  id:  controllerId,
+const createInitiator = (initiatorId, offer) => ({
+  id:  initiatorId,
   offer,
   rtc: new RTCPeerConnection(WEB_RTC_CONFIG),
 })
@@ -80,31 +80,31 @@ const createAnswer = (rtc, offer) => rtc
     return answer
   })
 
-// First point of contact from controller
-const onOffer = ({ controllerId, offer }) => {
-  log(`[Offer] ${prettyId(controllerId)} (${offer})`)
+// First point of contact from initiator
+const onOffer = ({ initiatorId, offer }) => {
+  log(`[Offer] ${prettyId(initiatorId)} (${offer})`)
 
-  const controller = createController(controllerId, offer)
-  controllers.push(controller)
-  const { rtc } = controller
+  const initiator = createInitiator(initiatorId, offer)
+  initiators.push(initiator)
+  const { rtc } = initiator
 
-  // Start collecting game candidates to be send to this controller
-  rtc.onicecandidate = onIceCandidate(controller)
-  rtc.ondatachannel = onDataChannel(controller)
+  // Start collecting receiver candidates to be send to this initiator
+  rtc.onicecandidate = onIceCandidate(initiator)
+  rtc.ondatachannel = onDataChannel(initiator)
 
   createAnswer(rtc, offer).then((answer) => {
-    emit(EVENTS.WS.ANSWER, { answer, controllerId })
+    emit(EVENTS.WS.ANSWER, { answer, initiatorId })
   })
 }
 
-const onControllerCandidate = ({ controllerId, candidate }) => {
-  const controller = getController(controllerId)
-  controller.rtc.addIceCandidate(new RTCIceCandidate(candidate))
+const onInitiatorCandidate = ({ initiatorId, candidate }) => {
+  const initiator = getInitiator(initiatorId)
+  initiator.rtc.addIceCandidate(new RTCIceCandidate(candidate))
 }
 
 const wsEvents = {
-  [EVENTS.WS.OFFER]:                onOffer,
-  [EVENTS.WS.CONTROLLER_CANDIDATE]: onControllerCandidate,
+  [EVENTS.WS.OFFER]:               onOffer,
+  [EVENTS.WS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
 }
 
 const onWsMessage = (message) => {
@@ -119,15 +119,15 @@ const onWsMessage = (message) => {
 
 const init = ({
   wsAdress,
-  gameCode,
-  onControllerJoin,
-  onControllerLeave,
+  receiverId,
+  onInitiatorJoin,
+  onInitiatorLeave,
 }) => {
-  outputEvents.onControllerJoin = onControllerJoin
-  outputEvents.onControllerLeave = onControllerLeave
+  outputEvents.onInitiatorJoin = onInitiatorJoin
+  outputEvents.onInitiatorLeave = onInitiatorLeave
 
   ws = new WebSocket(wsAdress)
-  ws.onopen = () => { emit(EVENTS.WS.GAME_UPGRADE, gameCode) }
+  ws.onopen = () => { emit(EVENTS.WS.RECEIVER_UPGRADE, receiverId) }
   ws.onmessage = onWsMessage
 }
 
