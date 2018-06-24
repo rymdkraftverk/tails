@@ -1,4 +1,5 @@
 const EVENTS = {
+  // TODO: Move WS events into signaling module
   WS: {
     ANSWER:              'receiver.join.answer',
     INITIATOR_CANDIDATE: 'receiver.join.controller.candidate',
