@@ -11,13 +11,13 @@ import { transitionToGameover } from './gameover'
 const { log } = console
 
 const TURN_RADIUS = 3
-const SPEED_MULTIPLIER = 1.2
+const SPEED_MULTIPLIER = 1.8
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
 
-const HOLE_LENGTH_MAX_TIME = 30
-const HOLE_LENGTH_MIN_TIME = 10
+const HOLE_LENGTH_MAX_TIME = 90
+const HOLE_LENGTH_MIN_TIME = 30
 
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
@@ -27,8 +27,14 @@ export function gameState(maxPlayers) {
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
+  const playerCountFactor = R.compose(
+    Math.sqrt,
+    R.length,
+    Object.values,
+  )(players)
+
   R.compose(
-    R.zipWith(createPlayer, shuffle(R.range(0, maxPlayers))),
+    R.zipWith(createPlayer(playerCountFactor), shuffle(R.range(0, maxPlayers))),
     shuffle,
     Object.values,
   )(players)
@@ -37,7 +43,7 @@ export function gameState(maxPlayers) {
   walls.behaviors.renderWalls = renderWalls()
 }
 
-function createPlayer(index, { playerId, spriteId, color }) {
+const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
   const square = Entity.create(playerId)
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
@@ -46,21 +52,24 @@ function createPlayer(index, { playerId, spriteId, color }) {
   sprite.scale.set(0.3)
   square.color = color
   square.isAlive = true
-  square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
+  square.behaviors.startPlayerMovement = startPlayerMovement(playerCountFactor, square, playerId, spriteId)
   Entity.addEmitter(square, {
     id:       playerId,
     textures: [Game.getTexture('particle')],
   })
-}
+})
 
-const startPlayerMovement = (player, playerId, spriteId) => ({
+const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
   timer: Timer.create(60),
   run:   (b) => {
     if (b.timer.run()) {
       player.behaviors.pivot = pivot(playerId)
-      player.behaviors.holeGenerator = holeGenerator()
-      player.behaviors.createTrail = createTrail(playerId, spriteId, player.behaviors.holeGenerator)
-      player.behaviors.move = move(Util.getRandomInRange(0, 360))
+      player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
+      player.behaviors.createTrail = createTrail(playerCountFactor, playerId, spriteId, player.behaviors.holeGenerator)
+      player.behaviors.move = move({
+        startingDegrees: Util.getRandomInRange(0, 360),
+        playerCountFactor,
+      })
       player.behaviors.collisionChecker = collisionChecker(playerId)
 
       // Enable the following behaviour for keyboard debugging
@@ -76,7 +85,7 @@ function toRadians(angle) {
   return angle * (Math.PI / 180)
 }
 
-const move = startingDegrees => ({
+const move = ({ startingDegrees, playerCountFactor }) => ({
   init: (b, e) => {
     e.degrees = startingDegrees
   },
@@ -84,8 +93,8 @@ const move = startingDegrees => ({
     const radians = toRadians(e.degrees)
     const y = Math.sin(radians)
     const x = Math.cos(radians)
-    e.sprite.x += x * SPEED_MULTIPLIER
-    e.sprite.y += y * SPEED_MULTIPLIER
+    e.sprite.x += (x * SPEED_MULTIPLIER) / playerCountFactor
+    e.sprite.y += (y * SPEED_MULTIPLIER) / playerCountFactor
   },
 })
 
@@ -109,8 +118,8 @@ const pivot = playerId => ({
   },
 })
 
-const createTrail = (playerId, spriteId, holeGenerator) => ({
-  timer: Timer.create(2),
+const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
+  timer: Timer.create(Math.ceil(2 * playerCountFactor)),
   run:   (b, e) => {
     if (holeGenerator.preventTrail) {
       return
@@ -121,17 +130,17 @@ const createTrail = (playerId, spriteId, holeGenerator) => ({
       trailE.player = playerId
       Entity.addType(trailE, 'trail')
       const sprite = Entity.addSprite(trailE, spriteId)
-      sprite.scale.set(0.2)
+      sprite.scale.set(1 / playerCountFactor)
       sprite.x = e.sprite.x + ((e.sprite.width / 2) - (sprite.width / 2))
       sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
       b.timer.reset()
 
-      trailE.behaviors.activate = activate()
+      trailE.behaviors.activate = activate(playerCountFactor)
     }
   },
 })
 
-const holeGenerator = () => ({
+const holeGenerator = playerCountFactor => ({
   preventTrail:      false,
   generateHoleTimer: Timer
     .create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
@@ -147,7 +156,10 @@ const holeGenerator = () => ({
     } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
       b.preventTrail = false
 
-      const rand = Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)
+      const rand = Util.getRandomInRange(
+        Math.ceil(GENERATE_HOLE_MIN_TIME * playerCountFactor),
+        Math.ceil(GENERATE_HOLE_MAX_TIME * playerCountFactor),
+      )
       b.generateHoleTimer = Timer.create(rand)
 
       b.holeLengthTimer = null
@@ -156,8 +168,8 @@ const holeGenerator = () => ({
 })
 
 /* This behavior is needed so that the player wont immediately collide with its own tail */
-const activate = () => ({
-  timer: Timer.create(5),
+const activate = playerCountFactor => ({
+  timer: Timer.create(Math.floor(15 * playerCountFactor)),
   run:   (b, e) => {
     if (b.timer.run()) {
       e.active = true
