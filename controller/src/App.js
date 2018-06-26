@@ -99,9 +99,9 @@ class App extends Component {
         return
       }
 
-      state.error = true
+      state.error = 'Web RTC problem'
       connectionCleanUp({ ws, peer, channel })
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: true })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: state.error })
     }
 
     const onError = (event) => {
