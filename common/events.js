@@ -6,6 +6,7 @@ const EVENTS = {
     GAME_CANDIDATE:        'game.join.game.candidate',
     GAME_UPGRADE:          'game.upgrade',
     OFFER:                 'game.join.offer',
+    NOT_FOUND:             'game.join.controller.notfound',
   },
   RTC: {
     GAME_OVER:             'game.over',

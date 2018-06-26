@@ -40,6 +40,7 @@ const onOffer = client => (event, { gameCode, offer }) => {
   const game = getGameClient(gameCode)
   if (!game) {
     warn(`Game with code ${gameCode} not found`)
+    emit(client, EVENTS.WS.NOT_FOUND, { message: `Game with code ${gameCode} not found` })
     return
   }
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(game)}`)

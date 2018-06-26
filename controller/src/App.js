@@ -76,7 +76,7 @@ class App extends Component {
     channel:     null,
     playerId:    null,
     playerColor: null,
-    error:       false,
+    error:       '',
   }
 
   connectToGame(gameCode) {
@@ -88,7 +88,7 @@ class App extends Component {
 
     const state = {
       candidates:        [],
-      error:             false,
+      error:             '',
       connected:         false,
       hasReceivedAnswer: false,
       gameCandidates:    [],
@@ -99,9 +99,9 @@ class App extends Component {
         return
       }
 
-      state.error = true
+      state.error = 'Web RTC problem'
       connectionCleanUp({ ws, peer, channel })
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: true })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: state.error })
     }
 
     const onError = (event) => {
@@ -142,9 +142,15 @@ class App extends Component {
       }
     }
 
+    const onGameNotFound = (event, { message }) => {
+      log(message)
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
+    }
+
     const events = {
       [EVENTS.WS.ANSWER]:         onAnswer,
       [EVENTS.WS.GAME_CANDIDATE]: onGameCandidate,
+      [EVENTS.WS.NOT_FOUND]:      onGameNotFound,
     }
 
     ws.onmessage = (wsEvent) => {
@@ -209,19 +215,19 @@ class App extends Component {
 
   checkConnectionTimeout = () => {
     if (this.state.appState === APP_STATE.GAME_CONNECTING) {
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: true })
+      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: 'Failed to connect, try again!' })
     }
   };
 
   onJoin = () => {
-    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: false, fullscreen: true })
+    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(this.state.gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     this.connectToGame(this.state.gameCode)
   };
 
   clearError = () => {
-    this.setState({ error: false })
+    this.setState({ error: '' })
   }
 
   send = (data) => {
@@ -254,7 +260,7 @@ class App extends Component {
           this.state.appState === APP_STATE.LOCKER_ROOM
             ? <LockerRoom
                 clearError={this.clearError}
-                showError={this.state.error}
+                error={this.state.error}
                 gameCodeChange={this.gameCodeChange}
                 gameCode={this.state.gameCode}
                 onJoin={this.onJoin} />

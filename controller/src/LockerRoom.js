@@ -4,8 +4,8 @@ import Notifications, { notify } from 'react-notify-toast'
 /* eslint-disable-next-line fp/no-class */
 class LockerRoom extends Component {
   componentDidMount() {
-    if (this.props.showError) {
-      notify.show('Failed to connect, try again!', 'error')
+    if (this.props.error) {
+      notify.show(this.props.error, 'error')
     }
   }
 
