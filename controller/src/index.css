@@ -47,6 +47,7 @@ body {
 #controller-container {
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
 #game-lobby-container {

@@ -274,7 +274,9 @@ class App extends Component {
         }
         {
           this.state.appState === APP_STATE.GAME_PLAYING
-            ? <GamePlaying send={this.send}/>
+            ? <GamePlaying
+                send={this.send}
+                playerColor={this.state.playerColor} />
             : null
         }
       </Fullscreen>
