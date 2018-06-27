@@ -150,10 +150,10 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
       log(`[Game created] ${gameCode}`)
 
       signal({
-        wsAdress: WS_ADDRESS,
-        gameCode,
-        onControllerJoin,
-        onControllerLeave,
+        wsAdress:         WS_ADDRESS,
+        receiverId:       gameCode,
+        onInitiatorJoin:  onControllerJoin,
+        onInitiatorLeave: onControllerLeave,
       })
     })
 

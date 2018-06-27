@@ -5,24 +5,24 @@ const { clients } = require('./state')
 const { EVENTS, prettyId } = require('common')
 
 const TYPE = {
-  CONTROLLER: 'controller',
-  GAME:       'game',
+  INITIATOR: 'initiator',
+  RECEIVER:  'receiver',
 }
 
 const { log, warn } = console
 
 const getClient = id => clients.find(x => x.id === id)
-const getGameClient = gameCode =>
+const getReceiverClient = receiverId =>
   clients.find(x =>
-    x.type === TYPE.GAME &&
-    x.gameCode === gameCode.toUpperCase())
+    x.type === TYPE.RECEIVER &&
+    x.receiverId === receiverId.toUpperCase())
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
 const createClient = socket => ({
   id:   uuid(),
   socket,
-  type: TYPE.CONTROLLER, // game clients get upgraded in onGameCreate
+  type: TYPE.INITIATOR, // receiver clients get upgraded in onReceiverCreate
 })
 
 const emit = (client, event, payload) => {
@@ -30,59 +30,59 @@ const emit = (client, event, payload) => {
   client.socket.send(message)
 }
 
-const onGameUpgrade = client => (event, gameCode) => {
-  client.type = TYPE.GAME
-  client.gameCode = gameCode
-  log(`[Game upgrade] ${prettyClient(client)}`)
+const onReceiverUpgrade = client => (event, receiverId) => {
+  client.type = TYPE.RECEIVER
+  client.receiverId = receiverId
+  log(`[Receiver upgrade] ${prettyClient(client)}`)
 }
 
-const onOffer = client => (event, { gameCode, offer }) => {
-  const game = getGameClient(gameCode)
-  if (!game) {
-    warn(`Game with code ${gameCode} not found`)
-    emit(client, EVENTS.WS.NOT_FOUND, { message: `Game with code ${gameCode} not found` })
+const onOffer = client => (event, { receiverId, offer }) => {
+  const receiver = getReceiverClient(receiverId)
+  if (!receiver) {
+    warn(`Receiver with id ${receiverId} not found`)
+    emit(client, EVENTS.WS.NOT_FOUND, { receiverId })
     return
   }
-  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(game)}`)
-  emit(game, event, { offer, controllerId: client.id })
+  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
+  emit(receiver, event, { offer, initiatorId: client.id })
 }
 
-const onAnswer = client => (event, { answer, controllerId }) => {
-  const controller = getClient(controllerId)
-  if (!controller) {
-    warn(`Controller with id ${controllerId} not found`)
+const onAnswer = client => (event, { answer, initiatorId }) => {
+  const initiator = getClient(initiatorId)
+  if (!initiator) {
+    warn(`Initiator with id ${initiatorId} not found`)
     return
   }
-  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(controller)}`)
-  emit(controller, event, { answer })
+  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
+  emit(initiator, event, { answer })
 }
 
-const onControllerCandidate = client => (event, { candidate, gameCode }) => {
-  const game = getGameClient(gameCode)
-  if (!game) {
-    warn(`Game with code ${gameCode} not found`)
+const onInitiatorCandidate = client => (event, { candidate, receiverId }) => {
+  const receiver = getReceiverClient(receiverId)
+  if (!receiver) {
+    warn(`Receiver with id ${receiverId} not found`)
     return
   }
-  log(`[Controller Candidate] ${prettyClient(client)} -> ${prettyClient(game)}`)
-  emit(game, event, { candidate, controllerId: client.id })
+  log(`[Initiator Candidate] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
+  emit(receiver, event, { candidate, initiatorId: client.id })
 }
 
-const onGameCandidate = client => (event, { candidate, controllerId }) => {
-  const controller = getClient(controllerId)
-  if (!controller) {
-    warn(`Controller with id ${controllerId} not found`)
+const onReceiverCandidate = client => (event, { candidate, initiatorId }) => {
+  const initiator = getClient(initiatorId)
+  if (!initiator) {
+    warn(`Initiator with id ${initiatorId} not found`)
     return
   }
-  log(`[Game Candidate] ${prettyClient(client)} -> ${prettyClient(controller)}`)
-  emit(controller, event, { candidate })
+  log(`[Receiver Candidate] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
+  emit(initiator, event, { candidate })
 }
 
 const events = {
-  [EVENTS.WS.GAME_UPGRADE]:         onGameUpgrade,
-  [EVENTS.WS.ANSWER]:               onAnswer,
-  [EVENTS.WS.CONTROLLER_CANDIDATE]: onControllerCandidate,
-  [EVENTS.WS.GAME_CANDIDATE]:       onGameCandidate,
-  [EVENTS.WS.OFFER]:                onOffer,
+  [EVENTS.WS.RECEIVER_UPGRADE]:    onReceiverUpgrade,
+  [EVENTS.WS.ANSWER]:              onAnswer,
+  [EVENTS.WS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
+  [EVENTS.WS.RECEIVER_CANDIDATE]:  onReceiverCandidate,
+  [EVENTS.WS.OFFER]:               onOffer,
 }
 
 const onMessage = client => (message) => {
@@ -95,16 +95,16 @@ const onMessage = client => (message) => {
   f(client)(event, payload)
 }
 
-const onClose = (deleteGameCode, client) => () => {
+const onClose = (deleteReceiverId, client) => () => {
   const i = clients.indexOf(client)
   clients.splice(i, 1)
 
-  if (client.type === TYPE.GAME) {
-    deleteGameCode(client.gameCode)
+  if (client.type === TYPE.RECEIVER) {
+    deleteReceiverId(client.receiverId)
   }
 }
 
-const init = (port, deleteGameCode) => {
+const init = (port, deleteReceiverId) => {
   const server = new WebSocket.Server({ port })
   log(`ws listening on port ${port}`)
 
@@ -114,7 +114,7 @@ const init = (port, deleteGameCode) => {
     log(`[Client connected] ${prettyClient(client)}`)
 
     socket.on('message', onMessage(client))
-    socket.on('close', onClose(deleteGameCode, client))
+    socket.on('close', onClose(deleteReceiverId, client))
   })
 }
 
