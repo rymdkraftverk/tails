@@ -3,6 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
+import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToRoundEnd } from './roundEnd'
@@ -41,8 +42,30 @@ export function transitionToGameScene(maxPlayers) {
   walls.behaviors.renderWalls = renderWalls()
 }
 
+export function scoreToWin() {
+  return (playerCount(gameState.players) - 1) * 5
+}
+
+export function resetPlayerScores() {
+  Object.values(gameState.players).forEach((player) => {
+    player.score = 0
+  })
+}
+
+export function calculatePlayerScores({ lastResult: { placement } }) {
+  return R.zip(R.range(0, placement.length), placement)
+}
+
+export function assignPlayerScores(scores) {
+  scores.forEach(([score, playerId]) => {
+    const { score: currentScore } = gameState.players[playerId]
+    gameState.players[playerId].score = currentScore + score
+  })
+}
+
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
   const square = Entity.create(playerId)
+  square.events = new EventEmitter()
   const sprite = Entity.addSprite(square, spriteId)
   Entity.addType(square, 'player')
   sprite.x = 150 + ((index % 5) * 200)
@@ -238,12 +261,14 @@ const collisionChecker = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
+        e.events.emit('collided')
         killPlayer(e, playerId)
       } else if (
         e.sprite.x < WALL_THICKNESS ||
         e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
         e.sprite.y < WALL_THICKNESS ||
         e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
+        e.events.emit('collided')
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
@@ -251,6 +276,8 @@ const collisionChecker = playerId => ({
       if (playersAlive.length === 1 && gameState.started) {
         gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
+        gameState.lastRoundResult.placement =
+          gameState.lastResult.placement.concat([playersAlive[0].id])
         transitionToRoundEnd()
       }
       b.timer.reset()

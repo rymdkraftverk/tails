@@ -28,7 +28,8 @@ export const gameState = {
   players: {
   },
   lastRoundResult: {
-    winner: null,
+    placement: [],
+    winner:    null,
   },
 }
 
@@ -47,6 +48,10 @@ export const playerCount = R.compose(R.length, R.values)
 const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
+
+const registerPlacement = ({ id }) => () => {
+  gameState.lastRoundResult.placement = gameState.lastRoundResult.placement.concat([id])
+}
 
 const playerMovement = (id, { command, ordering }) => {
   if (gameState.controllers[id].lastOrder >= ordering) {
@@ -74,6 +79,11 @@ const roundStart = () => {
 
     transitionToGameScene(MAX_PLAYERS_ALLOWED)
     gameState.started = true
+
+    gameState.lastRoundResult.placement = []
+    Entity
+      .getByType('player')
+      .forEach(player => player.events.on('collided', registerPlacement(player)))
   }
 }
 

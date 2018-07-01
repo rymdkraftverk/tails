@@ -3,6 +3,7 @@ import { COLORS } from 'common'
 import { getRatio, playerCount, gameState } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
+import { scoreToWin } from './game'
 
 const CONTROLLER_PORT = '4001'
 
@@ -31,8 +32,27 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   createGameCodeText(gameCode)
   createControllerURLLabel()
   createControllerURLText(getControllerUrl())
+  createFirstToWins()
   alreadyConnectedPlayers
     .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
+}
+
+function createFirstToWins() {
+  const e = Entity.get('firstToWins')
+  if (e) {
+    Entity.destroy(e)
+  }
+
+  const numOfPlayers = playerCount(gameState.players)
+  if (numOfPlayers < 2) {
+    return
+  }
+
+  const score = scoreToWin(numOfPlayers)
+  const entity = Entity.create('firstToWins')
+  const sprite = Entity.addText(entity, `First to ${score} wins!`, { ...small, fill: 'white' })
+  sprite.x = 860
+  sprite.y = 20
 }
 
 function createLobbyTitle() {
@@ -85,6 +105,7 @@ export function addPlayerToLobby(newPlayer) {
   const player = {
     ...newPlayer,
     spriteId: `square-${color}`,
+    score:    0,
     color,
   }
 
@@ -94,13 +115,19 @@ export function addPlayerToLobby(newPlayer) {
   return player
 }
 
-function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
+function createPlayerEntity({ color, score }, numOfPlayers, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
   sprite.x = 400 + (numOfPlayers > 4 ? 200 : 0)
   sprite.y = 100 + ((numOfPlayers % 5) * 100)
   sprite.anchor.set(0.5)
+
+  const squareScore = Entity.create(`square-score-${color}`)
+  const scoreSprite = Entity.addText(squareScore, score, { ...small, fill: 'white' }, { zIndex: 1 })
+  scoreSprite.x = (388 + (playerCount > 4 ? 200 : 0)) - ((score.toString().length - 1) * 9)
+  scoreSprite.y = 83 + ((playerCount % 5) * 100)
+
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
     const joinSounds = [
@@ -111,6 +138,7 @@ function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
     const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
     const join = Sound.getSound(`./sounds/${joinSound}.wav`, { volume: 0.6 })
     join.play()
+    createFirstToWins()
   }
 }
 
