@@ -6,6 +6,7 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
+import signal from './signal'
 
 const { log } = console
 
@@ -14,17 +15,6 @@ const TIMEOUT_SECONDS = 20
 
 log('REACT_APP_WS_ADDRESS', WS_ADDRESS)
 
-const RTC = {
-  SERVERS: {
-    iceServers: [
-      {
-        urls: 'stun:stun.l.google.com:19302',
-      },
-    ],
-  },
-  CHANNEL_NAME: 'data.channel',
-}
-
 const APP_STATE = {
   LOCKER_ROOM:     'locker-room',
   GAME_CONNECTING: 'game-connecting',
@@ -32,10 +22,9 @@ const APP_STATE = {
   GAME_PLAYING:    'game-playing',
 }
 
-const { warn, error } = console
+const { warn } = console
 
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
-const isSafari = () => navigator.userAgent.indexOf('Safari') > -1
 
 const getLastGameCode = () => {
   const gameCode = localStorage.getItem('gameCode')
@@ -45,26 +34,6 @@ const getLastGameCode = () => {
 const setLastGameCode = (gameCode) => {
   localStorage.setItem('gameCode', gameCode)
   return gameCode
-}
-
-const rtcCleanUP = ({ peer, channel }) => {
-  if (channel) {
-    channel.close()
-  }
-  if (peer) {
-    peer.close()
-  }
-}
-
-const wsCleanUp = ({ ws }) => {
-  if (ws) {
-    ws.close()
-  }
-}
-
-const connectionCleanUp = ({ ws, peer, channel }) => {
-  rtcCleanUP({ peer, channel })
-  wsCleanUp({ ws })
 }
 
 /* eslint-disable-next-line fp/no-class */
@@ -80,129 +49,42 @@ class App extends Component {
   }
 
   connectToGame(gameCode) {
-    const peer = new RTCPeerConnection(RTC.SERVERS)
-    const channel = isSafari()
-      ? peer.createDataChannel(RTC.CHANNEL_NAME)
-      : peer.createDataChannel(RTC.CHANNEL_NAME, { ordered: false, maxRetransmits: 0 })
-    const ws = new WebSocket(WS_ADDRESS)
+    signal({
+      wsAdress:   WS_ADDRESS,
+      receiverId: gameCode,
+    }).then(({ setOnData, send }) => {
+      setOnData(this.onReceiverData)
+      this.send = send
+    }).catch(({ cause }) => {
+      const message = {
+        NOT_FOUND: `Game with code ${gameCode} not found`,
+      }[cause]
 
-    const state = {
-      candidates:        [],
-      error:             '',
-      connected:         false,
-      hasReceivedAnswer: false,
-      gameCandidates:    [],
-    }
-
-    const cleanUp = () => {
-      if (state.error) {
-        return
-      }
-
-      state.error = 'Web RTC problem'
-      connectionCleanUp({ ws, peer, channel })
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, channel: null, error: state.error })
-    }
-
-    const onError = (event) => {
-      error(event)
-      cleanUp()
-    }
-
-    ws.onopen = () => {
-      peer
-        .createOffer()
-        .then(offer => Promise.all([offer, peer.setLocalDescription(offer)]))
-        .then(([offer]) => emit(EVENTS.WS.OFFER, { receiverId: gameCode, offer }))
-    }
-
-    const emit = (event, payload) => {
-      const message = JSON.stringify({ event, payload })
-      ws.send(message)
-    }
-
-    const onAnswer = (event, { answer }) => {
-      state.hasReceivedAnswer = true
-
-      peer
-        .setRemoteDescription(answer)
-        .then(() => {
-          state.gameCandidates.forEach(c =>
-            peer.addIceCandidate(new RTCIceCandidate(c)))
-          state.candidates.forEach(c =>
-            emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId: gameCode, candidate: c }))
-        })
-    }
-
-    const onGameCandidate = (event, { candidate }) => {
-      if (!state.hasReceivedAnswer) {
-        state.gameCandidates = state.gameCandidates.concat(candidate)
-      } else {
-        peer.addIceCandidate(new RTCIceCandidate(candidate))
-      }
-    }
-
-    const onGameNotFound = (event, { receiverId }) => {
-      const message = `Game with code ${receiverId} not found`
-      log(message)
+      warn(message)
       this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
+    })
+  }
+
+  onReceiverData = ({ event, payload }) => {
+    if (event === EVENTS.RTC.CONTROLLER_COLOR) {
+      this.setState({
+        appState:    APP_STATE.GAME_LOBBY,
+        playerColor: payload.color,
+        playerId:    payload.playerId,
+      })
+    } else if (event === EVENTS.RTC.GAME_START) {
+      this.setState({
+        appState: APP_STATE.GAME_PLAYING,
+      })
+    } else if (event === EVENTS.RTC.GAME_STARTED) {
+      this.setState({
+        appState: APP_STATE.GAME_PLAYING,
+      })
+    } else if (event === EVENTS.RTC.GAME_OVER) {
+      this.setState({
+        appState: APP_STATE.GAME_LOBBY,
+      })
     }
-
-    const events = {
-      [EVENTS.WS.ANSWER]:             onAnswer,
-      [EVENTS.WS.RECEIVER_CANDIDATE]: onGameCandidate,
-      [EVENTS.WS.NOT_FOUND]:          onGameNotFound,
-    }
-
-    ws.onmessage = (wsEvent) => {
-      const { event, payload } = JSON.parse(wsEvent.data)
-      const f = events[event]
-      if (!f) {
-        warn(`Unhandled event for message: ${wsEvent.data}`)
-        return
-      }
-      f(event, payload)
-    }
-
-    peer.onicecandidate = (e) => {
-      if (!e.candidate) {
-        return
-      }
-      state.candidates = state.candidates.concat(e.candidate)
-    }
-
-    channel.onopen = () => {
-      state.connected = true
-      wsCleanUp({ ws })
-      this.setState({ channel })
-    }
-
-    channel.onmessage = ({ data }) => {
-      const { event, payload } = JSON.parse(data)
-
-      if (event === EVENTS.RTC.CONTROLLER_COLOR) {
-        this.setState({
-          appState:    APP_STATE.GAME_LOBBY,
-          playerColor: payload.color,
-          playerId:    payload.playerId,
-        })
-      } else if (event === EVENTS.RTC.GAME_START) {
-        this.setState({
-          appState: APP_STATE.GAME_PLAYING,
-        })
-      } else if (event === EVENTS.RTC.GAME_STARTED) {
-        this.setState({
-          appState: APP_STATE.GAME_PLAYING,
-        })
-      } else if (event === EVENTS.RTC.GAME_OVER) {
-        this.setState({
-          appState: APP_STATE.GAME_LOBBY,
-        })
-      }
-    }
-
-    channel.onerror = onError
-    channel.onclose = cleanUp
   }
 
   componentDidMount() {
@@ -229,14 +111,6 @@ class App extends Component {
 
   clearError = () => {
     this.setState({ error: '' })
-  }
-
-  send = (data) => {
-    if (!this.state.channel) {
-      return
-    }
-
-    this.state.channel.send(JSON.stringify(data))
   }
 
   startGame = () => {
