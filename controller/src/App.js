@@ -149,9 +149,9 @@ class App extends Component {
     }
 
     const events = {
-      [EVENTS.WS.ANSWER]:         onAnswer,
-      [EVENTS.WS.GAME_CANDIDATE]: onGameCandidate,
-      [EVENTS.WS.NOT_FOUND]:      onGameNotFound,
+      [EVENTS.WS.ANSWER]:             onAnswer,
+      [EVENTS.WS.RECEIVER_CANDIDATE]: onGameCandidate,
+      [EVENTS.WS.NOT_FOUND]:          onGameNotFound,
     }
 
     ws.onmessage = (wsEvent) => {
