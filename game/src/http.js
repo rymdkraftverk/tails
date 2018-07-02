@@ -1,19 +1,11 @@
-let httpAddress
+const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
 
 const createGame = () =>
   fetch(
-    `${httpAddress}/game`,
+    `${HTTP_ADDRESS}/game`,
     {
       method: 'POST',
     },
   ).then(res => res.json())
 
-const init = (address) => {
-  httpAddress = address
-
-  return {
-    createGame,
-  }
-}
-
-module.exports = init
+export default { createGame }

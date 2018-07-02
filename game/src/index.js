@@ -4,13 +4,10 @@ import { EVENTS, prettyId } from 'common'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
-import initHttp from './http'
+import http from './http'
 import signal from './signal'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
-const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
-
-const http = initHttp(HTTP_ADDRESS)
 
 const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
