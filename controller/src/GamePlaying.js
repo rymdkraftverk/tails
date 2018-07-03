@@ -66,7 +66,11 @@ class GamePlaying extends Component {
 
   render() {
     return (
-  <div id="controller-container" style={{ touchAction: 'manipulation' }}>
+  <div id="controller-container" style={{
+      touchAction:     'manipulation',
+      border:          `2rem solid ${this.props.playerColor}`,
+      'border-radius': '4rem',
+    }}>
     <div id="controller-left" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendLeft} onMouseUp={this.sendNone} onTouchStart={this.sendLeft} onTouchEnd={this.sendNone}>LEFT</div>
     <div id="controller-right" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendRight} onMouseUp={this.sendNone} onTouchStart={this.sendRight} onTouchEnd={this.sendNone}>RIGHT</div>
   </div>
