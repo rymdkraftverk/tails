@@ -22,7 +22,6 @@ let rtcChannel
 
 const state = {
   receiverId:        null,
-  hasReceivedAnswer: false,
 }
 
 const outputEvents = {
