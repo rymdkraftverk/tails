@@ -20,9 +20,7 @@ let ws
 let rtc
 let rtcChannel
 
-const state = {
-  receiverId:        null,
-}
+let receiverId
 
 const outputEvents = {
   onSuccess: null,
@@ -48,7 +46,7 @@ const onIceCandidate = ({ candidate }) => {
   }
 
   log(`[Ice Candidate] ${candidate}`)
-  emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId: state.receiverId, candidate })
+  emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId, candidate })
 }
 
 const onChannelOpen = () => {
@@ -97,15 +95,13 @@ const onWsMessage = (message) => {
   f(payload)
 }
 
-const init = ({
-  wsAdress,
-  receiverId,
-}) => new Promise((resolve, reject) => {
-  state.receiverId = receiverId
+const init = options => new Promise((resolve, reject) => {
+  ({ receiverId } = options)
+
   outputEvents.onSuccess = resolve
   outputEvents.onFailure = reject
 
-  ws = new WebSocket(wsAdress)
+  ws = new WebSocket(options.wsAdress)
   ws.onmessage = onWsMessage
   ws.onopen = () => {
     createOffer().then(([offer]) => {
