@@ -22,6 +22,8 @@ const getControllerUrl = () => {
   return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
+const getPlayerPosition = Util.grid(400, 100, 200, 100, 2)
+
 export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -119,14 +121,16 @@ function createPlayerEntity({ color, score }, numOfPlayers, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
-  sprite.x = 400 + (numOfPlayers > 4 ? 200 : 0)
-  sprite.y = 100 + ((numOfPlayers % 5) * 100)
+
+  const { x, y } = getPlayerPosition(playerCount)
+  sprite.x = x
+  sprite.y = y
   sprite.anchor.set(0.5)
 
   const squareScore = Entity.create(`square-score-${color}`)
   const scoreSprite = Entity.addText(squareScore, score, { ...small, fill: 'white' }, { zIndex: 1 })
-  scoreSprite.x = (388 + (playerCount > 4 ? 200 : 0)) - ((score.toString().length - 1) * 9)
-  scoreSprite.y = 83 + ((playerCount % 5) * 100)
+  scoreSprite.x = x - 13
+  scoreSprite.y = y - 13
 
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
