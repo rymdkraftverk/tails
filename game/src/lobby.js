@@ -1,5 +1,6 @@
 import { Entity, Sound, Util } from 'l1'
 import { COLORS } from 'common'
+import { getRatio } from './'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 
@@ -20,7 +21,10 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
 
 function createLobbyTitle() {
   const text = Entity.create('lobbyText')
-  const sprite = Entity.addText(text, 'LOBBY', { ...big, fill: 'white' })
+  const sprite = Entity.addText(text, 'LOBBY', { ...big, fill: 'white', fontSize: 48 * getRatio() })
+  // NON_SCALABLE
+  text.originalPositionX = 50
+  text.originalPositionY = 50
   sprite.x = 50
   sprite.y = 50
 }
@@ -28,6 +32,8 @@ function createLobbyTitle() {
 function createGameCodeLabel() {
   const text = Entity.create('gameCodeLabel')
   const sprite = Entity.addText(text, 'Code:', { ...small, fill: 'white' })
+  text.originalPositionX = 50
+  text.originalPositionY = 260
   sprite.x = 50
   sprite.y = 260
 }
@@ -35,6 +41,8 @@ function createGameCodeLabel() {
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
   const sprite = Entity.addText(text, gameCode, code)
+  text.originalPositionX = 50
+  text.originalPositionY = 300
   sprite.x = 50
   sprite.y = 300
 }
@@ -54,7 +62,8 @@ export function addPlayerToLobby(player) {
 function createPlayerEntity({ color }, playerCount, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
-  sprite.scale.set(3)
+  console.warn('getRatio() fdsfsdfdsf', getRatio())
+  sprite.scale.set(3 * getRatio())
   sprite.x = 400 + (playerCount > 4 ? 200 : 0)
   sprite.y = 100 + ((playerCount % 5) * 100)
   sprite.anchor.set(0.5)

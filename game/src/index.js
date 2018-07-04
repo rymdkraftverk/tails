@@ -13,8 +13,8 @@ const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
-export const GAME_WIDTH = 1200
-export const GAME_HEIGHT = 600
+export const GAME_WIDTH = 1280
+export const GAME_HEIGHT = 720
 
 export const game = {
   started:                        false,
@@ -140,7 +140,36 @@ const onControllerLeave = (id) => {
   // TODO: remove from controllers and lobby
 }
 
-Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
+let screenWidth = window.innerWidth
+let screenHeight = window.innerHeight
+let ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
+
+export const getRatio = () => ratio
+
+const resizeGame = () => {
+  screenWidth = window.innerWidth
+  screenHeight = window.innerHeight
+  ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
+  Game.getRenderer().resize(GAME_WIDTH, GAME_HEIGHT)
+  Game.getRenderer().autoResize = true
+  console.warn('test3')
+  Game.getStage().scale.set(ratio)
+  Entity.getAll()
+    .forEach((e) => {
+      if (e.sprite) {
+        // e.sprite.scale.set(ratio)
+      }
+      if (e.text) {
+        e.text.style.fontSize = 48 * ratio
+        // e.text.position.x = e.originalPositionX * ratio
+        // e.text.position.y = e.originalPositionY * ratio
+        e.text.dirty = true
+      }
+    })
+}
+// window.addEventListener('resize', resizeGame)
+
+Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.getElementById('game') }).then(() => {
   http.createGame()
     .then(({ gameCode }) => {
       createGame({ gameCode })
@@ -153,9 +182,10 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
         onInitiatorLeave: onControllerLeave,
       })
     })
-
   const background = Entity.create('background')
   Entity.addSprite(background, 'background', { zIndex: -999999 })
+
+  resizeGame()
 
   Key.add('up')
   Key.add('down')

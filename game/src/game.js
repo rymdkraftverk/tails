@@ -3,7 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
-import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
+import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game, getRatio } from '.'
 import { players } from './lobby'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
@@ -43,7 +43,7 @@ function createPlayer(index, { playerId, spriteId, color }) {
   Entity.addType(square, 'player')
   sprite.x = 150 + ((index % 5) * 200)
   sprite.y = 150 + (index > 4 ? 300 : 0)
-  sprite.scale.set(0.3)
+  sprite.scale.set(0.3 * getRatio())
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
