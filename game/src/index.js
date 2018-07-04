@@ -140,34 +140,24 @@ const onControllerLeave = (id) => {
   // TODO: remove from controllers and lobby
 }
 
-let screenWidth = window.innerWidth
-let screenHeight = window.innerHeight
-let ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
-
+let ratio
 export const getRatio = () => ratio
 
 const resizeGame = () => {
-  screenWidth = window.innerWidth
-  screenHeight = window.innerHeight
+  const screenWidth = window.innerWidth
+  const screenHeight = window.innerHeight
   ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
-  Game.getRenderer().resize(GAME_WIDTH, GAME_HEIGHT)
-  Game.getRenderer().autoResize = true
-  console.warn('test3')
   Game.getStage().scale.set(ratio)
+  Game.getRenderer().resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
   Entity.getAll()
     .forEach((e) => {
-      if (e.sprite) {
-        // e.sprite.scale.set(ratio)
-      }
       if (e.text) {
-        e.text.style.fontSize = 48 * ratio
-        // e.text.position.x = e.originalPositionX * ratio
-        // e.text.position.y = e.originalPositionY * ratio
-        e.text.dirty = true
+        e.text.style.fontSize = e.originalSize * ratio
+        e.text.scale.set(1 / ratio)
       }
     })
 }
-// window.addEventListener('resize', resizeGame)
+window.addEventListener('resize', resizeGame)
 
 Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.getElementById('game') }).then(() => {
   http.createGame()

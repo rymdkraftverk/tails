@@ -22,27 +22,31 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
 function createLobbyTitle() {
   const text = Entity.create('lobbyText')
   const sprite = Entity.addText(text, 'LOBBY', { ...big, fill: 'white', fontSize: 48 * getRatio() })
+  sprite.scale.set(1 / getRatio())
   // NON_SCALABLE
   text.originalPositionX = 50
   text.originalPositionY = 50
+  text.originalSize = 48
   sprite.x = 50
   sprite.y = 50
 }
 
 function createGameCodeLabel() {
   const text = Entity.create('gameCodeLabel')
-  const sprite = Entity.addText(text, 'Code:', { ...small, fill: 'white' })
-  text.originalPositionX = 50
-  text.originalPositionY = 260
+  const sprite = Entity.addText(text, 'Code:', { ...small, fontSize: small.fontSize * getRatio(), fill: 'white' })
+  sprite.scale.set(1 / getRatio())
+
+  text.originalSize = small.fontSize
   sprite.x = 50
   sprite.y = 260
 }
 
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
-  const sprite = Entity.addText(text, gameCode, code)
-  text.originalPositionX = 50
-  text.originalPositionY = 300
+  const sprite = Entity.addText(text, gameCode, { ...code, fontSize: code.fontSize * getRatio() })
+  sprite.scale.set(1 / getRatio())
+
+  text.originalSize = code.fontSize
   sprite.x = 50
   sprite.y = 300
 }
@@ -62,8 +66,7 @@ export function addPlayerToLobby(player) {
 function createPlayerEntity({ color }, playerCount, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
-  console.warn('getRatio() fdsfsdfdsf', getRatio())
-  sprite.scale.set(3 * getRatio())
+  sprite.scale.set(3)
   sprite.x = 400 + (playerCount > 4 ? 200 : 0)
   sprite.y = 100 + ((playerCount % 5) * 100)
   sprite.anchor.set(0.5)

@@ -1,13 +1,11 @@
 body {
   font-family: 'patchy-robots';
   /* background: #414844; */
-  background-color: red;
+  background-color: black;
   margin: 0px;
-}
-
-#game {
-  width: 1280px;
-  height: 720px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @font-face {
