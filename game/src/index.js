@@ -4,7 +4,7 @@ import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby } from './lobby'
-import { transitionToGameScene } from './game'
+import { transitionToGameScene, EVENTS as GAME_EVENTS } from './game'
 import http from './http'
 import signal from './signal'
 import layers from './util/layers'
@@ -83,7 +83,7 @@ const roundStart = () => {
     gameState.lastRoundResult.placement = []
     Entity
       .getByType('player')
-      .forEach(player => player.events.on('collided', registerPlacement(player)))
+      .forEach(player => player.events.on(GAME_EVENTS.PLAYER_COLLIDED, registerPlacement(player)))
   }
 }
 

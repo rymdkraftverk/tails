@@ -22,6 +22,8 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+export const EVENTS = { PLAYER_COLLIDED: 'player.collided' }
+
 export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -261,14 +263,14 @@ const collisionChecker = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        e.events.emit('collided')
+        e.events.emit(EVENTS.PLAYER_COLLIDED)
         killPlayer(e, playerId)
       } else if (
         e.sprite.x < WALL_THICKNESS ||
         e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
         e.sprite.y < WALL_THICKNESS ||
         e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
-        e.events.emit('collided')
+        e.events.emit(EVENTS.PLAYER_COLLIDED)
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
