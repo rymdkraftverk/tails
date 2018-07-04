@@ -172,6 +172,7 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.ge
         onInitiatorLeave: onControllerLeave,
       })
     })
+
   const background = Entity.create('background')
   Entity.addSprite(background, 'background', { zIndex: -999999 })
 
