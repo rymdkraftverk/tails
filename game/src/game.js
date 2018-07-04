@@ -43,7 +43,7 @@ function createPlayer(index, { playerId, spriteId, color }) {
   Entity.addType(square, 'player')
   sprite.x = 150 + ((index % 5) * 200)
   sprite.y = 150 + (index > 4 ? 300 : 0)
-  sprite.scale.set(0.3 * getRatio())
+  sprite.scale.set(0.3)
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(square, playerId, spriteId)
