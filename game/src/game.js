@@ -54,8 +54,8 @@ export function resetPlayerScores() {
   })
 }
 
-export function calculatePlayerScores({ lastResult: { placement } }) {
-  return R.zip(R.range(0, placement.length), placement)
+export function calculatePlayerScores({ lastResult: { playerFinishOrder } }) {
+  return R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 }
 
 export function assignPlayerScores(scores) {
@@ -278,8 +278,8 @@ const collisionChecker = playerId => ({
       if (playersAlive.length === 1 && gameState.started) {
         gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
-        gameState.lastRoundResult.placement =
-          gameState.lastResult.placement.concat([playersAlive[0].id])
+        gameState.lastRoundResult.playerFinishOrder =
+          gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
         transitionToRoundEnd()
       }
       b.timer.reset()

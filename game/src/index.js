@@ -49,8 +49,9 @@ const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const registerPlacement = ({ id }) => () => {
-  gameState.lastRoundResult.placement = gameState.lastRoundResult.placement.concat([id])
+const registerPlayerFinished = ({ id }) => () => {
+  gameState.lastRoundResult.playerFinishOrder =
+    gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
 const playerMovement = (id, { command, ordering }) => {
@@ -80,10 +81,11 @@ const roundStart = () => {
     transitionToGameScene(MAX_PLAYERS_ALLOWED)
     gameState.started = true
 
-    gameState.lastRoundResult.placement = []
+    gameState.lastRoundResult.playerFinishOrder = []
     Entity
       .getByType('player')
-      .forEach(player => player.events.on(GAME_EVENTS.PLAYER_COLLIDED, registerPlacement(player)))
+      .forEach(player =>
+        player.events.on(GAME_EVENTS.PLAYER_COLLIDED, registerPlayerFinished(player)))
   }
 }
 
