@@ -23,9 +23,7 @@ function createLobbyTitle() {
   const text = Entity.create('lobbyText')
   const sprite = Entity.addText(text, 'LOBBY', { ...big, fill: 'white', fontSize: 48 * getRatio() })
   sprite.scale.set(1 / getRatio())
-  // NON_SCALABLE
-  text.originalPositionX = 50
-  text.originalPositionY = 50
+
   text.originalSize = 48
   sprite.x = 50
   sprite.y = 50
