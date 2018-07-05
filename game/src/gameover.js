@@ -4,13 +4,14 @@ import { createEaseInAndOut } from './magic'
 import { createLobby } from './lobby'
 import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
+import layers from './util/layers'
 
 const TIME_UNTIL_GAME_RESTARTS = 240
 
 export function transitionToGameover() {
   const gameover = Entity.create('game-over')
   const { winner } = gameState.lastResult
-  const text = Entity.addText(gameover, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: 100 })
+  const text = Entity.addText(gameover, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: layers.FOREGROUND })
   text.scale.set(1 / getRatio())
   gameover.originalSize = big.fontSize * getRatio()
 

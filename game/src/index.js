@@ -7,6 +7,7 @@ import { createLobby, addPlayerToLobby } from './lobby'
 import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
+import layers from './util/layers'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -183,7 +184,7 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.ge
     })
 
   const background = Entity.create('background')
-  Entity.addSprite(background, 'background', { zIndex: -999999 })
+  Entity.addSprite(background, 'background', { zIndex: layers.BACKGROUND })
 
   resizeGame()
 
