@@ -149,7 +149,10 @@ const holeGenerator = playerCountFactor => ({
     if (b.generateHoleTimer && b.generateHoleTimer.run()) {
       b.preventTrail = true
 
-      const rand = Util.getRandomInRange(HOLE_LENGTH_MIN_TIME, HOLE_LENGTH_MAX_TIME)
+      const rand = Util.getRandomInRange(
+        Math.ceil(HOLE_LENGTH_MIN_TIME * playerCountFactor),
+        Math.ceil(HOLE_LENGTH_MAX_TIME * playerCountFactor),
+      )
       b.holeLengthTimer = Timer.create(rand)
 
       b.generateHoleTimer = null
