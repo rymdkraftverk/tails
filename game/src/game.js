@@ -11,7 +11,7 @@ import { transitionToGameover } from './gameover'
 const { log } = console
 
 const TURN_RADIUS = 3
-const SPEED_MULTIPLIER = 1.8
+const SPEED_MULTIPLIER = 3.6
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
