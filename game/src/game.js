@@ -143,7 +143,10 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
 const holeGenerator = playerCountFactor => ({
   preventTrail:      false,
   generateHoleTimer: Timer
-    .create(Util.getRandomInRange(GENERATE_HOLE_MIN_TIME, GENERATE_HOLE_MAX_TIME)),
+    .create(Util.getRandomInRange(
+      GENERATE_HOLE_MIN_TIME,
+      GENERATE_HOLE_MAX_TIME,
+    )),
   holeLengthTimer: null,
   run:             (b) => {
     if (b.generateHoleTimer && b.generateHoleTimer.run()) {
