@@ -20,10 +20,8 @@ const getControllerUrl = () => {
       port,
     },
   } = window
-  if (port) {
-    return `${hostname}:${CONTROLLER_PORT}`
-  }
-  return deployedURLs[hostname]
+
+  return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
 export function createLobby(gameCode, alreadyConnectedPlayers = []) {
