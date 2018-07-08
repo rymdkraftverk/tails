@@ -13,8 +13,8 @@ const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
-export const GAME_WIDTH = 1200
-export const GAME_HEIGHT = 600
+export const GAME_WIDTH = 1280
+export const GAME_HEIGHT = 720
 
 export const game = {
   started:                        false,
@@ -140,7 +140,30 @@ const onControllerLeave = (id) => {
   // TODO: remove from controllers and lobby
 }
 
-Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
+let ratio
+export const getRatio = () => ratio
+
+const resizeGame = () => {
+  const screenWidth = window.innerWidth
+  const screenHeight = window.innerHeight
+  ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
+  Game.getStage().scale.set(ratio)
+  Game.getRenderer().resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
+
+  // The following code is needed to couteract the scale change on the whole canvas since
+  // texts get distorted by PIXI when you try to change their scale.
+  // Texts instead change size by setting their fontSize.
+  Entity.getAll()
+    .forEach((e) => {
+      if (e.text) {
+        e.text.style.fontSize = e.originalSize * ratio
+        e.text.scale.set(1 / ratio)
+      }
+    })
+}
+window.addEventListener('resize', resizeGame)
+
+Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.getElementById('game') }).then(() => {
   http.createGame()
     .then(({ gameCode }) => {
       createGame({ gameCode })
@@ -156,6 +179,8 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false }).then(() => {
 
   const background = Entity.create('background')
   Entity.addSprite(background, 'background', { zIndex: -999999 })
+
+  resizeGame()
 
   Key.add('up')
   Key.add('down')
