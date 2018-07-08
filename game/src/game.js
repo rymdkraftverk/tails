@@ -49,7 +49,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   Entity.addType(square, 'player')
   sprite.x = 150 + ((index % 5) * 200)
   sprite.y = 150 + (index > 4 ? 300 : 0)
-  sprite.scale.set(0.3)
+  sprite.scale.set(1 / playerCountFactor)
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(playerCountFactor, square, playerId, spriteId)
