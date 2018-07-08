@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import { EVENTS } from 'common'
+import { EVENTS, COLORS } from 'common'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
@@ -283,7 +283,7 @@ class App extends Component {
           this.state.appState === APP_STATE.GAME_PLAYING
             ? <GamePlaying
                 send={this.send}
-                playerColor={this.state.playerColor} />
+                playerColor={COLORS[this.state.playerColor]} />
             : null
         }
       </Fullscreen>
