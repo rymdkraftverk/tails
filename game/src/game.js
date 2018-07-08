@@ -119,7 +119,7 @@ const pivot = playerId => ({
 })
 
 const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
-  timer: Timer.create(Math.ceil(2 * playerCountFactor)),
+  timer: Timer.create(Math.ceil(2)),
   run:   (b, e) => {
     if (holeGenerator.preventTrail) {
       return
