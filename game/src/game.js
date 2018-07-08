@@ -135,7 +135,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
       sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
       b.timer.reset()
 
-      trailE.behaviors.activate = activate(playerCountFactor)
+      trailE.behaviors.activate = activate()
     }
   },
 })
@@ -174,8 +174,8 @@ const holeGenerator = playerCountFactor => ({
 })
 
 /* This behavior is needed so that the player wont immediately collide with its own tail */
-const activate = playerCountFactor => ({
-  timer: Timer.create(Math.floor(15 * playerCountFactor)),
+const activate = () => ({
+  timer: Timer.create(15),
   run:   (b, e) => {
     if (b.timer.run()) {
       e.active = true
