@@ -7,6 +7,23 @@ export const players = {
 
 }
 
+const CONTROLLER_PORT = '4001'
+
+const deployedURLs = {
+  'game.rymdkraftverk.com': 'rymdkraftverk.com',
+}
+
+const getControllerUrl = () => {
+  const {
+    location: {
+      hostname,
+      port,
+    },
+  } = window
+
+  return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
+}
+
 export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -15,6 +32,8 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   createLobbyTitle()
   createGameCodeLabel()
   createGameCodeText(gameCode)
+  createControllerURLLabel()
+  createControllerURLText(getControllerUrl())
   alreadyConnectedPlayers.forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
 }
 
@@ -22,21 +41,35 @@ function createLobbyTitle() {
   const text = Entity.create('lobbyText')
   const sprite = Entity.addText(text, 'LOBBY', { ...big, fill: 'white' })
   sprite.x = 50
-  sprite.y = 50
+  sprite.y = 40
 }
 
 function createGameCodeLabel() {
   const text = Entity.create('gameCodeLabel')
   const sprite = Entity.addText(text, 'Code:', { ...small, fill: 'white' })
   sprite.x = 50
-  sprite.y = 260
+  sprite.y = 360
 }
 
 function createGameCodeText(gameCode) {
   const text = Entity.create('gameCodeText')
   const sprite = Entity.addText(text, gameCode, code)
   sprite.x = 50
-  sprite.y = 300
+  sprite.y = 400
+}
+
+function createControllerURLLabel() {
+  const text = Entity.create('controllerURLLabel')
+  const sprite = Entity.addText(text, 'Go to:', { ...small, fill: 'white' })
+  sprite.x = 50
+  sprite.y = 170
+}
+
+function createControllerURLText(controllerURL) {
+  const text = Entity.create('controllerURLText')
+  const sprite = Entity.addText(text, controllerURL, { ...code, fontSize: 30 })
+  sprite.x = 50
+  sprite.y = 200
 }
 
 export function addPlayerToLobby(player) {
