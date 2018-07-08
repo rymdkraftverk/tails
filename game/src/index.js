@@ -149,6 +149,10 @@ const resizeGame = () => {
   ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
   Game.getStage().scale.set(ratio)
   Game.getRenderer().resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
+
+  // The following code is needed to couteract the scale change on the whole canvas since
+  // texts get distorted by PIXI when you try to change their scale.
+  // Texts instead change size by setting their fontSize.
   Entity.getAll()
     .forEach((e) => {
       if (e.text) {
