@@ -173,7 +173,10 @@ const holeGenerator = playerCountFactor => ({
   },
 })
 
-/* This behavior is needed so that the player wont immediately collide with its own tail */
+/*
+ * This behavior is needed so that the player wont immediately collide with its own tail.
+ * If the timer is set too high you risk having players pass through each other's heads.
+ */
 const activate = () => ({
   timer: Timer.create(15),
   run:   (b, e) => {
