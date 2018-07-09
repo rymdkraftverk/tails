@@ -3,7 +3,7 @@ import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Ut
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
 import sprites from './sprites.json'
-import { createLobby, addPlayerToLobby, players } from './lobby'
+import { createLobby, addPlayerToLobby } from './lobby'
 import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
@@ -23,6 +23,8 @@ export const gameState = {
   hasReceivedControllerCandidate: false,
   // TODO: change to array
   controllers:                    {
+  },
+  players: {
   },
   lastResult: {
     winner: null,
@@ -106,7 +108,7 @@ const onControllerData = id => (message) => {
 }
 
 const moreControllersAllowed = () =>
-  playerCount(players) < MAX_PLAYERS_ALLOWED && !gameState.started
+  playerCount(gameState.players) < MAX_PLAYERS_ALLOWED && !gameState.started
 
 const onControllerJoin = ({
   id,
