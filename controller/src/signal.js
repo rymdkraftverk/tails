@@ -45,7 +45,7 @@ const onIceCandidate = ({ candidate }) => {
 }
 
 const onChannelOpen = () => {
-  log(`[Data Channel] ${rtcChannel}`)
+  log(`[Data channel opened] ${rtcChannel}`)
   outputEvents.onSuccess({
     setOnData: (onData) => {
       rtcChannel.onmessage = ({ data }) => {
