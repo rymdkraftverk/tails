@@ -2,14 +2,14 @@ import { Entity, Timer } from 'l1'
 import { EVENTS } from 'common'
 import { createEaseInAndOut } from './magic'
 import { createLobby, players } from './lobby'
-import { game, GAME_WIDTH, getRatio } from '.'
+import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 
 const TIME_UNTIL_GAME_RESTARTS = 240
 
 export function transitionToGameover() {
   const gameover = Entity.create('game-over')
-  const { winner } = game.lastResult
+  const { winner } = gameState.lastResult
   const text = Entity.addText(gameover, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: 100 })
   text.scale.set(1 / getRatio())
   gameover.originalSize = big.fontSize * getRatio()
@@ -26,12 +26,12 @@ const pause = () => ({
   run:   (b) => {
     if (b.timer.run()) {
       Object
-        .values(game.controllers)
+        .values(gameState.controllers)
         .forEach((controller) => {
           controller.send({ event: EVENTS.RTC.GAME_OVER, payload: {} })
         })
 
-      createLobby(game.gameCode, Object.values(players))
+      createLobby(gameState.gameCode, Object.values(players))
     }
   },
 })
