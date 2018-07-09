@@ -22,8 +22,6 @@ const APP_STATE = {
   GAME_PLAYING:    'game-playing',
 }
 
-const { warn } = console
-
 const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
 
 const getLastGameCode = () => {
@@ -60,7 +58,6 @@ class App extends Component {
         NOT_FOUND: `Game with code ${gameCode} not found`,
       }[cause]
 
-      warn(message)
       this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
     })
   }

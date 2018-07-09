@@ -9,7 +9,7 @@ const WEB_RTC_CONFIG = {
 }
 const WEB_RTC_CHANNEL_NAME = 'data.channel'
 
-const { log, warn } = console
+const { error, log, warn } = console
 
 // state
 let ws
@@ -71,6 +71,7 @@ const onReceiverCandidate = ({ candidate }) => {
 }
 
 const onReceiverNotFound = () => {
+  warn('Reciver not found')
   cleanUp()
   outputEvents.onFailure({ cause: 'NOT_FOUND' })
 }
