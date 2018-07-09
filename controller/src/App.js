@@ -50,8 +50,13 @@ class App extends Component {
     signal({
       wsAdress:   WS_ADDRESS,
       receiverId: gameCode,
-    }).then(({ setOnData, send }) => {
+    }).then(({ setOnData, setOnClose, send }) => {
       setOnData(this.onReceiverData)
+
+      setOnClose(() => {
+        this.displayError('Connection closed')
+      })
+
       this.send = send
     }).catch(({ cause }) => {
       const message = {

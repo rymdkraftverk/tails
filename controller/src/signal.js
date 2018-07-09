@@ -52,6 +52,12 @@ const onChannelOpen = () => {
         onData(JSON.parse(data))
       }
     },
+    setOnClose: (onClose) => {
+      rtcChannel.onclose = () => {
+        warn('RTC connection closed')
+        onClose()
+      }
+    },
     send: (data) => {
       rtcChannel.send(JSON.stringify(data))
     },
