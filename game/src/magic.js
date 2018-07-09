@@ -1,5 +1,7 @@
 const getNormalizer = (x1, x2) => (4 / ((x1 ** 2) + (x2 ** 2)))
 
+const { error } = console
+
 /**
  *
  * @param {number} x1 -
@@ -41,7 +43,7 @@ export const createEaseInAndOut = ({
   start, end, duration, startTime = 0,
 }) => {
   if (duration <= 0) {
-    console.error('createEaseInAndOut: duration has to be positive')
+    error('createEaseInAndOut: duration has to be positive')
   }
   const endTime = startTime + duration
   const speed = 4 * ((start - end) / ((startTime - endTime) ** 3))
