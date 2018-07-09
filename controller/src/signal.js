@@ -9,10 +9,6 @@ const WEB_RTC_CONFIG = {
 }
 const WEB_RTC_CHANNEL_NAME = 'data.channel'
 
-// TODO: working?
-const isSafari = navigator.userAgent.indexOf('Safari') > -1
-const rtcOptions = isSafari ? {} : { ordered: false, maxRetransmits: 0 }
-
 const { log, warn } = console
 
 // state
@@ -110,7 +106,7 @@ const init = options => new Promise((resolve, reject) => {
   }
 
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
-  rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME, rtcOptions)
+  rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
   rtcChannel.onopen = onChannelOpen
 
   rtc.onicecandidate = onIceCandidate
