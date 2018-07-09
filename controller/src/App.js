@@ -58,7 +58,7 @@ class App extends Component {
         NOT_FOUND: `Game with code ${gameCode} not found`,
       }[cause]
 
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
+      this.displayError(message)
     })
   }
 
@@ -89,13 +89,17 @@ class App extends Component {
     this.setState({ gameCode })
   }
 
+  displayError = (message) => {
+    this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
+  }
+
   gameCodeChange = ({ target: { value } }) => {
     this.setState({ gameCode: value.toUpperCase() })
   };
 
   checkConnectionTimeout = () => {
     if (this.state.appState === APP_STATE.GAME_CONNECTING) {
-      this.setState({ appState: APP_STATE.LOCKER_ROOM, error: 'Failed to connect, try again!' })
+      this.displayError('Failed to connect, try again!')
     }
   };
 
