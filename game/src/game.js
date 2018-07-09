@@ -3,7 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
-import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
+import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game, playerCount } from '.'
 import { players } from './lobby'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
@@ -29,8 +29,7 @@ export function gameState(maxPlayers) {
 
   const playerCountFactor = R.compose(
     Math.sqrt,
-    R.length,
-    Object.values,
+    playerCount,
   )(players)
 
   R.compose(

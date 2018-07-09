@@ -1,6 +1,6 @@
 import { Entity, Sound, Util } from 'l1'
 import { COLORS } from 'common'
-import { getRatio } from './'
+import { getRatio, playerCount } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 
@@ -84,23 +84,23 @@ function createControllerURLText(controllerURL) {
 }
 
 export function addPlayerToLobby(player) {
-  const playerCount = Object.keys(players).length
-  const color = Object.keys(COLORS)[playerCount]
+  const numOfPlayers = playerCount(players)
+  const color = Object.keys(COLORS)[numOfPlayers]
 
   players[player.playerId] = player
   players[player.playerId].spriteId = `square-${color}`
   players[player.playerId].color = color
-  createPlayerEntity(player, playerCount, { newPlayer: true })
+  createPlayerEntity(player, numOfPlayers, { newPlayer: true })
 
   return players[player.playerId]
 }
 
-function createPlayerEntity({ color }, playerCount, { newPlayer }) {
+function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
-  sprite.x = 400 + (playerCount > 4 ? 200 : 0)
-  sprite.y = 100 + ((playerCount % 5) * 100)
+  sprite.x = 400 + (numOfPlayers > 4 ? 200 : 0)
+  sprite.y = 100 + ((numOfPlayers % 5) * 100)
   sprite.anchor.set(0.5)
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()

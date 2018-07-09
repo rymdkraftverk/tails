@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
 import { EVENTS, prettyId } from 'common'
+import R from 'ramda'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
 import { gameState } from './game'
@@ -37,6 +38,8 @@ const movePlayer = (pId, direction) => {
     warn(`Failed to move player ${prettyId(pId)} with direction ${direction}`)
   }
 }
+
+export const playerCount = R.compose(R.length, R.values)
 
 const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
@@ -103,7 +106,7 @@ const onControllerData = id => (message) => {
 }
 
 const moreControllersAllowed = () =>
-  Object.keys(players).length < MAX_PLAYERS_ALLOWED && !game.started
+  playerCount(players) < MAX_PLAYERS_ALLOWED && !game.started
 
 const onControllerJoin = ({
   id,
