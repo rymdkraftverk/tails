@@ -3,7 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
-import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game, getRatio } from '.'
+import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game } from '.'
 import { players } from './lobby'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
@@ -52,7 +52,12 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   sprite.scale.set(1 / playerCountFactor)
   square.color = color
   square.isAlive = true
-  square.behaviors.startPlayerMovement = startPlayerMovement(playerCountFactor, square, playerId, spriteId)
+  square.behaviors.startPlayerMovement = startPlayerMovement(
+    playerCountFactor,
+    square,
+    playerId,
+    spriteId,
+  )
   Entity.addEmitter(square, {
     id:       playerId,
     textures: [Game.getTexture('particle')],
@@ -65,7 +70,12 @@ const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => (
     if (b.timer.run()) {
       player.behaviors.pivot = pivot(playerId)
       player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
-      player.behaviors.createTrail = createTrail(playerCountFactor, playerId, spriteId, player.behaviors.holeGenerator)
+      player.behaviors.createTrail = createTrail(
+        playerCountFactor,
+        playerId,
+        spriteId,
+        player.behaviors.holeGenerator,
+      )
       player.behaviors.move = move({
         startingDegrees: Util.getRandomInRange(0, 360),
         playerCountFactor,

@@ -35,7 +35,8 @@ export function createLobby(gameCode, alreadyConnectedPlayers = []) {
   createGameCodeText(gameCode)
   createControllerURLLabel()
   createControllerURLText(getControllerUrl())
-  alreadyConnectedPlayers.forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
+  alreadyConnectedPlayers
+    .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
 }
 
 function createLobbyTitle() {
