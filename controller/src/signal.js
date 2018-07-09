@@ -31,7 +31,6 @@ const emit = (event, payload) => {
 
 const cleanUp = () => {
   ws.close()
-  rtcChannel.close()
   rtc.close()
 }
 
