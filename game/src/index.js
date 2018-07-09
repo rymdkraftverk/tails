@@ -4,7 +4,7 @@ import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
-import { gameScene } from './game'
+import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
 
@@ -69,7 +69,7 @@ const gameStart = () => {
         })
       })
 
-    gameScene(MAX_PLAYERS_ALLOWED)
+    transitionToGameScene(MAX_PLAYERS_ALLOWED)
     gameState.started = true
   }
 }

@@ -22,7 +22,7 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-export function gameScene(maxPlayers) {
+export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
