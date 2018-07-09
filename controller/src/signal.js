@@ -44,6 +44,11 @@ const onIceCandidate = ({ candidate }) => {
   emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId, candidate })
 }
 
+const onError = () => {
+  error('WebRTC error')
+  cleanUp()
+}
+
 const onChannelOpen = () => {
   log(`[Data channel opened] ${rtcChannel}`)
   outputEvents.onSuccess({
@@ -114,6 +119,7 @@ const init = options => new Promise((resolve, reject) => {
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
   rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
   rtcChannel.onopen = onChannelOpen
+  rtcChannel.onerror = onError
 
   rtc.onicecandidate = onIceCandidate
 })
