@@ -83,16 +83,19 @@ function createControllerURLText(controllerURL) {
   sprite.y = 200
 }
 
-export function addPlayerToLobby(player) {
+export function addPlayerToLobby(newPlayer) {
   const numOfPlayers = playerCount(players)
   const color = Object.keys(COLORS)[numOfPlayers]
+  const player = {
+    ...newPlayer,
+    spriteId: `square-${color}`,
+    color,
+  }
 
   players[player.playerId] = player
-  players[player.playerId].spriteId = `square-${color}`
-  players[player.playerId].color = color
   createPlayerEntity(player, numOfPlayers, { newPlayer: true })
 
-  return players[player.playerId]
+  return player
 }
 
 function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
