@@ -3,7 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
-import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, game, playerCount } from '.'
+import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import { players } from './lobby'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
@@ -22,7 +22,7 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-export function gameState(maxPlayers) {
+export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
@@ -249,9 +249,9 @@ const collisionChecker = playerId => ({
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       const playersAlive = Entity.getByType('player').filter(p => !p.killed)
-      if (playersAlive.length === 1 && game.started) {
-        game.started = false
-        game.lastResult.winner = playersAlive[0].color
+      if (playersAlive.length === 1 && gameState.started) {
+        gameState.started = false
+        gameState.lastResult.winner = playersAlive[0].color
         transitionToGameover()
       }
       b.timer.reset()

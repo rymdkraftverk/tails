@@ -4,7 +4,7 @@ import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
 import sprites from './sprites.json'
 import { createLobby, addPlayerToLobby, players } from './lobby'
-import { gameState } from './game'
+import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
 
@@ -17,7 +17,7 @@ export const RIGHT = 'right'
 export const GAME_WIDTH = 1280
 export const GAME_HEIGHT = 720
 
-export const game = {
+export const gameState = {
   started:                        false,
   gameCode:                       '',
   hasReceivedControllerCandidate: false,
@@ -46,12 +46,12 @@ const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
 const playerMovement = (id, { command, ordering }) => {
-  if (game.controllers[id].lastOrder >= ordering) {
+  if (gameState.controllers[id].lastOrder >= ordering) {
     log(`dropping old move: ${ordering}`)
     return
   }
 
-  game.controllers[id].lastMoveOrder = ordering
+  gameState.controllers[id].lastMoveOrder = ordering
   const commandFn = commands[command]
   if (commandFn) {
     commandFn(id)
@@ -59,18 +59,18 @@ const playerMovement = (id, { command, ordering }) => {
 }
 
 const gameStart = () => {
-  if (!game.started) {
+  if (!gameState.started) {
     Object
-      .values(game.controllers)
+      .values(gameState.controllers)
       .forEach(({ id }) => {
-        game.controllers[id].send({
+        gameState.controllers[id].send({
           event:   EVENTS.RTC.GAME_STARTED,
           payload: {},
         })
       })
 
-    gameState(MAX_PLAYERS_ALLOWED)
-    game.started = true
+    transitionToGameScene(MAX_PLAYERS_ALLOWED)
+    gameState.started = true
   }
 }
 
@@ -88,8 +88,8 @@ const commands = {
 }
 
 const createGame = ({ gameCode }) => {
-  game.gameCode = gameCode
-  createLobby(game.gameCode)
+  gameState.gameCode = gameCode
+  createLobby(gameState.gameCode)
 }
 
 // TODO: extract event switch logic to common function
@@ -106,7 +106,7 @@ const onControllerData = id => (message) => {
 }
 
 const moreControllersAllowed = () =>
-  playerCount(players) < MAX_PLAYERS_ALLOWED && !game.started
+  playerCount(players) < MAX_PLAYERS_ALLOWED && !gameState.started
 
 const onControllerJoin = ({
   id,
@@ -115,7 +115,7 @@ const onControllerJoin = ({
   close,
 }) => {
   if (moreControllersAllowed()) {
-    game.controllers[id] = {
+    gameState.controllers[id] = {
       id,
       lastMoveOrder: -1,
       send,
