@@ -1,4 +1,4 @@
-import { Entity, Timer } from 'l1'
+import { Entity, Timer, Text } from 'l1'
 import { EVENTS } from 'common'
 import { createEaseInAndOut } from './magic'
 import { transitionToLobby } from './lobby'
@@ -11,7 +11,18 @@ const TIME_UNTIL_ROUND_END_RESTARTS = 240
 export function transitionToRoundEnd() {
   const roundEnd = Entity.create('round-end')
   const { winner } = gameState.lastRoundResult
-  const text = Entity.addText(roundEnd, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: layers.FOREGROUND })
+  const text = Text.show(
+    roundEnd,
+    {
+      text:   `Winner is ${winner}!`,
+      zIndex: layers.FOREGROUND,
+      style:  {
+        ...big,
+        fill:     winner,
+        fontSize: big.fontSize * getRatio(),
+      },
+    },
+  )
   text.scale.set(1 / getRatio())
   roundEnd.originalSize = big.fontSize * getRatio()
 
@@ -23,9 +34,9 @@ export function transitionToRoundEnd() {
 }
 
 const pause = () => ({
-  timer: Timer.create(TIME_UNTIL_ROUND_END_RESTARTS),
+  timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
   run:   (b) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
