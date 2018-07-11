@@ -18,6 +18,7 @@ rules:
   fp/no-this: off
   fp/no-unused-expression: off
   fp/no-mutation: off
+  fp/no-let: off
   import/prefer-default-export: off
   no-use-before-define: off
   key-spacing:
