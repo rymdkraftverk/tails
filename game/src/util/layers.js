@@ -1,6 +1,6 @@
 
 export default {
-  BACKGROUND: -10,
+  BACKGROUND: -1000,
   CENTER:     0,
-  FOREGROUND: 10,
+  FOREGROUND: 1000,
 }
