@@ -3,10 +3,7 @@ import { COLORS } from 'common'
 import { getRatio, playerCount } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
-
-export const players = {
-
-}
+import { gameState } from '.'
 
 const CONTROLLER_PORT = '4001'
 
@@ -84,7 +81,7 @@ function createControllerURLText(controllerURL) {
 }
 
 export function addPlayerToLobby(newPlayer) {
-  const numOfPlayers = playerCount(players)
+  const numOfPlayers = playerCount(gameState.players)
   const color = Object.keys(COLORS)[numOfPlayers]
   const player = {
     ...newPlayer,
@@ -92,7 +89,7 @@ export function addPlayerToLobby(newPlayer) {
     color,
   }
 
-  players[player.playerId] = player
+  gameState.players[player.playerId] = player
   createPlayerEntity(player, numOfPlayers, { newPlayer: true })
 
   return player

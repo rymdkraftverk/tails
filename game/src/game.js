@@ -4,7 +4,6 @@ import { Entity, Util, Timer, Game, Sound } from 'l1'
 import uuid from 'uuid/v4'
 import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
-import { players } from './lobby'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToGameover } from './gameover'
 
@@ -30,13 +29,13 @@ export function transitionToGameScene(maxPlayers) {
   const playerCountFactor = R.compose(
     Math.sqrt,
     playerCount,
-  )(players)
+  )(gameState.players)
 
   R.compose(
     R.zipWith(createPlayer(playerCountFactor), shuffle(R.range(0, maxPlayers))),
     shuffle,
     Object.values,
-  )(players)
+  )(gameState.players)
 
   const walls = Entity.create('walls')
   walls.behaviors.renderWalls = renderWalls()
