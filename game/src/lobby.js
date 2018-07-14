@@ -111,11 +111,18 @@ export function addPlayerToLobby(newPlayer) {
 }
 
 function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
-  const square = Entity.addChild(Entity.getRoot(), { id: `square-${color}` })
+  const x = 400 + (numOfPlayers > 4 ? 200 : 0)
+  const y = 100 + ((numOfPlayers % 5) * 100)
+  const square = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: `square-${color}`,
+      x,
+      y,
+    },
+  )
   const sprite = Sprite.show(square, { texture: `square-${color}` })
   sprite.scale.set(3)
-  sprite.x = 400 + (numOfPlayers > 4 ? 200 : 0)
-  sprite.y = 100 + ((numOfPlayers % 5) * 100)
   sprite.anchor.set(0.5)
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()

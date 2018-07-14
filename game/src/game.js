@@ -103,8 +103,8 @@ const move = ({ startingDegrees, playerCountFactor }) => ({
     const radians = toRadians(e.degrees)
     const y = Math.sin(radians)
     const x = Math.cos(radians)
-    e.sprite.x += (x * SPEED_MULTIPLIER) / playerCountFactor
-    e.sprite.y += (y * SPEED_MULTIPLIER) / playerCountFactor
+    e.x += (x * SPEED_MULTIPLIER) / playerCountFactor
+    e.y += (y * SPEED_MULTIPLIER) / playerCountFactor
   },
 })
 
@@ -138,7 +138,8 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
       const trailE = Entity.addChild(
         Entity.getRoot(),
         {
-          x:  Entity.getX(e) + ((e.width / 2) - (sprite.width / 2)),
+          x: Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
+          y: Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
         },
       )
       trailE.active = false
@@ -149,8 +150,6 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
         { texture: spriteId },
       )
       sprite.scale.set(1 / playerCountFactor)
-      sprite.x = e.sprite.x + ((e.sprite.width / 2) - (sprite.width / 2))
-      sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
@@ -209,8 +208,8 @@ const killPlayer = (e) => {
   const updatedDeathExplosion = {
     ...deathExplosion,
     pos: {
-      x: e.sprite.position.x,
-      y: e.sprite.position.y,
+      x: Entity.getX(e),
+      y: Entity.getY(e),
     },
     startRotation: {
       min: e.degrees - 30,

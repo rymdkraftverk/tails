@@ -9,7 +9,14 @@ import layers from './util/layers'
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export function transitionToRoundEnd() {
-  const roundEnd = Entity.create('round-end')
+  const roundEnd = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: 'round-end',
+      x:  -300,
+      y:  200,
+    },
+  )
   const { winner } = gameState.lastRoundResult
   const text = Text.show(
     roundEnd,
@@ -26,7 +33,6 @@ export function transitionToRoundEnd() {
   text.scale.set(1 / getRatio())
   roundEnd.originalSize = big.fontSize * getRatio()
 
-  text.position.set(-300, 200)
   text.anchor.set(0.5)
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
@@ -58,7 +64,7 @@ const roundWinnerTextAnimation = () => ({
     })
   },
   run: (b, e) => {
-    e.text.position.x = b.animation(b.tick)
+    e.x = b.animation(b.tick)
     b.tick += 1
   },
 })
