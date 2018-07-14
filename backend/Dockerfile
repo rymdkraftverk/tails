@@ -1,9 +1,9 @@
 FROM node:carbon
-WORKDIR /novelty/backend
-COPY ./backend /novelty/backend
+WORKDIR /novelty/backend/src
+COPY ./backend/src /novelty/backend/src
 COPY ./common /novelty/common
 
 RUN npm install
 EXPOSE 3000
 
-CMD ["node", "./index.js"]
+CMD ["node", "./src/index.js"]
