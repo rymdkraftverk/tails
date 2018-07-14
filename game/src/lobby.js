@@ -139,11 +139,11 @@ function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
 const animateEntranceBehaviour = () => ({
   init: (b, e) => {
     b.tick = 0
-    b.animation = createParabola(0, 20, -1 * e.sprite.scale.x, 0.08)
+    b.animation = createParabola(0, 20, -1 * e.asset.scale.x, 0.08)
   },
   run: (b, e) => {
     b.tick += 1
-    e.sprite.scale.set(-1 * b.animation(b.tick))
+    e.asset.scale.set(-1 * b.animation(b.tick))
     if (b.tick >= 20) {
       // eslint-disable-next-line fp/no-delete
       delete e.behaviors.animateEntrance

@@ -253,10 +253,10 @@ const collisionChecker = playerId => ({
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         killPlayer(e, playerId)
       } else if (
-        e.sprite.x < WALL_THICKNESS ||
-        e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
-        e.sprite.y < WALL_THICKNESS ||
-        e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
+        Entity.getX(e) < WALL_THICKNESS ||
+        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.asset.width ||
+        Entity.getY(e) < WALL_THICKNESS ||
+        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.asset.height) {
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }

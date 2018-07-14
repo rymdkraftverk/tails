@@ -58,8 +58,8 @@ const roundWinnerTextAnimation = () => ({
   tick: 0,
   init: (b, e) => {
     b.animation = createEaseInAndOut({
-      start:    -(e.text.width / 2),
-      end:      GAME_WIDTH + (e.text.width / 2),
+      start:    -(e.asset.width / 2),
+      end:      GAME_WIDTH + (e.asset.width / 2),
       duration: 120,
     })
   },
