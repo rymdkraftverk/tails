@@ -132,7 +132,9 @@ function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
       'join3',
     ]
     const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
-    Sound.play(square, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
+
+    const sound = Entity.addChild(square)
+    Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
   }
 }
 
