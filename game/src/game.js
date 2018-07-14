@@ -1,7 +1,6 @@
 import { shuffle } from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound, Sprite, Particles } from 'l1'
-import uuid from 'uuid/v4'
 import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
@@ -139,7 +138,6 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
       const trailE = Entity.addChild(
         Entity.getRoot(),
         {
-          id: `trail${uuid()}`,
           x:  Entity.getX(e) + ((e.width / 2) - (sprite.width / 2)),
         },
       )
