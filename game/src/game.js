@@ -69,7 +69,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
   timer: Timer.create({ duration: 60 }),
   run:   (b) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       player.behaviors.pivot = pivot(playerId)
       player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
       player.behaviors.createTrail = createTrail(
@@ -171,7 +171,7 @@ const holeGenerator = playerCountFactor => ({
     }),
   holeLengthTimer: null,
   run:             (b) => {
-    if (b.generateHoleTimer && b.generateHoleTimer.run()) {
+    if (b.generateHoleTimer && Timer.run(b.generateHoleTimer)) {
       b.preventTrail = true
 
       const rand = Util.getRandomInRange(
@@ -181,7 +181,7 @@ const holeGenerator = playerCountFactor => ({
       b.holeLengthTimer = Timer.create({ duration: rand })
 
       b.generateHoleTimer = null
-    } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
+    } else if (b.holeLengthTimer && Timer.run(b.holeLengthTimer)) {
       b.preventTrail = false
 
       const rand = Util.getRandomInRange(
@@ -201,7 +201,7 @@ const holeGenerator = playerCountFactor => ({
 const activate = () => ({
   timer: Timer.create({ duration: 15 }),
   run:   (b, e) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       e.active = true
     }
   },
