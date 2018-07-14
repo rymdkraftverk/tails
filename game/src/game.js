@@ -221,12 +221,16 @@ const killPlayer = (e) => {
     },
   }
 
-  Particles.emit(e, {
+  const particles = Entity.addChild(e)
+
+  Particles.emit(particles, {
     textures: ['particle'],
     config:   updatedDeathExplosion,
   })
 
-  Sound.play(e, { src: './sounds/explosion.wav', volume: 0.6 })
+  const sound = Entity.addChild(e)
+
+  Sound.play(sound, { src: './sounds/explosion.wav', volume: 0.6 })
 
   e.killed = true
   /* eslint-disable fp/no-delete */
