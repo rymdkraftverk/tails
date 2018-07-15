@@ -20,6 +20,8 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+const PLAYER_HITBOX_SIZE = 12
+
 export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -46,15 +48,22 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   const square = Entity.addChild(
     Entity.getRoot(),
-    { id: playerId, x, y },
+    {
+      id:     playerId,
+      x,
+      y,
+      width:  PLAYER_HITBOX_SIZE,
+      height: PLAYER_HITBOX_SIZE,
+    },
   )
+  Entity.addType(square, 'player')
 
   const sprite = Sprite.show(
     square,
     { texture: spriteId },
   )
-  Entity.addType(square, 'player')
   sprite.scale.set(1 / playerCountFactor)
+
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(
@@ -138,8 +147,10 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
       const trailE = Entity.addChild(
         Entity.getRoot(),
         {
-          x: Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
-          y: Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
+          x:      Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
+          y:      Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
+          width:  PLAYER_HITBOX_SIZE,
+          height: PLAYER_HITBOX_SIZE,
         },
       )
       trailE.active = false
