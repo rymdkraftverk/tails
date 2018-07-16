@@ -25,7 +25,7 @@
   "dependencies": {
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "common": "file:../common",
-    "l1": "^0.3.6",
+    "l1": "^0.3.7",
     "lodash": "^4.17.10",
     "ramda": "^0.25.0",
     "webrtc-adapter": "^6.2.1"
