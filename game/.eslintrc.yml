@@ -7,8 +7,8 @@ env:
   node: true
   browser: true
 extends:
- - airbnb-base
- - plugin:fp/recommended
+  - airbnb-base
+  - plugin:fp/recommended
 rules:
   fp/no-nil: off
   fp/no-unused-expression: off
