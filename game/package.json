@@ -1,6 +1,7 @@
 {
   "name": "game",
   "version": "0.0.1",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
