@@ -54,13 +54,17 @@ export const getMatchWinners = (players, scoreNeeded) =>
   )(players)
 
 export function scoreToWin(players) {
-  return (playerCount(players) - 1) * 5
+//  return (playerCount(players) - 1) * 5
+  return 1
 }
 
-export const resetPlayerScore = player => ({ ...player, score: 0 })
+export const resetPlayerScore = (acc, player) => {
+  acc[player.playerId] = { ...player, score: 0 }
+  return acc
+}
 
 export const resetPlayersScore = players => R.compose(
-  R.map(resetPlayerScore),
+  R.reduce(resetPlayerScore, {}),
   Object.values,
 )(players)
 
