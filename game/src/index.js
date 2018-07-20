@@ -28,8 +28,8 @@ export const gameState = {
   players: {
   },
   lastRoundResult: {
-    placement: [],
-    winner:    null,
+    playerFinishOrder: [],
+    winner:            null,
   },
 }
 

@@ -117,12 +117,12 @@ export function addPlayerToLobby(newPlayer) {
   return player
 }
 
-function createPlayerEntity({ color, score }, numOfPlayers, { newPlayer }) {
+function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
   const square = Entity.create(`square-${color}`)
   const sprite = Entity.addSprite(square, `square-${color}`)
   sprite.scale.set(3)
 
-  const { x, y } = getPlayerPosition(playerCount)
+  const { x, y } = getPlayerPosition(playerIndex)
   sprite.x = x
   sprite.y = y
   sprite.anchor.set(0.5)

@@ -54,7 +54,7 @@ export function resetPlayerScores() {
   })
 }
 
-export function calculatePlayerScores({ lastResult: { playerFinishOrder } }) {
+export function calculatePlayerScores({ lastRoundResult: { playerFinishOrder } }) {
   return R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 }
 

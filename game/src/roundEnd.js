@@ -2,6 +2,7 @@ import { Entity, Timer } from 'l1'
 import { EVENTS } from 'common'
 import { createEaseInAndOut } from './magic'
 import { createLobby } from './lobby'
+import { calculatePlayerScores, assignPlayerScores } from './game'
 import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
@@ -9,6 +10,10 @@ import layers from './util/layers'
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export function transitionToRoundEnd() {
+  // TODO: Can now be made immutable
+  const scores = calculatePlayerScores(gameState)
+  assignPlayerScores(scores)
+
   const roundEnd = Entity.create('round-end')
   const { winner } = gameState.lastRoundResult
   const text = Entity.addText(roundEnd, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: layers.FOREGROUND })
