@@ -17,7 +17,6 @@ const playerColorToBackgroundColor = (player) => {
   return background || 'white'
 }
 
-/* eslint-disable-next-line fp/no-class */
 class GameLobby extends Component {
   render() {
     const {

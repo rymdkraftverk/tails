@@ -16,7 +16,6 @@ navigator.vibrate = (navigator.vibrate ||
 
 const createCommand = (ordering, command) => ({ command, ordering })
 
-/* eslint-disable-next-line fp/no-class */
 class GamePlaying extends Component {
   constructor(props) {
     super(props)

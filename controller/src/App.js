@@ -34,7 +34,6 @@ const setLastGameCode = (gameCode) => {
   return gameCode
 }
 
-/* eslint-disable-next-line fp/no-class */
 class App extends Component {
   state = {
     appState:    APP_STATE.LOCKER_ROOM,

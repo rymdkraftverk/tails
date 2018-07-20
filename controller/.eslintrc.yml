@@ -10,4 +10,5 @@ rules:
   react/no-this-in-sfc: error
   fp/no-this: off
   fp/no-let: off
+  fp/no-class: off
   import/prefer-default-export: off

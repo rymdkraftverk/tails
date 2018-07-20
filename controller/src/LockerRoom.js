@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Notifications, { notify } from 'react-notify-toast'
 
-/* eslint-disable-next-line fp/no-class */
 class LockerRoom extends Component {
   componentDidMount() {
     if (this.props.error) {
