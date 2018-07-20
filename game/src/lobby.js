@@ -83,7 +83,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 }
 
 function createGoalDescription() {
-  const e = Entity.get('firstToWins')
+  const e = Entity.get('goal-description')
   if (e) {
     Entity.destroy(e)
   }
@@ -95,24 +95,24 @@ function createGoalDescription() {
     return
   }
 
-  const firstToWinsEntity = Entity.addChild(
+  const entity = Entity.addChild(
     Entity.getRoot(),
     {
-      id: 'firstToWins',
+      id: 'goal-description',
       x:  860,
       y:  20,
     },
   )
 
   const textAsset = Text.show(
-    firstToWinsEntity,
+    entity,
     {
       text:  `First to ${score} wins!`,
       style: { ...small, fill: 'white' },
     },
   )
   textAsset.scale.set(1 / getRatio())
-  firstToWinsEntity.originalSize = small.fontSize
+  entity.originalSize = small.fontSize
 }
 
 function createText({
