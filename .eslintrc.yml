@@ -1,11 +1,13 @@
 plugins:
   - fp
+  - lodash-fp
 env:
   es6: true
   node: true
 extends:
   - airbnb-base
   - plugin:fp/recommended
+  - plugin:lodash-fp/recommended
 rules:
   fp/no-nil: off
   fp/no-let: off
