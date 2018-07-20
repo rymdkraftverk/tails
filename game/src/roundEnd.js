@@ -1,5 +1,5 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS } from 'common'
+import { EVENTS, COLORS } from 'common'
 import { createEaseInAndOut } from './magic'
 import { transitionToLobby } from './lobby'
 import { gameState, GAME_WIDTH, getRatio } from '.'
@@ -25,7 +25,7 @@ export function transitionToRoundEnd() {
       zIndex: layers.FOREGROUND,
       style:  {
         ...big,
-        fill:     winner,
+        fill:     COLORS[winner],
         fontSize: big.fontSize * getRatio(),
       },
     },
