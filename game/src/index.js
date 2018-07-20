@@ -27,7 +27,7 @@ export const gameState = {
   },
   players: {
   },
-  lastResult: {
+  lastRoundResult: {
     winner: null,
   },
 }
@@ -61,13 +61,13 @@ const playerMovement = (id, { command, ordering }) => {
   }
 }
 
-const gameStart = () => {
+const roundStart = () => {
   if (!gameState.started) {
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
         gameState.controllers[id].send({
-          event:   EVENTS.RTC.GAME_STARTED,
+          event:   EVENTS.RTC.ROUND_STARTED,
           payload: {},
         })
       })
@@ -81,7 +81,7 @@ const { log, warn } = console
 
 const rtcEvents = {
   [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.RTC.GAME_START]:      gameStart,
+  [EVENTS.RTC.ROUND_START]:     roundStart,
 }
 
 const commands = {

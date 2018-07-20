@@ -9,11 +9,11 @@ const EVENTS = {
     NOT_FOUND:           'receiver.join.initiator.notfound',
   },
   RTC: {
-    GAME_OVER:             'game.over',
-    GAME_START:            'game.start',
-    GAME_STARTED:          'game.started',
-    PLAYER_JOINED:         'player.joined',
-    PLAYER_MOVEMENT:       'player.movement',
+    ROUND_END:       'round.end',
+    ROUND_START:     'round.start',
+    ROUND_STARTED:   'round.started',
+    PLAYER_JOINED:   'player.joined',
+    PLAYER_MOVEMENT: 'player.movement',
   }
 }
 

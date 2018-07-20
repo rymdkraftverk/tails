@@ -6,30 +6,30 @@ import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 
-const TIME_UNTIL_GAME_RESTARTS = 240
+const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
-export function transitionToGameover() {
-  const gameover = Entity.create('game-over')
-  const { winner } = gameState.lastResult
-  const text = Entity.addText(gameover, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: layers.FOREGROUND })
+export function transitionToRoundEnd() {
+  const roundEnd = Entity.create('round-end')
+  const { winner } = gameState.lastRoundResult
+  const text = Entity.addText(roundEnd, `Winner is ${winner}!`, { ...big, fill: winner, fontSize: big.fontSize * getRatio() }, { zIndex: layers.FOREGROUND })
   text.scale.set(1 / getRatio())
-  gameover.originalSize = big.fontSize * getRatio()
+  roundEnd.originalSize = big.fontSize * getRatio()
 
   text.position.set(-300, 200)
   text.anchor.set(0.5)
-  gameover.behaviors.winnerTextAnimation = winnerTextAnimation()
+  roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
-  gameover.behaviors.pause = pause()
+  roundEnd.behaviors.pause = pause()
 }
 
 const pause = () => ({
-  timer: Timer.create(TIME_UNTIL_GAME_RESTARTS),
+  timer: Timer.create(TIME_UNTIL_ROUND_END_RESTARTS),
   run:   (b) => {
     if (b.timer.run()) {
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: EVENTS.RTC.GAME_OVER, payload: {} })
+          controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
         })
 
       createLobby(gameState.gameCode, Object.values(gameState.players))
@@ -37,7 +37,7 @@ const pause = () => ({
   },
 })
 
-const winnerTextAnimation = () => ({
+const roundWinnerTextAnimation = () => ({
   tick: 0,
   init: (b, e) => {
     b.animation = createEaseInAndOut({
