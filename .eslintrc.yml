@@ -10,6 +10,7 @@ extends:
   - plugin:fp/recommended
   - plugin:lodash-fp/recommended
   - plugin:ramda/recommended
+  - plugin:eslint-comments/recommended
 rules:
   fp/no-nil: off
   fp/no-let: off
