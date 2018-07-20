@@ -1,9 +1,8 @@
 import { Entity, Sound, Util } from 'l1'
 import { COLORS } from 'common'
-import { getRatio, playerCount } from '.'
+import { getRatio, playerCount, gameState } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
-import { gameState } from '.'
 
 const CONTROLLER_PORT = '4001'
 
