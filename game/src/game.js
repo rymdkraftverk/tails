@@ -44,24 +44,36 @@ export function transitionToGameScene(maxPlayers) {
   walls.behaviors.renderWalls = renderWalls()
 }
 
-export function scoreToWin() {
-  return (playerCount(gameState.players) - 1) * 5
+export const getMatchWinners = (players, scoreNeeded) =>
+  R.compose(
+    R.filter(R.compose(
+      R.flip(R.gte)(scoreNeeded),
+      R.view(R.lensProp('score')),
+    )),
+    Object.values,
+  )(players)
+
+export function scoreToWin(players) {
+  return (playerCount(players) - 1) * 5
 }
 
-export function resetPlayerScores() {
-  Object.values(gameState.players).forEach((player) => {
-    player.score = 0
-  })
-}
+export const resetPlayerScore = player => ({ ...player, score: 0 })
+export const resetPlayersScore = players => R.compose(
+  R.map(resetPlayerScore),
+  Object.values,
+)(players)
 
 export function calculatePlayerScores({ lastRoundResult: { playerFinishOrder } }) {
   return R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 }
 
-export function assignPlayerScores(scores) {
-  scores.forEach(([score, playerId]) => {
-    const { score: currentScore } = gameState.players[playerId]
-    gameState.players[playerId].score = currentScore + score
+export function applyPlayerScores(players, scores) {
+  return scores.map(([score, playerId]) => {
+    const player = players[playerId]
+    return {
+      ...player,
+      score: player.score + score,
+    }
   })
 }
 

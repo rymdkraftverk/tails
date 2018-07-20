@@ -45,12 +45,13 @@ function createFirstToWins() {
     Entity.destroy(e)
   }
 
-  const numOfPlayers = playerCount(gameState.players)
+  const { players } = gameState
+  const numOfPlayers = playerCount(players)
   if (numOfPlayers < 2) {
     return
   }
 
-  const score = scoreToWin(numOfPlayers)
+  const score = scoreToWin(players)
   const entity = Entity.create('firstToWins')
   const sprite = Entity.addText(entity, `First to ${score} wins!`, { ...small, fill: 'white' })
   sprite.x = 860
