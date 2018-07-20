@@ -9,6 +9,7 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
+    "eslint-plugin-ramda": "^2.5.1",
     "prettier": "^1.13.7"
   },
   "scripts": {

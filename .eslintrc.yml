@@ -1,6 +1,7 @@
 plugins:
   - fp
   - lodash-fp
+  - ramda
 env:
   es6: true
   node: true
@@ -8,6 +9,7 @@ extends:
   - airbnb-base
   - plugin:fp/recommended
   - plugin:lodash-fp/recommended
+  - plugin:ramda/recommended
 rules:
   fp/no-nil: off
   fp/no-let: off
