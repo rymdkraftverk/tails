@@ -1,7 +1,7 @@
 import { Entity, Timer } from 'l1'
 import { EVENTS } from 'common'
 import { createEaseInAndOut } from './magic'
-import { createLobby } from './lobby'
+import { transitionToLobby } from './lobby'
 import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
@@ -32,7 +32,7 @@ const pause = () => ({
           controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
         })
 
-      createLobby(gameState.gameCode, Object.values(gameState.players))
+      transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },
 })

@@ -21,7 +21,7 @@ const getControllerUrl = () => {
   return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
-export function createLobby(gameCode, alreadyConnectedPlayers = []) {
+export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
