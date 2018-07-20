@@ -1,28 +1,28 @@
-import { Entity, Timer } from 'l1'
+import { Entity, Timer, Text } from 'l1'
 import { EVENTS } from 'common'
 import { gameState, getRatio, GAME_WIDTH } from '.'
 import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
-import { createLobby } from './lobby'
+import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 
 const TIME_UNTIL_MATCH_END_TRANSITION = 240
 
 const createText = (entity, content, color) => {
-  const text = Entity.addText(
+  const text = Text.show(
     entity,
-    content,
     {
-      ...big,
-      fill:     color,
-      fontSize: big.fontSize * getRatio(),
-    },
-    {
+      text:   content,
       zIndex: layers.FOREGROUND,
+      style:  {
+        ...big,
+        fill:     color,
+        fontSize: big.fontSize * getRatio(),
+      },
     },
   )
+
   text.scale.set(1 / getRatio())
-  text.position.set(GAME_WIDTH / 2, 200)
   text.anchor.set(0.5)
 
   return text
@@ -36,7 +36,15 @@ export const transitionToMatchEnd = () => {
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  const matchEnd = Entity.create('match-end')
+  const matchEnd = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: 'match-end',
+      x:  GAME_WIDTH / 2,
+      y:  200,
+    },
+  )
+
   const { players } = gameState
   const matchWinners = getMatchWinners(players, scoreToWin(players))
   if (matchWinners.length === 1) {
@@ -50,9 +58,9 @@ export const transitionToMatchEnd = () => {
 }
 
 const pause = () => ({
-  timer: Timer.create(TIME_UNTIL_MATCH_END_TRANSITION),
-  run:   (b) => {
-    if (b.timer.run()) {
+  timer: Timer.create({ duration: TIME_UNTIL_MATCH_END_TRANSITION }),
+  run:   ({ timer }) => {
+    if (Timer.run(timer)) {
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
@@ -60,7 +68,7 @@ const pause = () => ({
         })
 
       gameState.players = resetPlayersScore(gameState.players)
-      createLobby(gameState.gameCode, Object.values(gameState.players))
+      transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },
 })
