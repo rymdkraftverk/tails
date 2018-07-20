@@ -292,6 +292,8 @@ const killPlayer = (e) => {
   delete e.behaviors.move
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
+
+  e.events.emit(EVENTS.PLAYER_COLLISION)
 }
 
 const collisionChecker = playerId => ({
@@ -303,7 +305,6 @@ const collisionChecker = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        e.events.emit(EVENTS.PLAYER_COLLISION)
         killPlayer(e, playerId)
       } else if (
         Entity.getX(e) < WALL_THICKNESS ||
@@ -311,7 +312,6 @@ const collisionChecker = playerId => ({
         Entity.getY(e) < WALL_THICKNESS ||
         Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.asset.height) {
         killPlayer(e, playerId)
-        e.events.emit(EVENTS.PLAYER_COLLISION)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       const playersAlive = Entity.getByType('player').filter(p => !p.killed)
