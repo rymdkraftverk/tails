@@ -58,6 +58,7 @@ export function scoreToWin(players) {
 }
 
 export const resetPlayerScore = player => ({ ...player, score: 0 })
+
 export const resetPlayersScore = players => R.compose(
   R.map(resetPlayerScore),
   Object.values,
