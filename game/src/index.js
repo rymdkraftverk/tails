@@ -85,7 +85,7 @@ const roundStart = () => {
     Entity
       .getByType('player')
       .forEach(player =>
-        player.events.on(GAME_EVENTS.PLAYER_COLLIDED, registerPlayerFinished(player)))
+        player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
   }
 }
 
