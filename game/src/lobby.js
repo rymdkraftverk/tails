@@ -35,7 +35,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
 
-  createFirstToWins()
+  createGoalDescription()
 
   createText({
     x:     50,
@@ -82,7 +82,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
 }
 
-function createFirstToWins() {
+function createGoalDescription() {
   const e = Entity.get('firstToWins')
   if (e) {
     Entity.destroy(e)
@@ -197,7 +197,7 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
       'join3',
     ]
     const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
-    createFirstToWins()
+    createGoalDescription()
 
     const sound = Entity.addChild(square)
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
