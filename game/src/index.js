@@ -3,7 +3,7 @@ import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Ut
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
 import sprites from './sprites.json'
-import { createLobby, addPlayerToLobby } from './lobby'
+import { transitionToLobby, addPlayerToLobby } from './lobby'
 import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
@@ -92,7 +92,7 @@ const commands = {
 
 const createGame = ({ gameCode }) => {
   gameState.gameCode = gameCode
-  createLobby(gameState.gameCode)
+  transitionToLobby(gameState.gameCode)
 }
 
 // TODO: extract event switch logic to common function
