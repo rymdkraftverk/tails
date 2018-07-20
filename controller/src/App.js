@@ -74,15 +74,15 @@ class App extends Component {
         playerColor: payload.color,
         playerId:    payload.playerId,
       })
-    } else if (event === EVENTS.RTC.GAME_START) {
+    } else if (event === EVENTS.RTC.ROUND_START) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === EVENTS.RTC.GAME_STARTED) {
+    } else if (event === EVENTS.RTC.ROUND_STARTED) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === EVENTS.RTC.GAME_OVER) {
+    } else if (event === EVENTS.RTC.ROUND_OVER) {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
       })
@@ -120,7 +120,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.send({ event: EVENTS.RTC.GAME_START })
+    this.send({ event: EVENTS.RTC.ROUND_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 

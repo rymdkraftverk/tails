@@ -5,7 +5,7 @@ import uuid from 'uuid/v4'
 import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
-import { transitionToGameover } from './gameover'
+import { transitionToRoundEnd } from './roundEnd'
 
 const { log } = console
 
@@ -250,8 +250,8 @@ const collisionChecker = playerId => ({
       const playersAlive = Entity.getByType('player').filter(p => !p.killed)
       if (playersAlive.length === 1 && gameState.started) {
         gameState.started = false
-        gameState.lastResult.winner = playersAlive[0].color
-        transitionToGameover()
+        gameState.lastRoundResult.winner = playersAlive[0].color
+        transitionToRoundEnd()
       }
       b.timer.reset()
     }
