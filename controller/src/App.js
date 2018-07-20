@@ -82,7 +82,7 @@ class App extends Component {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === EVENTS.RTC.ROUND_OVER) {
+    } else if (event === EVENTS.RTC.ROUND_END) {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
       })
