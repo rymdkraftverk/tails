@@ -109,10 +109,11 @@ class App extends Component {
   };
 
   onJoin = () => {
+    const { gameCode } = this.state
     this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
-    setLastGameCode(this.state.gameCode)
+    setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
-    this.connectToGame(this.state.gameCode)
+    this.connectToGame(gameCode)
   };
 
   clearError = () => {
@@ -132,38 +133,45 @@ class App extends Component {
       throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
     }
 
+    const {
+      error,
+      gameCode,
+      appState,
+      playerColor,
+    } = this.state
+
     return (
       <Fullscreen
         style={{ touchAction: 'manipulation' }}
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}>
         {
-          this.state.appState === APP_STATE.LOCKER_ROOM
+          appState === APP_STATE.LOCKER_ROOM
             ? <LockerRoom
                 clearError={this.clearError}
-                error={this.state.error}
+                error={error}
                 gameCodeChange={this.gameCodeChange}
-                gameCode={this.state.gameCode}
+                gameCode={gameCode}
                 onJoin={this.onJoin} />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_CONNECTING
+          appState === APP_STATE.GAME_CONNECTING
             ? <LockerRoomLoader />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_LOBBY
+          appState === APP_STATE.GAME_LOBBY
             ? <GameLobby
                 startGame={this.startGame}
-                playerColor={this.state.playerColor} />
+                playerColor={playerColor} />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_PLAYING
+          appState === APP_STATE.GAME_PLAYING
             ? <GamePlaying
                 send={this.send}
-                playerColor={COLORS[this.state.playerColor]} />
+                playerColor={COLORS[playerColor]} />
             : null
         }
       </Fullscreen>

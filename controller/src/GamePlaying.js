@@ -65,10 +65,14 @@ class GamePlaying extends Component {
   }
 
   render() {
+    const {
+      playerColor,
+    } = this.props
+
     return (
   <div id="controller-container" style={{
       touchAction:     'manipulation',
-      border:          `2rem solid ${this.props.playerColor}`,
+      border:          `2rem solid ${playerColor}`,
       'border-radius': '4rem',
     }}>
     <div id="controller-left" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendLeft} onMouseUp={this.sendNone} onTouchStart={this.sendLeft} onTouchEnd={this.sendNone}>LEFT</div>

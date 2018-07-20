@@ -10,6 +10,12 @@ class LockerRoom extends Component {
   }
 
   render() {
+    const {
+      gameCode,
+      onJoin,
+      gameCodeChange,
+    } = this.props
+
     return (
       <div id="lobby-container" style={{ touchAction: 'manipulation' }}>
         <div className="flex-box" style={{ touchAction: 'manipulation' }}>
@@ -17,8 +23,8 @@ class LockerRoom extends Component {
             id="lobby-game-code-input"
             type="text"
             style={{ touchAction: 'manipulation' }}
-            value={this.props.gameCode}
-            onChange={this.props.gameCodeChange}
+            value={gameCode}
+            onChange={gameCodeChange}
             placeholder="Code"
             className="game-join-input"
             spellCheck="false"
@@ -28,10 +34,10 @@ class LockerRoom extends Component {
             maxLength="4" />
         </div>
         <div className="flex-box" style={{ touchAction: 'manipulation' }}>
-          {this.props.gameCode.length === 4
+          {gameCode.length === 4
             ? <button
               id="lobby-join-button"
-              onClick={this.props.onJoin}>
+              onClick={onJoin}>
               Join
                 </button>
             : null}
