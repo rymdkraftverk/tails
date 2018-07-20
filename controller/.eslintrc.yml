@@ -11,4 +11,3 @@ rules:
   fp/no-this: off
   fp/no-let: off
   import/prefer-default-export: off
-  
