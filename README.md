@@ -18,3 +18,17 @@ Example:
 ```js
 const myZIndex = layers.BACKGROUND - 10
 ```
+
+### eslint
+
+Rules that apply to _all_ projects should be placed in the project root `.eslintrc.yml`
+
+Rules applying to a subset of projects should be individually added to each projects `.eslintrc.yml`
+
+### VS Code
+
+It is strongly recommended to turn on the following settings:
+
+```json
+"eslint.autoFixOnSave": true,
+```

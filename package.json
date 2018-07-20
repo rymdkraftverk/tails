@@ -1,0 +1,27 @@
+{
+  "name": "novelty",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-eslint-comments": "^3.0.1",
+    "eslint-plugin-fp": "^2.3.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-lodash-fp": "^2.2.0-a1",
+    "eslint-plugin-ramda": "^2.5.1",
+    "prettier": "^1.13.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbarlin/novelty.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rbarlin/novelty/issues"
+  },
+  "homepage": "https://github.com/rbarlin/novelty#readme"
+}
