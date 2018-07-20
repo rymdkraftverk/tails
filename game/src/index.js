@@ -1,10 +1,9 @@
-// eslint-disable-next-line no-unused-vars
-import { Game, Entity, Timer, Key, Debug, Gamepad, Physics, Sound, Net, Text, Util } from 'l1'
+import { Game, Entity, Sprite, Key } from 'l1'
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
-import sprites from './sprites.json'
-import { createLobby, addPlayerToLobby } from './lobby'
 import { transitionToGameScene, EVENTS as GAME_EVENTS } from './game'
+import assets from './assets.json'
+import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
 import signal from './signal'
 import layers from './util/layers'
@@ -104,7 +103,7 @@ const commands = {
 
 const createGame = ({ gameCode }) => {
   gameState.gameCode = gameCode
-  createLobby(gameState.gameCode)
+  transitionToLobby(gameState.gameCode)
 }
 
 // TODO: extract event switch logic to common function
@@ -173,15 +172,22 @@ const resizeGame = () => {
   // Texts instead change size by setting their fontSize.
   Entity.getAll()
     .forEach((e) => {
-      if (e.text) {
-        e.text.style.fontSize = e.originalSize * ratio
-        e.text.scale.set(1 / ratio)
+      // TODO: Export assettype constants from level1?
+      if (e.originalSize) {
+        e.asset.style.fontSize = e.originalSize * ratio
+        e.asset.scale.set(1 / ratio)
       }
     })
 }
 window.addEventListener('resize', resizeGame)
 
-Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.getElementById('game') }).then(() => {
+Game.init({
+  width:   GAME_WIDTH,
+  height:  GAME_HEIGHT,
+  assets,
+  debug:   false,
+  element: document.getElementById('game'),
+}).then(() => {
   http.createGame()
     .then(({ gameCode }) => {
       createGame({ gameCode })
@@ -195,8 +201,8 @@ Game.init(GAME_WIDTH, GAME_HEIGHT, sprites, { debug: false, element: document.ge
       })
     })
 
-  const background = Entity.create('background')
-  Entity.addSprite(background, 'background', { zIndex: layers.BACKGROUND })
+  const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
+  Sprite.show(background, { texture: 'background', zIndex: layers.BACKGROUND })
 
   resizeGame()
 
