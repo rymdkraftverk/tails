@@ -3,8 +3,12 @@ import Notifications, { notify } from 'react-notify-toast'
 
 class LockerRoom extends Component {
   componentDidMount() {
-    if (this.props.error) {
-      notify.show(this.props.error, 'error')
+    const {
+      error,
+    } = this.props
+
+    if (error) {
+      notify.show(error, 'error')
     }
   }
 
