@@ -1,0 +1,27 @@
+plugins:
+  - fp
+env:
+  es6: true
+  node: true
+extends:
+  - airbnb-base
+  - plugin:fp/recommended
+rules:
+  fp/no-nil: off
+  fp/no-let: off
+  fp/no-unused-expression: off
+  fp/no-mutation: off
+  no-use-before-define: off
+  no-param-reassign: off
+  no-unexpected-multiline: error
+  func-call-spacing:
+    - error
+    - never
+  semi:
+    - error
+    - never
+  key-spacing:
+    - error
+    -
+      align: value
+  
