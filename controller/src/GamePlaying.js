@@ -38,30 +38,17 @@ class GamePlaying extends Component {
     clearInterval(this.state.intervalId)
   }
 
-  sendRight = () => {
-    navigator.vibrate(100)
-    this.props.send({
-      event:   EVENTS.RTC.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, MOVES.RIGHT),
-    })
-    this.setState({ lastMove: MOVES.RIGHT, ordering: (this.state.ordering + 1) })
-  }
+  sendCommand = ({ move, vibrate = false }) => () => {
+    if (vibrate) {
+      navigator.vibrate(100)
+    }
 
-  sendLeft = () => {
-    navigator.vibrate(100)
     this.props.send({
       event:   EVENTS.RTC.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, MOVES.LEFT),
+      payload: createCommand(this.state.ordering, move),
     })
-    this.setState({ lastMove: MOVES.LEFT, ordering: (this.state.ordering + 1) })
-  }
 
-  sendNone = () => {
-    this.props.send({
-      event:   EVENTS.RTC.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, MOVES.NONE),
-    })
-    this.setState({ lastMove: MOVES.NONE, ordering: (this.state.ordering + 1) })
+    this.setState(state => ({ lastMove: move, ordering: state.ordering + 1 }))
   }
 
   render() {
@@ -70,14 +57,32 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-  <div id="controller-container" style={{
-      touchAction:     'manipulation',
-      border:          `2rem solid ${playerColor}`,
-      'border-radius': '4rem',
-    }}>
-    <div id="controller-left" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendLeft} onMouseUp={this.sendNone} onTouchStart={this.sendLeft} onTouchEnd={this.sendNone}>LEFT</div>
-    <div id="controller-right" style={{ touchAction: 'manipulation' }} onMouseDown={this.sendRight} onMouseUp={this.sendNone} onTouchStart={this.sendRight} onTouchEnd={this.sendNone}>RIGHT</div>
-  </div>
+      <div id="controller-container" style={{
+          touchAction:     'manipulation',
+          border:          `2rem solid ${playerColor}`,
+          'border-radius': '4rem',
+        }}>
+        <div
+          id="controller-left"
+          style={{ touchAction: 'manipulation' }}
+          onMouseDown={this.sendCommand({ move: MOVES.LEFT, vibrate: true })}
+          onMouseUp={this.sendCommand({ move: MOVES.NONE })}
+          onTouchStart={this.sendCommand({ move: MOVES.LEFT, vibrate: true })}
+          onTouchEnd={this.sendCommand({ move: MOVES.NONE })}
+        >
+          LEFT
+        </div>
+        <div
+          id="controller-right"
+          style={{ touchAction: 'manipulation' }}
+          onMouseDown={this.sendCommand({ move: MOVES.RIGHT, vibrate: true })}
+          onMouseUp={this.sendCommand({ move: MOVES.NONE })}
+          onTouchStart={this.sendCommand({ move: MOVES.RIGHT, vibrate: true })}
+          onTouchEnd={this.sendCommand({ move: MOVES.NONE })}
+        >
+          RIGHT
+        </div>
+      </div>
     )
   }
 }
