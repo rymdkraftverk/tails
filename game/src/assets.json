@@ -1,0 +1,18 @@
+{
+  "sprites": [
+    "square-red",
+    "square-purple",
+    "square-yellow",
+    "square-turqouise",
+    "square-orange",
+    "square-brown",
+    "square-pink",
+    "square-blue",
+    "square-white",
+    "background",
+    "particle",
+    "square-green"
+  ],
+  "fonts": [
+  ]
+}

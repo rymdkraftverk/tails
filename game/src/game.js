@@ -1,7 +1,6 @@
 import { shuffle } from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Game, Sound } from 'l1'
-import uuid from 'uuid/v4'
+import { Entity, Util, Timer, Game, Sound, Sprite, Particles } from 'l1'
 import { COLORS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
@@ -21,6 +20,8 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+const PLAYER_HITBOX_SIZE = 12
+
 export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
@@ -37,17 +38,32 @@ export function transitionToGameScene(maxPlayers) {
     Object.values,
   )(gameState.players)
 
-  const walls = Entity.create('walls')
+  const walls = Entity.addChild(Entity.getRoot())
   walls.behaviors.renderWalls = renderWalls()
 }
 
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
-  const square = Entity.create(playerId)
-  const sprite = Entity.addSprite(square, spriteId)
+  const x = 150 + ((index % 5) * 200)
+  const y = 150 + (index > 4 ? 300 : 0)
+
+  const square = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id:     playerId,
+      x,
+      y,
+      width:  PLAYER_HITBOX_SIZE,
+      height: PLAYER_HITBOX_SIZE,
+    },
+  )
   Entity.addType(square, 'player')
-  sprite.x = 150 + ((index % 5) * 200)
-  sprite.y = 150 + (index > 4 ? 300 : 0)
+
+  const sprite = Sprite.show(
+    square,
+    { texture: spriteId },
+  )
   sprite.scale.set(1 / playerCountFactor)
+
   square.color = color
   square.isAlive = true
   square.behaviors.startPlayerMovement = startPlayerMovement(
@@ -56,16 +72,12 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     playerId,
     spriteId,
   )
-  Entity.addEmitter(square, {
-    id:       playerId,
-    textures: [Game.getTexture('particle')],
-  })
 })
 
 const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
-  timer: Timer.create(60),
+  timer: Timer.create({ duration: 60 }),
   run:   (b) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       player.behaviors.pivot = pivot(playerId)
       player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
       player.behaviors.createTrail = createTrail(
@@ -82,12 +94,11 @@ const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => (
 
       // Enable the following behaviour for keyboard debugging
       // square.behaviors.player1Keyboard = player1Keyboard()
-      const controller = Entity.create(`${playerId}controller`)
+      const controller = Entity.addChild(player, { id: `${playerId}controller` })
       controller.direction = null
     }
   },
 })
-
 
 function toRadians(angle) {
   return angle * (Math.PI / 180)
@@ -101,8 +112,8 @@ const move = ({ startingDegrees, playerCountFactor }) => ({
     const radians = toRadians(e.degrees)
     const y = Math.sin(radians)
     const x = Math.cos(radians)
-    e.sprite.x += (x * SPEED_MULTIPLIER) / playerCountFactor
-    e.sprite.y += (y * SPEED_MULTIPLIER) / playerCountFactor
+    e.x += (x * SPEED_MULTIPLIER) / playerCountFactor
+    e.y += (y * SPEED_MULTIPLIER) / playerCountFactor
   },
 })
 
@@ -127,21 +138,30 @@ const pivot = playerId => ({
 })
 
 const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
-  timer: Timer.create(Math.ceil(2)),
+  timer: Timer.create({ duration: Math.ceil(2) }),
   run:   (b, e) => {
     if (holeGenerator.preventTrail) {
       return
     }
-    if (b.timer.run()) {
-      const trailE = Entity.create(`trail${uuid()}`)
+    if (Timer.run(b.timer)) {
+      const trailE = Entity.addChild(
+        Entity.getRoot(),
+        {
+          x:      Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
+          y:      Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
+          width:  PLAYER_HITBOX_SIZE,
+          height: PLAYER_HITBOX_SIZE,
+        },
+      )
       trailE.active = false
       trailE.player = playerId
       Entity.addType(trailE, 'trail')
-      const sprite = Entity.addSprite(trailE, spriteId)
+      const sprite = Sprite.show(
+        trailE,
+        { texture: spriteId },
+      )
       sprite.scale.set(1 / playerCountFactor)
-      sprite.x = e.sprite.x + ((e.sprite.width / 2) - (sprite.width / 2))
-      sprite.y = e.sprite.y + ((e.sprite.height / 2) - (sprite.height / 2))
-      b.timer.reset()
+      Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
     }
@@ -151,30 +171,32 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
 const holeGenerator = playerCountFactor => ({
   preventTrail:      false,
   generateHoleTimer: Timer
-    .create(Util.getRandomInRange(
-      GENERATE_HOLE_MIN_TIME,
-      GENERATE_HOLE_MAX_TIME,
-    )),
+    .create({
+      duration: Util.getRandomInRange(
+        GENERATE_HOLE_MIN_TIME,
+        GENERATE_HOLE_MAX_TIME,
+      ),
+    }),
   holeLengthTimer: null,
   run:             (b) => {
-    if (b.generateHoleTimer && b.generateHoleTimer.run()) {
+    if (b.generateHoleTimer && Timer.run(b.generateHoleTimer)) {
       b.preventTrail = true
 
       const rand = Util.getRandomInRange(
         Math.ceil(HOLE_LENGTH_MIN_TIME * playerCountFactor),
         Math.ceil(HOLE_LENGTH_MAX_TIME * playerCountFactor),
       )
-      b.holeLengthTimer = Timer.create(rand)
+      b.holeLengthTimer = Timer.create({ duration: rand })
 
       b.generateHoleTimer = null
-    } else if (b.holeLengthTimer && b.holeLengthTimer.run()) {
+    } else if (b.holeLengthTimer && Timer.run(b.holeLengthTimer)) {
       b.preventTrail = false
 
       const rand = Util.getRandomInRange(
         GENERATE_HOLE_MIN_TIME,
         GENERATE_HOLE_MAX_TIME,
       )
-      b.generateHoleTimer = Timer.create(rand)
+      b.generateHoleTimer = Timer.create({ duration: rand })
 
       b.holeLengthTimer = null
     }
@@ -183,23 +205,22 @@ const holeGenerator = playerCountFactor => ({
 
 /*
  * This behavior is needed so that the player wont immediately collide with its own tail.
- * If the timer is set too high you risk having players pass through each other's heads.
  */
 const activate = () => ({
-  timer: Timer.create(15),
+  timer: Timer.create({ duration: 15 }),
   run:   (b, e) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       e.active = true
     }
   },
 })
 
-const killPlayer = (e, playerId) => {
+const killPlayer = (e) => {
   const updatedDeathExplosion = {
     ...deathExplosion,
     pos: {
-      x: e.sprite.position.x,
-      y: e.sprite.position.y,
+      x: Entity.getX(e),
+      y: Entity.getY(e),
     },
     startRotation: {
       min: e.degrees - 30,
@@ -211,13 +232,16 @@ const killPlayer = (e, playerId) => {
     },
   }
 
-  Entity.emitEmitter(e, {
-    id:     playerId,
-    config: updatedDeathExplosion,
+  const particles = Entity.addChild(e)
+
+  Particles.emit(particles, {
+    textures: ['particle'],
+    config:   updatedDeathExplosion,
   })
 
-  const explosion = Sound.getSound('./sounds/explosion.wav', { volume: 0.6 })
-  explosion.play()
+  const sound = Entity.addChild(e)
+
+  Sound.play(sound, { src: './sounds/explosion.wav', volume: 0.6 })
 
   e.killed = true
   /* eslint-disable fp/no-delete */
@@ -230,9 +254,9 @@ const killPlayer = (e, playerId) => {
 }
 
 const collisionChecker = playerId => ({
-  timer: Timer.create(2),
+  timer: Timer.create({ duration: 2 }),
   run:   (b, e) => {
-    if (b.timer.run()) {
+    if (Timer.run(b.timer)) {
       const allTrails = Entity
         .getByType('trail')
         .filter(t => t.active || t.player !== playerId)
@@ -240,10 +264,10 @@ const collisionChecker = playerId => ({
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         killPlayer(e, playerId)
       } else if (
-        e.sprite.x < WALL_THICKNESS ||
-        e.sprite.x > GAME_WIDTH - WALL_THICKNESS - e.sprite.width ||
-        e.sprite.y < WALL_THICKNESS ||
-        e.sprite.y > GAME_HEIGHT - WALL_THICKNESS - e.sprite.height) {
+        Entity.getX(e) < WALL_THICKNESS ||
+        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.asset.width ||
+        Entity.getY(e) < WALL_THICKNESS ||
+        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.asset.height) {
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
@@ -253,7 +277,7 @@ const collisionChecker = playerId => ({
         gameState.lastRoundResult.winner = playersAlive[0].color
         transitionToRoundEnd()
       }
-      b.timer.reset()
+      Timer.reset(b.timer)
     }
   },
 })
