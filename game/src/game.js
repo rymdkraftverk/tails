@@ -54,8 +54,7 @@ export const getMatchWinners = (players, scoreNeeded) =>
   )(players)
 
 export function scoreToWin(players) {
-//  return (playerCount(players) - 1) * 5
-  return 1
+  return (playerCount(players) - 1) * 5
 }
 
 export const resetPlayerScore = (acc, player) => {
