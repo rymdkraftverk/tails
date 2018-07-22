@@ -58,9 +58,9 @@ class GamePlaying extends Component {
       <div
         id="controller-container"
         style={{
-          touchAction:     'manipulation',
-          border:          `2rem solid ${playerColor}`,
-          'border-radius': '4rem',
+          touchAction:  'manipulation',
+          border:       `2rem solid ${playerColor}`,
+          borderRadius: '4rem',
         }}
       >
         <div
