@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Game, Sound, Sprite, Particles } from 'l1'
+import { Entity, Util, Timer, Game, Sound, Sprite, Particles, Graphics } from 'l1'
 import { COLORS } from 'common'
 import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
@@ -45,8 +45,7 @@ export function transitionToGameScene(maxPlayers) {
     Object.values,
   )(gameState.players)
 
-  const walls = Entity.addChild(Entity.getRoot())
-  walls.behaviors.renderWalls = renderWalls()
+  createWalls()
 }
 
 export const getMatchWinners = (players, scoreNeeded) =>
@@ -335,15 +334,14 @@ const collisionChecker = playerId => ({
   },
 })
 
-const renderWalls = () => ({
-  run: () => {
-    const graphics = Game.getGraphics()
-    graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
+function createWalls() {
+  const walls = Entity.addChild(Entity.getRoot())
+  const graphics = Graphics.create(walls)
+  graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
 
-    graphics.moveTo(0, 0)
-    graphics.lineTo(GAME_WIDTH, 0)
-    graphics.lineTo(GAME_WIDTH, GAME_HEIGHT)
-    graphics.lineTo(0, GAME_HEIGHT)
-    graphics.lineTo(0, 0)
-  },
-})
+  graphics.moveTo(0, 0)
+  graphics.lineTo(GAME_WIDTH, 0)
+  graphics.lineTo(GAME_WIDTH, GAME_HEIGHT)
+  graphics.lineTo(0, GAME_HEIGHT)
+  graphics.lineTo(0, 0)
+}
