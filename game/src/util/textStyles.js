@@ -10,7 +10,7 @@ const defaultStyle = {
 export const big = {
   ...defaultStyle,
   fontSize:           48,
-  stroke:             '#4a1850',
+  stroke:             '#000000',
   strokeThickness:    5,
   dropShadow:         true,
   dropShadowColor:    '#000000',
@@ -22,7 +22,7 @@ export const big = {
 export const small = {
   ...defaultStyle,
   fontSize:           28,
-  stroke:             '#4a1850',
+  stroke:             '#000000',
   strokeThickness:    3,
   dropShadow:         true,
   dropShadowColor:    '#000000',
@@ -35,7 +35,7 @@ export const code = {
   fontfamily:         'helvetica',
   fontSize:           72,
   fill:               'white',
-  stroke:             '#4a1850',
+  stroke:             '#000000',
   strokeThickness:    5,
   dropShadow:         true,
   dropShadowColor:    '#000000',
