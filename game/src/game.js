@@ -2,6 +2,7 @@ import { shuffle } from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Game, Sound, Sprite, Particles } from 'l1'
 import { COLORS } from 'common'
+import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToRoundEnd } from './roundEnd'
@@ -20,6 +21,7 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
+export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
 const PLAYER_HITBOX_SIZE = 12
 
 export function transitionToGameScene(maxPlayers) {
@@ -42,6 +44,44 @@ export function transitionToGameScene(maxPlayers) {
   walls.behaviors.renderWalls = renderWalls()
 }
 
+export const getMatchWinners = (players, scoreNeeded) =>
+  R.compose(
+    R.filter(R.compose(
+      R.flip(R.gte)(scoreNeeded),
+      R.view(R.lensProp('score')),
+    )),
+    Object.values,
+  )(players)
+
+export function scoreToWin(players) {
+  return (playerCount(players) - 1) * 5
+}
+
+export const resetPlayerScore = (acc, player) => {
+  acc[player.playerId] = { ...player, score: 0 }
+  return acc
+}
+
+export const resetPlayersScore = players => R.compose(
+  R.reduce(resetPlayerScore, {}),
+  Object.values,
+)(players)
+
+export function calculatePlayerScores({ lastRoundResult: { playerFinishOrder } }) {
+  return R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
+}
+
+export function applyPlayerScores(players, scores) {
+  return scores.reduce((acc, [score, playerId]) => {
+    const player = players[playerId]
+    acc[playerId] = {
+      ...player,
+      score: player.score + score,
+    }
+    return acc
+  }, {})
+}
+
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
   const x = 150 + ((index % 5) * 200)
   const y = 150 + (index > 4 ? 300 : 0)
@@ -56,6 +96,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       height: PLAYER_HITBOX_SIZE,
     },
   )
+  square.events = new EventEmitter()
   Entity.addType(square, 'player')
 
   const sprite = Sprite.show(
@@ -251,6 +292,8 @@ const killPlayer = (e) => {
   delete e.behaviors.move
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
+
+  e.events.emit(EVENTS.PLAYER_COLLISION)
 }
 
 const collisionChecker = playerId => ({
@@ -275,6 +318,8 @@ const collisionChecker = playerId => ({
       if (playersAlive.length === 1 && gameState.started) {
         gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
+        gameState.lastRoundResult.playerFinishOrder =
+          gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
         transitionToRoundEnd()
       }
       Timer.reset(b.timer)

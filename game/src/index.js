@@ -1,9 +1,9 @@
 import { Game, Entity, Sprite, Key } from 'l1'
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
+import { transitionToGameScene, EVENTS as GAME_EVENTS } from './game'
 import assets from './assets.json'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
-import { transitionToGameScene } from './game'
 import http from './http'
 import signal from './signal'
 import layers from './util/layers'
@@ -27,7 +27,8 @@ export const gameState = {
   players: {
   },
   lastRoundResult: {
-    winner: null,
+    playerFinishOrder: [],
+    winner:            null,
   },
 }
 
@@ -46,6 +47,11 @@ export const playerCount = R.compose(R.length, R.values)
 const moveLeft = playerId => movePlayer(playerId, LEFT)
 const moveRight = playerId => movePlayer(playerId, RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
+
+const registerPlayerFinished = ({ id }) => () => {
+  gameState.lastRoundResult.playerFinishOrder =
+    gameState.lastRoundResult.playerFinishOrder.concat([id])
+}
 
 const playerMovement = (id, { command, ordering }) => {
   if (gameState.controllers[id].lastOrder >= ordering) {
@@ -73,6 +79,12 @@ const roundStart = () => {
 
     transitionToGameScene(MAX_PLAYERS_ALLOWED)
     gameState.started = true
+
+    gameState.lastRoundResult.playerFinishOrder = []
+    Entity
+      .getByType('player')
+      .forEach(player =>
+        player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
   }
 }
 

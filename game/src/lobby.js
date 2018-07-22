@@ -3,6 +3,7 @@ import { COLORS } from 'common'
 import { getRatio, playerCount, gameState } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
+import { scoreToWin } from './game'
 
 const CONTROLLER_PORT = '4001'
 
@@ -21,10 +22,20 @@ const getControllerUrl = () => {
   return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
+const getPlayerPosition = Util.grid({
+  x:           400,
+  y:           100,
+  marginX:     200,
+  marginY:     100,
+  itemsPerRow: 2,
+})
+
 export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
+
+  createGoalDescription()
 
   createText({
     x:     50,
@@ -71,6 +82,38 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
 }
 
+function createGoalDescription() {
+  const e = Entity.get('goal-description')
+  if (e) {
+    Entity.destroy(e)
+  }
+
+  const { players } = gameState
+  const score = scoreToWin(players)
+  const numOfPlayers = playerCount(players)
+  if (numOfPlayers < 2) {
+    return
+  }
+
+  const entity = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: 'goal-description',
+      x:  860,
+      y:  20,
+    },
+  )
+
+  const textAsset = Text.show(
+    entity,
+    {
+      text:  `First to ${score} wins!`,
+      style: { ...small, fill: 'white' },
+    },
+  )
+  textAsset.scale.set(1 / getRatio())
+  entity.originalSize = small.fontSize
+}
 
 function createText({
   x, y, text, style, size,
@@ -101,6 +144,7 @@ export function addPlayerToLobby(newPlayer) {
   const player = {
     ...newPlayer,
     spriteId: `square-${color}`,
+    score:    0,
     color,
   }
 
@@ -110,9 +154,8 @@ export function addPlayerToLobby(newPlayer) {
   return player
 }
 
-function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
-  const x = 400 + (numOfPlayers > 4 ? 200 : 0)
-  const y = 100 + ((numOfPlayers % 5) * 100)
+function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
+  const { x, y } = getPlayerPosition(playerIndex)
   const square = Entity.addChild(
     Entity.getRoot(),
     {
@@ -124,6 +167,28 @@ function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
   const sprite = Sprite.show(square, { texture: `square-${color}` })
   sprite.scale.set(3)
   sprite.anchor.set(0.5)
+
+  const squareScore = Entity.addChild(
+    square,
+    {
+      id: `square-score-${color}`,
+      x:  -25,
+      y:  -25,
+    },
+  )
+
+  const squareScoreText = Text.show(
+    squareScore,
+    {
+      text:   score,
+      style:  { ...small, fill: 'white' },
+      zIndex: 1,
+    },
+  )
+
+  squareScoreText.scale.set(1 / getRatio())
+  squareScoreText.originalSize = small.fontSize
+
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
     const joinSounds = [
@@ -132,6 +197,7 @@ function createPlayerEntity({ color }, numOfPlayers, { newPlayer }) {
       'join3',
     ]
     const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
+    createGoalDescription()
 
     const sound = Entity.addChild(square)
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })

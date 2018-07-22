@@ -1,14 +1,20 @@
 import { Entity, Timer, Text } from 'l1'
 import { EVENTS, COLORS } from 'common'
 import { createEaseInAndOut } from './magic'
+import { calculatePlayerScores, getMatchWinners, scoreToWin, applyPlayerScores } from './game'
 import { transitionToLobby } from './lobby'
 import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
+import { transitionToMatchEnd } from './matchEnd'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export function transitionToRoundEnd() {
+  const scores = calculatePlayerScores(gameState)
+  gameState.players = applyPlayerScores(gameState.players, scores)
+
+  const { winner } = gameState.lastRoundResult
   const roundEnd = Entity.addChild(
     Entity.getRoot(),
     {
@@ -17,7 +23,6 @@ export function transitionToRoundEnd() {
       y:  200,
     },
   )
-  const { winner } = gameState.lastRoundResult
   const text = Text.show(
     roundEnd,
     {
@@ -36,10 +41,20 @@ export function transitionToRoundEnd() {
   text.anchor.set(0.5)
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
-  roundEnd.behaviors.pause = pause()
+  const { players } = gameState
+  const matchWinnerCount = getMatchWinners(players, scoreToWin(players)).length
+
+  roundEnd.behaviors.pause = matchWinnerCount > 0
+    ? pauseAndTransitionToMatchEnd()
+    : pauseAndTransitionToLobby()
 }
 
-const pause = () => ({
+const pauseAndTransitionToMatchEnd = () => ({
+  timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
+  run:   ({ timer }) => Timer.run(timer) && transitionToMatchEnd(),
+})
+
+const pauseAndTransitionToLobby = () => ({
   timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
   run:   (b) => {
     if (Timer.run(b.timer)) {
