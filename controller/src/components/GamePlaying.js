@@ -24,11 +24,7 @@ class GamePlaying extends Component {
     }
 
     this.state.intervalId = setInterval(() => {
-      this.props.send({
-        event:   EVENTS.RTC.PLAYER_MOVEMENT,
-        payload: createCommand(this.state.ordering, this.state.lastCommand),
-      })
-      this.setState({ ordering: (this.state.ordering + 1) })
+      this.sendCommand({ command: this.state.lastCommand })
     }, 10)
   }
 
