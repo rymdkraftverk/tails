@@ -1,6 +1,6 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import { COLORS } from 'common'
-import { getRatio, playerCount, gameState, GAME_WIDTH } from '.'
+import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 import { scoreToWin, GAME_COLORS } from './game'
@@ -81,6 +81,14 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     size:  code.fontSize,
   })
 
+  createText({
+    x:     GAME_WIDTH - 230,
+    y:     GAME_HEIGHT - 48,
+    text:  '© Rymdkraftverk 2018',
+    style: { ...code, fontSize: 20 * getRatio() },
+    size:  20,
+  })
+
   const titleBackground = Entity.addChild(Entity.getRoot())
   const titleBackgroundGraphics = Graphics
     .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
@@ -114,7 +122,7 @@ function createGoalDescription() {
     Entity.getRoot(),
     {
       id: 'goal-description',
-      x:  500,
+      x:  510,
       y:  200,
     },
   )
