@@ -111,9 +111,10 @@ const init = options => new Promise((resolve, reject) => {
   ws = new WebSocket(options.wsAdress)
   ws.onmessage = onWsMessage
   ws.onopen = () => {
-    createOffer().then(([offer]) => {
-      emit(EVENTS.WS.OFFER, { receiverId, offer })
-    })
+    createOffer()
+      .then(([offer]) => {
+        emit(EVENTS.WS.OFFER, { receiverId, offer })
+      })
   }
 
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)

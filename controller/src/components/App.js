@@ -39,21 +39,23 @@ class App extends Component {
     signal({
       wsAdress:   WS_ADDRESS,
       receiverId: gameCode,
-    }).then(({ setOnData, setOnClose, send }) => {
-      setOnData(this.onReceiverData)
-
-      setOnClose(() => {
-        this.displayError('Connection closed')
-      })
-
-      this.send = send
-    }).catch(({ cause }) => {
-      const message = {
-        NOT_FOUND: `Game with code ${gameCode} not found`,
-      }[cause]
-
-      this.displayError(message)
     })
+      .then(({ setOnData, setOnClose, send }) => {
+        setOnData(this.onReceiverData)
+
+        setOnClose(() => {
+          this.displayError('Connection closed')
+        })
+
+        this.send = send
+      })
+      .catch(({ cause }) => {
+        const message = {
+          NOT_FOUND: `Game with code ${gameCode} not found`,
+        }[cause]
+
+        this.displayError(message)
+      })
   }
 
   onReceiverData = ({ event, payload }) => {

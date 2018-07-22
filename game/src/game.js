@@ -314,7 +314,10 @@ const collisionChecker = playerId => ({
         killPlayer(e, playerId)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
-      const playersAlive = Entity.getByType('player').filter(p => !p.killed)
+      const playersAlive = Entity
+        .getByType('player')
+        .filter(p => !p.killed)
+
       if (playersAlive.length === 1 && gameState.started) {
         gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color

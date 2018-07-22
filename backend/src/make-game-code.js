@@ -32,9 +32,15 @@ const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
   client.on('error', err => console.error(`Error ${err}`)) // eslint-disable-line no-console
 
-  const set = util.promisify(client.set).bind(client)
-  const exists = util.promisify(client.exists).bind(client)
-  const del = util.promisify(client.del).bind(client)
+  const set = util
+    .promisify(client.set)
+    .bind(client)
+  const exists = util
+    .promisify(client.exists)
+    .bind(client)
+  const del = util
+    .promisify(client.del)
+    .bind(client)
 
   return {
     set,
@@ -54,7 +60,8 @@ const makeGameCode = (set, exists) => {
   return exists(candidateCode)
     .then(doesExist => (doesExist
       ? makeGameCode(set, exists)
-      : set(candidateCode, candidateCode).then(() => candidateCode)))
+      : set(candidateCode, candidateCode)
+        .then(() => candidateCode)))
 }
 
 const connectToRedis = (redisPath) => {
