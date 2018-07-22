@@ -35,6 +35,10 @@ class App extends Component {
     error:       '',
   }
 
+  componentDidMount = () => {
+    navigator.vibrate(1)
+  }
+
   connectToGame(gameCode) {
     signal({
       wsAdress:   WS_ADDRESS,
