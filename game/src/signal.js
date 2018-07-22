@@ -92,9 +92,10 @@ const onOffer = ({ initiatorId, offer }) => {
   rtc.onicecandidate = onIceCandidate(initiator)
   rtc.ondatachannel = onDataChannel(initiator)
 
-  createAnswer(rtc, offer).then((answer) => {
-    emit(EVENTS.WS.ANSWER, { answer, initiatorId })
-  })
+  createAnswer(rtc, offer)
+    .then((answer) => {
+      emit(EVENTS.WS.ANSWER, { answer, initiatorId })
+    })
 }
 
 const onInitiatorCandidate = ({ initiatorId, candidate }) => {

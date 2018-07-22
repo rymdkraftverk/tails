@@ -164,8 +164,13 @@ const resizeGame = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
   ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
-  Game.getStage().scale.set(ratio)
-  Game.getRenderer().resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
+  Game
+    .getStage()
+    .scale
+    .set(ratio)
+  Game
+    .getRenderer()
+    .resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
 
   // The following code is needed to couteract the scale change on the whole canvas since
   // texts get distorted by PIXI when you try to change their scale.
@@ -181,36 +186,38 @@ const resizeGame = () => {
 }
 window.addEventListener('resize', resizeGame)
 
-Game.init({
-  width:   GAME_WIDTH,
-  height:  GAME_HEIGHT,
-  assets,
-  debug:   false,
-  element: document.getElementById('game'),
-}).then(() => {
-  http.createGame()
-    .then(({ gameCode }) => {
-      createGame({ gameCode })
-      log(`[Game created] ${gameCode}`)
+Game
+  .init({
+    width:   GAME_WIDTH,
+    height:  GAME_HEIGHT,
+    assets,
+    debug:   false,
+    element: document.getElementById('game'),
+  })
+  .then(() => {
+    http.createGame()
+      .then(({ gameCode }) => {
+        createGame({ gameCode })
+        log(`[Game created] ${gameCode}`)
 
-      signal({
-        wsAdress:         WS_ADDRESS,
-        receiverId:       gameCode,
-        onInitiatorJoin:  onControllerJoin,
-        onInitiatorLeave: onControllerLeave,
+        signal({
+          wsAdress:         WS_ADDRESS,
+          receiverId:       gameCode,
+          onInitiatorJoin:  onControllerJoin,
+          onInitiatorLeave: onControllerLeave,
+        })
       })
-    })
 
-  const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
-  Sprite.show(background, { texture: 'background', zIndex: layers.BACKGROUND })
+    const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
+    Sprite.show(background, { texture: 'background', zIndex: layers.BACKGROUND })
 
-  resizeGame()
+    resizeGame()
 
-  Key.add('up')
-  Key.add('down')
-  Key.add('left')
-  Key.add('right')
-})
+    Key.add('up')
+    Key.add('down')
+    Key.add('left')
+    Key.add('right')
+  })
 
 // Enable the following behaviour for keyboard debugging
 

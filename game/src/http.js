@@ -6,6 +6,7 @@ const createGame = () =>
     {
       method: 'POST',
     },
-  ).then(res => res.json())
+  )
+    .then(res => res.json())
 
 export default { createGame }
