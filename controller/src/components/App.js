@@ -6,7 +6,9 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
-import signal from './signal'
+import signal from '../signal'
+import isMobileDevice from '../util/isMobileDevice'
+import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 
 const { log } = console
 
@@ -22,19 +24,6 @@ const APP_STATE = {
   GAME_PLAYING:    'game-playing',
 }
 
-const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
-
-const getLastGameCode = () => {
-  const gameCode = localStorage.getItem('gameCode')
-  return gameCode || ''
-}
-
-const setLastGameCode = (gameCode) => {
-  localStorage.setItem('gameCode', gameCode)
-  return gameCode
-}
-
-/* eslint-disable-next-line fp/no-class */
 class App extends Component {
   state = {
     appState:    APP_STATE.LOCKER_ROOM,
@@ -109,10 +98,11 @@ class App extends Component {
   };
 
   onJoin = () => {
+    const { gameCode } = this.state
     this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
-    setLastGameCode(this.state.gameCode)
+    setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
-    this.connectToGame(this.state.gameCode)
+    this.connectToGame(gameCode)
   };
 
   clearError = () => {
@@ -132,38 +122,52 @@ class App extends Component {
       throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
     }
 
+    const {
+      error,
+      gameCode,
+      appState,
+      playerColor,
+    } = this.state
+
     return (
       <Fullscreen
         style={{ touchAction: 'manipulation' }}
         enabled={this.enableFullscreen()}
-        onChange={fullscreen => this.setState({ fullscreen })}>
+        onChange={fullscreen => this.setState({ fullscreen })}
+      >
         {
-          this.state.appState === APP_STATE.LOCKER_ROOM
-            ? <LockerRoom
+          appState === APP_STATE.LOCKER_ROOM
+            ?
+              <LockerRoom
                 clearError={this.clearError}
-                error={this.state.error}
+                error={error}
                 gameCodeChange={this.gameCodeChange}
-                gameCode={this.state.gameCode}
-                onJoin={this.onJoin} />
+                gameCode={gameCode}
+                onJoin={this.onJoin}
+              />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_CONNECTING
+          appState === APP_STATE.GAME_CONNECTING
             ? <LockerRoomLoader />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_LOBBY
-            ? <GameLobby
+          appState === APP_STATE.GAME_LOBBY
+            ?
+              <GameLobby
                 startGame={this.startGame}
-                playerColor={this.state.playerColor} />
+                playerColor={playerColor}
+              />
             : null
         }
         {
-          this.state.appState === APP_STATE.GAME_PLAYING
-            ? <GamePlaying
+          appState === APP_STATE.GAME_PLAYING
+            ?
+              <GamePlaying
                 send={this.send}
-                playerColor={COLORS[this.state.playerColor]} />
+                playerColor={COLORS[playerColor]}
+              />
             : null
         }
       </Fullscreen>

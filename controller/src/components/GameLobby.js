@@ -17,12 +17,25 @@ const playerColorToBackgroundColor = (player) => {
   return background || 'white'
 }
 
-/* eslint-disable-next-line fp/no-class */
 class GameLobby extends Component {
   render() {
+    const {
+      playerColor,
+      startGame,
+    } = this.props
+
     return (
-      <div id="game-lobby-container" style={{ touchAction: 'manipulation', backgroundColor: playerColorToBackgroundColor(this.props.playerColor) }}>
-        <div style={style} className="flex-box" onClick={this.props.startGame}>Start Game!</div>
+      <div
+        id="game-lobby-container"
+        style={{ touchAction: 'manipulation', backgroundColor: playerColorToBackgroundColor(playerColor) }}
+      >
+        <div
+          style={style}
+          className="flex-box"
+          onClick={startGame}
+        >
+          Start Game!
+        </div>
       </div>
     )
   }
