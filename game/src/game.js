@@ -6,6 +6,7 @@ import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
 import { transitionToRoundEnd } from './roundEnd'
+import layers from './util/layers'
 
 const { log } = console
 
@@ -142,7 +143,7 @@ const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => (
         startingDegrees: Util.getRandomInRange(0, 360),
         playerCountFactor,
       })
-      player.behaviors.collisionChecker = collisionChecker(playerId)
+      player.behaviors.collisionChecker = collisionChecker(playerId, playerCountFactor)
 
       // Enable the following behaviour for keyboard debugging
       // square.behaviors.player1Keyboard = player1Keyboard()
@@ -267,28 +268,35 @@ const activate = () => ({
   },
 })
 
-const killPlayer = (e) => {
+const killPlayer = (e, playerCountFactor) => {
   const updatedDeathExplosion = {
     ...deathExplosion,
-    pos: {
-      x: Entity.getX(e),
-      y: Entity.getY(e),
-    },
     startRotation: {
-      min: e.degrees - 30,
-      max: e.degrees + 30,
+      min: (e.degrees - 180) - 30,
+      max: (e.degrees - 180) + 30,
     },
-    color: {
-      start: COLORS[e.color],
-      end:   COLORS[e.color],
+    scale: {
+      start:                  1 * (1 / playerCountFactor),
+      end:                    0.3 * (1 / playerCountFactor),
+      minimumScaleMultiplier: 0.1,
+    },
+    pos: {
+      x: Entity.getX(e) + (e.width / 2),
+      y: Entity.getY(e) + (e.height / 2),
+    },
+    spawnCircle: {
+      x: 0,
+      y: 0,
+      r: 10 * (1 / playerCountFactor),
     },
   }
 
   const particles = Entity.addChild(e)
 
   Particles.emit(particles, {
-    textures: ['particle'],
+    textures: ['particle-smoke'],
     config:   updatedDeathExplosion,
+    zIndex:   layers.FOREGROUND,
   })
 
   const sound = Entity.addChild(e)
@@ -307,7 +315,7 @@ const killPlayer = (e) => {
   e.events.emit(EVENTS.PLAYER_COLLISION)
 }
 
-const collisionChecker = playerId => ({
+const collisionChecker = (playerId, playerCountFactor) => ({
   timer: Timer.create({ duration: 2 }),
   run:   (b, e) => {
     if (Timer.run(b.timer)) {
@@ -316,13 +324,13 @@ const collisionChecker = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        killPlayer(e, playerId)
+        killPlayer(e, playerCountFactor)
       } else if (
         Entity.getX(e) < WALL_THICKNESS ||
         Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.asset.width ||
         Entity.getY(e) < WALL_THICKNESS ||
         Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.asset.height) {
-        killPlayer(e, playerId)
+        killPlayer(e, playerCountFactor)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       const playersAlive = Entity
