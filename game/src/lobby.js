@@ -23,11 +23,11 @@ const getControllerUrl = () => {
 }
 
 const getPlayerPosition = Util.grid({
-  x:           400,
-  y:           100,
-  marginX:     200,
-  marginY:     100,
-  itemsPerRow: 2,
+  x:           480,
+  y:           300,
+  marginX:     150,
+  marginY:     150,
+  itemsPerRow: 5,
 })
 
 export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
