@@ -1,17 +1,31 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { COLORS } from 'common'
+import styled from 'styled-components'
 
-const style = {
-  WebkitTouchCallout: 'none',
-  WebkitUserSelect:   'none',
-  khtmlUserSelect:    'none',
-  MozUserSelect:      'none',
-  msUserSelect:       'none',
-  userSelect:         'none',
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh; touchAction: 'manipulation';
+  background-color: ${({ backgroundColor }) => backgroundColor};
+`
 
-  touchAction: 'manipulation',
-}
+const StartGameButton = styled.div`
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  height: 30vh;
+  font-family : inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  touch-action: 'manipulation';
+`
 
 const playerColorToBackgroundColor = (player) => {
   const background = COLORS[player]
@@ -26,18 +40,15 @@ class GameLobby extends Component {
     } = this.props
 
     return (
-      <div
-        id="game-lobby-container"
-        style={{ touchAction: 'manipulation', backgroundColor: playerColorToBackgroundColor(playerColor) }}
+      <Container
+        backgroundColor={playerColorToBackgroundColor(playerColor)}
       >
-        <div
-          style={style}
-          className="flex-box"
+        <StartGameButton
           onClick={startGame}
         >
           Start Game!
-        </div>
-      </div>
+        </StartGameButton>
+      </Container>
     )
   }
 }

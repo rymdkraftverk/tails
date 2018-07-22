@@ -32,12 +32,6 @@
   overflow: hidden;
 }
 
-#game-lobby-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
 #lobby-container {
   display: flex;
   flex-direction: column;
