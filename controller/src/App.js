@@ -143,15 +143,18 @@ class App extends Component {
       <Fullscreen
         style={{ touchAction: 'manipulation' }}
         enabled={this.enableFullscreen()}
-        onChange={fullscreen => this.setState({ fullscreen })}>
+        onChange={fullscreen => this.setState({ fullscreen })}
+      >
         {
           appState === APP_STATE.LOCKER_ROOM
-            ? <LockerRoom
+            ?
+              <LockerRoom
                 clearError={this.clearError}
                 error={error}
                 gameCodeChange={this.gameCodeChange}
                 gameCode={gameCode}
-                onJoin={this.onJoin} />
+                onJoin={this.onJoin}
+              />
             : null
         }
         {
@@ -161,16 +164,20 @@ class App extends Component {
         }
         {
           appState === APP_STATE.GAME_LOBBY
-            ? <GameLobby
+            ?
+              <GameLobby
                 startGame={this.startGame}
-                playerColor={playerColor} />
+                playerColor={playerColor}
+              />
             : null
         }
         {
           appState === APP_STATE.GAME_PLAYING
-            ? <GamePlaying
+            ?
+              <GamePlaying
                 send={this.send}
-                playerColor={COLORS[playerColor]} />
+                playerColor={COLORS[playerColor]}
+              />
             : null
         }
       </Fullscreen>

@@ -8,6 +8,22 @@ rules:
   react/jsx-uses-vars: error
   react/jsx-uses-react: error
   react/no-this-in-sfc: error
+  react/jsx-max-props-per-line: error
+  react/jsx-first-prop-new-line: error
+  react/jsx-closing-bracket-location: error
+  react/jsx-tag-spacing:
+    - error
+    - 
+      closingSlash: never
+      beforeSelfClosing: always
+      afterOpening: never
+      beforeClosing: never
+  react/jsx-indent:
+    - error
+    - 2
+  react/jsx-indent-props:
+    - error
+    - 2  
   fp/no-this: off
   fp/no-let: off
   fp/no-class: off

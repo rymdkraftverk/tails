@@ -20,8 +20,14 @@ class LockerRoom extends Component {
     } = this.props
 
     return (
-      <div id="lobby-container" style={{ touchAction: 'manipulation' }}>
-        <div className="flex-box" style={{ touchAction: 'manipulation' }}>
+      <div
+        id="lobby-container"
+        style={{ touchAction: 'manipulation' }}
+      >
+        <div
+          className="flex-box"
+          style={{ touchAction: 'manipulation' }}
+        >
           <input
             id="lobby-game-code-input"
             type="text"
@@ -34,16 +40,24 @@ class LockerRoom extends Component {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            maxLength="4" />
+            maxLength="4"
+          />
         </div>
-        <div className="flex-box" style={{ touchAction: 'manipulation' }}>
-          {gameCode.length === 4
-            ? <button
-              id="lobby-join-button"
-              onClick={onJoin}>
-              Join
+        <div
+          className="flex-box"
+          style={{ touchAction: 'manipulation' }}
+        >
+          {
+            gameCode.length === 4
+              ?
+                <button
+                  id="lobby-join-button"
+                  onClick={onJoin}
+                >
+                Join
                 </button>
-            : null}
+              : null
+          }
         </div>
         <Notifications style={{ touchAction: 'manipulation' }} />
       </div>

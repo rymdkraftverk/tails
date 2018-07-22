@@ -56,11 +56,14 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <div id="controller-container" style={{
+      <div
+        id="controller-container"
+        style={{
           touchAction:     'manipulation',
           border:          `2rem solid ${playerColor}`,
           'border-radius': '4rem',
-        }}>
+        }}
+      >
         <div
           id="controller-left"
           style={{ touchAction: 'manipulation' }}
