@@ -22,7 +22,12 @@ const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
 export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
+
 const PLAYER_HITBOX_SIZE = 24
+
+export const GAME_COLORS = {
+  BLUE: '0x004275',
+}
 
 export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
