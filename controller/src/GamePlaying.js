@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { EVENTS } from 'common'
 
-const MOVES = {
+const COMMANDS = {
   NONE:  'none',
   LEFT:  'left',
   RIGHT: 'right',
@@ -20,14 +20,14 @@ class GamePlaying extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ordering: 0,
-      lastMove: MOVES.NONE,
+      ordering:    0,
+      lastCommand: COMMANDS.NONE,
     }
 
     this.state.intervalId = setInterval(() => {
       this.props.send({
         event:   EVENTS.RTC.PLAYER_MOVEMENT,
-        payload: createCommand(this.state.ordering, this.state.lastMove),
+        payload: createCommand(this.state.ordering, this.state.lastCommand),
       })
       this.setState({ ordering: (this.state.ordering + 1) })
     }, 10)
@@ -37,17 +37,17 @@ class GamePlaying extends Component {
     clearInterval(this.state.intervalId)
   }
 
-  sendCommand = ({ move, vibrate = false }) => () => {
+  sendCommand = ({ command, vibrate = false }) => () => {
     if (vibrate) {
       navigator.vibrate(100)
     }
 
     this.props.send({
       event:   EVENTS.RTC.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, move),
+      payload: createCommand(this.state.ordering, command),
     })
 
-    this.setState(state => ({ lastMove: move, ordering: state.ordering + 1 }))
+    this.setState(state => ({ lastCommand: command, ordering: state.ordering + 1 }))
   }
 
   render() {
@@ -64,20 +64,20 @@ class GamePlaying extends Component {
         <div
           id="controller-left"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ move: MOVES.LEFT, vibrate: true })}
-          onMouseUp={this.sendCommand({ move: MOVES.NONE })}
-          onTouchStart={this.sendCommand({ move: MOVES.LEFT, vibrate: true })}
-          onTouchEnd={this.sendCommand({ move: MOVES.NONE })}
+          onMouseDown={this.sendCommand({ command: COMMANDS.LEFT, vibrate: true })}
+          onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
+          onTouchStart={this.sendCommand({ command: COMMANDS.LEFT, vibrate: true })}
+          onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
         >
           LEFT
         </div>
         <div
           id="controller-right"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ move: MOVES.RIGHT, vibrate: true })}
-          onMouseUp={this.sendCommand({ move: MOVES.NONE })}
-          onTouchStart={this.sendCommand({ move: MOVES.RIGHT, vibrate: true })}
-          onTouchEnd={this.sendCommand({ move: MOVES.NONE })}
+          onMouseDown={this.sendCommand({ command: COMMANDS.RIGHT, vibrate: true })}
+          onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
+          onTouchStart={this.sendCommand({ command: COMMANDS.RIGHT, vibrate: true })}
+          onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
         >
           RIGHT
         </div>
