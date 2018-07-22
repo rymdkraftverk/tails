@@ -1,6 +1,7 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
+import _ from 'lodash/fp'
 import { COLORS } from 'common'
-import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT } from '.'
+import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
 import { scoreToWin, GAME_COLORS } from './game'
@@ -101,8 +102,34 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
   titleBackgroundGraphics.lineTo(0, 0)
   titleBackgroundGraphics.endFill()
 
-  alreadyConnectedPlayers
-    .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
+  _
+    .times(index => alreadyConnectedPlayers[index], MAX_PLAYERS_ALLOWED)
+    .forEach((player, index) => {
+      if (player) {
+        createPlayerEntity(player, index, { newPlayer: false })
+      } else {
+        createOutline(index)
+      }
+    })
+}
+
+function createOutline(index) {
+  const { x, y } = getPlayerPosition(index)
+
+  const e = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: `outline-${index}`,
+      x,
+      y,
+    },
+  )
+  const sprite = Sprite.show(e, {
+    texture: 'square-outline',
+    zIndex:  layers.BACKGROUND + 10,
+  })
+  sprite.scale.set(3)
+  sprite.anchor.set(0.5)
 }
 
 function createGoalDescription() {

@@ -10,7 +10,7 @@ import layers from './util/layers'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
-const MAX_PLAYERS_ALLOWED = 10
+export const MAX_PLAYERS_ALLOWED = 10
 export const LEFT = 'left'
 export const RIGHT = 'right'
 
@@ -188,11 +188,12 @@ window.addEventListener('resize', resizeGame)
 
 Game
   .init({
-    width:   GAME_WIDTH,
-    height:  GAME_HEIGHT,
+    width:     GAME_WIDTH,
+    height:    GAME_HEIGHT,
     assets,
-    debug:   false,
-    element: document.getElementById('game'),
+    debug:     false,
+    element:   document.getElementById('game'),
+    antialias: true,
   })
   .then(() => {
     http.createGame()
