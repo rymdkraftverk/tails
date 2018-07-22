@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
 import { EVENTS, COLORS } from 'common'
 import signaling from 'signaling'
+import styled from 'styled-components'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
@@ -10,6 +11,10 @@ import GamePlaying from './GamePlaying'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
+
+const FullscreenStyled = styled(Fullscreen)`
+  touch-action: manipulation;
+`
 
 const { log } = console
 
@@ -139,8 +144,7 @@ class App extends Component {
     } = this.state
 
     return (
-      <Fullscreen
-        style={{ touchAction: 'manipulation' }}
+      <FullscreenStyled
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
@@ -185,7 +189,7 @@ class App extends Component {
               <PlayerDead />
             : null
         }
-      </Fullscreen>
+      </FullscreenStyled>
     )
   }
 }
