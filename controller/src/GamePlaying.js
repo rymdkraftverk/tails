@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { EVENTS } from 'common'
+import createCommand from './util/createCommand'
 
 const COMMANDS = {
   NONE:  'none',
@@ -13,8 +14,6 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.webkitVibrate ||
   navigator.mozVibrate ||
   navigator.msVibrate || noop)
-
-const createCommand = (ordering, command) => ({ command, ordering })
 
 class GamePlaying extends Component {
   constructor(props) {

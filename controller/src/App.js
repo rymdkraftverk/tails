@@ -7,6 +7,8 @@ import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 import signal from './signal'
+import isMobileDevice from './util/isMobileDevice'
+import { getLastGameCode, setLastGameCode } from './util/localStorage'
 
 const { log } = console
 
@@ -20,18 +22,6 @@ const APP_STATE = {
   GAME_CONNECTING: 'game-connecting',
   GAME_LOBBY:      'game-lobby',
   GAME_PLAYING:    'game-playing',
-}
-
-const isMobileDevice = () => (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1)
-
-const getLastGameCode = () => {
-  const gameCode = localStorage.getItem('gameCode')
-  return gameCode || ''
-}
-
-const setLastGameCode = (gameCode) => {
-  localStorage.setItem('gameCode', gameCode)
-  return gameCode
 }
 
 class App extends Component {
