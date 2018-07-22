@@ -1,21 +1,3 @@
-html {
-  touch-action: manipulation;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'patchy-robots';
-  background: #414844;
-  margin: 0px;
-  touch-action: manipulation;
-}
-
-@font-face {
-  font-family: 'patchy-robots';
-  src: url('patchy-robots.ttf');
-}
-
 #controller-left {
   padding-top: 15px;
   letter-spacing: 0.3em;
