@@ -1,37 +1,3 @@
-#controller-left {
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
-  flex: 1;
-  background: #be5d4b;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-#controller-right{
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
-  flex: 1;
-  background: #839870;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-#controller-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
 #lobby-container {
   display: flex;
   flex-direction: column;

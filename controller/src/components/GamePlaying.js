@@ -1,7 +1,47 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { EVENTS } from 'common'
+import styled from 'styled-components'
 import createCommand from '../util/createCommand'
+
+const Container = styled.div`
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  touch-action:  manipulation;
+  border: ${({ playerColor }) => `2rem solid ${playerColor}`};
+  border-radius: 4rem;
+`
+
+const ContainerLeft = styled.div`
+  padding-top: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  flex: 1;
+  background: #be5d4b;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action:  manipulation;
+`
+
+const ContainerRight = styled.div`
+  padding-top: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  flex: 1;
+  background: #839870;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action:  manipulation;
+`
 
 const COMMANDS = {
   NONE:  'none',
@@ -50,35 +90,26 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <div
-        id="controller-container"
-        style={{
-          touchAction:  'manipulation',
-          border:       `2rem solid ${playerColor}`,
-          borderRadius: '4rem',
-        }}
+      <Container
+        playerColor={playerColor}
       >
-        <div
-          id="controller-left"
-          style={{ touchAction: 'manipulation' }}
+        <ContainerLeft
           onMouseDown={this.sendCommand(COMMANDS.LEFT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.LEFT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           LEFT
-        </div>
-        <div
-          id="controller-right"
-          style={{ touchAction: 'manipulation' }}
+        </ContainerLeft>
+        <ContainerRight
           onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           RIGHT
-        </div>
-      </div>
+        </ContainerRight>
+      </Container>
     )
   }
 }
