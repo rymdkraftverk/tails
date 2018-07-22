@@ -1,6 +1,48 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  touch-action: manipulation;
+`
+
+const ContainerRow = styled.div`
+  height: 30vh;
+  font-family : inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+`
+
+const GameCodeInput = styled.input`
+  letter-spacing: 0.5em;
+  font-size: 4vw; 
+  text-align: center;
+  text-decoration: none;
+  font-family: 'patchy-robots';
+  max-width: 100%;
+  outline: none;
+  border: 0px;
+  background: transparent;
+  border-bottom: 3px solid #4085AF;
+  width: 40%;
+  caret-color: #4085AF;
+  color: #4085AF
+  touch-action: manipulation;
+`
+
+const GameJoinButton = styled.button`
+  align-self: flex-start;
+  touch-action: manipulation;
+`
+
+const NotificationsStyled = styled(Notifications)`
+  touch-action: manipulation;
+`
 
 class LockerRoom extends Component {
   componentDidMount() {
@@ -34,18 +76,10 @@ class LockerRoom extends Component {
     const placeholder = 'Code'
 
     return (
-      <div
-        id="lobby-container"
-        style={{ touchAction: 'manipulation' }}
-      >
-        <div
-          className="flex-box"
-          style={{ touchAction: 'manipulation' }}
-        >
-          <input
-            id="lobby-game-code-input"
+      <Container>
+        <ContainerRow>
+          <GameCodeInput
             type="text"
-            style={{ touchAction: 'manipulation' }}
             value={gameCode}
             onChange={gameCodeChange}
             placeholder={placeholder}
@@ -59,25 +93,21 @@ class LockerRoom extends Component {
             autoCapitalize="off"
             maxLength="4"
           />
-        </div>
-        <div
-          className="flex-box"
-          style={{ touchAction: 'manipulation' }}
-        >
+        </ContainerRow>
+        <ContainerRow>
           {
             this.gameCodeFilled()
               ?
-                <button
-                  id="lobby-join-button"
+                <GameJoinButton
                   onClick={onJoin}
                 >
                 Join
-                </button>
+                </GameJoinButton>
               : null
           }
-        </div>
-        <Notifications style={{ touchAction: 'manipulation' }} />
-      </div>
+        </ContainerRow>
+        <NotificationsStyled />
+      </Container>
     )
   }
 }
