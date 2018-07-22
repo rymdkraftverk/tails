@@ -108,7 +108,7 @@ function createGoalDescription() {
     entity,
     {
       text:  `First to ${score} wins!`,
-      style: { ...small, fill: 'white' },
+      style: { ...small, fontSize: small.fontSize * getRatio(), fill: 'white' },
     },
   )
   textAsset.scale.set(1 / getRatio())
@@ -172,22 +172,26 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
     square,
     {
       id: `square-score-${color}`,
-      x:  -25,
-      y:  -25,
+      x:  -15,
+      y:  -15,
     },
   )
 
   const squareScoreText = Text.show(
     squareScore,
     {
-      text:   score,
-      style:  { ...small, fill: 'white' },
+      text:  score,
+      style: {
+        ...small,
+        fontSize: small.fontSize * getRatio(),
+        fill:     'white',
+      },
       zIndex: 1,
     },
   )
 
   squareScoreText.scale.set(1 / getRatio())
-  squareScoreText.originalSize = small.fontSize
+  squareScore.originalSize = small.fontSize
 
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
