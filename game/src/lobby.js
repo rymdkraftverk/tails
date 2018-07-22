@@ -107,9 +107,8 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     .forEach((player, index) => {
       if (player) {
         createPlayerEntity(player, index, { newPlayer: false })
-      } else {
-        createOutline(index)
       }
+      createOutline(index)
     })
 }
 
