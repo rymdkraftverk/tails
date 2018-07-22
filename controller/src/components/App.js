@@ -6,9 +6,9 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
-import signal from './signal'
-import isMobileDevice from './util/isMobileDevice'
-import { getLastGameCode, setLastGameCode } from './util/localStorage'
+import signal from '../signal'
+import isMobileDevice from '../util/isMobileDevice'
+import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 
 const { log } = console
 

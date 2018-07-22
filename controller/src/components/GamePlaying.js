@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { EVENTS } from 'common'
-import createCommand from './util/createCommand'
+import createCommand from '../util/createCommand'
 
 const COMMANDS = {
   NONE:  'none',
