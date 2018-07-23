@@ -22,7 +22,7 @@ const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
 export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
-const PLAYER_HITBOX_SIZE = 12
+const PLAYER_HITBOX_SIZE = 24
 
 export function transitionToGameScene(maxPlayers) {
   Entity.getAll()
@@ -92,8 +92,8 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       id:     playerId,
       x,
       y,
-      width:  PLAYER_HITBOX_SIZE,
-      height: PLAYER_HITBOX_SIZE,
+      width:  PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
+      height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
     },
   )
   square.events = new EventEmitter()
@@ -190,8 +190,8 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
         {
           x:      Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
           y:      Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
-          width:  PLAYER_HITBOX_SIZE,
-          height: PLAYER_HITBOX_SIZE,
+          width:  PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
+          height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
         },
       )
       trailE.active = false
