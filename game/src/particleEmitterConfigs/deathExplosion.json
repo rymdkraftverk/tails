@@ -14,10 +14,6 @@
 	},
 	"maxSpeed": 0,
 	"noRotation": true,
-	"lifetime": {
-		"min": 0.2,
-		"max": 0.8
-	},
 	"blendMode": "normal",
 	"frequency": 0.01,
 	"emitterLifetime": 0.2,

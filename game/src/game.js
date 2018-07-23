@@ -284,6 +284,10 @@ const killPlayer = (e, playerCountFactor) => {
       x: Entity.getX(e) + (e.width / 2),
       y: Entity.getY(e) + (e.height / 2),
     },
+    lifetime: {
+      min: 0.4 * (1 / playerCountFactor),
+      max: 1.6 * (1 / playerCountFactor),
+    },
     spawnCircle: {
       x: e.width / 2,
       y: e.height / 2,
