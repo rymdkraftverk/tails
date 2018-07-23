@@ -285,9 +285,9 @@ const killPlayer = (e, playerCountFactor) => {
       y: Entity.getY(e) + (e.height / 2),
     },
     spawnCircle: {
-      x: 0,
-      y: 0,
-      r: 10 * (1 / playerCountFactor),
+      x: e.width / 2,
+      y: e.height / 2,
+      r: e.width,
     },
   }
 
