@@ -86,9 +86,16 @@ export function applyPlayerScores(players, scores) {
   }, {})
 }
 
+const getPosition = Util.grid({
+  x:           150,
+  y:           150,
+  marginX:     200,
+  marginY:     300,
+  itemsPerRow: 5,
+})
+
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
-  const x = 150 + ((index % 5) * 200)
-  const y = 150 + (index > 4 ? 300 : 0)
+  const { x, y } = getPosition(index)
 
   const square = Entity.addChild(
     Entity.getRoot(),
