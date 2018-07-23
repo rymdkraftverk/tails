@@ -1,11 +1,15 @@
-import { Entity, Sound, Util, Sprite, Text } from 'l1'
+import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
+import _ from 'lodash/fp'
 import { COLORS } from 'common'
-import { getRatio, playerCount, gameState } from '.'
+import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
 import { createParabola } from './magic'
-import { scoreToWin } from './game'
+import { scoreToWin, GAME_COLORS } from './game'
+import layers from './util/layers'
 
 const CONTROLLER_PORT = '4001'
+
+const TITLE_BACKGROUND_HEIGHT = 120
 
 const deployedURLs = {
   'game.rymdkraftverk.com': 'rymdkraftverk.com',
@@ -23,11 +27,11 @@ const getControllerUrl = () => {
 }
 
 const getPlayerPosition = Util.grid({
-  x:           400,
-  y:           100,
-  marginX:     200,
-  marginY:     100,
-  itemsPerRow: 2,
+  x:           480,
+  y:           400,
+  marginX:     150,
+  marginY:     150,
+  itemsPerRow: 5,
 })
 
 export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
@@ -39,7 +43,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 
   createText({
     x:     50,
-    y:     40,
+    y:     30,
     text:  'LOBBY',
     style: { ...big, fill: 'white', fontSize: 48 * getRatio() },
     size:  48,
@@ -47,7 +51,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 
   createText({
     x:     50,
-    y:     170,
+    y:     340,
     text:  'Go to:',
     style: { ...small, fill: 'white', fontSize: small.fontSize * getRatio() },
     size:  small.fontSize,
@@ -55,7 +59,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 
   createText({
     x:     50,
-    y:     200,
+    y:     370,
     text:  getControllerUrl(),
     style: { ...code, fontSize: 30 * getRatio() },
     size:  30,
@@ -64,7 +68,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 
   createText({
     x:     50,
-    y:     360,
+    y:     480,
     text:  'Code:',
     style: { ...small, fontSize: small.fontSize * getRatio(), fill: 'white' },
     size:  small.fontSize,
@@ -72,14 +76,59 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
 
   createText({
     x:     50,
-    y:     400,
+    y:     520,
     text:  gameCode,
     style: { ...code, fontSize: code.fontSize * getRatio() },
     size:  code.fontSize,
   })
 
-  alreadyConnectedPlayers
-    .forEach(((player, index) => { createPlayerEntity(player, index, { newPlayer: false }) }))
+  createText({
+    x:     GAME_WIDTH - 230,
+    y:     GAME_HEIGHT - 48,
+    text:  '© Rymdkraftverk 2018',
+    style: { ...code, fontSize: 20 * getRatio() },
+    size:  20,
+  })
+
+  const titleBackground = Entity.addChild(Entity.getRoot())
+  const titleBackgroundGraphics = Graphics
+    .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
+
+  titleBackgroundGraphics.beginFill(GAME_COLORS.BLUE)
+  titleBackgroundGraphics.moveTo(0, 0)
+  titleBackgroundGraphics.lineTo(GAME_WIDTH, 0)
+  titleBackgroundGraphics.lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
+  titleBackgroundGraphics.lineTo(0, TITLE_BACKGROUND_HEIGHT)
+  titleBackgroundGraphics.lineTo(0, 0)
+  titleBackgroundGraphics.endFill()
+
+  _
+    .times(index => alreadyConnectedPlayers[index], MAX_PLAYERS_ALLOWED)
+    .forEach((player, index) => {
+      if (player) {
+        createPlayerEntity(player, index, { newPlayer: false })
+      }
+      createOutline(index)
+    })
+}
+
+function createOutline(index) {
+  const { x, y } = getPlayerPosition(index)
+
+  const e = Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: `outline-${index}`,
+      x,
+      y,
+    },
+  )
+  const sprite = Sprite.show(e, {
+    texture: 'square-outline',
+    zIndex:  layers.BACKGROUND + 10,
+  })
+  sprite.scale.set(3)
+  sprite.anchor.set(0.5)
 }
 
 function createGoalDescription() {
@@ -99,8 +148,8 @@ function createGoalDescription() {
     Entity.getRoot(),
     {
       id: 'goal-description',
-      x:  860,
-      y:  20,
+      x:  510,
+      y:  200,
     },
   )
 
@@ -108,11 +157,11 @@ function createGoalDescription() {
     entity,
     {
       text:  `First to ${score} wins!`,
-      style: { ...small, fill: 'white' },
+      style: { ...big, fontSize: big.fontSize * getRatio(), fill: 'white' },
     },
   )
   textAsset.scale.set(1 / getRatio())
-  entity.originalSize = small.fontSize
+  entity.originalSize = big.fontSize
 }
 
 function createText({
@@ -172,22 +221,26 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
     square,
     {
       id: `square-score-${color}`,
-      x:  -25,
-      y:  -25,
+      x:  -15,
+      y:  -15,
     },
   )
 
   const squareScoreText = Text.show(
     squareScore,
     {
-      text:   score,
-      style:  { ...small, fill: 'white' },
+      text:  score,
+      style: {
+        ...small,
+        fontSize: small.fontSize * getRatio(),
+        fill:     'white',
+      },
       zIndex: 1,
     },
   )
 
   squareScoreText.scale.set(1 / getRatio())
-  squareScoreText.originalSize = small.fontSize
+  squareScore.originalSize = small.fontSize
 
   if (newPlayer) {
     square.behaviors.animateEntrance = animateEntranceBehaviour()
