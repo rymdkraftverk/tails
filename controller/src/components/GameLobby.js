@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { COLORS } from 'common'
 
 const style = {
@@ -39,6 +40,11 @@ class GameLobby extends Component {
       </div>
     )
   }
+}
+
+GameLobby.propTypes = {
+  playerColor: PropTypes.string.isRequired,
+  startGame:   PropTypes.func.isRequired,
 }
 
 export default GameLobby

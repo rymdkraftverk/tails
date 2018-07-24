@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 
 class LockerRoom extends Component {
@@ -63,6 +64,13 @@ class LockerRoom extends Component {
       </div>
     )
   }
+}
+
+LockerRoom.propTypes = {
+  error:          PropTypes.string.isRequired,
+  gameCode:       PropTypes.string.isRequired,
+  onJoin:         PropTypes.func.isRequired,
+  gameCodeChange: PropTypes.func.isRequired,
 }
 
 export default LockerRoom

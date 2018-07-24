@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { EVENTS } from 'common'
 import createCommand from '../util/createCommand'
 
@@ -82,6 +83,11 @@ class GamePlaying extends Component {
       </div>
     )
   }
+}
+
+GamePlaying.propTypes = {
+  playerColor: PropTypes.string.isRequired,
+  send:        PropTypes.func.isRequired,
 }
 
 export default GamePlaying
