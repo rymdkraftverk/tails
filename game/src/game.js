@@ -1,10 +1,9 @@
 import { shuffle } from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
-import { COLORS } from 'common'
 import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
-import deathExplosion from './particleEmitterConfigs/deathExplosion.json'
+import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 
@@ -269,38 +268,17 @@ const activate = () => ({
 })
 
 const killPlayer = (e, playerCountFactor) => {
-  const updatedDeathExplosion = {
-    ...deathExplosion,
-    startRotation: {
-      min: (e.degrees - 180) - 30,
-      max: (e.degrees - 180) + 30,
-    },
-    scale: {
-      start:                  1 * (1 / playerCountFactor),
-      end:                    0.3 * (1 / playerCountFactor),
-      minimumScaleMultiplier: 0.1,
-    },
-    pos: {
-      x: Entity.getX(e) + (e.width / 2),
-      y: Entity.getY(e) + (e.height / 2),
-    },
-    lifetime: {
-      min: 0.4 * (1 / playerCountFactor),
-      max: 1.6 * (1 / playerCountFactor),
-    },
-    spawnCircle: {
-      x: e.width / 2,
-      y: e.height / 2,
-      r: e.width,
-    },
-  }
-
   const particles = Entity.addChild(e)
 
   Particles.emit(particles, {
-    textures: ['particle-smoke'],
-    config:   updatedDeathExplosion,
-    zIndex:   layers.FOREGROUND,
+    ...explode({
+      degrees:     e.degrees,
+      scaleFactor: playerCountFactor,
+      radius:      e.width,
+      x:           Entity.getX(e) + (e.width / 2),
+      y:           Entity.getY(e) + (e.height / 2),
+    }),
+    zIndex: layers.FOREGROUND,
   })
 
   const sound = Entity.addChild(e)
