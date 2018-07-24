@@ -37,6 +37,8 @@ class App extends Component {
 
   componentDidMount = () => {
     navigator.vibrate(1)
+    const gameCode = getLastGameCode()
+    this.setState({ gameCode })
   }
 
   connectToGame(gameCode) {
@@ -82,11 +84,6 @@ class App extends Component {
         appState: APP_STATE.GAME_LOBBY,
       })
     }
-  }
-
-  componentDidMount() {
-    const gameCode = getLastGameCode()
-    this.setState({ gameCode })
   }
 
   displayError = (message) => {
