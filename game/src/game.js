@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Game, Sound, Sprite, Particles, Graphics } from 'l1'
+import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import { COLORS } from 'common'
 import EventEmitter from 'eventemitter3'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
