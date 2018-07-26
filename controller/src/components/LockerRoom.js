@@ -22,6 +22,16 @@ class LockerRoom extends Component {
 
     const placeholder = 'Code'
 
+    const gameCodeFilled = () => gameCode.length === 4
+
+    const isSubmit = (pressed) =>
+      gameCodeFilled() &&
+      pressed === 'Enter'
+
+    const onKeyPress = (e) => {
+      if (isSubmit(e.key)) onJoin()
+    }
+
     return (
       <div
         id="lobby-container"
@@ -40,6 +50,7 @@ class LockerRoom extends Component {
             placeholder={placeholder}
             onFocus={(e) => { e.target.placeholder = '' }}
             onBlur={(e) => { e.target.placeholder = placeholder }}
+            onKeyPress={onKeyPress}
             className="game-join-input"
             spellCheck="false"
             autoComplete="off"
@@ -53,7 +64,7 @@ class LockerRoom extends Component {
           style={{ touchAction: 'manipulation' }}
         >
           {
-            gameCode.length === 4
+            gameCodeFilled()
               ?
                 <button
                   id="lobby-join-button"
