@@ -2,6 +2,8 @@ plugins:
   - import
   - react
 parser: babel-eslint
+extends:
+  plugin:react/recommended
 env:
   browser: true
 rules:
