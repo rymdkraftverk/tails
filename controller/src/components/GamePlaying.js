@@ -65,9 +65,9 @@ class GamePlaying extends Component {
         <div
           id="controller-left"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ command: COMMANDS.LEFT, vibrate: true })}
+          onMouseDown={this.sendCommand({ command: COMMANDS.LEFT })}
           onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
-          onTouchStart={this.sendCommand({ command: COMMANDS.LEFT, vibrate: true })}
+          onTouchStart={this.sendCommand({ command: COMMANDS.LEFT })}
           onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
         >
           LEFT
@@ -75,9 +75,9 @@ class GamePlaying extends Component {
         <div
           id="controller-right"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ command: COMMANDS.RIGHT, vibrate: true })}
+          onMouseDown={this.sendCommand({ command: COMMANDS.RIGHT })}
           onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
-          onTouchStart={this.sendCommand({ command: COMMANDS.RIGHT, vibrate: true })}
+          onTouchStart={this.sendCommand({ command: COMMANDS.RIGHT })}
           onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
         >
           RIGHT
