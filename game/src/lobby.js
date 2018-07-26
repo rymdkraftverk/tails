@@ -148,7 +148,7 @@ function createGoalDescription() {
     Entity.getRoot(),
     {
       id: 'goal-description',
-      x:  510,
+      x:  410,
       y:  200,
     },
   )
@@ -156,7 +156,7 @@ function createGoalDescription() {
   const textAsset = Text.show(
     entity,
     {
-      text:  `First to ${score} wins!`,
+      text:  `First to ${score} points wins!`,
       style: { ...big, fontSize: big.fontSize * getRatio(), fill: 'white' },
     },
   )
