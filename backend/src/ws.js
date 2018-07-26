@@ -2,7 +2,8 @@ const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
 
-const { EVENTS, prettyId } = require('common')
+const { prettyId } = require('common')
+const EVENTS = require('signaling/events')
 
 const TYPE = {
   INITIATOR: 'initiator',
@@ -40,7 +41,7 @@ const onOffer = client => (event, { receiverId, offer }) => {
   const receiver = getReceiverClient(receiverId)
   if (!receiver) {
     warn(`Receiver with id ${receiverId} not found`)
-    emit(client, EVENTS.WS.NOT_FOUND, { receiverId })
+    emit(client, EVENTS.NOT_FOUND, { receiverId })
     return
   }
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
@@ -78,11 +79,11 @@ const onReceiverCandidate = client => (event, { candidate, initiatorId }) => {
 }
 
 const events = {
-  [EVENTS.WS.RECEIVER_UPGRADE]:    onReceiverUpgrade,
-  [EVENTS.WS.ANSWER]:              onAnswer,
-  [EVENTS.WS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
-  [EVENTS.WS.RECEIVER_CANDIDATE]:  onReceiverCandidate,
-  [EVENTS.WS.OFFER]:               onOffer,
+  [EVENTS.RECEIVER_UPGRADE]:    onReceiverUpgrade,
+  [EVENTS.ANSWER]:              onAnswer,
+  [EVENTS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
+  [EVENTS.RECEIVER_CANDIDATE]:  onReceiverCandidate,
+  [EVENTS.OFFER]:               onOffer,
 }
 
 const onMessage = client => (message) => {

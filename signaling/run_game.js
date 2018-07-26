@@ -132,4 +132,4 @@ const init = ({
   ws.onmessage = onWsMessage
 }
 
-export default init
+module.exports = init
