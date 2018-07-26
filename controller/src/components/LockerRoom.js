@@ -20,6 +20,8 @@ class LockerRoom extends Component {
       gameCodeChange,
     } = this.props
 
+    const placeholder = "Code"
+
     return (
       <div
         id="lobby-container"
@@ -35,7 +37,9 @@ class LockerRoom extends Component {
             style={{ touchAction: 'manipulation' }}
             value={gameCode}
             onChange={gameCodeChange}
-            placeholder="Code"
+            placeholder={placeholder}
+            onFocus={(e) => e.target.placeholder = ""}
+            onBlur={(e) => e.target.placeholder = placeholder}
             className="game-join-input"
             spellCheck="false"
             autoComplete="off"
