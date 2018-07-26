@@ -35,11 +35,7 @@ class GamePlaying extends Component {
     clearInterval(this.state.intervalId)
   }
 
-  sendCommand = ({ command, vibrate = false }) => () => {
-    if (vibrate) {
-      navigator.vibrate(100)
-    }
-
+  sendCommand = (command) => () => {
     this.props.send({
       event:   EVENTS.RTC.PLAYER_MOVEMENT,
       payload: createCommand(this.state.ordering, command),
@@ -65,20 +61,20 @@ class GamePlaying extends Component {
         <div
           id="controller-left"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ command: COMMANDS.LEFT })}
-          onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
-          onTouchStart={this.sendCommand({ command: COMMANDS.LEFT })}
-          onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
+          onMouseDown={this.sendCommand(COMMANDS.LEFT)}
+          onMouseUp={this.sendCommand(COMMANDS.NONE)}
+          onTouchStart={this.sendCommand(COMMANDS.LEFT)}
+          onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           LEFT
         </div>
         <div
           id="controller-right"
           style={{ touchAction: 'manipulation' }}
-          onMouseDown={this.sendCommand({ command: COMMANDS.RIGHT })}
-          onMouseUp={this.sendCommand({ command: COMMANDS.NONE })}
-          onTouchStart={this.sendCommand({ command: COMMANDS.RIGHT })}
-          onTouchEnd={this.sendCommand({ command: COMMANDS.NONE })}
+          onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
+          onMouseUp={this.sendCommand(COMMANDS.NONE)}
+          onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
+          onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           RIGHT
         </div>
