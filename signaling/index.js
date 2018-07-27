@@ -1,4 +1,7 @@
+const runController = require('./runController')
+const runGame = require('./runGame')
+
 module.exports = {
-  run_controller: require('./run_controller'),
-  run_game: require('./run_game'),
+  runController,
+  runGame,
 }
