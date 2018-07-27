@@ -38,8 +38,8 @@ class LockerRoom extends Component {
             value={gameCode}
             onChange={gameCodeChange}
             placeholder={placeholder}
-            onFocus={(e) => e.target.placeholder = ""}
-            onBlur={(e) => e.target.placeholder = placeholder}
+            onFocus={(e) => { e.target.placeholder = "" }}
+            onBlur={(e) => { e.target.placeholder = placeholder }}
             className="game-join-input"
             spellCheck="false"
             autoComplete="off"
