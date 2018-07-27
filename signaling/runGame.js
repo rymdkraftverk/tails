@@ -1,4 +1,5 @@
-import { EVENTS, prettyId } from 'common'
+import { prettyId } from 'common'
+import { EVENTS } from './events'
 
 const WEB_RTC_CONFIG = {
   iceServers: [
@@ -39,7 +40,7 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
-  emit(EVENTS.WS.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
+  emit(EVENTS.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
 }
 
 const onDataChannel = initiator => ({ channel }) => {
@@ -95,7 +96,7 @@ const onOffer = ({ initiatorId, offer }) => {
 
   createAnswer(rtc, offer)
     .then((answer) => {
-      emit(EVENTS.WS.ANSWER, { answer, initiatorId })
+      emit(EVENTS.ANSWER, { answer, initiatorId })
     })
 }
 
@@ -105,8 +106,8 @@ const onInitiatorCandidate = ({ initiatorId, candidate }) => {
 }
 
 const wsEvents = {
-  [EVENTS.WS.OFFER]:               onOffer,
-  [EVENTS.WS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
+  [EVENTS.OFFER]:               onOffer,
+  [EVENTS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
 }
 
 const onWsMessage = (message) => {
@@ -129,7 +130,7 @@ const init = ({
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
   ws = new WebSocket(wsAddress)
-  ws.onopen = () => { emit(EVENTS.WS.RECEIVER_UPGRADE, receiverId) }
+  ws.onopen = () => { emit(EVENTS.RECEIVER_UPGRADE, receiverId) }
   ws.onmessage = onWsMessage
 }
 
