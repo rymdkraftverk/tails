@@ -20,7 +20,7 @@ class LockerRoom extends Component {
       gameCodeChange,
     } = this.props
 
-    const placeholder = "Code"
+    const placeholder = 'Code'
 
     return (
       <div
@@ -38,7 +38,7 @@ class LockerRoom extends Component {
             value={gameCode}
             onChange={gameCodeChange}
             placeholder={placeholder}
-            onFocus={(e) => { e.target.placeholder = "" }}
+            onFocus={(e) => { e.target.placeholder = '' }}
             onBlur={(e) => { e.target.placeholder = placeholder }}
             className="game-join-input"
             spellCheck="false"
