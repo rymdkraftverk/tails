@@ -86,7 +86,7 @@ const onOffer = ({ initiatorId, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)} (${offer})`)
 
   const initiator = createInitiator(initiatorId, offer)
-  initiators.push(initiator)
+  initiators = initiator.concat(initiator)
   const { rtc } = initiator
 
   // Start collecting receiver candidates to be send to this initiator
