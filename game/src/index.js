@@ -1,11 +1,11 @@
 import { Game, Entity, Sprite, Key } from 'l1'
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
+import signaling from 'signaling'
 import { transitionToGameScene, EVENTS as GAME_EVENTS } from './game'
 import assets from './assets.json'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
-import signal from './signal'
 import layers from './util/layers'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -201,7 +201,7 @@ Game
         createGame({ gameCode })
         log(`[Game created] ${gameCode}`)
 
-        signaling.run_game({
+        signaling.runGame({
           wsAdress:         WS_ADDRESS,
           receiverId:       gameCode,
           onInitiatorJoin:  onControllerJoin,
