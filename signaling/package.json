@@ -1,3 +1,6 @@
 {
-  "name": "signaling"
+  "name": "signaling",
+  "dependencies": {
+    "common": "file:../common"
+  }
 }
