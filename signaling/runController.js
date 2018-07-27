@@ -108,7 +108,7 @@ const init = options => new Promise((resolve, reject) => {
   outputEvents.onSuccess = resolve
   outputEvents.onFailure = reject
 
-  ws = new WebSocket(options.wsAdress)
+  ws = new WebSocket(options.wsAddress)
   ws.onmessage = onWsMessage
   ws.onopen = () => {
     createOffer()

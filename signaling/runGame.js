@@ -120,7 +120,7 @@ const onWsMessage = (message) => {
 }
 
 const init = ({
-  wsAdress,
+  wsAddress,
   receiverId,
   onInitiatorJoin,
   onInitiatorLeave,
@@ -128,7 +128,7 @@ const init = ({
   outputEvents.onInitiatorJoin = onInitiatorJoin
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
-  ws = new WebSocket(wsAdress)
+  ws = new WebSocket(wsAddress)
   ws.onopen = () => { emit(EVENTS.WS.RECEIVER_UPGRADE, receiverId) }
   ws.onmessage = onWsMessage
 }

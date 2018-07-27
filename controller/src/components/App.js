@@ -43,7 +43,7 @@ class App extends Component {
 
   connectToGame(gameCode) {
     signaling.runController({
-      wsAdress:   WS_ADDRESS,
+      wsAddress:  WS_ADDRESS,
       receiverId: gameCode,
     })
       .then(({ setOnData, setOnClose, send }) => {
