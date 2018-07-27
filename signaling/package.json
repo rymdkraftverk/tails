@@ -1,6 +1,7 @@
 {
   "name": "signaling",
   "dependencies": {
-    "common": "file:../common"
+    "common": "file:../common",
+    "webrtc-adapter": "^6.3.0"
   }
 }

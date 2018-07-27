@@ -22,6 +22,7 @@ let initiators = []
 // end state
 
 const getInitiator = id => initiators.find(x => x.id === id)
+
 const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
