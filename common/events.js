@@ -14,7 +14,7 @@ const EVENTS = {
     ROUND_STARTED:   'round.started',
     PLAYER_JOINED:   'player.joined',
     PLAYER_MOVEMENT: 'player.movement',
-  }
+  },
 }
 
-module.exports = EVENTS;
+module.exports = EVENTS
