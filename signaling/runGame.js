@@ -1,5 +1,5 @@
-import { prettyId } from 'common'
-import { EVENTS } from './events'
+const { prettyId } = require('common')
+const EVENTS = require('./events')
 
 const WEB_RTC_CONFIG = {
   iceServers: [
