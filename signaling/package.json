@@ -1,5 +1,6 @@
 {
   "name": "signaling",
+  "main": "index.js",
   "dependencies": {
     "common": "file:../common",
     "webrtc-adapter": "^6.3.0"
