@@ -116,6 +116,8 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     { texture: spriteId },
   )
   sprite.scale.set(1 / playerCountFactor)
+  
+  // Offset the sprite so that the entity hitbox is in the middle
   sprite.anchor.set((1 - (square.width / sprite.width)) / 2)
 
   square.color = color
@@ -200,6 +202,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
     const width = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
     const height = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
 
+    // Find the middle of the player entity so that we can put the trails' middle point in the same spot
     const middleX = Entity.getX(e) + (e.width / 2)
     const middleY = Entity.getY(e) + (e.height / 2)
 
