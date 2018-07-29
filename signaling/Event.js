@@ -1,4 +1,4 @@
-const EVENTS = {
+const Event = {
   ANSWER:              'receiver.join.answer',
   INITIATOR_CANDIDATE: 'receiver.join.initiator.candidate',
   RECEIVER_CANDIDATE:  'receiver.join.receiver.candidate',
@@ -7,4 +7,4 @@ const EVENTS = {
   NOT_FOUND:           'receiver.join.initiator.notfound',
 }
 
-module.exports = EVENTS
+module.exports = Event

@@ -61,7 +61,7 @@ send | TODO
 ### events
 
 ```js
-import event from 'signaling/event'
+import { Event } from 'signaling'
 ```
 
 Event | Description
@@ -72,3 +72,8 @@ RECEIVER_CANDIDATE | TODO
 RECEIVER_UPGRADE | TODO
 OFFER | TODO
 NOT_FOUND | TODO
+
+**Example**
+```js
+Event.ANSWER
+```

@@ -1,4 +1,4 @@
-const EVENTS = require('./events')
+const Event = require('./Event')
 
 const WEB_RTC_CONFIG = {
   iceServers: [
@@ -41,7 +41,7 @@ const onIceCandidate = ({ candidate }) => {
   }
 
   log(`[Ice Candidate] ${candidate}`)
-  emit(EVENTS.INITIATOR_CANDIDATE, { receiverId, candidate })
+  emit(Event.INITIATOR_CANDIDATE, { receiverId, candidate })
 }
 
 const onError = () => {
@@ -87,9 +87,9 @@ const onReceiverNotFound = () => {
 }
 
 const wsEvents = {
-  [EVENTS.ANSWER]:             onAnswer,
-  [EVENTS.RECEIVER_CANDIDATE]: onReceiverCandidate,
-  [EVENTS.NOT_FOUND]:          onReceiverNotFound,
+  [Event.ANSWER]:             onAnswer,
+  [Event.RECEIVER_CANDIDATE]: onReceiverCandidate,
+  [Event.NOT_FOUND]:          onReceiverNotFound,
 }
 
 const onWsMessage = (message) => {
@@ -113,7 +113,7 @@ const init = options => new Promise((resolve, reject) => {
   ws.onopen = () => {
     createOffer()
       .then(([offer]) => {
-        emit(EVENTS.OFFER, { receiverId, offer })
+        emit(Event.OFFER, { receiverId, offer })
       })
   }
 
