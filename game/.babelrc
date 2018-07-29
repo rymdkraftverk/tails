@@ -3,6 +3,7 @@
   "plugins": [
     ["transform-inline-environment-variables", {
       "include": [
+        "GAME_IP",
         "WS_ADDRESS",
         "HTTP_ADDRESS"
       ]

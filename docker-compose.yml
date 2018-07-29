@@ -22,6 +22,7 @@ services:
         ports:
             - '8081:8081'
         environment:
+            - GAME_IP=${GAME_IP}
             - WS_ADDRESS=${WS_ADDRESS}
             - HTTP_ADDRESS=${HTTP_ADDRESS}
 
