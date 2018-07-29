@@ -23,7 +23,8 @@ const WALL_COLOR = 0xffffff
 
 export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
 
-const PLAYER_HITBOX_SIZE = 24
+const PLAYER_HITBOX_SIZE = 16
+const TRAIL_HITBOX_SIZE = 24
 
 export const GAME_COLORS = {
   BLUE: '0x004275',
@@ -115,6 +116,9 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     { texture: spriteId },
   )
   sprite.scale.set(1 / playerCountFactor)
+  
+  // Offset the sprite so that the entity hitbox is in the middle
+  sprite.anchor.set((1 - (square.width / sprite.width)) / 2)
 
   square.color = color
   square.isAlive = true
@@ -195,14 +199,21 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
     if (holeGenerator.preventTrail) {
       return
     }
+    const width = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
+    const height = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
+
+    // Find the middle of the player entity so that we can put the trails' middle point in the same spot
+    const middleX = Entity.getX(e) + (e.width / 2)
+    const middleY = Entity.getY(e) + (e.height / 2)
+
     if (Timer.run(b.timer)) {
       const trailE = Entity.addChild(
         Entity.getRoot(),
         {
-          x:      Entity.getX(e) + ((e.asset.width / 2) - (e.asset.width / 2)),
-          y:      Entity.getY(e) + ((e.asset.height / 2) - (e.asset.height / 2)),
-          width:  PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
-          height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
+          x: middleX - (width / 2),
+          y: middleY - (height / 2),
+          width,
+          height,
         },
       )
       trailE.active = false
@@ -309,9 +320,9 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         killPlayer(e, playerCountFactor)
       } else if (
         Entity.getX(e) < WALL_THICKNESS ||
-        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.asset.width ||
+        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.width ||
         Entity.getY(e) < WALL_THICKNESS ||
-        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.asset.height) {
+        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
         killPlayer(e, playerCountFactor)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
