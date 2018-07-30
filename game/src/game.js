@@ -9,6 +9,8 @@ import layers from './util/layers'
 
 const { log } = console
 
+const WAIT_TIME_BEFORE_PLAYERS_MOVE = 60
+
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
 
@@ -136,7 +138,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 })
 
 const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
-  timer: Timer.create({ duration: 60 }),
+  timer: Timer.create({ duration: WAIT_TIME_BEFORE_PLAYERS_MOVE }),
   run:   (b) => {
     if (Timer.run(b.timer)) {
       player.behaviors.pivot = pivot(playerId)
