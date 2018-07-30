@@ -260,7 +260,12 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
 const animateEntranceBehaviour = () => ({
   init: (b, e) => {
     b.tick = 0
-    b.animation = createParabola(0, 20, -1 * e.asset.scale.x, 0.08)
+    b.animation = createParabola({
+      start:    0,
+      end:      20,
+      offset:   -1 * e.asset.scale.x,
+      modifier: 0.08,
+    })
   },
   run: (b, e) => {
     b.tick += 1

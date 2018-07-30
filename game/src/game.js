@@ -31,8 +31,13 @@ export const GAME_COLORS = {
 }
 
 export function transitionToGameScene(maxPlayers) {
+  const doNotDestroy = [
+    'background',
+    'fadeInOut',
+  ]
+
   Entity.getAll()
-    .filter(e => e.id !== 'background')
+    .filter(e => !doNotDestroy.includes(e.id))
     .forEach(Entity.destroy)
 
   const playerCountFactor = R.compose(
@@ -116,7 +121,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     { texture: spriteId },
   )
   sprite.scale.set(1 / playerCountFactor)
-  
+
   // Offset the sprite so that the entity hitbox is in the middle
   sprite.anchor.set((1 - (square.width / sprite.width)) / 2)
 
