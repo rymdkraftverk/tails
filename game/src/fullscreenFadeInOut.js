@@ -44,7 +44,8 @@ const fadeInOut = (duration, resolve) => ({
       b.hasResolved = true
       resolve()
     }
-    if (b.tick >= DURATION) {
+
+    if (b.tick >= duration) {
       // eslint-disable-next-line fp/no-delete
       Entity.destroy(e)
     }
