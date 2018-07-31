@@ -6,10 +6,9 @@ import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
+import countdown from './countdown'
 
 const { log } = console
-
-const WAIT_TIME_BEFORE_PLAYERS_MOVE = 60
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
@@ -129,38 +128,28 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   square.color = color
   square.isAlive = true
-  square.behaviors.startPlayerMovement = startPlayerMovement(
-    playerCountFactor,
-    square,
-    playerId,
-    spriteId,
-  )
-})
 
-const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
-  timer: Timer.create({ duration: WAIT_TIME_BEFORE_PLAYERS_MOVE }),
-  run:   (b) => {
-    if (Timer.run(b.timer)) {
-      player.behaviors.pivot = pivot(playerId)
-      player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
-      player.behaviors.createTrail = createTrail(
+  countdown()
+    .then(() => {
+      square.behaviors.pivot = pivot(playerId)
+      square.behaviors.holeGenerator = holeGenerator(playerCountFactor)
+      square.behaviors.createTrail = createTrail(
         playerCountFactor,
         playerId,
         spriteId,
-        player.behaviors.holeGenerator,
+        square.behaviors.holeGenerator,
       )
-      player.behaviors.move = move({
+      square.behaviors.move = move({
         startingDegrees: Util.getRandomInRange(0, 360),
         playerCountFactor,
       })
-      player.behaviors.collisionChecker = collisionChecker(playerId, playerCountFactor)
+      square.behaviors.collisionChecker = collisionChecker(playerId, playerCountFactor)
 
       // Enable the following behaviour for keyboard debugging
       // square.behaviors.player1Keyboard = player1Keyboard()
-      const controller = Entity.addChild(player, { id: `${playerId}controller` })
+      const controller = Entity.addChild(square, { id: `${playerId}controller` })
       controller.direction = null
-    }
-  },
+    })
 })
 
 function toRadians(angle) {

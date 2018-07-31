@@ -3,9 +3,9 @@ import _ from 'lodash/fp'
 import { COLORS } from 'common'
 import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
-import { createParabola } from './magic'
 import { scoreToWin, GAME_COLORS } from './game'
 import layers from './util/layers'
+import bounce from './bounce'
 
 const CONTROLLER_PORT = '4001'
 
@@ -243,7 +243,7 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
   squareScore.originalSize = small.fontSize
 
   if (newPlayer) {
-    square.behaviors.animateEntrance = animateEntranceBehaviour()
+    square.behaviors.bounce = bounce()
     const joinSounds = [
       'join1',
       'join2',
@@ -256,23 +256,3 @@ function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
   }
 }
-
-const animateEntranceBehaviour = () => ({
-  init: (b, e) => {
-    b.tick = 0
-    b.animation = createParabola({
-      start:    0,
-      end:      20,
-      offset:   -1 * e.asset.scale.x,
-      modifier: 0.08,
-    })
-  },
-  run: (b, e) => {
-    b.tick += 1
-    e.asset.scale.set(-1 * b.animation(b.tick))
-    if (b.tick >= 20) {
-      // eslint-disable-next-line fp/no-delete
-      delete e.behaviors.animateEntrance
-    }
-  },
-})
