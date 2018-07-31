@@ -7,6 +7,7 @@ import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
+import bounce from './bounce'
 
 const { log } = console
 
@@ -27,6 +28,8 @@ export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
 const PLAYER_HITBOX_SIZE = 16
 const TRAIL_HITBOX_SIZE = 24
 
+const TOTAL_BOUNCE_DURATION = 100
+
 export const GAME_COLORS = {
   BLUE: '0x004275',
 }
@@ -46,13 +49,38 @@ export function transitionToGameScene(maxPlayers) {
     playerCount,
   )(gameState.players)
 
-  R.compose(
+  const playerEntities = R.compose(
     R.zipWith(createPlayer(playerCountFactor), shuffle(R.range(0, maxPlayers))),
     shuffle,
     Object.values,
   )(gameState.players)
 
   createWalls()
+
+  bouncePlayers(playerEntities, playerCountFactor)
+    .then(countdown)
+    .then(() => {
+      playerEntities.forEach((player) => {
+        player.behaviors.pivot = pivot(player.id)
+        player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
+        player.behaviors.createTrail = createTrail(
+          playerCountFactor,
+          player.id,
+          player.spriteId,
+          player.behaviors.holeGenerator,
+        )
+        player.behaviors.move = move({
+          startingDegrees: Util.getRandomInRange(0, 360),
+          playerCountFactor,
+        })
+        player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
+
+        // Enable the following behaviour for keyboard debugging
+        // player.behaviors.player1Keyboard = player1Keyboard()
+        const controller = Entity.addChild(player, { id: `${player.id}controller` })
+        controller.direction = null
+      })
+    })
 }
 
 export const getMatchWinners = (players, scoreNeeded) =>
@@ -117,39 +145,43 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   square.events = new EventEmitter()
   Entity.addType(square, 'player')
 
-  const sprite = Sprite.show(
-    square,
-    { texture: spriteId },
-  )
-  sprite.scale.set(1 / playerCountFactor)
-
-  // Offset the sprite so that the entity hitbox is in the middle
-  sprite.anchor.set((1 - (square.width / sprite.width)) / 2)
-
   square.color = color
   square.isAlive = true
+  square.spriteId = spriteId
 
-  countdown()
-    .then(() => {
-      square.behaviors.pivot = pivot(playerId)
-      square.behaviors.holeGenerator = holeGenerator(playerCountFactor)
-      square.behaviors.createTrail = createTrail(
-        playerCountFactor,
-        playerId,
-        spriteId,
-        square.behaviors.holeGenerator,
-      )
-      square.behaviors.move = move({
-        startingDegrees: Util.getRandomInRange(0, 360),
-        playerCountFactor,
-      })
-      square.behaviors.collisionChecker = collisionChecker(playerId, playerCountFactor)
+  return square
+})
 
-      // Enable the following behaviour for keyboard debugging
-      // square.behaviors.player1Keyboard = player1Keyboard()
-      const controller = Entity.addChild(square, { id: `${playerId}controller` })
-      controller.direction = null
-    })
+const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
+  const bouncer = Entity.addChild(Entity.getRoot())
+  bouncer.behaviors.bouncePlayers = {
+    timer: Timer.create({ duration: (TOTAL_BOUNCE_DURATION / players.length) + 15 }),
+    index: 0,
+    run:   (b) => {
+      if (Timer.run(b.timer)) {
+        const player = players[b.index]
+
+        const sprite = Sprite.show(
+          player,
+          { texture: player.spriteId },
+        )
+        sprite.scale.set(1 / playerCountFactor)
+
+        // Offset the sprite so that the entity hitbox is in the middle
+        sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
+
+        player.behaviors.bounce = bounce()
+
+        b.index += 1
+        Timer.reset(b.timer)
+
+        if (b.index === players.length) {
+          Entity.destroy(bouncer)
+          resolve()
+        }
+      }
+    },
+  }
 })
 
 function toRadians(angle) {
@@ -198,7 +230,8 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
     const width = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
     const height = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
 
-    // Find the middle of the player entity so that we can put the trails' middle point in the same spot
+    // Find the middle of the player entity so that
+    // we can put the trails' middle point in the same spot
     const middleX = Entity.getX(e) + (e.width / 2)
     const middleY = Entity.getY(e) + (e.height / 2)
 
