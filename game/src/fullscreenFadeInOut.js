@@ -39,7 +39,9 @@ const fadeInOut = (duration, resolve) => ({
     graphics.lineTo(0, GAME_HEIGHT)
     graphics.lineTo(0, 0)
     graphics.endFill()
-    // console.log('alpha', alpha)
+
+    // Resolve after half the duration has passed,
+    // to allow the next screen to fade in
     if (!b.hasResolved && (b.tick >= duration / 2)) {
       b.hasResolved = true
       resolve()

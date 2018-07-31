@@ -1,8 +1,8 @@
 import { createParabola } from './magic'
 
 export default () => ({
+  tick: 0,
   init: (b, e) => {
-    b.tick = 0
     b.animation = createParabola({
       start:    0,
       end:      20,
