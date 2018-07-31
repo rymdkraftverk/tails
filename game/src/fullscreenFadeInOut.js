@@ -23,9 +23,9 @@ const fadeInOut = (duration, resolve) => ({
   tick:        0,
   animation:   createParabola({
     start:    0,
-    end:      DURATION,
+    end:      duration,
     offset:   0,
-    modifier: 100 / DURATION,
+    modifier: 100 / duration,
   }),
   run: (b, e) => {
     const { asset: graphics } = e
