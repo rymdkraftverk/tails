@@ -28,7 +28,7 @@ export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
 const PLAYER_HITBOX_SIZE = 16
 const TRAIL_HITBOX_SIZE = 24
 
-const TOTAL_BOUNCE_DURATION = 100
+const TOTAL_BOUNCE_DURATION = 50
 
 export const GAME_COLORS = {
   BLUE: '0x004275',
