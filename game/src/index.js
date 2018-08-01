@@ -69,6 +69,8 @@ const playerMovement = (id, { command, ordering }) => {
 
 const roundStart = () => {
   if (!gameState.started) {
+    gameState.started = true
+
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
@@ -81,7 +83,6 @@ const roundStart = () => {
     fullscreenFadeInOut()
       .then(() => {
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
-        gameState.started = true
 
         gameState.lastRoundResult.playerFinishOrder = []
         Entity
