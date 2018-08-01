@@ -155,7 +155,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   const bouncer = Entity.addChild(Entity.getRoot())
   bouncer.behaviors.bouncePlayers = {
-    timer: Timer.create({ duration: (TOTAL_BOUNCE_DURATION / players.length) + 15 }),
+    timer: Timer.create({ duration: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15 }),
     index: 0,
     run:   (b) => {
       if (Timer.run(b.timer)) {
