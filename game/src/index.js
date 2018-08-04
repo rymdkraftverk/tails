@@ -201,7 +201,7 @@ Game
         createGame({ gameCode })
         log(`[Game created] ${gameCode}`)
 
-        signaling.runGame({
+        signaling.runReceiver({
           wsAddress:        WS_ADDRESS,
           receiverId:       gameCode,
           onInitiatorJoin:  onControllerJoin,

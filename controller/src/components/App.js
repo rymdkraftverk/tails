@@ -42,7 +42,7 @@ class App extends Component {
   }
 
   connectToGame(gameCode) {
-    signaling.runController({
+    signaling.runInitiator({
       wsAddress:  WS_ADDRESS,
       receiverId: gameCode,
     })

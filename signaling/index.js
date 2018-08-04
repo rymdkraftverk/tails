@@ -1,9 +1,9 @@
-const runController = require('./runController')
-const runGame = require('./runGame')
+const runInitiator = require('./runInitiator')
+const runReceiver = require('./runReceiver')
 const Event = require('./Event')
 
 module.exports = {
-  runController,
-  runGame,
+  runInitiator,
+  runReceiver,
   Event,
 }
