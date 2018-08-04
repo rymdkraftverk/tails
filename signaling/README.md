@@ -1,15 +1,37 @@
 # Signaling
 
+This package allows you to create applications and games where you can have communication between browsers with minimal lag.
+
+It uses [WebRTC](https://webrtc.org/) and adds an abstraction on top of it which makes it easier to work with.
+
+It can be used for games where one browser is the game screen while a mobile phone browser is the controller.
+
+### Index
+
+  - Getting started
+  - API
+  - Events
+
+### Getting started
+
+Usage of the `signaling` module is split into three parts:
+
+  - Initiator
+
+  - Receiver
+
+  - Broker
+
 ### API
 
 ```js
 import signaling from 'signaling'
 ```
 
-#### createGame
+---
 
 ```js
-signaling.runGame(options)
+signaling.runReceiver(options)
 ```
 
 TODO: Add description here
@@ -20,10 +42,21 @@ TODO: Add description here
 
 Option | Type | Required | Default | Description
   -- | -- | -- | -- | --
-**wsAddress** | String | [ ] | - | TODO
-**receiverId** | String | [ ] | - | TODO
-**onInitiatorJoin** | Function | [ ] | - | TODO
-**onInitiatorLeave** | Function | [ ] | - | TODO
+**wsAddress** | String | ✓ | - | TODO
+**receiverId** | String | ✓ | - | TODO
+**onInitiatorJoin** | Function | ✓ | - | Function that is run whenever an initiator joins
+**onInitiatorLeave** | Function | ✓ | - | Function that is run whenever an initiator leaves
+
+**onInitiatorJoin arguments**
+
+The onInitiatorJoin function is always called with an object with these properties:
+
+Property | Type | Description
+  -- | -- | --
+**id** | String | 
+setOnData
+send
+close
 
 **Returns**
 
@@ -32,7 +65,7 @@ Nothing
 ---
 
 ```js
-signaling.runController(options)
+signaling.runInitiator(options)
 ```
 
 TODO: Add description
@@ -43,8 +76,8 @@ TODO: Add description
 
 Option | Type | Required | Default | Description
   -- | -- | -- | -- | --
-**wsAddress** | String | [ ] | - | TODO
-**receiverId** | String | [ ] | - | TODO
+**wsAddress** | String | ✓ | - | The address of the broker
+**receiverId** | String | ✓ | - | The id of the receiver to join
 
 **Returns**
 
@@ -58,7 +91,7 @@ send | TODO
 
 ---
 
-### events
+### Events
 
 ```js
 import { Event } from 'signaling'
