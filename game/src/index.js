@@ -7,6 +7,7 @@ import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
 import signal from './signal'
 import layers from './util/layers'
+import fullscreenFadeInOut from './fullscreenFadeInOut'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -68,6 +69,8 @@ const playerMovement = (id, { command, ordering }) => {
 
 const roundStart = () => {
   if (!gameState.started) {
+    gameState.started = true
+
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
@@ -77,14 +80,16 @@ const roundStart = () => {
         })
       })
 
-    transitionToGameScene(MAX_PLAYERS_ALLOWED)
-    gameState.started = true
+    fullscreenFadeInOut()
+      .then(() => {
+        transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
-    gameState.lastRoundResult.playerFinishOrder = []
-    Entity
-      .getByType('player')
-      .forEach(player =>
-        player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
+        gameState.lastRoundResult.playerFinishOrder = []
+        Entity
+          .getByType('player')
+          .forEach(player =>
+            player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
+      })
   }
 }
 

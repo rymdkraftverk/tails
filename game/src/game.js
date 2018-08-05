@@ -6,6 +6,8 @@ import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
+import countdown from './countdown'
+import bounce from './bounce'
 
 const { log } = console
 
@@ -26,13 +28,20 @@ export const EVENTS = { PLAYER_COLLISION: 'player.collision' }
 const PLAYER_HITBOX_SIZE = 16
 const TRAIL_HITBOX_SIZE = 24
 
+const TOTAL_BOUNCE_DURATION = 50
+
 export const GAME_COLORS = {
   BLUE: '0x004275',
 }
 
 export function transitionToGameScene(maxPlayers) {
+  const doNotDestroy = [
+    'background',
+    'fadeInOut',
+  ]
+
   Entity.getAll()
-    .filter(e => e.id !== 'background')
+    .filter(e => !doNotDestroy.includes(e.id))
     .forEach(Entity.destroy)
 
   const playerCountFactor = R.compose(
@@ -40,13 +49,38 @@ export function transitionToGameScene(maxPlayers) {
     playerCount,
   )(gameState.players)
 
-  R.compose(
+  const playerEntities = R.compose(
     R.zipWith(createPlayer(playerCountFactor), shuffle(R.range(0, maxPlayers))),
     shuffle,
     Object.values,
   )(gameState.players)
 
   createWalls()
+
+  bouncePlayers(playerEntities, playerCountFactor)
+    .then(countdown)
+    .then(() => {
+      playerEntities.forEach((player) => {
+        player.behaviors.pivot = pivot(player.id)
+        player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
+        player.behaviors.createTrail = createTrail(
+          playerCountFactor,
+          player.id,
+          player.spriteId,
+          player.behaviors.holeGenerator,
+        )
+        player.behaviors.move = move({
+          startingDegrees: Util.getRandomInRange(0, 360),
+          playerCountFactor,
+        })
+        player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
+
+        // Enable the following behaviour for keyboard debugging
+        // player.behaviors.player1Keyboard = player1Keyboard()
+        const controller = Entity.addChild(player, { id: `${player.id}controller` })
+        controller.direction = null
+      })
+    })
 }
 
 export const getMatchWinners = (players, scoreNeeded) =>
@@ -87,7 +121,7 @@ export function applyPlayerScores(players, scores) {
   }, {})
 }
 
-const getPosition = Util.grid({
+const getStartingPosition = Util.grid({
   x:           150,
   y:           150,
   marginX:     200,
@@ -96,7 +130,7 @@ const getPosition = Util.grid({
 })
 
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
-  const { x, y } = getPosition(index)
+  const { x, y } = getStartingPosition(index)
 
   const square = Entity.addChild(
     Entity.getRoot(),
@@ -111,49 +145,43 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   square.events = new EventEmitter()
   Entity.addType(square, 'player')
 
-  const sprite = Sprite.show(
-    square,
-    { texture: spriteId },
-  )
-  sprite.scale.set(1 / playerCountFactor)
-  
-  // Offset the sprite so that the entity hitbox is in the middle
-  sprite.anchor.set((1 - (square.width / sprite.width)) / 2)
-
   square.color = color
   square.isAlive = true
-  square.behaviors.startPlayerMovement = startPlayerMovement(
-    playerCountFactor,
-    square,
-    playerId,
-    spriteId,
-  )
+  square.spriteId = spriteId
+
+  return square
 })
 
-const startPlayerMovement = (playerCountFactor, player, playerId, spriteId) => ({
-  timer: Timer.create({ duration: 60 }),
-  run:   (b) => {
-    if (Timer.run(b.timer)) {
-      player.behaviors.pivot = pivot(playerId)
-      player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
-      player.behaviors.createTrail = createTrail(
-        playerCountFactor,
-        playerId,
-        spriteId,
-        player.behaviors.holeGenerator,
-      )
-      player.behaviors.move = move({
-        startingDegrees: Util.getRandomInRange(0, 360),
-        playerCountFactor,
-      })
-      player.behaviors.collisionChecker = collisionChecker(playerId, playerCountFactor)
+const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
+  const bouncer = Entity.addChild(Entity.getRoot())
+  bouncer.behaviors.bouncePlayers = {
+    timer: Timer.create({ duration: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15 }),
+    index: 0,
+    run:   (b) => {
+      if (Timer.run(b.timer)) {
+        const player = players[b.index]
 
-      // Enable the following behaviour for keyboard debugging
-      // square.behaviors.player1Keyboard = player1Keyboard()
-      const controller = Entity.addChild(player, { id: `${playerId}controller` })
-      controller.direction = null
-    }
-  },
+        const sprite = Sprite.show(
+          player,
+          { texture: player.spriteId },
+        )
+        sprite.scale.set(1 / playerCountFactor)
+
+        // Offset the sprite so that the entity hitbox is in the middle
+        sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
+
+        player.behaviors.bounce = bounce()
+
+        b.index += 1
+        Timer.reset(b.timer)
+
+        if (b.index === players.length) {
+          Entity.destroy(bouncer)
+          resolve()
+        }
+      }
+    },
+  }
 })
 
 function toRadians(angle) {
@@ -202,7 +230,8 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
     const width = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
     const height = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
 
-    // Find the middle of the player entity so that we can put the trails' middle point in the same spot
+    // Find the middle of the player entity so that
+    // we can put the trails' middle point in the same spot
     const middleX = Entity.getX(e) + (e.width / 2)
     const middleY = Entity.getY(e) + (e.height / 2)
 

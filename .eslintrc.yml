@@ -12,6 +12,7 @@ extends:
   - plugin:ramda/recommended
   - plugin:eslint-comments/recommended
 rules:
+  eslint-comments/no-unused-disable: error
   fp/no-nil: off
   fp/no-let: off
   fp/no-unused-expression: off

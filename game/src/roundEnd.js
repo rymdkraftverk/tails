@@ -27,7 +27,7 @@ export function transitionToRoundEnd() {
     roundEnd,
     {
       text:   `Winner is ${winner}!`,
-      zIndex: layers.FOREGROUND,
+      zIndex: layers.FOREGROUND + 10,
       style:  {
         ...big,
         fill:     COLORS[winner],

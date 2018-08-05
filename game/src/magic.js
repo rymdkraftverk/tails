@@ -9,9 +9,11 @@ const { error } = console
  * @param {number} y -
  * @param {number} [modifier]
  */
-export const createParabola = (x1, x2, y, modifier = 1) => (x) => {
-  const normalizer = getNormalizer(x1, x2)
-  return y + ((Math.abs(x1 - x2) * modifier) * (normalizer * (x - x1) * (x - x2)))
+export const createParabola = ({
+  start, end, offset, modifier = 1,
+}) => (t) => {
+  const normalizer = getNormalizer(start, end)
+  return offset + ((Math.abs(start - end) * modifier) * (normalizer * (t - start) * (t - end)))
 }
 
 export const createParabolaAngle = (x1, x2, modifier = 1) => (x) => {
