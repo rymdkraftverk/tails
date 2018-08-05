@@ -48,7 +48,6 @@ const fadeInOut = (duration, resolve) => ({
     }
 
     if (b.tick >= duration) {
-      // eslint-disable-next-line fp/no-delete
       Entity.destroy(e)
     }
   },
