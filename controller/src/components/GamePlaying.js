@@ -8,6 +8,8 @@ const COMMANDS = {
   RIGHT: 'right',
 }
 
+const SEND_INTERVAL = 250
+
 const noop = () => {}
 
 navigator.vibrate = (navigator.vibrate ||
@@ -25,7 +27,7 @@ class GamePlaying extends Component {
 
     this.state.intervalId = setInterval(() => {
       this.sendCommand({ command: this.state.lastCommand })
-    }, 10)
+    }, SEND_INTERVAL)
   }
 
   componentWillUnmount() {
