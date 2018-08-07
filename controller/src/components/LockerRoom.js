@@ -71,10 +71,14 @@ class LockerRoom extends Component {
 }
 
 LockerRoom.propTypes = {
-  error:          PropTypes.string.isRequired,
+  error:          PropTypes.string,
   gameCode:       PropTypes.string.isRequired,
   onJoin:         PropTypes.func.isRequired,
   gameCodeChange: PropTypes.func.isRequired,
+}
+
+LockerRoom.defaultProps = {
+  error: null,
 }
 
 export default LockerRoom
