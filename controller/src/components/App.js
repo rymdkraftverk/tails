@@ -42,17 +42,17 @@ class App extends Component {
   }
 
   connectToGame(gameCode) {
+    const onClose = () => {
+      this.displayError('Connection closed')
+    }
+
     signaling.runInitiator({
       wsAddress:  WS_ADDRESS,
       receiverId: gameCode,
+      onData:     this.onReceiverData,
+      onClose,
     })
-      .then(({ setOnData, setOnClose, send }) => {
-        setOnData(this.onReceiverData)
-
-        setOnClose(() => {
-          this.displayError('Connection closed')
-        })
-
+      .then(({ send }) => {
         this.send = send
       })
       .catch(({ cause }) => {

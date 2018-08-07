@@ -52,17 +52,6 @@ const onError = () => {
 const onChannelOpen = () => {
   log(`[Data channel opened] ${rtcChannel}`)
   outputEvents.onSuccess({
-    setOnData: (onData) => {
-      rtcChannel.onmessage = ({ data }) => {
-        onData(JSON.parse(data))
-      }
-    },
-    setOnClose: (onClose) => {
-      rtcChannel.onclose = () => {
-        warn('RTC connection closed')
-        onClose()
-      }
-    },
     send: (data) => {
       rtcChannel.send(JSON.stringify(data))
     },
@@ -104,11 +93,16 @@ const onWsMessage = (message) => {
 
 const init = options => new Promise((resolve, reject) => {
   ({ receiverId } = options)
+  const {
+    wsAddress,
+    onData,
+    onClose,
+  } = options
 
   outputEvents.onSuccess = resolve
   outputEvents.onFailure = reject
 
-  ws = new WebSocket(options.wsAddress)
+  ws = new WebSocket(wsAddress)
   ws.onmessage = onWsMessage
   ws.onopen = () => {
     createOffer()
@@ -121,6 +115,13 @@ const init = options => new Promise((resolve, reject) => {
   rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
   rtcChannel.onopen = onChannelOpen
   rtcChannel.onerror = onError
+  rtcChannel.onmessage = ({ data }) => {
+    onData(JSON.parse(data))
+  }
+  rtcChannel.onclose = () => {
+    warn('RTC connection closed')
+    onClose()
+  }
 
   rtc.onicecandidate = onIceCandidate
 })
