@@ -3,4 +3,3 @@ globals:
   RTCIceCandidate: true
   RTCSessionDescription: true
   RTCPeerConnection: true
-  
