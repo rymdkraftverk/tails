@@ -5,6 +5,7 @@ const EVENTS = {
     ROUND_STARTED:   'round.started',
     PLAYER_JOINED:   'player.joined',
     PLAYER_MOVEMENT: 'player.movement',
+    PLAYER_DIED:     'player.died',
   },
 }
 

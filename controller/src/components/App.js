@@ -7,6 +7,7 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
+import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 
@@ -22,6 +23,7 @@ const APP_STATE = {
   GAME_CONNECTING: 'game-connecting',
   GAME_LOBBY:      'game-lobby',
   GAME_PLAYING:    'game-playing',
+  PLAYER_DEAD:     'player-dead',
 }
 
 class App extends Component {
@@ -82,6 +84,10 @@ class App extends Component {
     } else if (event === EVENTS.RTC.ROUND_END) {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
+      })
+    } else if (event === EVENTS.RTC.PLAYER_DIED) {
+      this.setState({
+        appState: APP_STATE.PLAYER_DEAD,
       })
     }
   }
@@ -171,6 +177,12 @@ class App extends Component {
                 send={this.send}
                 playerColor={COLORS[playerColor]}
               />
+            : null
+        }
+        {
+          appState === APP_STATE.PLAYER_DEAD
+            ?
+              <PlayerDead />
             : null
         }
       </Fullscreen>
