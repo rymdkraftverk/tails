@@ -1,11 +1,11 @@
 import { Game, Entity, Sprite, Key } from 'l1'
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
+import signaling from 'signaling'
 import { transitionToGameScene, EVENTS as GAME_EVENTS } from './game'
 import assets from './assets.json'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
-import signal from './signal'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 
@@ -206,8 +206,8 @@ Game
         createGame({ gameCode })
         log(`[Game created] ${gameCode}`)
 
-        signal({
-          wsAdress:         WS_ADDRESS,
+        signaling.runReceiver({
+          wsAddress:        WS_ADDRESS,
           receiverId:       gameCode,
           onInitiatorJoin:  onControllerJoin,
           onInitiatorLeave: onControllerLeave,

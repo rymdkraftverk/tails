@@ -30,6 +30,6 @@
     "l1": "^0.3.11",
     "lodash": "^4.17.10",
     "ramda": "^0.25.0",
-    "webrtc-adapter": "^6.2.1"
+    "signaling": "file:../signaling"
   }
 }

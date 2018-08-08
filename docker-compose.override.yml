@@ -7,6 +7,7 @@ services:
         volumes:
             - ./backend:/novelty/backend
             - ./common:/novelty/common
+            - ./signaling:/novelty/signaling
 
     game:
         image: 'node:carbon'
@@ -15,6 +16,7 @@ services:
         volumes:
             - ./game:/novelty/game
             - ./common:/novelty/common
+            - ./signaling:/novelty/signaling
 
     controller:
         image: 'node:carbon'
@@ -23,3 +25,4 @@ services:
         volumes:
             - ./controller:/novelty/controller
             - ./common:/novelty/common
+            - ./signaling:/novelty/signaling

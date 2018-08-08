@@ -1,4 +1,5 @@
-import { EVENTS, prettyId } from 'common'
+const { prettyId } = require('common')
+const Event = require('./Event')
 
 const WEB_RTC_CONFIG = {
   iceServers: [
@@ -22,6 +23,7 @@ let initiators = []
 // end state
 
 const getInitiator = id => initiators.find(x => x.id === id)
+
 const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
@@ -38,7 +40,7 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
-  emit(EVENTS.WS.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
+  emit(Event.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
 }
 
 const onDataChannel = initiator => ({ channel }) => {
@@ -85,7 +87,7 @@ const onOffer = ({ initiatorId, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)} (${offer})`)
 
   const initiator = createInitiator(initiatorId, offer)
-  initiators.push(initiator)
+  initiators = initiators.concat(initiator)
   const { rtc } = initiator
 
   // Start collecting receiver candidates to be send to this initiator
@@ -94,7 +96,7 @@ const onOffer = ({ initiatorId, offer }) => {
 
   createAnswer(rtc, offer)
     .then((answer) => {
-      emit(EVENTS.WS.ANSWER, { answer, initiatorId })
+      emit(Event.ANSWER, { answer, initiatorId })
     })
 }
 
@@ -104,8 +106,8 @@ const onInitiatorCandidate = ({ initiatorId, candidate }) => {
 }
 
 const wsEvents = {
-  [EVENTS.WS.OFFER]:               onOffer,
-  [EVENTS.WS.INITIATOR_CANDIDATE]: onInitiatorCandidate,
+  [Event.OFFER]:               onOffer,
+  [Event.INITIATOR_CANDIDATE]: onInitiatorCandidate,
 }
 
 const onWsMessage = (message) => {
@@ -119,7 +121,7 @@ const onWsMessage = (message) => {
 }
 
 const init = ({
-  wsAdress,
+  wsAddress,
   receiverId,
   onInitiatorJoin,
   onInitiatorLeave,
@@ -127,9 +129,9 @@ const init = ({
   outputEvents.onInitiatorJoin = onInitiatorJoin
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
-  ws = new WebSocket(wsAdress)
-  ws.onopen = () => { emit(EVENTS.WS.RECEIVER_UPGRADE, receiverId) }
+  ws = new WebSocket(wsAddress)
+  ws.onopen = () => { emit(Event.RECEIVER_UPGRADE, receiverId) }
   ws.onmessage = onWsMessage
 }
 
-export default init
+module.exports = init

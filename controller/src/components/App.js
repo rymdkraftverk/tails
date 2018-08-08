@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
 import { EVENTS, COLORS } from 'common'
+import signaling from 'signaling'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
-import signal from '../signal'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 
@@ -42,17 +42,17 @@ class App extends Component {
   }
 
   connectToGame(gameCode) {
-    signal({
-      wsAdress:   WS_ADDRESS,
+    const onClose = () => {
+      this.displayError('Connection closed')
+    }
+
+    signaling.runInitiator({
+      wsAddress:  WS_ADDRESS,
       receiverId: gameCode,
+      onData:     this.onReceiverData,
+      onClose,
     })
-      .then(({ setOnData, setOnClose, send }) => {
-        setOnData(this.onReceiverData)
-
-        setOnClose(() => {
-          this.displayError('Connection closed')
-        })
-
+      .then(({ send }) => {
         this.send = send
       })
       .catch(({ cause }) => {

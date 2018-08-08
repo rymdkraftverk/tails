@@ -1,4 +1,4 @@
-import { EVENTS } from 'common'
+const Event = require('./Event')
 
 const WEB_RTC_CONFIG = {
   iceServers: [
@@ -41,7 +41,7 @@ const onIceCandidate = ({ candidate }) => {
   }
 
   log(`[Ice Candidate] ${candidate}`)
-  emit(EVENTS.WS.INITIATOR_CANDIDATE, { receiverId, candidate })
+  emit(Event.INITIATOR_CANDIDATE, { receiverId, candidate })
 }
 
 const onError = () => {
@@ -52,17 +52,6 @@ const onError = () => {
 const onChannelOpen = () => {
   log(`[Data channel opened] ${rtcChannel}`)
   outputEvents.onSuccess({
-    setOnData: (onData) => {
-      rtcChannel.onmessage = ({ data }) => {
-        onData(JSON.parse(data))
-      }
-    },
-    setOnClose: (onClose) => {
-      rtcChannel.onclose = () => {
-        warn('RTC connection closed')
-        onClose()
-      }
-    },
     send: (data) => {
       rtcChannel.send(JSON.stringify(data))
     },
@@ -87,9 +76,9 @@ const onReceiverNotFound = () => {
 }
 
 const wsEvents = {
-  [EVENTS.WS.ANSWER]:             onAnswer,
-  [EVENTS.WS.RECEIVER_CANDIDATE]: onReceiverCandidate,
-  [EVENTS.WS.NOT_FOUND]:          onReceiverNotFound,
+  [Event.ANSWER]:             onAnswer,
+  [Event.RECEIVER_CANDIDATE]: onReceiverCandidate,
+  [Event.NOT_FOUND]:          onReceiverNotFound,
 }
 
 const onWsMessage = (message) => {
@@ -104,16 +93,21 @@ const onWsMessage = (message) => {
 
 const init = options => new Promise((resolve, reject) => {
   ({ receiverId } = options)
+  const {
+    wsAddress,
+    onData,
+    onClose,
+  } = options
 
   outputEvents.onSuccess = resolve
   outputEvents.onFailure = reject
 
-  ws = new WebSocket(options.wsAdress)
+  ws = new WebSocket(wsAddress)
   ws.onmessage = onWsMessage
   ws.onopen = () => {
     createOffer()
       .then(([offer]) => {
-        emit(EVENTS.WS.OFFER, { receiverId, offer })
+        emit(Event.OFFER, { receiverId, offer })
       })
   }
 
@@ -121,8 +115,15 @@ const init = options => new Promise((resolve, reject) => {
   rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
   rtcChannel.onopen = onChannelOpen
   rtcChannel.onerror = onError
+  rtcChannel.onmessage = ({ data }) => {
+    onData(JSON.parse(data))
+  }
+  rtcChannel.onclose = () => {
+    warn('RTC connection closed')
+    onClose()
+  }
 
   rtc.onicecandidate = onIceCandidate
 })
 
-export default init
+module.exports = init
