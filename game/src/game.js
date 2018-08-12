@@ -2,13 +2,13 @@ import { shuffle } from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
+import { EVENTS } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
 import bounce from './bounce'
-import { EVENTS } from 'common'
 
 const { log } = console
 
@@ -151,8 +151,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       .send({
         event:   EVENTS.RTC.PLAYER_DIED,
         payload: {},
-      })
-  )
+      }))
 
   Entity.addType(square, 'player')
 

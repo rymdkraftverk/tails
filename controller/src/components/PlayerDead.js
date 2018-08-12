@@ -7,13 +7,15 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.mozVibrate ||
   navigator.msVibrate || noop)
 
-export default class PlayerDead extends Component {
+class PlayerDead extends Component {
   render() {
     navigator.vibrate(100)
     return (
       <div id="game-lobby-container">
-        <b className="flex-box">You're dead</b>
+        <b className="flex-box">{'You\'re dead'}</b>
       </div>
     )
   }
 }
+
+export default PlayerDead
