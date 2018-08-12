@@ -2,6 +2,7 @@ plugins:
   - fp
   - lodash-fp
   - ramda
+  - prefer-arrow
 env:
   es6: true
   node: true
@@ -34,3 +35,5 @@ rules:
     - error
     -
       align: value
+  prefer-arrow/prefer-arrow-functions:
+    - error
