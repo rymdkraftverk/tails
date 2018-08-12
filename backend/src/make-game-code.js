@@ -1,11 +1,9 @@
 const R = require('ramda')
-const { sample } = require('lodash/fp')
+const { sample, difference } = require('lodash/fp')
 const { URL } = require('url')
 const util = require('util')
 
 const redis = require('redis')
-
-const { except } = require('./util')
 
 const CODE_LENGTH = 4
 
@@ -18,7 +16,7 @@ const blacklistedLetters = [
   'G', // Sometimes confused with C at at quick glance
 ]
 
-const validChars = except(alphabet, blacklistedLetters)
+const validChars = difference(alphabet, blacklistedLetters)
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
