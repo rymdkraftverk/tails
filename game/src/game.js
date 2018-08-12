@@ -34,7 +34,7 @@ export const GAME_COLORS = {
   BLUE: '0x004275',
 }
 
-export function transitionToGameScene(maxPlayers) {
+export const transitionToGameScene = (maxPlayers) => {
   const doNotDestroy = [
     'background',
     'fadeInOut',
@@ -92,9 +92,7 @@ export const getMatchWinners = (players, scoreNeeded) =>
     Object.values,
   )(players)
 
-export function scoreToWin(players) {
-  return (playerCount(players) - 1) * 5
-}
+export const scoreToWin = players => (playerCount(players) - 1) * 5
 
 export const resetPlayerScore = (acc, player) => {
   acc[player.playerId] = { ...player, score: 0 }
@@ -106,12 +104,11 @@ export const resetPlayersScore = players => R.compose(
   Object.values,
 )(players)
 
-export function calculatePlayerScores({ lastRoundResult: { playerFinishOrder } }) {
-  return R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
-}
+export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
+  R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
-export function applyPlayerScores(players, scores) {
-  return scores.reduce((acc, [score, playerId]) => {
+export const applyPlayerScores = (players, scores) =>
+  scores.reduce((acc, [score, playerId]) => {
     const player = players[playerId]
     acc[playerId] = {
       ...player,
@@ -119,7 +116,6 @@ export function applyPlayerScores(players, scores) {
     }
     return acc
   }, {})
-}
 
 const getStartingPosition = Util.grid({
   x:           150,
@@ -184,9 +180,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   }
 })
 
-function toRadians(angle) {
-  return angle * (Math.PI / 180)
-}
+const toRadians = angle => angle * (Math.PI / 180)
 
 const move = ({ startingDegrees, playerCountFactor }) => ({
   init: (b, e) => {
@@ -371,7 +365,7 @@ const collisionChecker = (playerId, playerCountFactor) => ({
   },
 })
 
-function createWalls() {
+const createWalls = () => {
   const walls = Entity.addChild(Entity.getRoot())
   const graphics = Graphics.create(walls)
   graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
