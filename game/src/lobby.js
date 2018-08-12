@@ -34,7 +34,7 @@ const getPlayerPosition = Util.grid({
   itemsPerRow: 5,
 })
 
-export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
+export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   Entity.getAll()
     .filter(e => e.id !== 'background')
     .forEach(Entity.destroy)
@@ -112,7 +112,7 @@ export function transitionToLobby(gameCode, alreadyConnectedPlayers = []) {
     })
 }
 
-function createOutline(index) {
+const createOutline = (index) => {
   const { x, y } = getPlayerPosition(index)
 
   const e = Entity.addChild(
@@ -131,7 +131,7 @@ function createOutline(index) {
   sprite.anchor.set(0.5)
 }
 
-function createGoalDescription() {
+const createGoalDescription = () => {
   const e = Entity.get('goal-description')
   if (e) {
     Entity.destroy(e)
@@ -164,9 +164,9 @@ function createGoalDescription() {
   entity.originalSize = big.fontSize
 }
 
-function createText({
+const createText = ({
   x, y, text, style, size,
-}) {
+}) => {
   const textEntity = Entity.addChild(
     Entity.getRoot(),
     {
@@ -187,7 +187,7 @@ function createText({
   textEntity.originalSize = size
 }
 
-export function addPlayerToLobby(newPlayer) {
+export const addPlayerToLobby = (newPlayer) => {
   const numOfPlayers = playerCount(gameState.players)
   const color = Object.keys(COLORS)[numOfPlayers]
   const player = {
@@ -203,7 +203,7 @@ export function addPlayerToLobby(newPlayer) {
   return player
 }
 
-function createPlayerEntity({ color, score }, playerIndex, { newPlayer }) {
+const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
   const square = Entity.addChild(
     Entity.getRoot(),

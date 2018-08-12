@@ -10,7 +10,7 @@ import { transitionToMatchEnd } from './matchEnd'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
-export function transitionToRoundEnd() {
+export const transitionToRoundEnd = () => {
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
 
