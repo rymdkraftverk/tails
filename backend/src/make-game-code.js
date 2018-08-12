@@ -5,7 +5,7 @@ const util = require('util')
 
 const redis = require('redis')
 
-const x = require('./x')
+const { except } = require('./util')
 
 const CODE_LENGTH = 4
 
@@ -18,7 +18,7 @@ const blacklistedLetters = [
   'G', // Sometimes confused with C at at quick glance
 ]
 
-const validChars = x.except(alphabet, blacklistedLetters)
+const validChars = except(alphabet, blacklistedLetters)
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
