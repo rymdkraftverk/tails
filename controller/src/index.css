@@ -67,7 +67,20 @@ button {
   border: none;
   background: transparent;
   color: #4085AF;
-  font-family:'patchy-robots' 
+  font-family:'patchy-robots';
+  border: 0.1em solid #4085AF;
+  border-radius: 0.12em;
+  box-shadow: 0.1em 0.1em;
+  transition: all ease 0.05s;
+  position: relative;
+  top: 0rem;
+  left: 0rem;
+}
+
+button:active {
+  box-shadow: 0rem 0rem;
+  top: 0.1em;
+  left: 0.1em;
 }
 
 .flex-box {
