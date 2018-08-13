@@ -1,5 +1,5 @@
 const R = require('ramda')
-const { sample } = require('lodash/fp')
+const { sample, difference } = require('lodash/fp')
 const { URL } = require('url')
 const util = require('util')
 
@@ -7,26 +7,16 @@ const redis = require('redis')
 
 const CODE_LENGTH = 4
 
-const validChars = [
-  '4',
-  '6',
-  '9',
-  'A',
-  'C',
-  'G',
-  'H',
-  'J',
-  'K',
-  'L',
-  'M',
-  'N',
-  'P',
-  'Q',
-  'R',
-  'U',
-  'X',
-  'Y',
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+// Inspired by, but then mostly ignored:
+// https://www.ismp.org/resources/misidentification-alphanumeric-symbols
+const blacklistedLetters = [
+  'I', // To avoid "Is this uppercase i or lowercase l?!"
+  'G', // Sometimes confused with C at at quick glance
 ]
+
+const validChars = difference(alphabet, blacklistedLetters)
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
