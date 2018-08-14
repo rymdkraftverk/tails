@@ -1,5 +1,5 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS } from 'common'
+import { EVENTS, COLORS } from 'common'
 import { gameState, getRatio, GAME_WIDTH } from '.'
 import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
@@ -29,7 +29,7 @@ const createText = (entity, content, color) => {
 }
 
 const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a draw, better luck next time!', 'white')
-const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, color)
+const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, COLORS[color])
 
 export const transitionToMatchEnd = () => {
   Entity.getAll()
