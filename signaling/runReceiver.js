@@ -1,6 +1,10 @@
 const { prettyId } = require('common')
 const Event = require('./Event')
 
+const ReadyState = {
+  OPEN: 'open',
+}
+
 const WEB_RTC_CONFIG = {
   iceServers: [
     {
@@ -55,7 +59,9 @@ const onDataChannel = initiator => ({ channel }) => {
         }
       },
       send: (data) => {
-        channel.send(JSON.stringify(data))
+        if (channel.readyState === ReadyState.OPEN) {
+          channel.send(JSON.stringify(data))
+        }
       },
       close: initiator.rtc.close,
     })
