@@ -4,7 +4,7 @@ import styled, { injectGlobal } from 'styled-components'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 
-const AppStyled = styled(App)`
+const StyledApp = styled(App)`
   touch-action: manipulation;
 `
 
@@ -51,5 +51,5 @@ injectGlobal`
   }
 `
 
-ReactDOM.render(<AppStyled />, document.getElementById('root'))
+ReactDOM.render(<StyledApp />, document.getElementById('root'))
 registerServiceWorker()
