@@ -19,7 +19,7 @@ const StartGameButton = styled.div`
   align-items: center;
   justify-content: center;
 
-  touch-action: 'manipulation';
+  touch-action: manipulation;
 `
 
 const playerColorToBackgroundColor = (player) => {
