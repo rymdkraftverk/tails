@@ -12,13 +12,11 @@ const Container = styled.div`
 
 const StartGameButton = styled.div`
   user-select: none;
-
   height: 30vh;
   font-family : inherit;
   display: flex;
   align-items: center;
   justify-content: center;
-
   touch-action: manipulation;
 `
 
