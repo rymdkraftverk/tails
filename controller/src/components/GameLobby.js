@@ -6,14 +6,15 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh; touchAction: 'manipulation';
+  height: 100vh;
+  touch-action: manipulation;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `
 
 const StartGameButton = styled.div`
   user-select: none;
   height: 30vh;
-  font-family : inherit;
+  font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -22,30 +22,30 @@ injectGlobal`
   body {
     margin: 0;
     padding: 0;
+    /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: 'patchy-robots';
     background: #414844;
-    margin: 0px;
     touch-action: manipulation;
   }
 
   button {
     letter-spacing: 0.1em;
     font-size: 8vw;
-    border: none;
     background: transparent;
-    color: #4085AF;
-    font-family:'patchy-robots';
-    border: 0.1em solid #4085AF;
+    color: #4085af;
+    /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+    font-family: 'patchy-robots';
+    border: 0.1em solid #4085af;
     border-radius: 0.12em;
     box-shadow: 0.1em 0.1em;
     transition: all ease 0.05s;
     position: relative;
-    top: 0rem;
-    left: 0rem;
+    top: 0;
+    left: 0;
   }
 
   button:active {
-    box-shadow: 0rem 0rem;
+    box-shadow: 0 0;
     top: 0.1em;
     left: 0.1em;
   }

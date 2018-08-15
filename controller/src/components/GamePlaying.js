@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { EVENTS } from 'common'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import createCommand from '../util/createCommand'
 
-const buttonStyle = `
+const buttonStyle = css`
   padding-top: 15px;
   letter-spacing: 0.3em;
   text-align: center;
   flex: 1;
   user-select: none;
-  touch-action:  manipulation;
+  touch-action: manipulation;
 `
 
 const Container = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
-  touch-action:  manipulation;
+  touch-action: manipulation;
   border: ${({ playerColor }) => `2rem solid ${playerColor}`};
   border-radius: 4rem;
 `
