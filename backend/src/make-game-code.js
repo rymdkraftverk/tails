@@ -1,5 +1,5 @@
 const R = require('ramda')
-const { sample, difference } = require('lodash/fp')
+const _ = require('lodash/fp')
 const { URL } = require('url')
 const util = require('util')
 
@@ -16,7 +16,7 @@ const blacklistedLetters = [
   'G', // Sometimes confused with C at at quick glance
 ]
 
-const validChars = difference(alphabet, blacklistedLetters)
+const validChars = _.difference(alphabet, blacklistedLetters)
 
 const connectClient = (port, hostname) => {
   const client = redis.createClient(port, hostname)
@@ -41,7 +41,7 @@ const connectClient = (port, hostname) => {
 
 const randomizeCode = () => R
   .range(0, CODE_LENGTH)
-  .map(() => sample(validChars))
+  .map(() => _.sample(validChars))
   .reduce(R.concat, '')
 
 const makeGameCode = (set, exists) => {

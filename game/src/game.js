@@ -1,4 +1,4 @@
-import { shuffle } from 'lodash/fp'
+import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
@@ -51,8 +51,8 @@ export const transitionToGameScene = (maxPlayers) => {
   )(gameState.players)
 
   const playerEntities = R.compose(
-    R.zipWith(createPlayer(playerCountFactor), shuffle(R.range(0, maxPlayers))),
-    shuffle,
+    R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
+    _.shuffle,
     Object.values,
   )(gameState.players)
 
