@@ -4,6 +4,15 @@ import { EVENTS } from 'common'
 import styled from 'styled-components'
 import createCommand from '../util/createCommand'
 
+const buttonStyle = `
+  padding-top: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  flex: 1;
+  user-select: none;
+  touch-action:  manipulation;
+`
+
 const Container = styled.div`
   display: flex;
   height: 100vh;
@@ -14,33 +23,13 @@ const Container = styled.div`
 `
 
 const ButtonLeft = styled.div`
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
-  flex: 1;
+  ${buttonStyle}
   background: #be5d4b;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action:  manipulation;
 `
 
 const ButtonRight = styled.div`
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
-  flex: 1;
+  ${buttonStyle}
   background: #839870;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action:  manipulation;
 `
 
 const COMMANDS = {
