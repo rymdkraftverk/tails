@@ -13,7 +13,7 @@ const Container = styled.div`
   border-radius: 4rem;
 `
 
-const ContainerLeft = styled.div`
+const ButtonLeft = styled.div`
   padding-top: 15px;
   letter-spacing: 0.3em;
   text-align: center;
@@ -28,7 +28,7 @@ const ContainerLeft = styled.div`
   touch-action:  manipulation;
 `
 
-const ContainerRight = styled.div`
+const ButtonRight = styled.div`
   padding-top: 15px;
   letter-spacing: 0.3em;
   text-align: center;
@@ -93,22 +93,22 @@ class GamePlaying extends Component {
       <Container
         playerColor={playerColor}
       >
-        <ContainerLeft
+        <ButtonLeft
           onMouseDown={this.sendCommand(COMMANDS.LEFT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.LEFT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           LEFT
-        </ContainerLeft>
-        <ContainerRight
+        </ButtonLeft>
+        <ButtonRight
           onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
           RIGHT
-        </ContainerRight>
+        </ButtonRight>
       </Container>
     )
   }
