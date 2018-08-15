@@ -12,7 +12,7 @@ import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 
-const FullscreenStyled = styled(Fullscreen)`
+const StyledFullscreen = styled(Fullscreen)`
   touch-action: manipulation;
 `
 
@@ -144,7 +144,7 @@ class App extends Component {
     } = this.state
 
     return (
-      <FullscreenStyled
+      <StyledFullscreen
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
@@ -189,7 +189,7 @@ class App extends Component {
               <PlayerDead />
             : null
         }
-      </FullscreenStyled>
+      </StyledFullscreen>
     )
   }
 }
