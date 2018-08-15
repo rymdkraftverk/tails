@@ -1,4 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`
+
+const Text = styled.b`
+  height: 30vh;
+  font-family : inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const noop = () => {}
 
@@ -7,15 +22,13 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.mozVibrate ||
   navigator.msVibrate || noop)
 
-class PlayerDead extends Component {
-  render() {
-    navigator.vibrate(100)
-    return (
-      <div id="game-lobby-container">
-        <b className="flex-box">{'You\'re dead'}</b>
-      </div>
-    )
-  }
+const PlayerDead = () => {
+  navigator.vibrate(100)
+  return (
+    <Container>
+      <Text>{'You\'re dead'}</Text>
+    </Container>
+  )
 }
 
 export default PlayerDead
