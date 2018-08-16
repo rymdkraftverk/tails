@@ -9,11 +9,21 @@
     "square-pink",
     "square-blue",
     "square-white",
+    "square-green",
+    "circle-red",
+    "circle-purple",
+    "circle-yellow",
+    "circle-turqouise",
+    "circle-orange",
+    "circle-brown",
+    "circle-pink",
+    "circle-blue",
+    "circle-white",
+    "circle-green",
     "square-outline",
     "particle-smoke",
     "background",
-    "particle",
-    "square-green"
+    "particle"
   ],
   "fonts": [
   ]
