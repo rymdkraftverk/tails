@@ -26,7 +26,7 @@ const WALL_COLOR = 0xffffff
 
 export const GAME_EVENTS = { PLAYER_COLLISION: 'player.collision' }
 
-const PLAYER_HITBOX_SIZE = 16
+const PLAYER_HITBOX_SIZE = 14
 const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
@@ -169,7 +169,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 
         const sprite = Sprite.show(
           player,
-          { texture: player.spriteId },
+          { texture: `circle-${player.color}` },
         )
         sprite.scale.set(1 / playerCountFactor)
 
@@ -254,7 +254,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
       Entity.addType(trailE, 'trail')
       const sprite = Sprite.show(
         trailE,
-        { texture: spriteId },
+        { texture: `circle-${e.color}` },
       )
       sprite.scale.set(1 / playerCountFactor)
       Timer.reset(b.timer)
