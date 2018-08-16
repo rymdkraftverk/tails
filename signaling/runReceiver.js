@@ -59,6 +59,14 @@ const onDataChannel = initiator => ({ channel }) => {
         }
       },
       send: (data) => {
+        /*
+          Possible readyStates:
+            'open':       OK to send
+            'connecting': Not OK to send
+            'closing':    Not OK to send, but will try to send what's already in the internal queue
+            'closed':     Not OK to send
+        */
+
         if (channel.readyState === ReadyState.OPEN) {
           channel.send(JSON.stringify(data))
         }
