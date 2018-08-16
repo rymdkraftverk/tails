@@ -22,8 +22,6 @@ const outputEvents = {
 let initiators = []
 // end state
 
-const getInitiator = id => initiators.find(x => x.id === id)
-
 const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
@@ -34,13 +32,13 @@ const emit = (event, payload) => {
 }
 
 const onIceCandidate = initiator => ({ candidate }) => {
-  if (!candidate) {
-    log(`[Ice Candidate] ${prettyId(initiator.id)} Last candidate retrieved`)
+  if (candidate) {
+    log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
     return
   }
 
-  log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
-  emit(Event.RECEIVER_CANDIDATE, { candidate, initiatorId: initiator.id })
+  log(`[Ice Candidate] ${prettyId(initiator.id)} Last candidate retrieved`)
+  emit(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
 
 const onDataChannel = initiator => ({ channel }) => {
@@ -95,19 +93,10 @@ const onOffer = ({ initiatorId, offer }) => {
   rtc.ondatachannel = onDataChannel(initiator)
 
   createAnswer(rtc, offer)
-    .then((answer) => {
-      emit(Event.ANSWER, { answer, initiatorId })
-    })
-}
-
-const onInitiatorCandidate = ({ initiatorId, candidate }) => {
-  const initiator = getInitiator(initiatorId)
-  initiator.rtc.addIceCandidate(new RTCIceCandidate(candidate))
 }
 
 const wsEvents = {
-  [Event.OFFER]:               onOffer,
-  [Event.INITIATOR_CANDIDATE]: onInitiatorCandidate,
+  [Event.OFFER]: onOffer,
 }
 
 const onWsMessage = (message) => {

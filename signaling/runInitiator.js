@@ -35,13 +35,13 @@ const cleanUp = () => {
 }
 
 const onIceCandidate = ({ candidate }) => {
-  if (!candidate) {
-    log('[Ice Candidate] Last candidate retrieved')
+  if (candidate) {
+    log(`[Ice Candidate] ${candidate}`)
     return
   }
 
-  log(`[Ice Candidate] ${candidate}`)
-  emit(Event.INITIATOR_CANDIDATE, { receiverId, candidate })
+  log('[Ice Candidate] Last candidate retrieved')
+  emit(Event.OFFER, { receiverId, offer: rtc.localDescription })
 }
 
 const onError = () => {
@@ -65,10 +65,6 @@ const createOffer = () => rtc
 const onAnswer = ({ answer }) => rtc
   .setRemoteDescription(answer)
 
-const onReceiverCandidate = ({ candidate }) => {
-  rtc.addIceCandidate(new RTCIceCandidate(candidate))
-}
-
 const onReceiverNotFound = () => {
   warn('Reciver not found')
   cleanUp()
@@ -76,9 +72,8 @@ const onReceiverNotFound = () => {
 }
 
 const wsEvents = {
-  [Event.ANSWER]:             onAnswer,
-  [Event.RECEIVER_CANDIDATE]: onReceiverCandidate,
-  [Event.NOT_FOUND]:          onReceiverNotFound,
+  [Event.ANSWER]:    onAnswer,
+  [Event.NOT_FOUND]: onReceiverNotFound,
 }
 
 const onWsMessage = (message) => {
@@ -104,12 +99,7 @@ const init = options => new Promise((resolve, reject) => {
 
   ws = new WebSocket(wsAddress)
   ws.onmessage = onWsMessage
-  ws.onopen = () => {
-    createOffer()
-      .then(([offer]) => {
-        emit(Event.OFFER, { receiverId, offer })
-      })
-  }
+  ws.onopen = createOffer
 
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
   rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
