@@ -23,7 +23,6 @@ const GameCodeInput = styled.input`
   font-size: 4vw;
   text-align: center;
   text-decoration: none;
-  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
   font-family: 'patchy-robots';
   max-width: 100%;
   outline: none;

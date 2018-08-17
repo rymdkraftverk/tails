@@ -22,7 +22,6 @@ injectGlobal`
   body {
     margin: 0;
     padding: 0;
-    /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: 'patchy-robots';
     background: #414844;
     touch-action: manipulation;
@@ -33,7 +32,6 @@ injectGlobal`
     font-size: 8vw;
     background: transparent;
     color: #4085af;
-    /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: 'patchy-robots';
     border: 0.1em solid #4085af;
     border-radius: 0.12em;
