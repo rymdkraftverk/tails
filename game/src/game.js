@@ -11,6 +11,8 @@ import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
 
+window.debug = { ...window.debug, transitionToRoundEnd }
+
 const { log } = console
 
 const TURN_RADIUS = 3
@@ -105,7 +107,31 @@ export const resetPlayersScore = players => R.compose(
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
   R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
-export const applyPlayerScores = (players, scores) =>
+export const applyPlayerScores = (players, scores) => {
+  const scoreDict = scores
+    .map(([score, playerId]) => ({ [playerId]: score } ))
+    .reduce((dict, score) => ({ ...dict, ...score }), {})
+
+  return Object
+    .keys(players)
+    .map((playerId) => {
+      const player = players[playerId]
+
+      return {
+        ...player,
+        score: player.score + (scoreDict[playerId] || 0)
+      }
+    })
+    .reduce((updatedPlayers, player) => (
+      {
+        ...updatedPlayers,
+        ...{
+          [player.playerId]: player
+        }
+      }
+    ), {})
+
+  /*
   scores.reduce((acc, [score, playerId]) => {
     const player = players[playerId]
     acc[playerId] = {
@@ -114,6 +140,8 @@ export const applyPlayerScores = (players, scores) =>
     }
     return acc
   }, {})
+  */
+}
 
 const getStartingPosition = Util.grid({
   x:           150,

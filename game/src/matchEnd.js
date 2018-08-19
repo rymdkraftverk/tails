@@ -68,3 +68,5 @@ const pause = () => ({
     }
   },
 })
+
+window.debug = { ...window.debug, transitionToLobby, transitionToMatchEnd }

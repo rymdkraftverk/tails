@@ -12,6 +12,7 @@ import Scene from './Scene'
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
+  gameState.started = false
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
 
@@ -87,3 +88,5 @@ const roundWinnerTextAnimation = () => ({
     b.tick += 1
   },
 })
+
+window.debug = { ...window.debug, transitionToRoundEnd }
