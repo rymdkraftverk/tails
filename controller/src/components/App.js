@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import { EVENTS, COLORS } from 'common'
+import { EVENTS, COLOR } from 'common'
 import signaling from 'signaling'
 import styled from 'styled-components'
 
@@ -179,7 +179,7 @@ class App extends Component {
             ?
               <GamePlaying
                 send={this.send}
-                playerColor={COLORS[playerColor]}
+                playerColor={COLOR[playerColor]}
               />
             : null
         }

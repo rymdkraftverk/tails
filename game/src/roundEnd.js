@@ -1,5 +1,5 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS, COLORS } from 'common'
+import { EVENTS, COLOR } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, getMatchWinners, scoreToWin, applyPlayerScores } from './game'
 import { transitionToLobby } from './lobby'
@@ -32,7 +32,7 @@ export const transitionToRoundEnd = () => {
       zIndex: layers.FOREGROUND + 10,
       style:  {
         ...big,
-        fill: COLORS[winner],
+        fill: COLOR[winner],
       },
     },
   )

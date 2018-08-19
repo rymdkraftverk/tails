@@ -1,4 +1,4 @@
-const colors = {
+const color = {
   turquoise: '#009B9D',
   orange:    '#FF9201',
   pink:      '#FF85FF',
@@ -11,4 +11,4 @@ const colors = {
   brown:     '#945200',
 }
 
-module.exports = colors
+module.exports = color

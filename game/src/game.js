@@ -32,7 +32,7 @@ const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
 
-export const GAME_COLORS = {
+export const GAME_COLOR = {
   BLUE: '0x004275',
 }
 
