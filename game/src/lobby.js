@@ -45,24 +45,21 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:     50,
     y:     30,
     text:  'LOBBY',
-    style: { ...big, fill: 'white', fontSize: 48 * getRatio() },
-    size:  48,
+    style: { ...big, fill: 'white' },
   })
 
   createText({
     x:     50,
     y:     340,
     text:  'Go to:',
-    style: { ...small, fill: 'white', fontSize: small.fontSize * getRatio() },
-    size:  small.fontSize,
+    style: { ...small, fill: 'white' },
   })
 
   createText({
     x:     50,
     y:     370,
     text:  getControllerUrl(),
-    style: { ...code, fontSize: 30 * getRatio() },
-    size:  30,
+    style: code,
   })
 
 
@@ -70,24 +67,21 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:     50,
     y:     480,
     text:  'Code:',
-    style: { ...small, fontSize: small.fontSize * getRatio(), fill: 'white' },
-    size:  small.fontSize,
+    style: { ...small, fill: 'white' },
   })
 
   createText({
     x:     50,
     y:     520,
     text:  gameCode,
-    style: { ...code, fontSize: code.fontSize * getRatio() },
-    size:  code.fontSize,
+    style: code,
   })
 
   createText({
     x:     GAME_WIDTH - 230,
     y:     GAME_HEIGHT - 48,
     text:  '© Rymdkraftverk 2018',
-    style: { ...code, fontSize: 20 * getRatio() },
-    size:  20,
+    style: { ...code, fontSize: 20 },
   })
 
   const titleBackground = Entity.addChild(Entity.getRoot())
@@ -153,19 +147,17 @@ const createGoalDescription = () => {
     },
   )
 
-  const textAsset = Text.show(
+  Text.show(
     entity,
     {
       text:  `First to ${score} points wins!`,
-      style: { ...big, fontSize: big.fontSize * getRatio(), fill: 'white' },
+      style: { ...big, fill: 'white' },
     },
   )
-  textAsset.scale.set(1 / getRatio())
-  entity.originalSize = big.fontSize
 }
 
 const createText = ({
-  x, y, text, style, size,
+  x, y, text, style,
 }) => {
   const textEntity = Entity.addChild(
     Entity.getRoot(),
@@ -175,16 +167,13 @@ const createText = ({
     },
   )
 
-  const textAsset = Text.show(
+  Text.show(
     textEntity,
     {
       text,
       style,
     },
   )
-  textAsset.scale.set(1 / getRatio())
-
-  textEntity.originalSize = size
 }
 
 export const addPlayerToLobby = (newPlayer) => {
@@ -232,15 +221,11 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
       text:  score,
       style: {
         ...small,
-        fontSize: small.fontSize * getRatio(),
-        fill:     'white',
+        fill: 'white',
       },
       zIndex: 1,
     },
   )
-
-  squareScoreText.scale.set(1 / getRatio())
-  squareScore.originalSize = small.fontSize
 
   if (newPlayer) {
     square.behaviors.bounce = bounce()

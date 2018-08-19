@@ -30,13 +30,10 @@ export const transitionToRoundEnd = () => {
       zIndex: layers.FOREGROUND + 10,
       style:  {
         ...big,
-        fill:     COLORS[winner],
-        fontSize: big.fontSize * getRatio(),
+        fill: COLORS[winner],
       },
     },
   )
-  text.scale.set(1 / getRatio())
-  roundEnd.originalSize = big.fontSize * getRatio()
 
   text.anchor.set(0.5)
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()

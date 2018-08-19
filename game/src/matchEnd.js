@@ -16,13 +16,10 @@ const createText = (entity, content, color) => {
       zIndex: layers.FOREGROUND,
       style:  {
         ...big,
-        fill:     color,
-        fontSize: big.fontSize * getRatio(),
+        fill: color,
       },
     },
   )
-
-  text.scale.set(1 / getRatio())
   text.anchor.set(0.5)
 
   return text
@@ -53,7 +50,6 @@ export const transitionToMatchEnd = () => {
     createTextDraw(matchEnd)
   }
 
-  matchEnd.originalSize = big.fontSize * getRatio()
   matchEnd.behaviors.pause = pause()
 }
 
