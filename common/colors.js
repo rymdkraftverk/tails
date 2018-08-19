@@ -1,5 +1,5 @@
 const colors = {
-  turqouise: '#009B9D',
+  turquoise: '#009B9D',
   orange:    '#FF9201',
   pink:      '#FF85FF',
   white:     '#EEEDEF',
