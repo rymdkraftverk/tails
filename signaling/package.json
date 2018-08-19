@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
   "dependencies": {
     "common": "file:../common",
     "webrtc-adapter": "^6.3.0"
