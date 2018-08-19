@@ -168,27 +168,9 @@ export const getRatio = () => ratio
 const resizeGame = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
-  ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
-  Game
-    .getStage()
-    .scale
-    .set(ratio)
-  Game
-    .getRenderer()
-    .resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
-
-  // The following code is needed to couteract the scale change on the whole canvas since
-  // texts get distorted by PIXI when you try to change their scale.
-  // Texts instead change size by setting their fontSize.
-  Entity.getAll()
-    .forEach((e) => {
-      // TODO: Export assettype constants from level1?
-      if (e.originalSize) {
-        e.asset.style.fontSize = e.originalSize * ratio
-        e.asset.scale.set(1 / ratio)
-      }
-    })
+  Game.resize(screenWidth, screenHeight)
 }
+
 window.addEventListener('resize', resizeGame)
 
 Game
