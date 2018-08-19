@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const ContainerRow = styled.div`
   height: 30vh;
-  font-family : inherit;
+  font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,18 +20,18 @@ const ContainerRow = styled.div`
 
 const GameCodeInput = styled.input`
   letter-spacing: 0.5em;
-  font-size: 4vw; 
+  font-size: 4vw;
   text-align: center;
   text-decoration: none;
   font-family: 'patchy-robots';
   max-width: 100%;
   outline: none;
-  border: 0px;
+  border: 0;
   background: transparent;
-  border-bottom: 3px solid #4085AF;
+  border-bottom: 3px solid #4085af;
   width: 40%;
-  caret-color: #4085AF;
-  color: #4085AF
+  caret-color: #4085af;
+  color: #4085af;
   touch-action: manipulation;
 `
 

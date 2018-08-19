@@ -32,3 +32,13 @@ It is strongly recommended to turn on the following settings:
 ```json
 "eslint.autoFixOnSave": true,
 ```
+
+The following extensions are strongly recommended:
+
+#### stylelint
+
+With settings:
+
+```js
+"stylelint.enable": true,
+```

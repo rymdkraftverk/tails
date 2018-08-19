@@ -1,0 +1,12 @@
+---
+processors:
+- stylelint-processor-styled-components
+syntax: scss
+extends:
+- stylelint-config-standard
+- stylelint-config-styled-components
+rules:
+  declaration-empty-line-before: null
+  font-family-no-missing-generic-family-keyword: null
+  max-empty-lines: null
+  rule-empty-line-before: null

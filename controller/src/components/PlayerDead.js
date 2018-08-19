@@ -9,7 +9,7 @@ const Container = styled.div`
 
 const Text = styled.b`
   height: 30vh;
-  font-family : inherit;
+  font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
