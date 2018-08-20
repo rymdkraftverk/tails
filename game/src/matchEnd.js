@@ -5,6 +5,7 @@ import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
+import Scene from './Scene'
 
 const TIME_UNTIL_MATCH_END_TRANSITION = 240
 
@@ -29,14 +30,10 @@ const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a dra
 const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, COLORS[color])
 
 export const transitionToMatchEnd = () => {
-  Entity.getAll()
-    .filter(e => e.id !== 'background')
-    .forEach(Entity.destroy)
-
   const matchEnd = Entity.addChild(
     Entity.getRoot(),
     {
-      id: 'match-end',
+      id: Scene.MATCH_END,
       x:  GAME_WIDTH / 2,
       y:  200,
     },
@@ -64,6 +61,9 @@ const pause = () => ({
         })
 
       gameState.players = resetPlayersScore(gameState.players)
+
+      Entity.destroy(Entity.get(Scene.MATCH_END))
+
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },

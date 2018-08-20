@@ -6,6 +6,7 @@ import { code, big, small } from './util/textStyles'
 import { scoreToWin, GAME_COLORS } from './game'
 import layers from './util/layers'
 import bounce from './bounce'
+import Scene from './Scene'
 
 const CONTROLLER_PORT = '4001'
 
@@ -35,24 +36,30 @@ const getPlayerPosition = Util.grid({
 })
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
-  Entity.getAll()
-    .filter(e => e.id !== 'background')
-    .forEach(Entity.destroy)
+  const lobbyScene = Entity
+    .addChild(
+      Entity.getRoot(),
+      {
+        id: Scene.LOBBY,
+      },
+    )
 
   createGoalDescription()
 
   createText({
-    x:     50,
-    y:     30,
-    text:  'LOBBY',
-    style: { ...big, fill: 'white' },
+    x:      50,
+    y:      30,
+    text:   'LOBBY',
+    style:  { ...big, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
-    x:     50,
-    y:     340,
-    text:  'Go to:',
-    style: { ...small, fill: 'white' },
+    x:      50,
+    y:      340,
+    text:   'Go to:',
+    style:  { ...small, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
@@ -63,21 +70,24 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       ...code,
       fontSize: 30,
     },
+    parent: lobbyScene,
   })
 
 
   createText({
-    x:     50,
-    y:     480,
-    text:  'Code:',
-    style: { ...small, fill: 'white' },
+    x:      50,
+    y:      480,
+    text:   'Code:',
+    style:  { ...small, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
-    x:     50,
-    y:     520,
-    text:  gameCode,
-    style: code,
+    x:      50,
+    y:      520,
+    text:   gameCode,
+    style:  code,
+    parent: lobbyScene,
   })
 
   createText({
@@ -88,9 +98,10 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       ...code,
       fontSize: 20,
     },
+    parent: lobbyScene,
   })
 
-  const titleBackground = Entity.addChild(Entity.getRoot())
+  const titleBackground = Entity.addChild(lobbyScene)
   const titleBackgroundGraphics = Graphics
     .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
 
@@ -116,7 +127,7 @@ const createOutline = (index) => {
   const { x, y } = getPlayerPosition(index)
 
   const e = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: `outline-${index}`,
       x,
@@ -145,7 +156,7 @@ const createGoalDescription = () => {
   }
 
   const entity = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: 'goal-description',
       x:  410,
@@ -163,10 +174,10 @@ const createGoalDescription = () => {
 }
 
 const createText = ({
-  x, y, text, style,
+  x, y, text, style, parent,
 }) => {
   const textEntity = Entity.addChild(
-    Entity.getRoot(),
+    parent,
     {
       x,
       y,
@@ -200,8 +211,9 @@ export const addPlayerToLobby = (newPlayer) => {
 
 const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
+
   const square = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: `square-${color}`,
       x,
