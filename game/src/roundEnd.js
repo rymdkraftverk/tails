@@ -7,6 +7,7 @@ import { gameState, GAME_WIDTH, getRatio } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 import { transitionToMatchEnd } from './matchEnd'
+import Scene from './Scene'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
@@ -15,10 +16,11 @@ export const transitionToRoundEnd = () => {
   gameState.players = applyPlayerScores(gameState.players, scores)
 
   const { winner } = gameState.lastRoundResult
+
   const roundEnd = Entity.addChild(
     Entity.getRoot(),
     {
-      id: 'round-end',
+      id: Scene.ROUND_END,
       x:  -300,
       y:  200,
     },
@@ -48,7 +50,12 @@ export const transitionToRoundEnd = () => {
 
 const pauseAndTransitionToMatchEnd = () => ({
   timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
-  run:   ({ timer }) => Timer.run(timer) && transitionToMatchEnd(),
+  run:   ({ timer }) => {
+    if (Timer.run(timer)) {
+      Entity.destroy(Scene.ROUND_END)
+      transitionToMatchEnd()
+    }
+  },
 })
 
 const pauseAndTransitionToLobby = () => ({
@@ -60,7 +67,7 @@ const pauseAndTransitionToLobby = () => ({
         .forEach((controller) => {
           controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
         })
-
+      Entity.destroy(Scene.ROUND_END)
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },
