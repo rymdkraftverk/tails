@@ -1,7 +1,7 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
 import { COLORS } from 'common'
-import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
+import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
 import { scoreToWin, GAME_COLORS } from './game'
 import layers from './util/layers'
@@ -59,7 +59,10 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:     50,
     y:     370,
     text:  getControllerUrl(),
-    style: code,
+    style: {
+      ...code,
+      fontSize: 30,
+    },
   })
 
 
@@ -81,7 +84,10 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:     GAME_WIDTH - 230,
     y:     GAME_HEIGHT - 48,
     text:  '© Rymdkraftverk 2018',
-    style: { ...code, fontSize: 20 },
+    style: {
+      ...code,
+      fontSize: 20,
+    },
   })
 
   const titleBackground = Entity.addChild(Entity.getRoot())
@@ -215,7 +221,7 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
     },
   )
 
-  const squareScoreText = Text.show(
+  Text.show(
     squareScore,
     {
       text:  score,
