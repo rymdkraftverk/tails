@@ -1,6 +1,6 @@
 import { Entity, Timer, Text } from 'l1'
 import { EVENTS, COLORS } from 'common'
-import { gameState, getRatio, GAME_WIDTH } from '.'
+import { gameState, GAME_WIDTH } from '.'
 import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'

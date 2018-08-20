@@ -162,9 +162,6 @@ const onControllerLeave = (id) => {
   // TODO: remove from controllers and lobby
 }
 
-let ratio
-export const getRatio = () => ratio
-
 const resizeGame = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
