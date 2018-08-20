@@ -9,6 +9,13 @@ const WEB_RTC_CONFIG = {
 }
 const WEB_RTC_CHANNEL_NAME = 'data.channel'
 
+// "udpLike" as described in:
+// https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability.html
+const WEB_RTC_CHANNEL_CONFIG = {
+  ordered:        false,
+  maxRetransmits: 0,
+}
+
 const { error, log, warn } = console
 
 // state
@@ -112,7 +119,10 @@ const init = options => new Promise((resolve, reject) => {
   }
 
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
-  rtcChannel = rtc.createDataChannel(WEB_RTC_CHANNEL_NAME)
+  rtcChannel = rtc.createDataChannel(
+    WEB_RTC_CHANNEL_NAME,
+    WEB_RTC_CHANNEL_CONFIG,
+  )
   rtcChannel.onopen = onChannelOpen
   rtcChannel.onerror = onError
   rtcChannel.onmessage = ({ data }) => {
