@@ -7,6 +7,7 @@
     "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
     "start": "http-server -p 8081",
     "lint": "eslint src",
+    "electron": "electron src/electron.js",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
   "dependencies": {
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "common": "file:../common",
+    "electron": "^2.0.5",
     "eventemitter3": "^3.1.0",
     "l1": "^0.3.14",
     "lodash": "^4.17.10",

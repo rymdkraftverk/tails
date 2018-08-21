@@ -23,7 +23,12 @@ const getControllerUrl = () => {
     },
   } = window
 
-  return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
+  if (port) {
+    // We are running locally in a browser
+    return `${hostname}:${CONTROLLER_PORT}`
+  }
+  // We are running in prod in a browser OR we are running in electron
+  return deployedURLs[hostname] || `${process.env.GAME_IP}:${CONTROLLER_PORT}`
 }
 
 const getPlayerPosition = Util.grid({
