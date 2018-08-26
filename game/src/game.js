@@ -167,7 +167,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   )
   square.event = new EventEmitter()
 
-  square.events.on(GameEvent.PLAYER_COLLISION, () => {
+  square.event.on(GameEvent.PLAYER_COLLISION, () => {
     const controller = gameState
       .controllers[playerId]
 
