@@ -9,6 +9,7 @@ import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
 import bounce from './bounce'
+import Scene from './Scene'
 
 const { log } = console
 
@@ -36,14 +37,12 @@ export const GAME_COLORS = {
 }
 
 export const transitionToGameScene = (maxPlayers) => {
-  const doNotDestroy = [
-    'background',
-    'fadeInOut',
-  ]
-
-  Entity.getAll()
-    .filter(e => !doNotDestroy.includes(e.id))
-    .forEach(Entity.destroy)
+  Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: Scene.GAME,
+    },
+  )
 
   const playerCountFactor = R.compose(
     Math.sqrt,
@@ -130,7 +129,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   const { x, y } = getStartingPosition(index)
 
   const square = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.GAME),
     {
       id:     playerId,
       x,
@@ -241,7 +240,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
 
     if (Timer.run(b.timer)) {
       const trailE = Entity.addChild(
-        Entity.getRoot(),
+        Entity.get(Scene.GAME),
         {
           x: middleX - (width / 2),
           y: middleY - (height / 2),
@@ -368,6 +367,7 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         gameState.lastRoundResult.winner = playersAlive[0].color
         gameState.lastRoundResult.playerFinishOrder =
           gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
+
         transitionToRoundEnd()
       }
       Timer.reset(b.timer)
@@ -376,7 +376,7 @@ const collisionChecker = (playerId, playerCountFactor) => ({
 })
 
 const createWalls = () => {
-  const walls = Entity.addChild(Entity.getRoot())
+  const walls = Entity.addChild(Entity.get(Scene.GAME))
   const graphics = Graphics.create(walls)
   graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
 
