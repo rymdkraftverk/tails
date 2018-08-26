@@ -13,7 +13,7 @@ import Scene from './Scene'
 
 window.debug = { ...window.debug, transitionToRoundEnd }
 
-const { log } = console
+const { log, warn } = console
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
@@ -167,13 +167,21 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   )
   square.event = new EventEmitter()
 
-  square.event.on(GameEvent.PLAYER_COLLISION, () =>
-    gameState
+  square.events.on(GameEvent.PLAYER_COLLISION, () => {
+    const controller = gameState
       .controllers[playerId]
+
+    if(!controller) {
+      warn(`controller with id: ${playerId} not found`)
+      return
+    }
+
+    controller
       .send({
         event:   Event.Rtc.PLAYER_DIED,
         payload: {},
-      }))
+      })
+  })
 
   Entity.addType(square, 'player')
 

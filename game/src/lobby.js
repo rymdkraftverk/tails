@@ -259,3 +259,10 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
   }
 }
+
+window.debug = {
+  ...window.debug,
+  addPlayerToLobby: () => addPlayerToLobby({
+    playerId: `debugPlayer:${Math.random().toString(36).substring(7)}`
+  }),
+}
