@@ -18,7 +18,7 @@ export const transitionToRoundEnd = () => {
   const { winner } = gameState.lastRoundResult
 
   const roundEnd = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.GAME),
     {
       id: Scene.ROUND_END,
       x:  -300,
@@ -52,7 +52,7 @@ const pauseAndTransitionToMatchEnd = () => ({
   timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
   run:   ({ timer }) => {
     if (Timer.run(timer)) {
-      Entity.destroy(Scene.ROUND_END)
+      Entity.destroy(Scene.GAME)
       transitionToMatchEnd()
     }
   },
@@ -67,7 +67,7 @@ const pauseAndTransitionToLobby = () => ({
         .forEach((controller) => {
           controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
         })
-      Entity.destroy(Scene.ROUND_END)
+      Entity.destroy(Scene.GAME)
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },

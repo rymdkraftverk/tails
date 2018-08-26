@@ -368,7 +368,6 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         gameState.lastRoundResult.playerFinishOrder =
           gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
 
-        Entity.destroy(Entity.get(Scene.GAME))
         transitionToRoundEnd()
       }
       Timer.reset(b.timer)
