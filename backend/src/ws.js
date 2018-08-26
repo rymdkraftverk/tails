@@ -58,32 +58,10 @@ const onAnswer = client => (event, { answer, initiatorId }) => {
   emit(initiator, event, { answer })
 }
 
-const onInitiatorCandidate = client => (event, { candidate, receiverId }) => {
-  const receiver = getReceiverClient(receiverId)
-  if (!receiver) {
-    warn(`Receiver with id ${receiverId} not found`)
-    return
-  }
-  log(`[Initiator Candidate] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-  emit(receiver, event, { candidate, initiatorId: client.id })
-}
-
-const onReceiverCandidate = client => (event, { candidate, initiatorId }) => {
-  const initiator = getClient(initiatorId)
-  if (!initiator) {
-    warn(`Initiator with id ${initiatorId} not found`)
-    return
-  }
-  log(`[Receiver Candidate] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-  emit(initiator, event, { candidate })
-}
-
 const EventFunctions = {
-  [Event.RECEIVER_UPGRADE]:    onReceiverUpgrade,
-  [Event.ANSWER]:              onAnswer,
-  [Event.INITIATOR_CANDIDATE]: onInitiatorCandidate,
-  [Event.RECEIVER_CANDIDATE]:  onReceiverCandidate,
-  [Event.OFFER]:               onOffer,
+  [Event.RECEIVER_UPGRADE]: onReceiverUpgrade,
+  [Event.ANSWER]:           onAnswer,
+  [Event.OFFER]:            onOffer,
 }
 
 const onMessage = client => (message) => {
