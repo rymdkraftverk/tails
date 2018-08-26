@@ -62,7 +62,7 @@ const pause = () => ({
 
       gameState.players = resetPlayersScore(gameState.players)
 
-      Entity.destroy(Entity.get(Scene.MATCH_END))
+      Entity.destroy(Scene.MATCH_END)
 
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }

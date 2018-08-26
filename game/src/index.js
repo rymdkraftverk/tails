@@ -83,7 +83,7 @@ const roundStart = () => {
 
     fullscreenFadeInOut()
       .then(() => {
-        Entity.destroy(Entity.get(Scene.LOBBY))
+        Entity.destroy(Scene.LOBBY)
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
