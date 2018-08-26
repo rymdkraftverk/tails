@@ -1,1 +1,6 @@
-export default (ordering, command) => ({ command, ordering })
+export default (ordering, command) => ({
+  command,
+  ordering,
+  timestamp: new Date()
+    .getTime(),
+})

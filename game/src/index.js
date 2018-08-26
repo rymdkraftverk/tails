@@ -10,6 +10,7 @@ import http from './http'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import Scene from './Scene'
+import metrics from './util/metrics'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -117,6 +118,8 @@ const createGame = ({ gameCode }) => {
 
 // TODO: extract event switch logic to common function
 const onControllerData = id => (message) => {
+  metrics.movementLatency(id, message)
+
   const { event, payload } = message
 
   const f = rtcEvents[event]
