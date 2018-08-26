@@ -1,4 +1,5 @@
-const color = {
+const Color = {
+  // TODO: CAPS
   turquoise: '#009B9D',
   orange:    '#FF9201',
   pink:      '#FF85FF',
@@ -11,4 +12,4 @@ const color = {
   brown:     '#945200',
 }
 
-module.exports = color
+module.exports = Color

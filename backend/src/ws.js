@@ -5,7 +5,7 @@ const { clients } = require('./state')
 const { prettyId } = require('common')
 const { Event } = require('signaling')
 
-const TYPE = {
+const Type = {
   INITIATOR: 'initiator',
   RECEIVER:  'receiver',
 }
@@ -15,7 +15,7 @@ const { log, warn } = console
 const getClient = id => clients.find(x => x.id === id)
 const getReceiverClient = receiverId =>
   clients.find(x =>
-    x.type === TYPE.RECEIVER &&
+    x.type === Type.RECEIVER &&
     x.receiverId === receiverId.toUpperCase())
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
@@ -23,7 +23,7 @@ const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 const createClient = socket => ({
   id:   uuid(),
   socket,
-  type: TYPE.INITIATOR, // receiver clients get upgraded in onReceiverCreate
+  type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
 })
 
 const emit = (client, event, payload) => {
@@ -32,7 +32,7 @@ const emit = (client, event, payload) => {
 }
 
 const onReceiverUpgrade = client => (event, receiverId) => {
-  client.type = TYPE.RECEIVER
+  client.type = Type.RECEIVER
   client.receiverId = receiverId
   log(`[Receiver upgrade] ${prettyClient(client)}`)
 }
@@ -78,7 +78,7 @@ const onReceiverCandidate = client => (event, { candidate, initiatorId }) => {
   emit(initiator, event, { candidate })
 }
 
-const events = {
+const EventFunctions = {
   [Event.RECEIVER_UPGRADE]:    onReceiverUpgrade,
   [Event.ANSWER]:              onAnswer,
   [Event.INITIATOR_CANDIDATE]: onInitiatorCandidate,
@@ -88,7 +88,7 @@ const events = {
 
 const onMessage = client => (message) => {
   const { event, payload } = JSON.parse(message)
-  const f = events[event]
+  const f = EventFunctions[event]
   if (!f) {
     warn(`Unhandled event for message: ${message}`)
     return
@@ -100,7 +100,7 @@ const onClose = (deleteReceiverId, client) => () => {
   const i = clients.indexOf(client)
   clients.splice(i, 1)
 
-  if (client.type === TYPE.RECEIVER) {
+  if (client.type === Type.RECEIVER) {
     deleteReceiverId(client.receiverId)
   }
 }

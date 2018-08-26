@@ -2,7 +2,7 @@ import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { EVENTS } from 'common'
+import { Event } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
@@ -25,14 +25,14 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-export const GAME_EVENTS = { PLAYER_COLLISION: 'player.collision' }
+export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
 const PLAYER_HITBOX_SIZE = 14
 const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
 
-export const GAME_COLOR = {
+export const GameColor = {
   BLUE: '0x004275',
 }
 
@@ -138,13 +138,13 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
     },
   )
-  square.events = new EventEmitter()
+  square.event = new EventEmitter()
 
-  square.events.on(GAME_EVENTS.PLAYER_COLLISION, () =>
+  square.event.on(GameEvent.PLAYER_COLLISION, () =>
     gameState
       .controllers[playerId]
       .send({
-        event:   EVENTS.RTC.PLAYER_DIED,
+        event:   Event.Rtc.PLAYER_DIED,
         payload: {},
       }))
 
@@ -337,7 +337,7 @@ const killPlayer = (e, playerCountFactor) => {
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
 
-  e.events.emit(GAME_EVENTS.PLAYER_COLLISION)
+  e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
 const collisionChecker = (playerId, playerCountFactor) => ({

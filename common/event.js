@@ -1,5 +1,5 @@
-const EVENTS = {
-  RTC: {
+const Event = {
+  Rtc: {
     ROUND_END:       'round.end',
     ROUND_START:     'round.start',
     ROUND_STARTED:   'round.started',
@@ -9,4 +9,4 @@ const EVENTS = {
   },
 }
 
-module.exports = EVENTS
+module.exports = Event

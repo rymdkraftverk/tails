@@ -1,9 +1,9 @@
 import { Game, Entity, Sprite, Key } from 'l1'
-import { EVENTS, prettyId } from 'common'
+import { Event, prettyId } from 'common'
 import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
-import { transitionToGameScene, GAME_EVENTS } from './game'
+import { transitionToGameScene, GameEvent } from './game'
 import assets from './assets.json'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
@@ -41,7 +41,7 @@ const movePlayer = (pId, direction) => {
   if (playerEntity) {
     playerEntity.direction = direction
   } else {
-    // TODO: stop sending useless movements events
+    // TODO: stop sending useless movements event
     warn(`Failed to move player ${prettyId(pId)} with direction ${direction}`)
   }
 }
@@ -78,7 +78,7 @@ const roundStart = () => {
       .values(gameState.controllers)
       .forEach(({ id }) => {
         gameState.controllers[id].send({
-          event:   EVENTS.RTC.ROUND_STARTED,
+          event:   Event.Rtc.ROUND_STARTED,
           payload: {},
         })
       })
@@ -92,7 +92,7 @@ const roundStart = () => {
         Entity
           .getByType('player')
           .forEach(player =>
-            player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
+            player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
       })
   }
 }
@@ -100,8 +100,8 @@ const roundStart = () => {
 const { log, warn } = console
 
 const rtcEvents = {
-  [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.RTC.ROUND_START]:     roundStart,
+  [Event.Rtc.PLAYER_MOVEMENT]: playerMovement,
+  [Event.Rtc.ROUND_START]:     roundStart,
 }
 
 const commands = {
@@ -146,7 +146,7 @@ const onControllerJoin = ({
     const { color } = addPlayerToLobby({ playerId: id })
 
     send({
-      event:   EVENTS.RTC.CONTROLLER_COLOR,
+      event:   Event.Rtc.CONTROLLER_COLOR,
       payload: {
         playerId: id,
         color,

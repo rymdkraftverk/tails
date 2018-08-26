@@ -1,5 +1,5 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS, COLOR } from 'common'
+import { Event, Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, getMatchWinners, scoreToWin, applyPlayerScores } from './game'
 import { transitionToLobby } from './lobby'
@@ -32,7 +32,7 @@ export const transitionToRoundEnd = () => {
       zIndex: layers.FOREGROUND + 10,
       style:  {
         ...big,
-        fill: COLOR[winner],
+        fill: Color[winner],
       },
     },
   )
@@ -65,7 +65,7 @@ const pauseAndTransitionToLobby = () => ({
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
         })
       Entity.destroy(Scene.GAME)
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
