@@ -1,10 +1,10 @@
-const colors = require('./colors')
+const color = require('./color')
 const events = require('./events')
 
 const prettyId = id => id.substring(0, 4)
 
 module.exports = {
-  COLORS: colors,
+  COLOR:  color,
   EVENTS: events,
   prettyId,
 }

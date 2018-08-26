@@ -1,9 +1,9 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
-import { COLORS } from 'common'
+import { COLOR } from 'common'
 import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
-import { scoreToWin, GAME_COLORS } from './game'
+import { scoreToWin, GAME_COLOR } from './game'
 import layers from './util/layers'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -105,7 +105,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   const titleBackgroundGraphics = Graphics
     .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
 
-  titleBackgroundGraphics.beginFill(GAME_COLORS.BLUE)
+  titleBackgroundGraphics.beginFill(GAME_COLOR.BLUE)
   titleBackgroundGraphics.moveTo(0, 0)
   titleBackgroundGraphics.lineTo(GAME_WIDTH, 0)
   titleBackgroundGraphics.lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
@@ -195,7 +195,7 @@ const createText = ({
 
 export const addPlayerToLobby = (newPlayer) => {
   const numOfPlayers = playerCount(gameState.players)
-  const color = Object.keys(COLORS)[numOfPlayers]
+  const color = Object.keys(COLOR)[numOfPlayers]
   const player = {
     ...newPlayer,
     spriteId: `square-${color}`,
