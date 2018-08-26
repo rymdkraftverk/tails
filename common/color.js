@@ -1,5 +1,6 @@
 const Color = {
-  // TODO: CAPS
+  // These keys are exempted from the always caps keys-rule
+  // as the naming of these keys tightly coupled to other mechanisms (e.g. file names)
   turquoise: '#009B9D',
   orange:    '#FF9201',
   pink:      '#FF85FF',
