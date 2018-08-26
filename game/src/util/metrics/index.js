@@ -1,17 +1,46 @@
 const Influx = require('influx')
 
 const {
-  RTC: {
-    ROUND_START,
-    PLAYER_MOVEMENT,
-    ROUND_END,
+  EVENTS:{
+    RTC: {
+      ROUND_START,
+      PLAYER_MOVEMENT,
+      PLAYER_JOINED,
+      ROUND_END,
+    },
   },
 } = require('common')
 
-let movements = []
+const LATENCY_TIME_OFFSET_ERROR = -10
+const LATENCY_MISSING_MOVEMENT_ERROR = -20
+
+let movements = {}
+
+const saveToDb = (host, datapoints) => {
+  const influx = new Influx.InfluxDB({
+    host,
+    database: 'novelty',
+    schema:   [
+      {
+        measurement: 'game',
+        fields:      {
+          latency: Influx.FieldType.INTEGER,
+        },
+        tags: [
+          'color',
+        ],
+      },
+    ],
+  })
+}
 
 const clearMovements = () => {
-  movements = []
+  movements = Object
+    .keys(movements)
+    .reduce((acc, playerId) => {
+      acc[playerId] = []
+      return acc
+    }, {})
 }
 
 const createMovement = (
@@ -38,44 +67,58 @@ const createMovement = (
 }
 
 const registerMovement = (playerId, message) => {
-  const movement = createMovement(playerId, message)
-  movements = movements.concat(movement)
+  movements[playerId] = movements[playerId].concat(createMovement(playerId, message))
 }
 
-const save = (host, datapoints) => {
-  const influx = new Influx.InfluxDB({
-    host,
-    database: 'novelty',
-    schema:   [
-      {
-        measurement: 'game',
-        fields:      {
-          latency: Influx.FieldType.INTEGER,
-          command: Influx.FieldType.INTEGER,
-        },
-        tags: [
-          'controllerId',
-          'gameCode',
-          'color',
-        ],
-      },
-    ],
-  })
+const sortOrderingAsc = ({ ordering: ord1 }, { ordering: ord2 }) => ord1 - ord2
+const calculcateLatency = ({ controllerTimestamp, gameTimestamp }) => {
+  if (controllerTimestamp > gameTimestamp) {
+    return LATENCY_TIME_OFFSET_ERROR
+  }
+  return gameTimestamp - controllerTimestamp
+}
+
+const movementWithLatency = movement => ({
+  ...movement,
+  latency: calculcateLatency(movement),
+})
+
+const createLostMovement = (playerId, ordering) => ({
+  latency: LATENCY_MISSING_MOVEMENT_ERROR,
+  ordering,
+})
+
+const createLostMovementRange = (from, to) => {
+
+
+}
 
 const saveMovements = () => {
+  movements
+    .sort(sortOrderingAsc)
+    .map(movementWithLatency)
+    /*
+    .reduce((moves, move) => {
+      if (moves.length === 0) {
 
+      }
+    })
+    */
+  console.log('movements:', movements)
+  /*
+  sort by ordering
+  calculcate latency, if weird timestamp, set latency to -10
+  fill in missing commands based on ordering with -20 values
+  */
 }
 
-const movementLatency = (playerId, message) => {
-  const { event } = message
-  const eventHandlers = {
-    [ROUND_START]:     clearMovements,
-    [PLAYER_MOVEMENT]: registerMovement,
-    [ROUND_END]:       () => {},
-  }(eventHandlers[event] || (() => {}))(playerId, message)
-  return message
+const registerPlayerJoined = (playerId) => {
+  movementWithLatency[playerId] = []
 }
 
-module.exports = {
-  movementLatency,
+module.exports = (gameEvents) => {
+  gameEvents.on(ROUND_START, clearMovements)
+  gameEvents.on(ROUND_END, saveMovements)
+  gameEvents.on(PLAYER_MOVEMENT, registerMovement)
+  gameEvents.on(PLAYER_JOINED, registerPlayerJoined)
 }

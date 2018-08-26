@@ -118,8 +118,6 @@ const createGame = ({ gameCode }) => {
 
 // TODO: extract event switch logic to common function
 const onControllerData = id => (message) => {
-  metrics.movementLatency(id, message)
-
   const { event, payload } = message
 
   const f = rtcEvents[event]
@@ -187,6 +185,7 @@ Game
     antialias: true,
   })
   .then(() => {
+    metrics(gameState.events)
     http.createGame()
       .then(({ gameCode }) => {
         createGame({ gameCode })
