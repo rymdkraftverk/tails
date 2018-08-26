@@ -1,3 +1,4 @@
+const R = require('ramda')
 const Event = require('./Event')
 
 const WEB_RTC_CONFIG = {
@@ -7,28 +8,16 @@ const WEB_RTC_CONFIG = {
     },
   ],
 }
-const WEB_RTC_CHANNEL_NAME = 'data.channel'
-
-// "udpLike" as described in:
-// https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability.html
-const WEB_RTC_CHANNEL_CONFIG = {
-  ordered:        false,
-  maxRetransmits: 0,
-}
 
 const { error, log, warn } = console
 
 // state
 let ws
 let rtc
-let rtcChannel
 
 let receiverId
 
-const outputEvents = {
-  onSuccess: null,
-  onFailure: null,
-}
+let onFailure
 
 // io
 const emit = (event, payload) => {
@@ -36,33 +25,19 @@ const emit = (event, payload) => {
   ws.send(message)
 }
 
-const cleanUp = () => {
+const closeConnections = () => {
   ws.close()
   rtc.close()
 }
 
 const onIceCandidate = ({ candidate }) => {
   if (candidate) {
-    log(`[Ice Candidate] ${candidate}`)
+    log('[Ice Candidate]')
     return
   }
 
-  log('[Ice Candidate] Last candidate retrieved')
+  log('[Sending offer] Last candidate retrieved')
   emit(Event.OFFER, { receiverId, offer: rtc.localDescription })
-}
-
-const onError = () => {
-  error('WebRTC error')
-  cleanUp()
-}
-
-const onChannelOpen = () => {
-  log(`[Data channel opened] ${rtcChannel}`)
-  outputEvents.onSuccess({
-    send: (data) => {
-      rtcChannel.send(JSON.stringify(data))
-    },
-  })
 }
 
 const createOffer = () => rtc
@@ -74,9 +49,49 @@ const onAnswer = ({ answer }) => rtc
 
 const onReceiverNotFound = () => {
   warn('Reciver not found')
-  cleanUp()
-  outputEvents.onFailure({ cause: 'NOT_FOUND' })
+  closeConnections()
+  onFailure({ cause: 'NOT_FOUND' })
 }
+
+const sendJsonOverChannel = channel => (data) => {
+  channel.send(JSON.stringify(data))
+}
+
+// TODO: whynowork?!
+// const sendJsonOverChannel = channel => R.compose(
+//   channel.send,
+//   JSON.stringify,
+// )
+
+const setUpChannels = configs =>
+  configs.map((c) => {
+    const channel = rtc.createDataChannel(c.name, c.config)
+
+    channel.onerror = () => {
+      error('WebRTC error')
+      closeConnections()
+    }
+
+    channel.onclose = () => {
+      warn('RTC connection closed')
+      c.onClose()
+    }
+
+    channel.onmessage = R.compose(
+      c.onData,
+      JSON.parse,
+      ({ data }) => data,
+    )
+
+    // Channel considered "set up" once it's opened
+    return new Promise((resolve) => {
+      channel.onopen = () => {
+        log(`[Data channel] ${channel.label}`)
+        resolve(channel)
+      }
+    })
+  })
+
 
 const wsEvents = {
   [Event.ANSWER]:    onAnswer,
@@ -95,35 +110,58 @@ const onWsMessage = (message) => {
 
 const init = options => new Promise((resolve, reject) => {
   ({ receiverId } = options)
+
   const {
     wsAddress,
-    onData,
+    onUnreliableData,
+    onReliableData,
     onClose,
   } = options
 
-  outputEvents.onSuccess = resolve
-  outputEvents.onFailure = reject
+  onFailure = reject
 
   ws = new WebSocket(wsAddress)
   ws.onmessage = onWsMessage
   ws.onopen = createOffer
 
   rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
-  rtcChannel = rtc.createDataChannel(
-    WEB_RTC_CHANNEL_NAME,
-    WEB_RTC_CHANNEL_CONFIG,
-  )
-  rtcChannel.onopen = onChannelOpen
-  rtcChannel.onerror = onError
-  rtcChannel.onmessage = ({ data }) => {
-    onData(JSON.parse(data))
-  }
-  rtcChannel.onclose = () => {
-    warn('RTC connection closed')
-    onClose()
-  }
-
   rtc.onicecandidate = onIceCandidate
+
+  // configuration explanation:
+  // https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability.html
+  const channelConfigs = [{
+    // "udpLike"
+    name:   'unreliable',
+    config: {
+      ordered:        false,
+      maxRetransmits: 0,
+    },
+    onData: onUnreliableData,
+    onClose,
+  },
+  {
+    // "tcpLike"
+    name:   'reliable',
+    config: {
+      ordered: true,
+    },
+    onData: onReliableData,
+    onClose,
+  }]
+
+  // TODO: whynowork?!
+  // R.compose(
+  //   Promise.all,
+  //   setUpChannels,
+  // )(channelConfigs)
+
+  Promise.all(setUpChannels(channelConfigs))
+    .then(([unreliableChannel, reliableChannel]) => {
+      resolve({
+        sendUnreliable: sendJsonOverChannel(unreliableChannel),
+        sendReliable:   sendJsonOverChannel(reliableChannel),
+      })
+    })
 })
 
 module.exports = init

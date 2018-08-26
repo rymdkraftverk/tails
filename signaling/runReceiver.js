@@ -1,3 +1,4 @@
+const R = require('ramda')
 const { prettyId } = require('common')
 const Event = require('./Event')
 
@@ -37,47 +38,12 @@ const emit = (event, payload) => {
 
 const onIceCandidate = initiator => ({ candidate }) => {
   if (candidate) {
-    log(`[Ice Candidate] ${prettyId(initiator.id)} ${candidate}`)
+    log(`[Ice Candidate] ${prettyId(initiator.id)}`)
     return
   }
 
-  log(`[Ice Candidate] ${prettyId(initiator.id)} Last candidate retrieved`)
+  log(`[Sending answer] ${prettyId(initiator.id)} Last candidate retrieved`)
   emit(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
-}
-
-const onDataChannel = initiator => ({ channel }) => {
-  log(`[Data Channel] ${prettyId(initiator.id)} ${channel}`)
-
-  channel.onopen = () => {
-    outputEvents.onInitiatorJoin({
-      id:        initiator.id,
-      setOnData: (onData) => {
-        channel.onmessage = ({ data }) => {
-          onData(JSON.parse(data))
-        }
-      },
-      send: (data) => {
-        /*
-          Possible readyStates:
-            'open':       OK to send
-            'connecting': Not OK to send
-            'closing':    Not OK to send, but will try to send what's already in the internal queue
-            'closed':     Not OK to send
-        */
-
-        if (channel.readyState === ReadyState.OPEN) {
-          channel.send(JSON.stringify(data))
-        }
-      },
-      close: initiator.rtc.close,
-    })
-
-    removeInitiator(initiator.id)
-  }
-
-  channel.onclose = () => {
-    outputEvents.onInitiatorLeave(initiator.id)
-  }
 }
 
 const createInitiator = (initiatorId, offer) => ({
@@ -94,17 +60,94 @@ const createAnswer = (rtc, offer) => rtc
     return answer
   })
 
+const setUpChannels = (rtc, channelNames, initiator) => {
+  let openChannels = []
+
+  return new Promise((resolve) => {
+    rtc.ondatachannel = ({ channel }) => {
+      channel.onopen = () => {
+        log(`[Data channel] ${prettyId(initiator.id)} ${channel.label}`)
+        openChannels = openChannels.concat([channel])
+
+        const allOpened = R.compose(
+          R.equals(channelNames),
+          R.pluck('label'),
+        )(openChannels)
+
+        if (allOpened) {
+          resolve(openChannels)
+        }
+      }
+
+      channel.onclose = () => {
+        outputEvents.onInitiatorLeave(initiator.id)
+      }
+    }
+  })
+}
+
 // First point of contact from initiator
 const onOffer = ({ initiatorId, offer }) => {
-  log(`[Offer] ${prettyId(initiatorId)} (${offer})`)
+  log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
   initiators = initiators.concat(initiator)
   const { rtc } = initiator
 
-  // Start collecting receiver candidates to be send to this initiator
+  // Start collecting receiver candidates to be sent to this initiator
   rtc.onicecandidate = onIceCandidate(initiator)
-  rtc.ondatachannel = onDataChannel(initiator)
+
+  // Wait for both known channels to be opened before considering initiator
+  // to have joined
+  setUpChannels(rtc, ['unreliable', 'reliable'], initiator)
+    .then(([unreliableChannel, reliableChannel]) => {
+      outputEvents.onInitiatorJoin({
+        id:                  initiator.id,
+        setOnUnreliableData: (onData) => {
+          unreliableChannel.onmessage = R.compose(
+            onData,
+            JSON.parse,
+            ({ data }) => data,
+          )
+        },
+        setOnReliableData: (onData) => {
+          reliableChannel.onmessage = R.compose(
+            onData,
+            JSON.parse,
+            ({ data }) => data,
+          )
+        },
+        /*
+        Possible readyStates:
+        'open':       OK to send
+        'connecting': Not OK to send
+        'closing':    Not OK to send, but will try to send what's already in the internal queue
+        'closed':     Not OK to send
+        */
+        sendUnreliable: (data) => {
+          if (unreliableChannel.readyState === ReadyState.OPEN) {
+            R.compose(
+              unreliableChannel.send,
+              JSON.stringify,
+            )(data)
+          }
+        },
+        sendReliable: (data) => {
+          if (reliableChannel.readyState === ReadyState.OPEN) {
+            reliableChannel.send(JSON.stringify(data))
+
+            // TODO: whynowork?!
+            // R.compose(
+            //   reliableChannel.send,
+            //   JSON.stringify,
+            // )(data)
+          }
+        },
+        close: rtc.close,
+      })
+
+      removeInitiator(initiator.id)
+    })
 
   createAnswer(rtc, offer)
 }

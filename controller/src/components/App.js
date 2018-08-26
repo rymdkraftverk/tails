@@ -54,13 +54,15 @@ class App extends Component {
     }
 
     signaling.runInitiator({
-      wsAddress:  WS_ADDRESS,
-      receiverId: gameCode,
-      onData:     this.onReceiverData,
+      wsAddress:        WS_ADDRESS,
+      receiverId:       gameCode,
+      onReliableData:   this.onReliableData,
+      onUnreliableData: () => {},
       onClose,
     })
-      .then(({ send }) => {
-        this.send = send
+      .then(({ sendUnreliable, sendReliable }) => {
+        this.sendUnreliable = sendUnreliable
+        this.sendReliable = sendReliable
       })
       .catch(({ cause }) => {
         const message = {
@@ -71,7 +73,7 @@ class App extends Component {
       })
   }
 
-  onReceiverData = ({ event, payload }) => {
+  onReliableData = ({ event, payload }) => {
     if (event === Event.Rtc.CONTROLLER_COLOR) {
       if (!payload.started) {
         this.setState({
@@ -130,7 +132,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.send({ event: Event.Rtc.ROUND_START })
+    this.sendReliable({ event: Event.Rtc.ROUND_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 
@@ -184,7 +186,7 @@ class App extends Component {
           appState === APP_STATE.GAME_PLAYING
             ?
               <GamePlaying
-                send={this.send}
+                send={this.sendUnreliable}
                 playerColor={Color[playerColor]}
               />
             : null

@@ -118,7 +118,19 @@ const createGame = ({ gameCode }) => {
 }
 
 // TODO: extract event switch logic to common function
-const onControllerData = id => (message) => {
+const onReliableControllerData = id => (message) => {
+  const { event, payload } = message
+
+  const f = rtcEvents[event]
+  if (!f) {
+    warn(`Unhandled event for message: ${message.data}`)
+    return
+  }
+
+  f(id, payload)
+}
+
+const onUnreliableControllerData = id => (message) => {
   const { event, payload } = message
 
   const f = rtcEvents[event]
@@ -135,8 +147,9 @@ const moreControllersAllowed = () =>
 
 export const onControllerJoin = ({
   id,
-  setOnData,
-  send,
+  setOnReliableData,
+  setOnUnreliableData,
+  sendReliable: send,
   close,
 }) => {
   if (moreControllersAllowed()) {
@@ -170,8 +183,15 @@ export const onControllerJoin = ({
     close()
   }
 
-  // TODO: rambdify
-  setOnData(onControllerData(id))
+  R.compose(
+    setOnReliableData,
+    onReliableControllerData,
+  )(id)
+
+  R.compose(
+    setOnUnreliableData,
+    onUnreliableControllerData,
+  )(id)
 }
 
 const createNewPlayer = ({ playerId }) => {

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "common": "file:../common",
+    "ramda": "^0.25.0",
     "webrtc-adapter": "^6.3.0"
   }
 }
