@@ -1,3 +1,5 @@
+const Influx = require('influx')
+
 const {
   RTC: {
     ROUND_START,
@@ -38,6 +40,30 @@ const createMovement = (
 const registerMovement = (playerId, message) => {
   const movement = createMovement(playerId, message)
   movements = movements.concat(movement)
+}
+
+const save = (host, datapoints) => {
+  const influx = new Influx.InfluxDB({
+    host,
+    database: 'novelty',
+    schema:   [
+      {
+        measurement: 'game',
+        fields:      {
+          latency: Influx.FieldType.INTEGER,
+          command: Influx.FieldType.INTEGER,
+        },
+        tags: [
+          'controllerId',
+          'gameCode',
+          'color',
+        ],
+      },
+    ],
+  })
+
+const saveMovements = () => {
+
 }
 
 const movementLatency = (playerId, message) => {
