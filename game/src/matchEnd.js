@@ -30,6 +30,11 @@ const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a dra
 const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, Color[color])
 
 export const transitionToMatchEnd = () => {
+  Entity
+    .getAll()
+    .filter(e => e.id !== 'background')
+    .map(Entity.destroy)
+
   const matchEnd = Entity.addChild(
     Entity.getRoot(),
     {

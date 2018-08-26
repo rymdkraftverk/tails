@@ -85,10 +85,11 @@ export const transitionToGameScene = (maxPlayers) => {
 
 export const getMatchWinners = (players, scoreNeeded) =>
   R.compose(
-    R.filter(R.compose(
-      R.flip(R.gte)(scoreNeeded),
-      R.view(R.lensProp('score')),
-    )),
+    score => Object.values(players).filter(p => p.score == score),
+    R.reduce(R.max, 0),
+    R.map(parseInt),
+    Object.keys,
+    R.groupBy(R.lensProp('score')),
     Object.values,
   )(players)
 
