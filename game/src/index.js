@@ -1,6 +1,7 @@
 import { Game, Entity, Sprite, Key } from 'l1'
 import { EVENTS, prettyId } from 'common'
 import R from 'ramda'
+import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
 import { transitionToGameScene, GAME_EVENTS } from './game'
 import assets from './assets.json'
@@ -31,6 +32,7 @@ export const gameState = {
     playerFinishOrder: [],
     winner:            null,
   },
+  events: new EventEmitter(),
 }
 
 const movePlayer = (pId, direction) => {
