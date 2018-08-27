@@ -1,9 +1,10 @@
 import _ from 'lodash/fp'
 import { COLOR } from 'common'
-import { Entity, Sprite, Graphics } from 'l1'
+import { Entity, Sprite, Graphics, Text } from 'l1'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
 import { scoreToWin } from './game'
+import { small } from './util/textStyles'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
@@ -69,9 +70,6 @@ const createPlayer = (index) => {
   const previousX = getX((player && player.previousScore) || 0, goalScore)
   const currentX = getX((player && player.score) || 0, goalScore)
 
-  console.log('previousX', previousX)
-  console.log('currentX', currentX)
-
   const head = Entity
     .addChild(
       Entity.get(Scene.SCORE),
@@ -87,6 +85,29 @@ const createPlayer = (index) => {
   )
 
   sprite.scale.set(2)
+
+  if (player) {
+    const playerScore = Entity
+      .addChild(
+        head,
+        {
+          x: 0,
+          y: 6,
+        },
+      )
+
+    Text.show(
+      playerScore,
+      {
+        text:  player.score,
+        style: {
+          ...small,
+          fill: 'white',
+        },
+        zIndex: 1,
+      },
+    )
+  }
 
   const tail = Entity
     .addChild(
