@@ -4,13 +4,13 @@ import { Entity, Sprite, Graphics, Text } from 'l1'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
 import { scoreToWin } from './game'
-import { small } from './util/textStyles'
+import { small, big } from './util/textStyles'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
 const WORM_START_X = 40
 const GOAL_X = 1100
-const GOAL_Y = 60
+const GOAL_Y = 70
 const ANIMATION_DURATION = 60
 
 export const transitionToScoreScene = () => {
@@ -29,6 +29,7 @@ export const transitionToScoreScene = () => {
         y: GOAL_Y,
       },
     )
+
   const goalSprite = Sprite
     .show(
       goal,
@@ -37,6 +38,22 @@ export const transitionToScoreScene = () => {
       },
     )
   goalSprite.scale.set(1.5)
+
+  const goalScore = Entity.addChild(
+    goal,
+    {
+      y: -60,
+      x: 10,
+    },
+  )
+
+  Text.show(
+    goalScore,
+    {
+      text:  scoreToWin(gameState.players),
+      style: { ...big, fill: 'white' },
+    },
+  )
 
   // eslint-disable-next-line lodash-fp/no-unused-result
   _
