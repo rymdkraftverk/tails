@@ -9,6 +9,7 @@ import { big } from './util/textStyles'
 import layers from './util/layers'
 import { transitionToMatchEnd } from './matchEnd'
 import Scene from './Scene'
+import { transitionToScoreScene } from './score'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
@@ -75,7 +76,8 @@ const pauseAndTransitionToLobby = () => ({
           controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
         })
       Entity.destroy(Scene.GAME)
-      transitionToLobby(gameState.gameCode, Object.values(gameState.players))
+      // transitionToLobby(gameState.gameCode, Object.values(gameState.players))
+      transitionToScoreScene()
     }
   },
 })

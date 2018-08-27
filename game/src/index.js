@@ -9,6 +9,7 @@ import http from './http'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import Scene from './Scene'
+import { transitionToScoreScene } from './score'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -84,7 +85,10 @@ const roundStart = () => {
 
     fullscreenFadeInOut()
       .then(() => {
-        Entity.destroy(Scene.LOBBY)
+        Entity
+          .getAll()
+          .filter(e => e.id !== 'background')
+          .map(Entity.destroy)
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
