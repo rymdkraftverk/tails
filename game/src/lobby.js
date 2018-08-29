@@ -1,8 +1,7 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { Color } from 'common'
-import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
+import { GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
 import { code, big, small } from './util/textStyles'
 import { GameColor } from './game'
 import layers from './util/layers'
@@ -161,23 +160,7 @@ const createText = ({
   )
 }
 
-export const addPlayerToLobby = (newPlayer) => {
-  const numOfPlayers = playerCount(gameState.players)
-  const color = Object.keys(Color)[numOfPlayers]
-  const player = {
-    ...newPlayer,
-    spriteId: `square-${color}`,
-    score:    0,
-    color,
-  }
-
-  gameState.players[player.playerId] = player
-  createPlayerEntity(player, numOfPlayers, { newPlayer: true })
-
-  return player
-}
-
-const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
+export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
   const square = Entity.addChild(
@@ -206,15 +189,15 @@ const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   }
 }
 
-const addPlayerToLobbyDebug = () => addPlayerToLobby({
-  playerId: `debugPlayer:${Math.random()
+const addMockPlayer = () => onControllerJoin({
+  id: `debugPlayer:${Math.random()
     .toString(36)
     .substring(7)}`,
+  close: () => {},
 })
 
 window.debug = {
   ...window.debug,
-  addPlayerToLobby:  addPlayerToLobbyDebug,
-  addPlayersToLobby: count => R.range(0, count)
-    .map(() => addPlayerToLobbyDebug()),
+  addMockPlayers: count => R.range(0, count)
+    .map(() => addMockPlayer()),
 }

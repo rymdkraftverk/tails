@@ -1,10 +1,10 @@
 import { Game, Entity, Sprite, Key } from 'l1'
-import { Event, prettyId } from 'common'
+import { Event, prettyId, Color } from 'common'
 import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
-import { transitionToLobby, addPlayerToLobby } from './lobby'
+import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
@@ -130,9 +130,9 @@ const onControllerData = id => (message) => {
 }
 
 const moreControllersAllowed = () =>
-  playerCount(gameState.players) < MAX_PLAYERS_ALLOWED && !gameState.started
+  playerCount(gameState.players) < MAX_PLAYERS_ALLOWED
 
-const onControllerJoin = ({
+export const onControllerJoin = ({
   id,
   setOnData,
   send,
@@ -144,13 +144,27 @@ const onControllerJoin = ({
       lastMoveOrder: -1,
       send,
     }
-    const { color } = addPlayerToLobby({ playerId: id })
+    const player = createNewPlayer({ playerId: id })
+
+    if (Entity.get(Scene.LOBBY)) {
+      const numOfPlayers = playerCount(gameState.players)
+      createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
+    }
+
+    const controller = gameState
+      .controllers[id]
+
+    if (!controller) {
+      warn(`controller with id: ${id} not found`)
+      return
+    }
 
     send({
       event:   Event.Rtc.CONTROLLER_COLOR,
       payload: {
         playerId: id,
-        color,
+        color:    player.color,
+        started:  gameState.started,
       },
     })
   } else {
@@ -159,6 +173,20 @@ const onControllerJoin = ({
 
   // TODO: rambdify
   setOnData(onControllerData(id))
+}
+
+const createNewPlayer = ({ playerId }) => {
+  const numOfPlayers = playerCount(gameState.players)
+  const color = Object.keys(Color)[numOfPlayers]
+  const player = {
+    playerId,
+    spriteId: `square-${color}`,
+    score:    0,
+    color,
+  }
+
+  gameState.players[player.playerId] = player
+  return player
 }
 
 const onControllerLeave = (id) => {
