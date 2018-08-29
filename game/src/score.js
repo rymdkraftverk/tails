@@ -1,5 +1,5 @@
 import _ from 'lodash/fp'
-import { COLOR } from 'common'
+import { EVENTS, COLOR } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
@@ -63,13 +63,24 @@ export const transitionToScoreScene = () => {
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
 
-  const matchWinnerCount = getMatchWinners(gameState.players, scoreToWin(gameState.players)).length
+  const {
+    players,
+    controllers,
+  } = gameState
+
+  const matchWinnerCount = getMatchWinners(players, scoreToWin(players)).length
 
   if (matchWinnerCount > 0) {
     delay(120)
       .then(() => {
         Entity.destroy(scoreScene)
         transitionToMatchEnd()
+      })
+  } else {
+    Object
+      .values(controllers)
+      .forEach((controller) => {
+        controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
       })
   }
 }
