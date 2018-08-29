@@ -8,8 +8,6 @@ import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
-import Scene from './Scene'
-import { transitionToScoreScene } from './score'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
