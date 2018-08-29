@@ -388,7 +388,6 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         .filter(p => !p.killed)
 
       if (playersAlive.length === 1 && gameState.started) {
-        gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
         gameState.lastRoundResult.playerFinishOrder =
           gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
