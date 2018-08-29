@@ -4,7 +4,6 @@ import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
-import assets from './assets.json'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
 import layers from './util/layers'
@@ -176,12 +175,13 @@ window.addEventListener('resize', resizeGame)
 
 Game
   .init({
-    width:     GAME_WIDTH,
-    height:    GAME_HEIGHT,
-    assets,
-    debug:     false,
-    element:   document.getElementById('game'),
-    antialias: true,
+    width:   GAME_WIDTH,
+    height:  GAME_HEIGHT,
+    debug:   false,
+    element: document.getElementById('game'),
+    pixi:    {
+      antialias: true,
+    },
   })
   .then(() => {
     http.createGame()
