@@ -11,7 +11,10 @@ import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
 
-window.debug = { ...window.debug, transitionToRoundEnd }
+window.debug = {
+  ...window.debug,
+  transitionToRoundEnd,
+}
 
 const { log, warn } = console
 

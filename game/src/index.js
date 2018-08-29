@@ -208,4 +208,7 @@ Game
     Key.add('right')
   })
 
-window.debug = { ...window.debug, roundStart }
+window.debug = {
+  ...window.debug,
+  roundStart,
+}
