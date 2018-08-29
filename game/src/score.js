@@ -77,10 +77,13 @@ export const transitionToScoreScene = () => {
         transitionToMatchEnd()
       })
   } else {
-    Object
-      .values(controllers)
-      .forEach((controller) => {
-        controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+    delay(ANIMATION_DURATION)
+      .then(() => {
+        Object
+          .values(controllers)
+          .forEach((controller) => {
+            controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+          })
       })
   }
 }
