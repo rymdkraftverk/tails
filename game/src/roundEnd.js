@@ -61,7 +61,8 @@ const pauseAndTransitionToMatchEnd = () => ({
   run:   ({ timer }) => {
     if (Timer.run(timer)) {
       Entity.destroy(Scene.GAME)
-      transitionToMatchEnd()
+      // transitionToMatchEnd()
+      transitionToScoreScene()
     }
   },
 })

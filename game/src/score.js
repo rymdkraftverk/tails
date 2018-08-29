@@ -3,8 +3,11 @@ import { COLOR } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
-import { scoreToWin } from './game'
+import { scoreToWin, getMatchWinners } from './game'
+import delay from './delay'
 import { small, big } from './util/textStyles'
+import { transitionToMatchEnd } from './matchEnd'
+import layers from './util/layers'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
@@ -35,6 +38,7 @@ export const transitionToScoreScene = () => {
       goal,
       {
         texture: 'goal-flag',
+        zIndex:  layers.BACKGROUND,
       },
     )
   goalSprite.scale.set(1.5)
@@ -58,6 +62,16 @@ export const transitionToScoreScene = () => {
   // eslint-disable-next-line lodash-fp/no-unused-result
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
+
+  const matchWinnerCount = getMatchWinners(gameState.players, scoreToWin(gameState.players)).length
+
+  if (matchWinnerCount > 0) {
+    delay(120)
+      .then(() => {
+        Entity.destroy(scoreScene)
+        transitionToMatchEnd()
+      })
+  }
 }
 
 const getX = (score, goal) => {
