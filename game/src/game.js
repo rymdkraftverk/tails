@@ -83,9 +83,11 @@ export const transitionToGameScene = (maxPlayers) => {
     })
 }
 
-export const getMatchWinners = (players, scoreNeeded) =>
+export const getMatchWinners = players =>
   R.compose(
-    score => Object.values(players).filter(p => p.score == score),
+    score => Object
+      .values(players)
+      .filter(p => p.score === score),
     R.reduce(R.max, 0),
     R.map(parseInt),
     Object.keys,
@@ -110,7 +112,7 @@ export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }
 
 export const applyPlayerScores = (players, scores) => {
   const scoreDict = scores
-    .map(([score, playerId]) => ({ [playerId]: score } ))
+    .map(([score, playerId]) => ({ [playerId]: score }))
     .reduce((dict, score) => ({ ...dict, ...score }), {})
 
   return Object
@@ -120,28 +122,17 @@ export const applyPlayerScores = (players, scores) => {
 
       return {
         ...player,
-        score: player.score + (scoreDict[playerId] || 0)
+        score: player.score + (scoreDict[playerId] || 0),
       }
     })
     .reduce((updatedPlayers, player) => (
       {
         ...updatedPlayers,
         ...{
-          [player.playerId]: player
-        }
+          [player.playerId]: player,
+        },
       }
     ), {})
-
-  /*
-  scores.reduce((acc, [score, playerId]) => {
-    const player = players[playerId]
-    acc[playerId] = {
-      ...player,
-      score: player.score + score,
-    }
-    return acc
-  }, {})
-  */
 }
 
 const getStartingPosition = Util.grid({
@@ -171,7 +162,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     const controller = gameState
       .controllers[playerId]
 
-    if(!controller) {
+    if (!controller) {
       warn(`controller with id: ${playerId} not found`)
       return
     }

@@ -74,4 +74,8 @@ const pause = () => ({
   },
 })
 
-window.debug = { ...window.debug, transitionToLobby, transitionToMatchEnd }
+window.debug = {
+  ...window.debug,
+  transitionToLobby,
+  transitionToMatchEnd,
+}

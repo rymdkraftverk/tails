@@ -262,11 +262,14 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
 }
 
 const addPlayerToLobbyDebug = () => addPlayerToLobby({
-    playerId: `debugPlayer:${Math.random().toString(36).substring(7)}`
-  })
+  playerId: `debugPlayer:${Math.random()
+    .toString(36)
+    .substring(7)}`,
+})
 
 window.debug = {
   ...window.debug,
-  addPlayerToLobby: addPlayerToLobbyDebug,
-  addPlayersToLobby: count => R.range(0, count).map(x => addPlayerToLobbyDebug())
+  addPlayerToLobby:  addPlayerToLobbyDebug,
+  addPlayersToLobby: count => R.range(0, count)
+    .map(() => addPlayerToLobbyDebug()),
 }
