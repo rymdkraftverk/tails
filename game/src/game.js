@@ -75,8 +75,6 @@ export const transitionToGameScene = (maxPlayers) => {
         })
         player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
 
-        // Enable the following behaviour for keyboard debugging
-        // player.behaviors.player1Keyboard = player1Keyboard()
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
       })
