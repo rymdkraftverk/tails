@@ -115,43 +115,12 @@ const createPlayer = (index) => {
   const previousX = getX((player && player.previousScore) || 0, goalScore)
   const currentX = getX((player && player.score) || 0, goalScore)
 
-  const head = Entity
-    .addChild(
-      Entity.get(Scene.SCORE),
-      {
-        id: (player && player.playerId) || null,
-        x:  previousX,
-        y,
-      },
-    )
-  const sprite = Sprite.show(
-    head,
-    { texture },
-  )
-
-  sprite.scale.set(2)
+  const head = createHead({
+    x: previousX, y, texture,
+  })
 
   if (player) {
-    const playerScore = Entity
-      .addChild(
-        head,
-        {
-          x: 0,
-          y: 6,
-        },
-      )
-
-    Text.show(
-      playerScore,
-      {
-        text:  player.score,
-        style: {
-          ...small,
-          fill: 'white',
-        },
-        zIndex: 1,
-      },
-    )
+    createPlayerScore({ parent: head, score: player.score })
   }
 
   const tail = Entity
@@ -165,10 +134,57 @@ const createPlayer = (index) => {
 
   const tailGraphics = Graphics.create(tail, { zIndex: -10 })
 
-  head.behaviors.animate = animate(tailGraphics, Entity.getX(head), currentX, (player && player.color) || 'none')
+  head.behaviors.animate = animate({
+    tailGraphics, fromX: Entity.getX(head), toX:   currentX, color: (player && player.color) || 'none',
+  })
 }
 
-const animate = (tailGraphics, fromX, toX, color) => ({
+const createHead = ({
+  x, y, texture,
+}) => {
+  const head = Entity
+    .addChild(
+      Entity.get(Scene.SCORE),
+      {
+        x,
+        y,
+      },
+    )
+  const sprite = Sprite.show(
+    head,
+    { texture },
+  )
+
+  sprite.scale.set(2)
+  return head
+}
+
+const createPlayerScore = ({ parent, score }) => {
+  const playerScore = Entity
+    .addChild(
+      parent,
+      {
+        x: 0,
+        y: 6,
+      },
+    )
+
+  Text.show(
+    playerScore,
+    {
+      text:  score,
+      style: {
+        ...small,
+        fill: 'white',
+      },
+      zIndex: 1,
+    },
+  )
+}
+
+const animate = ({
+  tailGraphics, fromX, toX, color,
+}) => ({
   tick: 0,
   run:  (b, e) => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
