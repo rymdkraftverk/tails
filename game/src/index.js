@@ -207,17 +207,3 @@ Game
     Key.add('left')
     Key.add('right')
   })
-
-// Enable the following behaviour for keyboard debugging
-
-// const player1Keyboard = () => ({
-//   run: () => {
-//     if (Key.isDown('left')) {
-//       Entity.get('player1controller').direction = LEFT
-//     } else if (Key.isDown('right')) {
-//       Entity.get('player1controller').direction = RIGHT
-//     } else {
-//       Entity.get('player1controller').direction = null
-//     }
-//   },
-// })

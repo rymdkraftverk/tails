@@ -24,7 +24,6 @@ export default () => new Promise((resolve) => {
 })
 
 const showText = (entity, text) => {
-  // TODO: level1: Make show delete previous text
   Text.hide(entity)
   const asset = Text.show(entity, {
     text,
