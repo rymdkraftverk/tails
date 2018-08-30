@@ -1,5 +1,5 @@
 import _ from 'lodash/fp'
-import { EVENTS, COLOR } from 'common'
+import { Event, Color } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
@@ -82,7 +82,7 @@ export const transitionToScoreScene = () => {
         Object
           .values(controllers)
           .forEach((controller) => {
-            controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+            controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
           })
       })
   }
@@ -94,7 +94,7 @@ const getX = (score, goal) => {
 }
 
 const createPlayer = (index) => {
-  const currentColor = Object.keys(COLOR)[index]
+  const currentColor = Object.keys(Color)[index]
 
   const player = Object
     .values(gameState.players)
@@ -175,7 +175,7 @@ const animate = (tailGraphics, fromX, toX, color) => ({
     Entity.setX(e, Entity.getX(e) + diffX)
     tailGraphics.clear()
     // Pixi.Graphics requires color code to start with 0x instead of #
-    tailGraphics.beginFill(`0x${COLOR[color].substring(1, COLOR[color].length)}`, 1)
+    tailGraphics.beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
     tailGraphics.moveTo(0, 0)
     tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0)
     tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0 + e.asset.height)
