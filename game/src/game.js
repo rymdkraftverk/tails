@@ -312,14 +312,13 @@ const activate = () => ({
 
 const killPlayer = (e, playerCountFactor) => {
   const particles = Entity.addChild(e)
-
   Particles.emit(particles, {
     ...explode({
       degrees:     e.degrees,
       scaleFactor: playerCountFactor,
       radius:      e.width,
-      x:           Entity.getX(e) + (e.width / 2),
-      y:           Entity.getY(e) + (e.height / 2),
+      x:           Entity.getX(e),
+      y:           Entity.getY(e),
     }),
     zIndex: layers.FOREGROUND,
   })
