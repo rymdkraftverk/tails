@@ -139,11 +139,6 @@ export const onControllerJoin = ({
   close,
 }) => {
   if (moreControllersAllowed()) {
-    gameState.controllers[id] = {
-      id,
-      lastMoveOrder: -1,
-      send,
-    }
     const player = createNewPlayer({ playerId: id })
 
     if (Entity.get(Scene.LOBBY)) {
@@ -151,12 +146,15 @@ export const onControllerJoin = ({
       createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
     }
 
-    const controller = gameState
-      .controllers[id]
-
-    if (!controller) {
-      warn(`controller with id: ${id} not found`)
+    // If send is undefined we are trying to generate a mock player with window.debug
+    if (!send) {
       return
+    }
+
+    gameState.controllers[id] = {
+      id,
+      lastMoveOrder: -1,
+      send,
     }
 
     send({
