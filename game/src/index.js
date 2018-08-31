@@ -1,13 +1,14 @@
 import { Game, Entity, Sprite, Key } from 'l1'
-import { EVENTS, prettyId } from 'common'
+import { Event, prettyId } from 'common'
 import R from 'ramda'
+import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
-import { transitionToGameScene, GAME_EVENTS } from './game'
-import assets from './assets.json'
+import { transitionToGameScene, GameEvent } from './game'
 import { transitionToLobby, addPlayerToLobby } from './lobby'
 import http from './http'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
+import Scene from './Scene'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -31,6 +32,7 @@ export const gameState = {
     playerFinishOrder: [],
     winner:            null,
   },
+  events: new EventEmitter(),
 }
 
 const movePlayer = (pId, direction) => {
@@ -38,7 +40,7 @@ const movePlayer = (pId, direction) => {
   if (playerEntity) {
     playerEntity.direction = direction
   } else {
-    // TODO: stop sending useless movements events
+    // TODO: stop sending useless movements event
     warn(`Failed to move player ${prettyId(pId)} with direction ${direction}`)
   }
 }
@@ -75,20 +77,21 @@ const roundStart = () => {
       .values(gameState.controllers)
       .forEach(({ id }) => {
         gameState.controllers[id].send({
-          event:   EVENTS.RTC.ROUND_STARTED,
+          event:   Event.Rtc.ROUND_STARTED,
           payload: {},
         })
       })
 
     fullscreenFadeInOut()
       .then(() => {
+        Entity.destroy(Scene.LOBBY)
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
         Entity
           .getByType('player')
           .forEach(player =>
-            player.events.on(GAME_EVENTS.PLAYER_COLLISION, registerPlayerFinished(player)))
+            player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
       })
   }
 }
@@ -96,8 +99,8 @@ const roundStart = () => {
 const { log, warn } = console
 
 const rtcEvents = {
-  [EVENTS.RTC.PLAYER_MOVEMENT]: playerMovement,
-  [EVENTS.RTC.ROUND_START]:     roundStart,
+  [Event.Rtc.PLAYER_MOVEMENT]: playerMovement,
+  [Event.Rtc.ROUND_START]:     roundStart,
 }
 
 const commands = {
@@ -142,7 +145,7 @@ const onControllerJoin = ({
     const { color } = addPlayerToLobby({ playerId: id })
 
     send({
-      event:   EVENTS.RTC.CONTROLLER_COLOR,
+      event:   Event.Rtc.CONTROLLER_COLOR,
       payload: {
         playerId: id,
         color,
@@ -162,43 +165,23 @@ const onControllerLeave = (id) => {
   // TODO: remove from controllers and lobby
 }
 
-let ratio
-export const getRatio = () => ratio
-
 const resizeGame = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
-  ratio = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT)
-  Game
-    .getStage()
-    .scale
-    .set(ratio)
-  Game
-    .getRenderer()
-    .resize(GAME_WIDTH * ratio, GAME_HEIGHT * ratio)
-
-  // The following code is needed to couteract the scale change on the whole canvas since
-  // texts get distorted by PIXI when you try to change their scale.
-  // Texts instead change size by setting their fontSize.
-  Entity.getAll()
-    .forEach((e) => {
-      // TODO: Export assettype constants from level1?
-      if (e.originalSize) {
-        e.asset.style.fontSize = e.originalSize * ratio
-        e.asset.scale.set(1 / ratio)
-      }
-    })
+  Game.resize(screenWidth, screenHeight)
 }
+
 window.addEventListener('resize', resizeGame)
 
 Game
   .init({
-    width:     GAME_WIDTH,
-    height:    GAME_HEIGHT,
-    assets,
-    debug:     false,
-    element:   document.getElementById('game'),
-    antialias: true,
+    width:   GAME_WIDTH,
+    height:  GAME_HEIGHT,
+    debug:   false,
+    element: document.getElementById('game'),
+    pixi:    {
+      antialias: true,
+    },
   })
   .then(() => {
     http.createGame()
@@ -225,16 +208,7 @@ Game
     Key.add('right')
   })
 
-// Enable the following behaviour for keyboard debugging
-
-// const player1Keyboard = () => ({
-//   run: () => {
-//     if (Key.isDown('left')) {
-//       Entity.get('player1controller').direction = LEFT
-//     } else if (Key.isDown('right')) {
-//       Entity.get('player1controller').direction = RIGHT
-//     } else {
-//       Entity.get('player1controller').direction = null
-//     }
-//   },
-// })
+window.debug = {
+  ...window.debug,
+  roundStart,
+}

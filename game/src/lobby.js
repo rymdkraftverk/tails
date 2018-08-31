@@ -1,11 +1,13 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
-import { COLORS } from 'common'
-import { getRatio, playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
+import R from 'ramda'
+import { Color } from 'common'
+import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
-import { scoreToWin, GAME_COLORS } from './game'
+import { scoreToWin, GameColor } from './game'
 import layers from './util/layers'
 import bounce from './bounce'
+import Scene from './Scene'
 
 const CONTROLLER_PORT = '4001'
 
@@ -35,66 +37,76 @@ const getPlayerPosition = Util.grid({
 })
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
-  Entity.getAll()
-    .filter(e => e.id !== 'background')
-    .forEach(Entity.destroy)
+  const lobbyScene = Entity
+    .addChild(
+      Entity.getRoot(),
+      {
+        id: Scene.LOBBY,
+      },
+    )
 
   createGoalDescription()
 
   createText({
-    x:     50,
-    y:     30,
-    text:  'LOBBY',
-    style: { ...big, fill: 'white', fontSize: 48 * getRatio() },
-    size:  48,
+    x:      50,
+    y:      30,
+    text:   'LOBBY',
+    style:  { ...big, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
-    x:     50,
-    y:     340,
-    text:  'Go to:',
-    style: { ...small, fill: 'white', fontSize: small.fontSize * getRatio() },
-    size:  small.fontSize,
+    x:      50,
+    y:      340,
+    text:   'Go to:',
+    style:  { ...small, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
     x:     50,
     y:     370,
     text:  getControllerUrl(),
-    style: { ...code, fontSize: 30 * getRatio() },
-    size:  30,
+    style: {
+      ...code,
+      fontSize: 30,
+    },
+    parent: lobbyScene,
   })
 
 
   createText({
-    x:     50,
-    y:     480,
-    text:  'Code:',
-    style: { ...small, fontSize: small.fontSize * getRatio(), fill: 'white' },
-    size:  small.fontSize,
+    x:      50,
+    y:      480,
+    text:   'Code:',
+    style:  { ...small, fill: 'white' },
+    parent: lobbyScene,
   })
 
   createText({
-    x:     50,
-    y:     520,
-    text:  gameCode,
-    style: { ...code, fontSize: code.fontSize * getRatio() },
-    size:  code.fontSize,
+    x:      50,
+    y:      520,
+    text:   gameCode,
+    style:  code,
+    parent: lobbyScene,
   })
 
   createText({
     x:     GAME_WIDTH - 230,
     y:     GAME_HEIGHT - 48,
     text:  '© Rymdkraftverk 2018',
-    style: { ...code, fontSize: 20 * getRatio() },
-    size:  20,
+    style: {
+      ...code,
+      fontSize: 20,
+    },
+    parent: lobbyScene,
   })
 
-  const titleBackground = Entity.addChild(Entity.getRoot())
+  const titleBackground = Entity.addChild(lobbyScene)
   const titleBackgroundGraphics = Graphics
     .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
 
-  titleBackgroundGraphics.beginFill(GAME_COLORS.BLUE)
+  titleBackgroundGraphics.beginFill(GameColor.BLUE)
   titleBackgroundGraphics.moveTo(0, 0)
   titleBackgroundGraphics.lineTo(GAME_WIDTH, 0)
   titleBackgroundGraphics.lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
@@ -116,7 +128,7 @@ const createOutline = (index) => {
   const { x, y } = getPlayerPosition(index)
 
   const e = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: `outline-${index}`,
       x,
@@ -145,7 +157,7 @@ const createGoalDescription = () => {
   }
 
   const entity = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: 'goal-description',
       x:  410,
@@ -153,43 +165,38 @@ const createGoalDescription = () => {
     },
   )
 
-  const textAsset = Text.show(
+  Text.show(
     entity,
     {
       text:  `First to ${score} points wins!`,
-      style: { ...big, fontSize: big.fontSize * getRatio(), fill: 'white' },
+      style: { ...big, fill: 'white' },
     },
   )
-  textAsset.scale.set(1 / getRatio())
-  entity.originalSize = big.fontSize
 }
 
 const createText = ({
-  x, y, text, style, size,
+  x, y, text, style, parent,
 }) => {
   const textEntity = Entity.addChild(
-    Entity.getRoot(),
+    parent,
     {
       x,
       y,
     },
   )
 
-  const textAsset = Text.show(
+  Text.show(
     textEntity,
     {
       text,
       style,
     },
   )
-  textAsset.scale.set(1 / getRatio())
-
-  textEntity.originalSize = size
 }
 
 export const addPlayerToLobby = (newPlayer) => {
   const numOfPlayers = playerCount(gameState.players)
-  const color = Object.keys(COLORS)[numOfPlayers]
+  const color = Object.keys(Color)[numOfPlayers]
   const player = {
     ...newPlayer,
     spriteId: `square-${color}`,
@@ -205,8 +212,9 @@ export const addPlayerToLobby = (newPlayer) => {
 
 const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
+
   const square = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.LOBBY),
     {
       id: `square-${color}`,
       x,
@@ -226,21 +234,17 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
     },
   )
 
-  const squareScoreText = Text.show(
+  Text.show(
     squareScore,
     {
       text:  score,
       style: {
         ...small,
-        fontSize: small.fontSize * getRatio(),
-        fill:     'white',
+        fill: 'white',
       },
       zIndex: 1,
     },
   )
-
-  squareScoreText.scale.set(1 / getRatio())
-  squareScore.originalSize = small.fontSize
 
   if (newPlayer) {
     square.behaviors.bounce = bounce()
@@ -255,4 +259,17 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
     const sound = Entity.addChild(square)
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
   }
+}
+
+const addPlayerToLobbyDebug = () => addPlayerToLobby({
+  playerId: `debugPlayer:${Math.random()
+    .toString(36)
+    .substring(7)}`,
+})
+
+window.debug = {
+  ...window.debug,
+  addPlayerToLobby:  addPlayerToLobbyDebug,
+  addPlayersToLobby: count => R.range(0, count)
+    .map(() => addPlayerToLobbyDebug()),
 }

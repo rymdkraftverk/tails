@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { COLORS } from 'common'
+import { Color } from 'common'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -22,7 +22,7 @@ const StartGameButton = styled.div`
 `
 
 const playerColorToBackgroundColor = (player) => {
-  const background = COLORS[player]
+  const background = Color[player]
   return background || 'white'
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { EVENTS } from 'common'
+import { Event } from 'common'
 import styled, { css } from 'styled-components'
 import createCommand from '../util/createCommand'
 
@@ -19,7 +19,6 @@ const Container = styled.div`
   overflow: hidden;
   touch-action: manipulation;
   border: ${({ playerColor }) => `2rem solid ${playerColor}`};
-  border-radius: 4rem;
 `
 
 const ButtonLeft = styled.div`
@@ -66,7 +65,7 @@ class GamePlaying extends Component {
 
   sendCommand = command => () => {
     this.props.send({
-      event:   EVENTS.RTC.PLAYER_MOVEMENT,
+      event:   Event.Rtc.PLAYER_MOVEMENT,
       payload: createCommand(this.state.ordering, command),
     })
 

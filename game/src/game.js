@@ -2,15 +2,21 @@ import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { EVENTS } from 'common'
+import { Event } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
 import bounce from './bounce'
+import Scene from './Scene'
 
-const { log } = console
+window.debug = {
+  ...window.debug,
+  transitionToRoundEnd,
+}
+
+const { log, warn } = console
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
@@ -24,26 +30,24 @@ const HOLE_LENGTH_MIN_TIME = 10
 const WALL_THICKNESS = 6
 const WALL_COLOR = 0xffffff
 
-export const GAME_EVENTS = { PLAYER_COLLISION: 'player.collision' }
+export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
 const PLAYER_HITBOX_SIZE = 14
 const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
 
-export const GAME_COLORS = {
+export const GameColor = {
   BLUE: '0x004275',
 }
 
 export const transitionToGameScene = (maxPlayers) => {
-  const doNotDestroy = [
-    'background',
-    'fadeInOut',
-  ]
-
-  Entity.getAll()
-    .filter(e => !doNotDestroy.includes(e.id))
-    .forEach(Entity.destroy)
+  Entity.addChild(
+    Entity.getRoot(),
+    {
+      id: Scene.GAME,
+    },
+  )
 
   const playerCountFactor = R.compose(
     Math.sqrt,
@@ -76,20 +80,21 @@ export const transitionToGameScene = (maxPlayers) => {
         })
         player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
 
-        // Enable the following behaviour for keyboard debugging
-        // player.behaviors.player1Keyboard = player1Keyboard()
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
       })
     })
 }
 
-export const getMatchWinners = (players, scoreNeeded) =>
+export const getMatchWinners = players =>
   R.compose(
-    R.filter(R.compose(
-      R.flip(R.gte)(scoreNeeded),
-      R.view(R.lensProp('score')),
-    )),
+    score => Object
+      .values(players)
+      .filter(p => p.score === score),
+    R.reduce(R.max, 0),
+    R.map(parseInt),
+    Object.keys,
+    R.groupBy(R.lensProp('score')),
     Object.values,
   )(players)
 
@@ -108,15 +113,30 @@ export const resetPlayersScore = players => R.compose(
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
   R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
-export const applyPlayerScores = (players, scores) =>
-  scores.reduce((acc, [score, playerId]) => {
-    const player = players[playerId]
-    acc[playerId] = {
-      ...player,
-      score: player.score + score,
-    }
-    return acc
-  }, {})
+export const applyPlayerScores = (players, scores) => {
+  const scoreDict = scores
+    .map(([score, playerId]) => ({ [playerId]: score }))
+    .reduce((dict, score) => ({ ...dict, ...score }), {})
+
+  return Object
+    .keys(players)
+    .map((playerId) => {
+      const player = players[playerId]
+
+      return {
+        ...player,
+        score: player.score + (scoreDict[playerId] || 0),
+      }
+    })
+    .reduce((updatedPlayers, player) => (
+      {
+        ...updatedPlayers,
+        ...{
+          [player.playerId]: player,
+        },
+      }
+    ), {})
+}
 
 const getStartingPosition = Util.grid({
   x:           150,
@@ -130,7 +150,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   const { x, y } = getStartingPosition(index)
 
   const square = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.GAME),
     {
       id:     playerId,
       x,
@@ -139,15 +159,23 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
     },
   )
-  square.events = new EventEmitter()
+  square.event = new EventEmitter()
 
-  square.events.on(GAME_EVENTS.PLAYER_COLLISION, () =>
-    gameState
+  square.event.on(GameEvent.PLAYER_COLLISION, () => {
+    const controller = gameState
       .controllers[playerId]
+
+    if (!controller) {
+      warn(`controller with id: ${playerId} not found`)
+      return
+    }
+
+    controller
       .send({
-        event:   EVENTS.RTC.PLAYER_DIED,
+        event:   Event.Rtc.PLAYER_DIED,
         payload: {},
-      }))
+      })
+  })
 
   Entity.addType(square, 'player')
 
@@ -241,7 +269,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
 
     if (Timer.run(b.timer)) {
       const trailE = Entity.addChild(
-        Entity.getRoot(),
+        Entity.get(Scene.GAME),
         {
           x: middleX - (width / 2),
           y: middleY - (height / 2),
@@ -313,14 +341,13 @@ const activate = () => ({
 
 const killPlayer = (e, playerCountFactor) => {
   const particles = Entity.addChild(e)
-
   Particles.emit(particles, {
     ...explode({
       degrees:     e.degrees,
       scaleFactor: playerCountFactor,
       radius:      e.width,
-      x:           Entity.getX(e) + (e.width / 2),
-      y:           Entity.getY(e) + (e.height / 2),
+      x:           Entity.getX(e),
+      y:           Entity.getY(e),
     }),
     zIndex: layers.FOREGROUND,
   })
@@ -338,7 +365,7 @@ const killPlayer = (e, playerCountFactor) => {
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
 
-  e.events.emit(GAME_EVENTS.PLAYER_COLLISION)
+  e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
 const collisionChecker = (playerId, playerCountFactor) => ({
@@ -364,10 +391,10 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         .filter(p => !p.killed)
 
       if (playersAlive.length === 1 && gameState.started) {
-        gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
         gameState.lastRoundResult.playerFinishOrder =
           gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
+
         transitionToRoundEnd()
       }
       Timer.reset(b.timer)
@@ -376,7 +403,7 @@ const collisionChecker = (playerId, playerCountFactor) => ({
 })
 
 const createWalls = () => {
-  const walls = Entity.addChild(Entity.getRoot())
+  const walls = Entity.addChild(Entity.get(Scene.GAME))
   const graphics = Graphics.create(walls)
   graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
 

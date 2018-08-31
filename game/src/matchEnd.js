@@ -1,10 +1,11 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS, COLORS } from 'common'
-import { gameState, getRatio, GAME_WIDTH } from '.'
+import { Event, Color } from 'common'
+import { gameState, GAME_WIDTH } from '.'
 import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
+import Scene from './Scene'
 
 const TIME_UNTIL_MATCH_END_TRANSITION = 240
 
@@ -16,30 +17,28 @@ const createText = (entity, content, color) => {
       zIndex: layers.FOREGROUND,
       style:  {
         ...big,
-        fill:     color,
-        fontSize: big.fontSize * getRatio(),
+        fill: color,
       },
     },
   )
-
-  text.scale.set(1 / getRatio())
   text.anchor.set(0.5)
 
   return text
 }
 
 const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a draw, better luck next time!', 'white')
-const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, COLORS[color])
+const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, Color[color])
 
 export const transitionToMatchEnd = () => {
-  Entity.getAll()
+  Entity
+    .getAll()
     .filter(e => e.id !== 'background')
-    .forEach(Entity.destroy)
+    .map(Entity.destroy)
 
   const matchEnd = Entity.addChild(
     Entity.getRoot(),
     {
-      id: 'match-end',
+      id: Scene.MATCH_END,
       x:  GAME_WIDTH / 2,
       y:  200,
     },
@@ -53,7 +52,6 @@ export const transitionToMatchEnd = () => {
     createTextDraw(matchEnd)
   }
 
-  matchEnd.originalSize = big.fontSize * getRatio()
   matchEnd.behaviors.pause = pause()
 }
 
@@ -64,11 +62,20 @@ const pause = () => ({
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
         })
 
       gameState.players = resetPlayersScore(gameState.players)
+
+      Entity.destroy(Scene.MATCH_END)
+
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },
 })
+
+window.debug = {
+  ...window.debug,
+  transitionToLobby,
+  transitionToMatchEnd,
+}

@@ -1,24 +1,28 @@
 import { Entity, Timer, Text } from 'l1'
-import { EVENTS, COLORS } from 'common'
+import { Event, Color } from 'common'
+import R from 'ramda'
 import { createEaseInAndOut } from './magic'
-import { calculatePlayerScores, getMatchWinners, scoreToWin, applyPlayerScores } from './game'
+import { calculatePlayerScores, scoreToWin, applyPlayerScores } from './game'
 import { transitionToLobby } from './lobby'
-import { gameState, GAME_WIDTH, getRatio } from '.'
+import { gameState, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 import { transitionToMatchEnd } from './matchEnd'
+import Scene from './Scene'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
+  gameState.started = false
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
 
   const { winner } = gameState.lastRoundResult
+
   const roundEnd = Entity.addChild(
-    Entity.getRoot(),
+    Entity.get(Scene.GAME),
     {
-      id: 'round-end',
+      id: Scene.ROUND_END,
       x:  -300,
       y:  200,
     },
@@ -30,19 +34,21 @@ export const transitionToRoundEnd = () => {
       zIndex: layers.FOREGROUND + 10,
       style:  {
         ...big,
-        fill:     COLORS[winner],
-        fontSize: big.fontSize * getRatio(),
+        fill: Color[winner],
       },
     },
   )
-  text.scale.set(1 / getRatio())
-  roundEnd.originalSize = big.fontSize * getRatio()
 
   text.anchor.set(0.5)
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
   const { players } = gameState
-  const matchWinnerCount = getMatchWinners(players, scoreToWin(players)).length
+  const winLimit = scoreToWin(players)
+  const matchWinnerCount = Object
+    .values(players)
+    .map(R.prop('score'))
+    .filter(s => s >= winLimit)
+    .length
 
   roundEnd.behaviors.pause = matchWinnerCount > 0
     ? pauseAndTransitionToMatchEnd()
@@ -51,7 +57,12 @@ export const transitionToRoundEnd = () => {
 
 const pauseAndTransitionToMatchEnd = () => ({
   timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
-  run:   ({ timer }) => Timer.run(timer) && transitionToMatchEnd(),
+  run:   ({ timer }) => {
+    if (Timer.run(timer)) {
+      Entity.destroy(Scene.GAME)
+      transitionToMatchEnd()
+    }
+  },
 })
 
 const pauseAndTransitionToLobby = () => ({
@@ -61,9 +72,9 @@ const pauseAndTransitionToLobby = () => ({
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: EVENTS.RTC.ROUND_END, payload: {} })
+          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
         })
-
+      Entity.destroy(Scene.GAME)
       transitionToLobby(gameState.gameCode, Object.values(gameState.players))
     }
   },
@@ -83,3 +94,8 @@ const roundWinnerTextAnimation = () => ({
     b.tick += 1
   },
 })
+
+window.debug = {
+  ...window.debug,
+  transitionToRoundEnd,
+}

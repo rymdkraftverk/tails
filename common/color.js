@@ -1,5 +1,7 @@
-const colors = {
-  turqouise: '#009B9D',
+const Color = {
+  // These keys are exempted from the always caps keys-rule
+  // as the naming of these keys tightly coupled to other mechanisms (e.g. file names)
+  turquoise: '#009B9D',
   orange:    '#FF9201',
   pink:      '#FF85FF',
   white:     '#EEEDEF',
@@ -11,4 +13,4 @@ const colors = {
   brown:     '#945200',
 }
 
-module.exports = colors
+module.exports = Color

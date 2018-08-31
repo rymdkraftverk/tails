@@ -2,6 +2,9 @@ body {
   font-family: 'patchy-robots';
   background-color: black;
   margin: 0px;
+}
+
+#container {
   display: flex;
   justify-content: center;
   align-items: center;

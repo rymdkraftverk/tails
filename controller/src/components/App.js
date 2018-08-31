@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import { EVENTS, COLORS } from 'common'
+import { Event, Color } from 'common'
 import signaling from 'signaling'
 import styled from 'styled-components'
 
@@ -72,25 +72,25 @@ class App extends Component {
   }
 
   onReceiverData = ({ event, payload }) => {
-    if (event === EVENTS.RTC.CONTROLLER_COLOR) {
+    if (event === Event.Rtc.CONTROLLER_COLOR) {
       this.setState({
         appState:    APP_STATE.GAME_LOBBY,
         playerColor: payload.color,
         playerId:    payload.playerId,
       })
-    } else if (event === EVENTS.RTC.ROUND_START) {
+    } else if (event === Event.Rtc.ROUND_START) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === EVENTS.RTC.ROUND_STARTED) {
+    } else if (event === Event.Rtc.ROUND_STARTED) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === EVENTS.RTC.ROUND_END) {
+    } else if (event === Event.Rtc.ROUND_END) {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
       })
-    } else if (event === EVENTS.RTC.PLAYER_DIED) {
+    } else if (event === Event.Rtc.PLAYER_DIED) {
       this.setState({
         appState: APP_STATE.PLAYER_DEAD,
       })
@@ -124,7 +124,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.send({ event: EVENTS.RTC.ROUND_START })
+    this.send({ event: Event.Rtc.ROUND_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 
@@ -179,7 +179,7 @@ class App extends Component {
             ?
               <GamePlaying
                 send={this.send}
-                playerColor={COLORS[playerColor]}
+                playerColor={Color[playerColor]}
               />
             : null
         }
