@@ -73,11 +73,17 @@ class App extends Component {
 
   onReceiverData = ({ event, payload }) => {
     if (event === Event.Rtc.CONTROLLER_COLOR) {
-      this.setState({
-        appState:    APP_STATE.GAME_LOBBY,
-        playerColor: payload.color,
-        playerId:    payload.playerId,
-      })
+      if (!payload.started) {
+        this.setState({
+          appState:    APP_STATE.GAME_LOBBY,
+          playerColor: payload.color,
+          playerId:    payload.playerId,
+        })
+      } else {
+        this.setState({
+          appState: APP_STATE.PLAYER_DEAD,
+        })
+      }
     } else if (event === Event.Rtc.ROUND_START) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,

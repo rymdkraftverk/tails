@@ -49,8 +49,7 @@ They can be accessed from the console on the `window.debug` object.
 
 The following functions are available:
 
-* `window.debug.addPlayerToLobby()`
-* `window.debug.addPlayersToLobby(count)`
+* `window.debug.addMockPlayers(count)`
 * `window.debug.roundStart()`
 * `window.debug.transitionToLobby(gameCode)`
 * `window.debug.transitionToMatchEnd()`
