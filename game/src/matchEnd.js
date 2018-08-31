@@ -5,7 +5,7 @@ import { getPlayersWithHighestScore, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import * as TextStyle from './util/TextStyle'
 import Layer from './util/Layer'
-import Scene from './Scene'
+import Scene from './util/Scene'
 
 const TIME_UNTIL_MATCH_END_TRANSITION = 240
 

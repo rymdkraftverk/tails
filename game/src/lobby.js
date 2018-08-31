@@ -6,7 +6,7 @@ import * as TextStyle from './util/TextStyle'
 import { GameColor } from './game'
 import Layer from './util/Layer'
 import bounce from './bounce'
-import Scene from './Scene'
+import Scene from './util/Scene'
 
 const CONTROLLER_PORT = '4001'
 
