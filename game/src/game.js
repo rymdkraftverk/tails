@@ -238,7 +238,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           directionIndicator,
           { texture: `arrow-${player.color}` },
         )
-        directionSprite.scale.set(1 / playerCountFactor)
+        directionSprite.scale.set(3 / playerCountFactor)
         directionSprite.anchor.set(0.5)
         directionSprite.rotation = toRadians(player.degrees)
       }
