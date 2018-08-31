@@ -76,7 +76,7 @@ const roundStart = () => {
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
-        gameState.controllers[id].send({
+        gameState.controllers[id].send('reliable', {
           event:   Event.Rtc.ROUND_STARTED,
           payload: {},
         })
@@ -118,19 +118,7 @@ const createGame = ({ gameCode }) => {
 }
 
 // TODO: extract event switch logic to common function
-const onReliableControllerData = id => (message) => {
-  const { event, payload } = message
-
-  const f = rtcEvents[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
-    return
-  }
-
-  f(id, payload)
-}
-
-const onUnreliableControllerData = id => (message) => {
+const onControllerData = id => (message) => {
   const { event, payload } = message
 
   const f = rtcEvents[event]
@@ -147,9 +135,8 @@ const moreControllersAllowed = () =>
 
 export const onControllerJoin = ({
   id,
-  setOnReliableData,
-  setOnUnreliableData,
-  sendReliable: send,
+  setOnData,
+  send,
   close,
 }) => {
   if (moreControllersAllowed()) {
@@ -171,7 +158,7 @@ export const onControllerJoin = ({
       send,
     }
 
-    send({
+    send('reliable', {
       event:   Event.Rtc.CONTROLLER_COLOR,
       payload: {
         playerId: id,
@@ -183,15 +170,7 @@ export const onControllerJoin = ({
     close()
   }
 
-  R.compose(
-    setOnReliableData,
-    onReliableControllerData,
-  )(id)
-
-  R.compose(
-    setOnUnreliableData,
-    onUnreliableControllerData,
-  )(id)
+  setOnData(onControllerData(id))
 }
 
 const createNewPlayer = ({ playerId }) => {

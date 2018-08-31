@@ -63,7 +63,7 @@ const pause = () => ({
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
+          controller.send('reliable', { event: Event.Rtc.ROUND_END, payload: {} })
         })
 
       gameState.players = resetPlayersScore(gameState.players)

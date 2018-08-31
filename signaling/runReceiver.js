@@ -1,11 +1,14 @@
 const R = require('ramda')
 const { prettyId } = require('common')
 const Event = require('./Event')
+const Channel = require('./channel')
 
+// TODO: common signaling
 const ReadyState = {
   OPEN: 'open',
 }
 
+// TODO: common signaling
 const WEB_RTC_CONFIG = {
   iceServers: [
     {
@@ -31,6 +34,7 @@ const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
 
+// TODO: common signaling
 const emit = (event, payload) => {
   const message = JSON.stringify({ event, payload })
   ws.send(message)
@@ -69,9 +73,9 @@ const setUpChannels = (rtc, channelNames, initiator) => {
         log(`[Data channel] ${prettyId(initiator.id)} ${channel.label}`)
         openChannels = openChannels.concat([channel])
 
-        const allOpened = R.compose(
-          R.equals(channelNames),
+        const allOpened = R.pipe(
           R.pluck('label'),
+          R.equals(channelNames),
         )(openChannels)
 
         if (allOpened) {
@@ -84,6 +88,18 @@ const setUpChannels = (rtc, channelNames, initiator) => {
       }
     }
   })
+}
+
+// TODO: common signaling
+const sendJsonOverChannel = (channel, data) => {
+  if (channel.readyState === ReadyState.OPEN) {
+    R.pipe(
+      JSON.stringify,
+      channel.send.bind(channel),
+    )(data)
+  } else {
+    warn(`Attempt to send ${data} to closed channel ${channel.label}`)
+  }
 }
 
 // First point of contact from initiator
@@ -99,49 +115,26 @@ const onOffer = ({ initiatorId, offer }) => {
 
   // Wait for both known channels to be opened before considering initiator
   // to have joined
-  setUpChannels(rtc, ['unreliable', 'reliable'], initiator)
-    .then(([unreliableChannel, reliableChannel]) => {
-      outputEvents.onInitiatorJoin({
-        id:                  initiator.id,
-        setOnUnreliableData: (onData) => {
-          unreliableChannel.onmessage = R.compose(
-            onData,
-            JSON.parse,
-            ({ data }) => data,
-          )
-        },
-        setOnReliableData: (onData) => {
-          reliableChannel.onmessage = R.compose(
-            onData,
-            JSON.parse,
-            ({ data }) => data,
-          )
-        },
-        /*
-        Possible readyStates:
-        'open':       OK to send
-        'connecting': Not OK to send
-        'closing':    Not OK to send, but will try to send what's already in the internal queue
-        'closed':     Not OK to send
-        */
-        sendUnreliable: (data) => {
-          if (unreliableChannel.readyState === ReadyState.OPEN) {
-            R.compose(
-              unreliableChannel.send,
-              JSON.stringify,
-            )(data)
-          }
-        },
-        sendReliable: (data) => {
-          if (reliableChannel.readyState === ReadyState.OPEN) {
-            reliableChannel.send(JSON.stringify(data))
+  setUpChannels(rtc, Object.values(Channel), initiator)
+    .then((channels) => {
+      const channelMap = channels
+        .map(channel => ({ [channel.label]: channel }))
+        .reduce(R.merge)
 
-            // TODO: whynowork?!
-            // R.compose(
-            //   reliableChannel.send,
-            //   JSON.stringify,
-            // )(data)
-          }
+      outputEvents.onInitiatorJoin({
+        id:        initiator.id,
+        setOnData: (onData) => {
+          channels.forEach((channel) => {
+            channel.onmessage = R.pipe(
+              ({ data }) => data,
+              JSON.parse,
+              onData,
+            )
+          })
+        },
+        send: (channelName, data) => {
+          const channel = channelMap[channelName]
+          sendJsonOverChannel(channel, data)
         },
         close: rtc.close,
       })
@@ -156,6 +149,7 @@ const wsEvents = {
   [Event.OFFER]: onOffer,
 }
 
+// TODO: common signaling
 const onWsMessage = (message) => {
   const { event, payload } = JSON.parse(message.data)
   const f = wsEvents[event]
