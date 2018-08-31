@@ -86,7 +86,7 @@ export const transitionToGameScene = (maxPlayers) => {
     })
 }
 
-export const getMatchWinners = players =>
+export const getPlayersWithHighestScore = players =>
   R.compose(
     score => Object
       .values(players)
