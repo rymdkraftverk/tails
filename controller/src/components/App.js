@@ -16,7 +16,7 @@ const StyledFullscreen = styled(Fullscreen)`
   touch-action: manipulation;
 `
 
-const { log } = console
+const { error: logError, log } = console
 
 const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
@@ -63,12 +63,16 @@ class App extends Component {
         this.sendUnreliable = send('unreliable')
         this.sendReliable = send('reliable')
       })
-      .catch(({ cause }) => {
+      .catch((error) => {
         const message = {
           NOT_FOUND: `Game with code ${gameCode} not found`,
-        }[cause]
+        }[error.cause]
 
-        this.displayError(message)
+        if (message) {
+          this.displayError(message)
+        } else {
+          logError(error)
+        }
       })
   }
 

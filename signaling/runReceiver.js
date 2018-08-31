@@ -2,25 +2,18 @@ const R = require('ramda')
 const { prettyId } = require('common')
 const Event = require('./Event')
 const Channel = require('./channel')
+const {
+  WEB_RTC_CONFIG,
+  makeOnMessage,
+  makeRtcSend,
+  makeWsSend,
+  onWsMessage,
+} = require('./common')
 
-// TODO: common signaling
-const ReadyState = {
-  OPEN: 'open',
-}
-
-// TODO: common signaling
-const WEB_RTC_CONFIG = {
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302',
-    },
-  ],
-}
-
-const { log, warn } = console
+const { log } = console
 
 // state
-let ws
+let wsSend = null
 
 const outputEvents = {
   onInitiatorJoin:  null,
@@ -34,12 +27,6 @@ const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
 
-// TODO: common signaling
-const emit = (event, payload) => {
-  const message = JSON.stringify({ event, payload })
-  ws.send(message)
-}
-
 const onIceCandidate = initiator => ({ candidate }) => {
   if (candidate) {
     log(`[Ice Candidate] ${prettyId(initiator.id)}`)
@@ -47,7 +34,7 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Sending answer] ${prettyId(initiator.id)} Last candidate retrieved`)
-  emit(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
+  wsSend(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
 
 const createInitiator = (initiatorId, offer) => ({
@@ -90,17 +77,12 @@ const setUpChannels = (rtc, channelNames, initiator) => {
   })
 }
 
-// TODO: common signaling
-const sendJsonOverChannel = (channel, data) => {
-  if (channel.readyState === ReadyState.OPEN) {
-    R.pipe(
-      JSON.stringify,
-      channel.send.bind(channel),
-    )(data)
-  } else {
-    warn(`Attempt to send ${data} to closed channel ${channel.label}`)
-  }
+const makeSetOnData = channels => (onData) => {
+  channels.forEach((channel) => {
+    channel.onmessage = makeOnMessage(onData)
+  })
 }
+
 
 // First point of contact from initiator
 const onOffer = ({ initiatorId, offer }) => {
@@ -117,47 +99,17 @@ const onOffer = ({ initiatorId, offer }) => {
   // to have joined
   setUpChannels(rtc, Object.values(Channel), initiator)
     .then((channels) => {
-      const channelMap = channels
-        .map(channel => ({ [channel.label]: channel }))
-        .reduce(R.merge)
-
       outputEvents.onInitiatorJoin({
         id:        initiator.id,
-        setOnData: (onData) => {
-          channels.forEach((channel) => {
-            channel.onmessage = R.pipe(
-              ({ data }) => data,
-              JSON.parse,
-              onData,
-            )
-          })
-        },
-        send: (channelName, data) => {
-          const channel = channelMap[channelName]
-          sendJsonOverChannel(channel, data)
-        },
-        close: rtc.close,
+        setOnData: makeSetOnData(channels),
+        send:      makeRtcSend(channels),
+        close:     rtc.close,
       })
 
       removeInitiator(initiator.id)
     })
 
   createAnswer(rtc, offer)
-}
-
-const wsEvents = {
-  [Event.OFFER]: onOffer,
-}
-
-// TODO: common signaling
-const onWsMessage = (message) => {
-  const { event, payload } = JSON.parse(message.data)
-  const f = wsEvents[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
-    return
-  }
-  f(payload)
 }
 
 const init = ({
@@ -169,9 +121,12 @@ const init = ({
   outputEvents.onInitiatorJoin = onInitiatorJoin
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
-  ws = new WebSocket(wsAddress)
-  ws.onopen = () => { emit(Event.RECEIVER_UPGRADE, receiverId) }
-  ws.onmessage = onWsMessage
+  const ws = new WebSocket(wsAddress)
+  wsSend = makeWsSend(ws)
+  ws.onopen = () => { wsSend(Event.RECEIVER_UPGRADE, receiverId) }
+  ws.onmessage = onWsMessage({
+    [Event.OFFER]: onOffer,
+  })
 }
 
 module.exports = init

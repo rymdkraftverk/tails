@@ -1,75 +1,49 @@
 const R = require('ramda')
 const Event = require('./Event')
 const Channel = require('./channel')
-
-const ReadyState = {
-  OPEN: 'open',
-}
-
-const WEB_RTC_CONFIG = {
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302',
-    },
-  ],
-}
+const {
+  WEB_RTC_CONFIG,
+  makeCloseConnections,
+  makeOnMessage,
+  makeRtcSend,
+  makeWsSend,
+  onWsMessage,
+} = require('./common')
 
 const { error, log, warn } = console
 
 // state
-let ws
-let rtc
+let wsSend = null
+let closeConnections = null
+// end state
 
-let receiverId
-
-let onFailure
-
-// io
-const emit = (event, payload) => {
-  const message = JSON.stringify({ event, payload })
-  ws.send(message)
-}
-
-const closeConnections = () => {
-  ws.close()
-  rtc.close()
-}
-
-const onIceCandidate = ({ candidate }) => {
+const onIceCandidate = (rtc, receiverId) => ({ candidate }) => {
   if (candidate) {
     log('[Ice Candidate]')
     return
   }
 
   log('[Sending offer] Last candidate retrieved')
-  emit(Event.OFFER, { receiverId, offer: rtc.localDescription })
+  wsSend(Event.OFFER, { receiverId, offer: rtc.localDescription })
 }
 
-const createOffer = () => rtc
+const createOffer = rtc => () => rtc
   .createOffer()
-  .then(offer => Promise.all([offer, rtc.setLocalDescription(offer)]))
+  .then(offer => Promise.all([
+    offer,
+    rtc.setLocalDescription(offer),
+  ]))
 
-const onAnswer = ({ answer }) => rtc
+const onAnswer = rtc => ({ answer }) => rtc
   .setRemoteDescription(answer)
 
-const onReceiverNotFound = () => {
+const onReceiverNotFound = onFailure => () => {
   warn('Reciver not found')
   closeConnections()
   onFailure({ cause: 'NOT_FOUND' })
 }
 
-const sendJsonOverChannel = (channel, data) => {
-  if (channel.readyState === ReadyState.OPEN) {
-    R.pipe(
-      JSON.stringify,
-      channel.send.bind(channel),
-    )(data)
-  } else {
-    warn(`Attempt to send ${data} to closed channel ${channel.label}`)
-  }
-}
-
-const setUpChannel = ({
+const setUpChannel = rtc => ({
   name, config, onClose, onData,
 }) => {
   const channel = rtc.createDataChannel(
@@ -87,11 +61,7 @@ const setUpChannel = ({
     onClose,
   )
 
-  channel.onmessage = R.pipe(
-    ({ data }) => data,
-    JSON.parse,
-    onData,
-  )
+  channel.onmessage = makeOnMessage(onData)
 
   // Channel considered "set up" once it's opened
   return new Promise((resolve) => {
@@ -102,38 +72,24 @@ const setUpChannel = ({
   })
 }
 
-const wsEvents = {
-  [Event.ANSWER]:    onAnswer,
-  [Event.NOT_FOUND]: onReceiverNotFound,
-}
+const init = ({
+  onClose,
+  onData,
+  receiverId,
+  wsAddress,
+}) => new Promise((resolve, reject) => {
+  const rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
+  rtc.onicecandidate = onIceCandidate(rtc, receiverId)
 
-const onWsMessage = (message) => {
-  const { event, payload } = JSON.parse(message.data)
-  const f = wsEvents[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
-    return
-  }
-  f(payload)
-}
+  const ws = new WebSocket(wsAddress)
+  wsSend = makeWsSend(ws)
+  ws.onopen = createOffer(rtc)
+  ws.onmessage = onWsMessage({
+    [Event.ANSWER]:    onAnswer(rtc),
+    [Event.NOT_FOUND]: onReceiverNotFound(reject),
+  })
 
-const init = options => new Promise((resolve, reject) => {
-  ({ receiverId } = options)
-
-  const {
-    wsAddress,
-    onData,
-    onClose,
-  } = options
-
-  onFailure = reject
-
-  ws = new WebSocket(wsAddress)
-  ws.onmessage = onWsMessage
-  ws.onopen = createOffer
-
-  rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
-  rtc.onicecandidate = onIceCandidate
+  closeConnections = makeCloseConnections([rtc, ws])
 
   // configuration explanation:
   // https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability.html
@@ -158,19 +114,13 @@ const init = options => new Promise((resolve, reject) => {
   }]
 
   const promisedChannels = channelConfigs
-    .map(setUpChannel)
+    .map(setUpChannel(rtc))
 
   Promise.all(promisedChannels)
-    .then((channels) => {
-      const channelMap = channels
-        .map(channel => ({ [channel.label]: channel }))
-        .reduce(R.merge)
-
-      resolve(channelName => (data) => {
-        const channel = channelMap[channelName]
-        sendJsonOverChannel(channel, data)
-      })
-    })
+    .then(R.pipe(
+      makeRtcSend,
+      resolve,
+    ))
 })
 
 module.exports = init
