@@ -7,7 +7,7 @@ import { transitionToGameScene, GameEvent } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
 import Scene from './Scene'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -227,7 +227,7 @@ Game
       })
 
     const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
-    Sprite.show(background, { texture: 'background', zIndex: layers.BACKGROUND })
+    Sprite.show(background, { texture: 'background', zIndex: Layer.BACKGROUND })
 
     resizeGame()
 

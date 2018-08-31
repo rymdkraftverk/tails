@@ -4,7 +4,7 @@ import { gameState, GAME_WIDTH } from '.'
 import { getPlayersWithHighestScore, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import Scene from './Scene'
 
 const TIME_UNTIL_MATCH_END_TRANSITION = 240
@@ -14,7 +14,7 @@ const createText = (entity, content, color) => {
     entity,
     {
       text:   content,
-      zIndex: layers.FOREGROUND,
+      zIndex: Layer.FOREGROUND,
       style:  {
         ...big,
         fill: color,
