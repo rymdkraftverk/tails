@@ -11,12 +11,12 @@ $ docker-compose -f docker-compose.yml up
 
 ### z-index
 
-When setting z-index, always use the constants defined in `layers.js`, and set the z-index relative to them.
+When setting z-index, always use the constants defined in `Layer.js`, and set the z-index relative to them.
 
 Example:
 
 ```js
-const myZIndex = layers.BACKGROUND - 10
+const myZIndex = Layer.BACKGROUND - 10
 ```
 
 ### eslint
