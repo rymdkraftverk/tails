@@ -3,7 +3,7 @@ import { Event, Color } from 'common'
 import { gameState, GAME_WIDTH } from '.'
 import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
-import { big } from './util/textStyles'
+import * as TextStyle from './util/TextStyle'
 import Layer from './util/Layer'
 import Scene from './Scene'
 
@@ -16,7 +16,7 @@ const createText = (entity, content, color) => {
       text:   content,
       zIndex: Layer.FOREGROUND,
       style:  {
-        ...big,
+        ...TextStyle.BIG,
         fill: color,
       },
     },
