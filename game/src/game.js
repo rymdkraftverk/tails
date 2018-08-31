@@ -186,7 +186,6 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   square.isAlive = true
   square.spriteId = spriteId
 
-  // const directionRadians = (square.degrees / 180) * Math.PI
   const directionRadians = toRadians(square.degrees)
   const directionDistanceScale = 100 / playerCountFactor
 
@@ -242,8 +241,6 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
         directionSprite.scale.set(1 / playerCountFactor)
         directionSprite.anchor.set(0.5)
         directionSprite.rotation = toRadians(player.degrees)
-
-        // Offset the directionSprite so that the entity hitbox is in the middle
       }
     },
   }
