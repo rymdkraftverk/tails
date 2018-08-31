@@ -19,7 +19,6 @@ const Container = styled.div`
   overflow: hidden;
   touch-action: manipulation;
   border: ${({ playerColor }) => `2rem solid ${playerColor}`};
-  border-radius: 4rem;
 `
 
 const ButtonLeft = styled.div`
