@@ -75,13 +75,14 @@ export const transitionToGameScene = (maxPlayers) => {
           player.behaviors.holeGenerator,
         )
         player.behaviors.move = move({
-          startingDegrees: Util.getRandomInRange(0, 360),
           playerCountFactor,
         })
         player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
 
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
+
+        Entity.destroy(`${player.id}:direction`)
       })
     })
 }
@@ -159,6 +160,8 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
     },
   )
+
+  square.degrees = Util.getRandomInRange(0, 360)
   square.event = new EventEmitter()
 
   square.event.on(GameEvent.PLAYER_COLLISION, () => {
@@ -182,6 +185,22 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   square.color = color
   square.isAlive = true
   square.spriteId = spriteId
+
+  // const directionRadians = (square.degrees / 180) * Math.PI
+  const directionRadians = toRadians(square.degrees)
+  const directionDistanceScale = 100 / playerCountFactor
+
+  const directionIndicator = Entity.addChild(
+    Entity.get(playerId),
+    {
+      id: `${playerId}:direction`,
+      x:  (directionDistanceScale * Math.cos(directionRadians)) + (square.width / 2),
+      y:  (directionDistanceScale * Math.sin(directionRadians)) + (square.height / 2),
+    },
+  )
+
+  directionIndicator.spriteId = spriteId
+  directionIndicator.color = color
 
   return square
 })
@@ -213,6 +232,18 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           Entity.destroy(bouncer)
           resolve()
         }
+
+        const directionIndicator = Entity.get(`${player.id}:direction`)
+
+        const directionSprite = Sprite.show(
+          directionIndicator,
+          { texture: `arrow-${player.color}` },
+        )
+        directionSprite.scale.set(1 / playerCountFactor)
+        directionSprite.anchor.set(0.5)
+        directionSprite.rotation = toRadians(player.degrees)
+
+        // Offset the directionSprite so that the entity hitbox is in the middle
       }
     },
   }
@@ -220,11 +251,9 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 
 const toRadians = angle => angle * (Math.PI / 180)
 
-const move = ({ startingDegrees, playerCountFactor }) => ({
-  init: (b, e) => {
-    e.degrees = startingDegrees
-  },
-  run: (b, e) => {
+const move = ({ playerCountFactor }) => ({
+  init: () => {},
+  run:  (b, e) => {
     const radians = toRadians(e.degrees)
     const y = Math.sin(radians)
     const x = Math.cos(radians)
