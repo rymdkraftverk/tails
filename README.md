@@ -45,15 +45,15 @@ With settings:
 
 ### debugging
 There are a few functions available to help with debugging from the game view.
-They can be accessed from the console on the `window.debug` object.
+They can be accessed from the console on the `debug` object.
 
 The following functions are available:
 
-* `window.debug.addMockPlayers(count)`
-* `window.debug.roundStart()`
-* `window.debug.transitionToLobby(gameCode)`
-* `window.debug.transitionToMatchEnd()`
-* `window.debug.transitionToRoundEnd()`
+* `debug.addMockPlayers(count)`
+* `debug.roundStart()`
+* `debug.transitionToLobby(gameCode)`
+* `debug.transitionToMatchEnd()`
+* `debug.transitionToRoundEnd()`
 
 `transitionToLobby` is currently a bit problematic due to race conditions in rendering the lobby.
 If some other function tries to render the lobby again the game engine will crash.
