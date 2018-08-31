@@ -6,6 +6,7 @@ import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
+import Scene from './Scene'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 
