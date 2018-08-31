@@ -6,9 +6,9 @@ import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
-import Scene from './Scene'
 import Layer from './util/Layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
+import Scene from './util/Scene'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 

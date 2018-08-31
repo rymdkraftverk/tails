@@ -5,7 +5,7 @@ import { calculatePlayerScores, applyPlayerScores } from './game'
 import { gameState, GAME_WIDTH } from '.'
 import * as TextStyle from './util/TextStyle'
 import Layer from './util/Layer'
-import Scene from './Scene'
+import Scene from './util/Scene'
 import { transitionToScoreScene } from './score'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
