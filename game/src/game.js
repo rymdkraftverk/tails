@@ -11,7 +11,12 @@ import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
 
-const { log } = console
+window.debug = {
+  ...window.debug,
+  transitionToRoundEnd,
+}
+
+const { log, warn } = console
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
@@ -81,12 +86,15 @@ export const transitionToGameScene = (maxPlayers) => {
     })
 }
 
-export const getMatchWinners = (players, scoreNeeded) =>
+export const getMatchWinners = players =>
   R.compose(
-    R.filter(R.compose(
-      R.flip(R.gte)(scoreNeeded),
-      R.view(R.lensProp('score')),
-    )),
+    score => Object
+      .values(players)
+      .filter(p => p.score === score),
+    R.reduce(R.max, 0),
+    R.map(parseInt),
+    Object.keys,
+    R.groupBy(R.lensProp('score')),
     Object.values,
   )(players)
 
@@ -105,15 +113,30 @@ export const resetPlayersScore = players => R.compose(
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
   R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
-export const applyPlayerScores = (players, scores) =>
-  scores.reduce((acc, [score, playerId]) => {
-    const player = players[playerId]
-    acc[playerId] = {
-      ...player,
-      score: player.score + score,
-    }
-    return acc
-  }, {})
+export const applyPlayerScores = (players, scores) => {
+  const scoreDict = scores
+    .map(([score, playerId]) => ({ [playerId]: score }))
+    .reduce((dict, score) => ({ ...dict, ...score }), {})
+
+  return Object
+    .keys(players)
+    .map((playerId) => {
+      const player = players[playerId]
+
+      return {
+        ...player,
+        score: player.score + (scoreDict[playerId] || 0),
+      }
+    })
+    .reduce((updatedPlayers, player) => (
+      {
+        ...updatedPlayers,
+        ...{
+          [player.playerId]: player,
+        },
+      }
+    ), {})
+}
 
 const getStartingPosition = Util.grid({
   x:           150,
@@ -138,13 +161,21 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   )
   square.event = new EventEmitter()
 
-  square.event.on(GameEvent.PLAYER_COLLISION, () =>
-    gameState
+  square.event.on(GameEvent.PLAYER_COLLISION, () => {
+    const controller = gameState
       .controllers[playerId]
+
+    if (!controller) {
+      warn(`controller with id: ${playerId} not found`)
+      return
+    }
+
+    controller
       .send({
         event:   Event.Rtc.PLAYER_DIED,
         payload: {},
-      }))
+      })
+  })
 
   Entity.addType(square, 'player')
 
@@ -360,7 +391,6 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         .filter(p => !p.killed)
 
       if (playersAlive.length === 1 && gameState.started) {
-        gameState.started = false
         gameState.lastRoundResult.winner = playersAlive[0].color
         gameState.lastRoundResult.playerFinishOrder =
           gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])

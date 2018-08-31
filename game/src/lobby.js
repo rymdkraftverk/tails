@@ -1,5 +1,6 @@
 import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
+import R from 'ramda'
 import { Color } from 'common'
 import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
@@ -258,4 +259,17 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
     const sound = Entity.addChild(square)
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
   }
+}
+
+const addPlayerToLobbyDebug = () => addPlayerToLobby({
+  playerId: `debugPlayer:${Math.random()
+    .toString(36)
+    .substring(7)}`,
+})
+
+window.debug = {
+  ...window.debug,
+  addPlayerToLobby:  addPlayerToLobbyDebug,
+  addPlayersToLobby: count => R.range(0, count)
+    .map(() => addPlayerToLobbyDebug()),
 }

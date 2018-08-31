@@ -1,7 +1,8 @@
 import { Entity, Timer, Text } from 'l1'
 import { Event, Color } from 'common'
+import R from 'ramda'
 import { createEaseInAndOut } from './magic'
-import { calculatePlayerScores, getMatchWinners, scoreToWin, applyPlayerScores } from './game'
+import { calculatePlayerScores, scoreToWin, applyPlayerScores } from './game'
 import { transitionToLobby } from './lobby'
 import { gameState, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'
@@ -12,6 +13,7 @@ import Scene from './Scene'
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
+  gameState.started = false
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
 
@@ -41,7 +43,12 @@ export const transitionToRoundEnd = () => {
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
   const { players } = gameState
-  const matchWinnerCount = getMatchWinners(players, scoreToWin(players)).length
+  const winLimit = scoreToWin(players)
+  const matchWinnerCount = Object
+    .values(players)
+    .map(R.prop('score'))
+    .filter(s => s >= winLimit)
+    .length
 
   roundEnd.behaviors.pause = matchWinnerCount > 0
     ? pauseAndTransitionToMatchEnd()
@@ -87,3 +94,8 @@ const roundWinnerTextAnimation = () => ({
     b.tick += 1
   },
 })
+
+window.debug = {
+  ...window.debug,
+  transitionToRoundEnd,
+}

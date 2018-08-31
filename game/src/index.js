@@ -207,3 +207,8 @@ Game
     Key.add('left')
     Key.add('right')
   })
+
+window.debug = {
+  ...window.debug,
+  roundStart,
+}
