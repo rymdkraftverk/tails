@@ -145,6 +145,7 @@ const onControllerJoin = ({
       send,
     }
     const { color } = addPlayerToLobby({ playerId: id })
+    gameState.events.emit(Event.Rtc.PLAYER_JOINED, { playerId: id, color })
 
     send({
       event:   Event.Rtc.CONTROLLER_COLOR,

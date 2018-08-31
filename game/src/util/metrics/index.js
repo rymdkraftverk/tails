@@ -1,15 +1,16 @@
 const Influx = require('influx')
-
 const {
-  EVENTS:{
-    RTC: {
-      ROUND_START,
+  Event:{
+    Rtc: {
+      ROUND_STARTED,
       PLAYER_MOVEMENT,
       PLAYER_JOINED,
       ROUND_END,
     },
   },
 } = require('common')
+
+const { log } = console
 
 const LATENCY_TIME_OFFSET_ERROR = -10
 const LATENCY_MISSING_MOVEMENT_ERROR = -20
@@ -38,7 +39,7 @@ const clearMovements = () => {
   movements = Object
     .keys(movements)
     .reduce((acc, playerId) => {
-      acc[playerId] = []
+      acc[playerId] = { ...acc[playerId] }
       return acc
     }, {})
 }
@@ -71,6 +72,7 @@ const registerMovement = (playerId, message) => {
 }
 
 const sortOrderingAsc = ({ ordering: ord1 }, { ordering: ord2 }) => ord1 - ord2
+
 const calculcateLatency = ({ controllerTimestamp, gameTimestamp }) => {
   if (controllerTimestamp > gameTimestamp) {
     return LATENCY_TIME_OFFSET_ERROR
@@ -90,13 +92,13 @@ const createLostMovement = (playerId, ordering) => ({
 
 const createLostMovementRange = (from, to) => {
 
-
 }
 
 const saveMovements = () => {
   movements
     .sort(sortOrderingAsc)
     .map(movementWithLatency)
+
     /*
     .reduce((moves, move) => {
       if (moves.length === 0) {
@@ -104,7 +106,7 @@ const saveMovements = () => {
       }
     })
     */
-  console.log('movements:', movements)
+  log('movements:', movements)
   /*
   sort by ordering
   calculcate latency, if weird timestamp, set latency to -10
@@ -112,12 +114,13 @@ const saveMovements = () => {
   */
 }
 
-const registerPlayerJoined = (playerId) => {
-  movementWithLatency[playerId] = []
+const registerPlayerJoined = ({ playerId, color }) => {
+  log('[METRICS] player joined -', playerId)
+  movementWithLatency[playerId] = { color, movements: [] }
 }
 
 module.exports = (gameEvents) => {
-  gameEvents.on(ROUND_START, clearMovements)
+  gameEvents.on(ROUND_STARTED, clearMovements)
   gameEvents.on(ROUND_END, saveMovements)
   gameEvents.on(PLAYER_MOVEMENT, registerMovement)
   gameEvents.on(PLAYER_JOINED, registerPlayerJoined)
