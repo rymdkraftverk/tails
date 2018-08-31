@@ -1,14 +1,12 @@
 import { Entity, Timer, Text } from 'l1'
-import { Event, Color } from 'common'
-import R from 'ramda'
+import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
-import { calculatePlayerScores, scoreToWin, applyPlayerScores } from './game'
-import { transitionToLobby } from './lobby'
+import { calculatePlayerScores, applyPlayerScores } from './game'
 import { gameState, GAME_WIDTH } from '.'
 import { big } from './util/textStyles'
 import layers from './util/layers'
-import { transitionToMatchEnd } from './matchEnd'
 import Scene from './Scene'
+import { transitionToScoreScene } from './score'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
@@ -42,40 +40,15 @@ export const transitionToRoundEnd = () => {
   text.anchor.set(0.5)
   roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
 
-  const { players } = gameState
-  const winLimit = scoreToWin(players)
-  const matchWinnerCount = Object
-    .values(players)
-    .map(R.prop('score'))
-    .filter(s => s >= winLimit)
-    .length
-
-  roundEnd.behaviors.pause = matchWinnerCount > 0
-    ? pauseAndTransitionToMatchEnd()
-    : pauseAndTransitionToLobby()
+  roundEnd.behaviors.pause = pauseAndTransitionToScoreScene()
 }
 
-const pauseAndTransitionToMatchEnd = () => ({
+const pauseAndTransitionToScoreScene = () => ({
   timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
   run:   ({ timer }) => {
     if (Timer.run(timer)) {
       Entity.destroy(Scene.GAME)
-      transitionToMatchEnd()
-    }
-  },
-})
-
-const pauseAndTransitionToLobby = () => ({
-  timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
-  run:   (b) => {
-    if (Timer.run(b.timer)) {
-      Object
-        .values(gameState.controllers)
-        .forEach((controller) => {
-          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
-        })
-      Entity.destroy(Scene.GAME)
-      transitionToLobby(gameState.gameCode, Object.values(gameState.players))
+      transitionToScoreScene()
     }
   },
 })

@@ -11,6 +11,7 @@ const Color = {
   red:       '#CB725D',
   purple:    '#A73D8D',
   brown:     '#945200',
+  none:      '#999999',
 }
 
 module.exports = Color

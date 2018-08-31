@@ -4,7 +4,7 @@ import R from 'ramda'
 import { Color } from 'common'
 import { playerCount, gameState, GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED } from '.'
 import { code, big, small } from './util/textStyles'
-import { scoreToWin, GameColor } from './game'
+import { GameColor } from './game'
 import layers from './util/layers'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -44,8 +44,6 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
         id: Scene.LOBBY,
       },
     )
-
-  createGoalDescription()
 
   createText({
     x:      50,
@@ -143,37 +141,6 @@ const createOutline = (index) => {
   sprite.anchor.set(0.5)
 }
 
-const createGoalDescription = () => {
-  const e = Entity.get('goal-description')
-  if (e) {
-    Entity.destroy(e)
-  }
-
-  const { players } = gameState
-  const score = scoreToWin(players)
-  const numOfPlayers = playerCount(players)
-  if (numOfPlayers < 2) {
-    return
-  }
-
-  const entity = Entity.addChild(
-    Entity.get(Scene.LOBBY),
-    {
-      id: 'goal-description',
-      x:  410,
-      y:  200,
-    },
-  )
-
-  Text.show(
-    entity,
-    {
-      text:  `First to ${score} points wins!`,
-      style: { ...big, fill: 'white' },
-    },
-  )
-}
-
 const createText = ({
   x, y, text, style, parent,
 }) => {
@@ -210,7 +177,7 @@ export const addPlayerToLobby = (newPlayer) => {
   return player
 }
 
-const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
+const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
   const square = Entity.addChild(
@@ -225,27 +192,6 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
   sprite.scale.set(3)
   sprite.anchor.set(0.5)
 
-  const squareScore = Entity.addChild(
-    square,
-    {
-      id: `square-score-${color}`,
-      x:  -15,
-      y:  -15,
-    },
-  )
-
-  Text.show(
-    squareScore,
-    {
-      text:  score,
-      style: {
-        ...small,
-        fill: 'white',
-      },
-      zIndex: 1,
-    },
-  )
-
   if (newPlayer) {
     square.behaviors.bounce = bounce()
     const joinSounds = [
@@ -254,7 +200,6 @@ const createPlayerEntity = ({ color, score }, playerIndex, { newPlayer }) => {
       'join3',
     ]
     const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
-    createGoalDescription()
 
     const sound = Entity.addChild(square)
     Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })

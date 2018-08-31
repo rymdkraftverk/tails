@@ -125,7 +125,8 @@ export const applyPlayerScores = (players, scores) => {
 
       return {
         ...player,
-        score: player.score + (scoreDict[playerId] || 0),
+        score:         player.score + (scoreDict[playerId] || 0),
+        previousScore: player.score,
       }
     })
     .reduce((updatedPlayers, player) => (
