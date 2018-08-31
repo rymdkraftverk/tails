@@ -1,9 +1,10 @@
 import _ from 'lodash/fp'
 import { Event, Color } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
+import R from 'ramda'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED, gameState } from '.'
-import { scoreToWin, getMatchWinners } from './game'
+import { scoreToWin } from './game'
 import delay from './delay'
 import { small, big } from './util/textStyles'
 import { transitionToMatchEnd } from './matchEnd'
@@ -68,7 +69,12 @@ export const transitionToScoreScene = () => {
     controllers,
   } = gameState
 
-  const matchWinnerCount = getMatchWinners(players, scoreToWin(players)).length
+  const winLimit = scoreToWin(players)
+  const matchWinnerCount = Object
+    .values(players)
+    .map(R.prop('score'))
+    .filter(s => s >= winLimit)
+    .length
 
   if (matchWinnerCount > 0) {
     delay(120)

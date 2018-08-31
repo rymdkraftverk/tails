@@ -1,7 +1,7 @@
 import { Entity, Timer, Text } from 'l1'
 import { Event, Color } from 'common'
 import { gameState, GAME_WIDTH } from '.'
-import { getMatchWinners, scoreToWin, resetPlayersScore } from './game'
+import { getPlayersWithHighestScore, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
@@ -45,7 +45,8 @@ export const transitionToMatchEnd = () => {
   )
 
   const { players } = gameState
-  const matchWinners = getMatchWinners(players, scoreToWin(players))
+  const matchWinners = getPlayersWithHighestScore(players)
+
   if (matchWinners.length === 1) {
     createTextWinner(matchEnd, matchWinners)
   } else {
