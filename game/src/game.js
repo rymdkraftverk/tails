@@ -6,7 +6,7 @@ import { Event } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -350,7 +350,7 @@ const killPlayer = (e, playerCountFactor) => {
       x:           Entity.getX(e),
       y:           Entity.getY(e),
     }),
-    zIndex: layers.FOREGROUND,
+    zIndex: Layer.FOREGROUND,
   })
 
   const sound = Entity.addChild(e)

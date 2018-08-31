@@ -1,6 +1,6 @@
 import { Entity, Graphics } from 'l1'
 import { GAME_WIDTH, GAME_HEIGHT } from '.'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import { createParabola } from './magic'
 
 const DURATION = 50
@@ -14,7 +14,7 @@ export default () => new Promise((resolve) => {
       height: GAME_HEIGHT,
     },
   )
-  Graphics.create(entity, { zIndex: layers.FOREGROUND })
+  Graphics.create(entity, { zIndex: Layer.FOREGROUND })
   entity.behaviors.fadeInOut = fadeInOut(DURATION, resolve)
 })
 

@@ -4,7 +4,7 @@ import R from 'ramda'
 import { GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
 import { code, big, small } from './util/textStyles'
 import { GameColor } from './game'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import bounce from './bounce'
 import Scene from './Scene'
 
@@ -101,7 +101,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   const titleBackground = Entity.addChild(lobbyScene)
   const titleBackgroundGraphics = Graphics
-    .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
+    .create(titleBackground, { zIndex: Layer.BACKGROUND + 10 })
 
   titleBackgroundGraphics.beginFill(GameColor.BLUE)
   titleBackgroundGraphics.moveTo(0, 0)
@@ -134,7 +134,7 @@ const createOutline = (index) => {
   )
   const sprite = Sprite.show(e, {
     texture: 'square-outline',
-    zIndex:  layers.BACKGROUND + 10,
+    zIndex:  Layer.BACKGROUND + 10,
   })
   sprite.scale.set(3)
   sprite.anchor.set(0.5)
