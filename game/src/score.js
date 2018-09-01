@@ -156,12 +156,11 @@ const createHead = ({
         y,
       },
     )
-  const sprite = Sprite.show(
+  Sprite.show(
     head,
     { texture },
   )
 
-  sprite.scale.set(2)
   return head
 }
 

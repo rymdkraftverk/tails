@@ -218,7 +218,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           player,
           { texture: `circle-${player.color}` },
         )
-        sprite.scale.set(1 / playerCountFactor)
+        sprite.scale.set(0.5 / playerCountFactor)
 
         // Offset the sprite so that the entity hitbox is in the middle
         sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
@@ -239,7 +239,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           directionIndicator,
           { texture: `arrow-${player.color}` },
         )
-        directionSprite.scale.set(3 / playerCountFactor)
+        directionSprite.scale.set(1.5 / playerCountFactor)
         directionSprite.anchor.set(0.5)
         directionSprite.rotation = toRadians(player.degrees)
       }
@@ -311,7 +311,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
         trailE,
         { texture: `circle-${e.color}` },
       )
-      sprite.scale.set(1 / playerCountFactor)
+      sprite.scale.set(0.5 / playerCountFactor)
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
