@@ -28,7 +28,6 @@ const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
 const WALL_THICKNESS = 6
-const WALL_COLOR = 0xffffff
 
 export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
@@ -38,7 +37,8 @@ const TRAIL_HITBOX_SIZE = 24
 const TOTAL_BOUNCE_DURATION = 50
 
 export const GameColor = {
-  BLUE: '0x004275',
+  BLUE:  '0x04A4EC',
+  WHITE: '0xeeeeee',
 }
 
 export const transitionToGameScene = (maxPlayers) => {
@@ -247,7 +247,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   }
 })
 
-const toRadians = angle => angle * (Math.PI / 180)
+export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = ({ playerCountFactor }) => ({
   init: () => {},
@@ -432,7 +432,7 @@ const collisionChecker = (playerId, playerCountFactor) => ({
 const createWalls = () => {
   const walls = Entity.addChild(Entity.get(Scene.GAME))
   const graphics = Graphics.create(walls)
-  graphics.lineStyle(WALL_THICKNESS, WALL_COLOR, 1)
+  graphics.lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
 
   graphics.moveTo(0, 0)
   graphics.lineTo(GAME_WIDTH, 0)
