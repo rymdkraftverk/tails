@@ -108,8 +108,8 @@ const initPowerups = (playerCountFactor, snakeSpeed) => {
         const powerup = Entity.addChild(powerupGenerator, {
           x:      Util.getRandomInRange(100, GAME_WIDTH - 100),
           y:      Util.getRandomInRange(100, GAME_HEIGHT - 100),
-          width:  32 * (snakeSpeed / SPEED_MULTIPLIER),
-          height: 32 * (snakeSpeed / SPEED_MULTIPLIER),
+          width:  64 * (snakeSpeed / SPEED_MULTIPLIER),
+          height: 64 * (snakeSpeed / SPEED_MULTIPLIER),
         })
         const sprite = Sprite.show(powerup, {
           texture: 'powerup-ghost',
