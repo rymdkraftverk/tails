@@ -1,7 +1,7 @@
 import { Entity, Timer, Text, Particles, Util } from 'l1'
 import { Event, Color, Channel } from 'common'
 
-import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import { createSine } from './magic'
 import { resetPlayersScore, getPlayersWithHighestScore } from './game'
 import firework from './particleEmitter/firework'

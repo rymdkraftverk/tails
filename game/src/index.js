@@ -9,7 +9,7 @@ import Scene from './Scene'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState from './gameState'
-import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -89,7 +89,7 @@ const rtcEvents = {
 const commands = {
   [SteeringCommand.LEFT]:  moveLeft,
   [SteeringCommand.RIGHT]: moveRight,
-  [SteeringCommand.None]:  moveStraight,
+  [SteeringCommand.NONE]:  moveStraight,
 }
 
 const createGame = ({ gameCode }) => {

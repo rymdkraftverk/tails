@@ -3,7 +3,7 @@ import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel, SteeringCommand } from 'common'
-import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import gameState from './gameState'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
@@ -277,6 +277,7 @@ const pivot = playerId => ({
       }
       e.degrees -= TURN_RADIUS
     } else {
+      console.log()
       // Do nothing
     }
   },

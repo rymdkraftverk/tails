@@ -1,5 +1,5 @@
 import { Entity, Graphics } from 'l1'
-import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import layers from './util/layers'
 import { createParabola } from './magic'
 
