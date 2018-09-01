@@ -226,7 +226,7 @@ Game
       })
 
     const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
-    Sprite.show(background, { texture: 'background', zIndex: layers.BACKGROUND })
+    Sprite.show(background, { texture: 'background', zIndex: layers.ABSOLUTE_BACKGROUND })
 
     resizeGame()
 

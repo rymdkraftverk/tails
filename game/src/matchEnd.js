@@ -1,13 +1,16 @@
-import { Entity, Timer, Text } from 'l1'
+import { Entity, Timer, Text, Particles, Util } from 'l1'
 import { Event, Color, Channel } from 'common'
-import { gameState, GAME_WIDTH } from '.'
-import { getPlayersWithHighestScore, resetPlayersScore } from './game'
+
+import { gameState, GAME_WIDTH, GAME_HEIGHT } from '.'
+import { createSine } from './magic'
+import { resetPlayersScore, getPlayersWithHighestScore } from './game'
+import firework from './particleEmitter/firework'
 import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 import Scene from './Scene'
 
-const TIME_UNTIL_MATCH_END_TRANSITION = 240
+const TIME_UNTIL_LOBBY_TRANSITION = 500
 
 const createText = (entity, content, color) => {
   const text = Text.show(
@@ -48,7 +51,12 @@ export const transitionToMatchEnd = () => {
   const matchWinners = getPlayersWithHighestScore(players)
 
   if (matchWinners.length === 1) {
-    createTextWinner(matchEnd, matchWinners)
+    const winnerTextEntity = Entity.addChild(matchEnd)
+    createTextWinner(winnerTextEntity, matchWinners)
+    winnerTextEntity.behaviors.textMovement = textMovement()
+
+    const fireworkCreator = Entity.addChild(matchEnd)
+    fireworkCreator.behaviors.createFireworks = createFireworks(matchWinners[0].color)
   } else {
     createTextDraw(matchEnd)
   }
@@ -56,8 +64,42 @@ export const transitionToMatchEnd = () => {
   matchEnd.behaviors.pause = pause()
 }
 
+const textMovement = () => ({
+  sine: createSine({
+    start: 1,
+    end:   1.2,
+    speed: 120,
+  }),
+  tick: 0,
+  run:  (b, e) => {
+    const foo = b.sine(b.tick)
+    b.tick += 1
+    e.asset.style.fontSize = e.originalSize * foo
+  },
+})
+
+const createFireworks = color => ({
+  timer: Timer.create({ duration: Util.getRandomInRange(5, 10) }),
+  run:   (b, e) => {
+    if (Timer.run(b.timer)) {
+      const particles = Entity.addChild(e)
+      const x = Util.getRandomInRange(100, GAME_WIDTH - 100)
+      const y = Util.getRandomInRange(100, GAME_HEIGHT - 100)
+      Particles.emit(particles, {
+        ...firework({
+          color,
+          x,
+          y,
+        }),
+        zIndex: layers.BACKGROUND,
+      })
+      Timer.reset(b.timer)
+    }
+  },
+})
+
 const pause = () => ({
-  timer: Timer.create({ duration: TIME_UNTIL_MATCH_END_TRANSITION }),
+  timer: Timer.create({ duration: TIME_UNTIL_LOBBY_TRANSITION }),
   run:   ({ timer }) => {
     if (Timer.run(timer)) {
       Object
