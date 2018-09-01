@@ -1,5 +1,5 @@
 import { Entity, Text, Timer } from 'l1'
-import { GAME_WIDTH, GAME_HEIGHT } from '.'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import { big } from './util/textStyles'
 import bounce from './bounce'
 

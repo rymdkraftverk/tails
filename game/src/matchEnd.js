@@ -1,7 +1,7 @@
 import { Entity, Timer, Text, Particles, Util } from 'l1'
 import { Event, Color, Channel } from 'common'
 
-import { gameState, GAME_WIDTH, GAME_HEIGHT } from '.'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import { createSine } from './magic'
 import { resetPlayersScore, getPlayersWithHighestScore } from './game'
 import firework from './particleEmitter/firework'
@@ -9,6 +9,7 @@ import { transitionToLobby } from './lobby'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 import Scene from './Scene'
+import gameState from './gameState'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 

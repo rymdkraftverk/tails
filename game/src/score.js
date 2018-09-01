@@ -3,12 +3,13 @@ import { Event, Color, Channel } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
 import R from 'ramda'
 import Scene from './Scene'
-import { MAX_PLAYERS_ALLOWED, gameState } from '.'
+import { MAX_PLAYERS_ALLOWED } from '.'
 import { scoreToWin } from './game'
 import delay from './delay'
 import { small, big } from './util/textStyles'
 import { transitionToMatchEnd } from './matchEnd'
 import layers from './util/layers'
+import gameState from './gameState'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64

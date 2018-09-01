@@ -2,11 +2,12 @@ import { Entity, Timer, Text } from 'l1'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, applyPlayerScores } from './game'
-import { gameState, GAME_WIDTH } from '.'
+import { GAME_WIDTH } from './rendering'
 import { big } from './util/textStyles'
 import layers from './util/layers'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
+import gameState from './gameState'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 

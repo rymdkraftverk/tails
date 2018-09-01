@@ -2,8 +2,9 @@ import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { Event, Channel } from 'common'
-import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
+import { Event, Channel, SteeringCommand } from 'common'
+import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
+import gameState from './gameState'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
@@ -51,7 +52,8 @@ export const transitionToGameScene = (maxPlayers) => {
 
   const playerCountFactor = R.compose(
     Math.sqrt,
-    playerCount,
+    R.length,
+    R.values,
   )(gameState.players)
 
   const playerEntities = R.compose(
@@ -97,7 +99,7 @@ export const getPlayersWithHighestScore = players =>
     Object.values,
   )(players)
 
-export const scoreToWin = players => (playerCount(players) - 1) * 5
+export const scoreToWin = players => (Object.keys(players).length - 1) * 5
 
 export const resetPlayerScore = (acc, player) => {
   acc[player.playerId] = { ...player, score: 0 }
@@ -261,13 +263,13 @@ const move = () => ({
 
 const pivot = playerId => ({
   run: (b, e) => {
-    if (Entity.get(`${playerId}controller`).direction === RIGHT) {
+    if (Entity.get(`${playerId}controller`).direction === SteeringCommand.RIGHT) {
       if (e.degrees >= 360) {
         e.degrees = 0
         return
       }
       e.degrees += TURN_RADIUS
-    } else if (Entity.get(`${playerId}controller`).direction === LEFT) {
+    } else if (Entity.get(`${playerId}controller`).direction === SteeringCommand.LEFT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return
