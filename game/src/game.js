@@ -42,6 +42,8 @@ gameState
   .events
   .on(GameEvent.PLAYER_COLLISION, addPoints)
 
+const GHOST_POWERUP_DURATION = 500
+
 export const GameColor = {
   BLUE:  '0x04A4EC',
   WHITE: '0xeeeeee',
@@ -82,20 +84,21 @@ export const transitionToGameScene = (maxPlayers) => {
           player.speed,
         )
         player.behaviors.move = move()
-        player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
+        player.behaviors.collisionCheckerTrail = collisionCheckerTrail(player.id, playerCountFactor)
+        player.behaviors.collisionCheckerWalls = collisionCheckerWalls()
 
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
 
         Entity.destroy(`${player.id}:direction`)
       })
-      initPowerups()
+      initPowerups(playerCountFactor)
     })
 }
 
-const initPowerups = () => {
+const initPowerups = (playerCountFactor) => {
   const powerupGenerator = Entity.addChild(Entity.get(Scene.GAME))
-  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(120, 140) })
+  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(2, 10) })
   powerupGenerator.behaviors.generatePowerups = {
     init: (b) => {
       b.timer = getNewPowerupTimer()
@@ -123,6 +126,36 @@ const initPowerups = () => {
               Sound.play(soundEntity, { src: './sounds/join1.wav', volume: 0.6 })
               Entity.destroy(powerup)
               b.timer = getNewPowerupTimer()
+
+              collidingEntity.behaviors.ghost = {
+                timer: Timer.create({ duration: GHOST_POWERUP_DURATION }),
+                init:  (be, e) => {
+                  // Scale up player 3 times
+                  e.asset.scale.set((e.speed / SPEED_MULTIPLIER / 2) * 3)
+                  e.asset.alpha = 0.4
+                  /* eslint-disable fp/no-delete */
+                  delete e.behaviors.holeGenerator
+                  delete e.behaviors.createTrail
+                  delete e.behaviors.collisionCheckerTrail
+                  /* eslint-enable fp/no-delete */
+                },
+                run: (be, e) => {
+                  if (Timer.run(be.timer)) {
+                    // Reset player
+                    e.asset.scale.set((e.speed / SPEED_MULTIPLIER / 2))
+                    e.asset.alpha = 1
+                    e.behaviors.collisionCheckerTrail =
+                      collisionCheckerTrail(e.id, playerCountFactor)
+                    e.behaviors.holeGenerator = holeGenerator(e.speed)
+                    e.behaviors.createTrail = createTrail(
+                      e.id,
+                      e.spriteId,
+                      e.behaviors.holeGenerator,
+                      e.speed,
+                    )
+                  }
+                },
+              }
             }
           },
         }
@@ -156,7 +189,7 @@ export const resetPlayersScore = players => R.compose(
 )(players)
 
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
-  R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
+  R.zip(R.range(1, playerFinishOrder.length), playerFinishOrder)
 
 export const applyPlayerScores = (players, scores) => {
   const scoreDict = scores
@@ -263,7 +296,10 @@ const bouncePlayers = players => new Promise((resolve) => {
 
         const sprite = Sprite.show(
           player,
-          { texture: `circle-${player.color}` },
+          {
+            texture: `circle-${player.color}`,
+            zIndex:  layers.FOREGROUND,
+          },
         )
         sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
@@ -430,7 +466,8 @@ const killPlayer = (e) => {
 
   e.killed = true
   /* eslint-disable fp/no-delete */
-  delete e.behaviors.collisionChecker
+  delete e.behaviors.collisionCheckerTrail
+  delete e.behaviors.collisionCheckerWalls
   delete e.behaviors.holeGenerator
   delete e.behaviors.createTrail
   delete e.behaviors.move
@@ -441,7 +478,7 @@ const killPlayer = (e) => {
   e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
-const collisionChecker = playerId => ({
+const collisionCheckerTrail = playerId => ({
   timer: Timer.create({ duration: 2 }),
   run:   (b, e) => {
     if (Timer.run(b.timer)) {
@@ -451,29 +488,43 @@ const collisionChecker = playerId => ({
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
         killPlayer(e)
-      } else if (
-        Entity.getX(e) < WALL_THICKNESS ||
-        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.width ||
-        Entity.getY(e) < WALL_THICKNESS ||
-        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
-        killPlayer(e)
-        log('PLAYER DIED DUE TO OUT OF BOUNDS!')
+        checkPlayersAlive()
       }
-      const playersAlive = Entity
-        .getByType('player')
-        .filter(p => !p.killed)
 
-      if (playersAlive.length === 1 && gameState.started) {
-        gameState.lastRoundResult.winner = playersAlive[0].color
-        gameState.lastRoundResult.playerFinishOrder =
-          gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
-
-        transitionToRoundEnd()
-      }
       Timer.reset(b.timer)
     }
   },
 })
+
+const collisionCheckerWalls = () => ({
+  timer: Timer.create({ duration: 2 }),
+  run:   (b, e) => {
+    if (
+      Entity.getX(e) < WALL_THICKNESS ||
+      Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.width ||
+      Entity.getY(e) < WALL_THICKNESS ||
+      Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
+      killPlayer(e)
+      log('PLAYER DIED DUE TO OUT OF BOUNDS!')
+      checkPlayersAlive()
+    }
+  },
+})
+
+const checkPlayersAlive = () => {
+  const playersAlive = Entity
+    .getByType('player')
+    .filter(p => !p.killed)
+
+  if (playersAlive.length === 1 && gameState.started) {
+    gameState.lastRoundResult.winner = playersAlive[0].color
+    gameState.lastRoundResult.playerFinishOrder =
+            gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
+
+    transitionToRoundEnd()
+  }
+}
+
 
 const createWalls = () => {
   const walls = Entity.addChild(Entity.get(Scene.GAME))
