@@ -2,11 +2,11 @@ import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
 import R from 'ramda'
 import { GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
-import { code, big, small } from './util/textStyles'
+import * as TextStyle from './util/TextStyle'
 import { GameColor } from './game'
-import layers from './util/layers'
+import Layer from './util/Layer'
 import bounce from './bounce'
-import Scene from './Scene'
+import Scene from './util/Scene'
 
 const CONTROLLER_PORT = '4001'
 
@@ -45,18 +45,24 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     )
 
   createText({
-    x:      50,
-    y:      30,
-    text:   'LOBBY',
-    style:  { ...big, fill: 'white' },
+    x:     50,
+    y:     30,
+    text:  'LOBBY',
+    style: {
+      ...TextStyle.BIG,
+      fill: 'white',
+    },
     parent: lobbyScene,
   })
 
   createText({
-    x:      50,
-    y:      340,
-    text:   'Go to:',
-    style:  { ...small, fill: 'white' },
+    x:     50,
+    y:     340,
+    text:  'Go to:',
+    style: {
+      ...TextStyle.SMALL,
+      fill: 'white',
+    },
     parent: lobbyScene,
   })
 
@@ -65,7 +71,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     y:     370,
     text:  getControllerUrl(),
     style: {
-      ...code,
+      ...TextStyle.CODE,
       fontSize: 30,
     },
     parent: lobbyScene,
@@ -73,10 +79,13 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
 
   createText({
-    x:      50,
-    y:      480,
-    text:   'Code:',
-    style:  { ...small, fill: 'white' },
+    x:     50,
+    y:     480,
+    text:  'Code:',
+    style: {
+      ...TextStyle.SMALL,
+      fill: 'white',
+    },
     parent: lobbyScene,
   })
 
@@ -84,7 +93,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:      50,
     y:      520,
     text:   gameCode,
-    style:  code,
+    style:  TextStyle.CODE,
     parent: lobbyScene,
   })
 
@@ -93,7 +102,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     y:     GAME_HEIGHT - 48,
     text:  '© Rymdkraftverk 2018',
     style: {
-      ...code,
+      ...TextStyle.CODE,
       fontSize: 20,
     },
     parent: lobbyScene,
@@ -101,7 +110,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   const titleBackground = Entity.addChild(lobbyScene)
   const titleBackgroundGraphics = Graphics
-    .create(titleBackground, { zIndex: layers.BACKGROUND + 10 })
+    .create(titleBackground, { zIndex: Layer.BACKGROUND + 10 })
 
   titleBackgroundGraphics.beginFill(GameColor.BLUE)
   titleBackgroundGraphics.moveTo(0, 0)
@@ -134,7 +143,7 @@ const createOutline = (index) => {
   )
   const sprite = Sprite.show(e, {
     texture: 'square-outline',
-    zIndex:  layers.BACKGROUND + 10,
+    zIndex:  Layer.BACKGROUND + 10,
   })
   sprite.scale.set(3)
   sprite.anchor.set(0.5)

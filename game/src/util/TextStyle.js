@@ -7,7 +7,7 @@ const defaultStyle = {
   http://pixijs.download/dev/docs/PIXI.TextStyle.html
 */
 
-export const big = {
+export const BIG = {
   ...defaultStyle,
   fontSize:           48,
   stroke:             '#000000',
@@ -19,7 +19,7 @@ export const big = {
   dropShadowDistance: 6,
 }
 
-export const small = {
+export const SMALL = {
   ...defaultStyle,
   fontSize:           28,
   stroke:             '#000000',
@@ -31,7 +31,7 @@ export const small = {
   dropShadowDistance: 3,
 }
 
-export const code = {
+export const CODE = {
   fontfamily:         'helvetica',
   fontSize:           72,
   fill:               'white',
