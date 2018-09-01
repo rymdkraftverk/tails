@@ -93,6 +93,8 @@ class App extends Component {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
+    } else if (event === Event.Rtc.GAME_FULL) {
+      this.displayError('Game is full')
     } else if (event === Event.Rtc.ROUND_STARTED) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,

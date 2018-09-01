@@ -103,7 +103,7 @@ const onOffer = ({ initiatorId, offer }) => {
         id:        initiator.id,
         setOnData: makeSetOnData(channels),
         send:      makeRtcSend(channels),
-        close:     rtc.close,
+        close:     rtc.close.bind(rtc),
       })
 
       removeInitiator(initiator.id)

@@ -171,6 +171,11 @@ export const onControllerJoin = ({
       },
     })
   } else {
+    send(Channel.RELIABLE, {
+      event:   Event.Rtc.GAME_FULL,
+      payload: {},
+    })
+
     close()
   }
 
