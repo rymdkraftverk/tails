@@ -92,13 +92,13 @@ export const transitionToGameScene = (maxPlayers) => {
 
         Entity.destroy(`${player.id}:direction`)
       })
-      initPowerups(playerCountFactor)
+      initPowerups(playerCountFactor, playerEntities[0].speed)
     })
 }
 
-const initPowerups = (playerCountFactor) => {
+const initPowerups = (playerCountFactor, snakeSpeed) => {
   const powerupGenerator = Entity.addChild(Entity.get(Scene.GAME))
-  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(2, 10) })
+  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(120, 240) })
   powerupGenerator.behaviors.generatePowerups = {
     init: (b) => {
       b.timer = getNewPowerupTimer()
@@ -108,13 +108,13 @@ const initPowerups = (playerCountFactor) => {
         const powerup = Entity.addChild(powerupGenerator, {
           x:      Util.getRandomInRange(100, GAME_WIDTH - 100),
           y:      Util.getRandomInRange(100, GAME_HEIGHT - 100),
-          width:  32,
-          height: 32,
+          width:  32 * (snakeSpeed / SPEED_MULTIPLIER),
+          height: 32 * (snakeSpeed / SPEED_MULTIPLIER),
         })
         const sprite = Sprite.show(powerup, {
           texture: 'powerup-ghost',
         })
-        sprite.scale.set(0.5)
+        sprite.scale.set((snakeSpeed / SPEED_MULTIPLIER))
 
         powerup.behaviors.collisionChecker = {
           run: () => {
