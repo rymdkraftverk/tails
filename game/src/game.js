@@ -140,7 +140,7 @@ const initPowerups = (playerCountFactor, snakeSpeed) => {
                   /* eslint-enable fp/no-delete */
                 },
                 run: (be, e) => {
-                  if (Timer.run(be.timer)) {
+                  if (Timer.run(be.timer) && !e.killed) {
                     // Reset player
                     e.asset.scale.set((e.speed / SPEED_MULTIPLIER / 2))
                     e.asset.alpha = 1
