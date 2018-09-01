@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
@@ -6,23 +6,32 @@ import styled, { css } from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   height: 100vh;
   touch-action: manipulation;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `
 
-const label = css`
-  user-select: none;
-  height: 30vh;
-  font-family: inherit;
+const Instructions = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
+  text-align: center;
+  height: 25vh;
 `
 
-const StartGameButton = styled.div`
+const label = css`
+  user-select: none;
+  padding: 16px 8px;
+  font-family: inherit;
+`
+
+const StartGameButton = styled.button`
   ${label};
   touch-action: manipulation;
+  border: 0.1em solid black;
 `
 
 const AwaitingPlayers = styled.div`
@@ -49,11 +58,26 @@ class GameLobby extends Component {
         {
           playerCount > 1
             ?
-              <StartGameButton
-                onClick={startGame}
-              >
-                Start Game!
-              </StartGameButton>
+              <Fragment>
+                <Instructions>
+                  <div>
+                    {`
+                    Your phone is the controller
+                  `}
+                  </div>
+                  <div>
+                    {`
+                    The game is played on the other screen
+                  `}
+                  </div>
+                </Instructions>
+                <StartGameButton
+                  onClick={startGame}
+                >
+                  {'I\'m ready!'}
+                </StartGameButton>
+              </Fragment>
+
             :
               <AwaitingPlayers>
                 Awaiting more players...

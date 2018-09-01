@@ -14,7 +14,7 @@ const SteerButton = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 100pt;
-  background: ${R.prop('playerColor')}
+  background: ${R.prop('playerColor')};
 `
 
 const Separator = styled.div`
