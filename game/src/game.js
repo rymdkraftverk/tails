@@ -1,40 +1,34 @@
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
+import { Entity, Util, Timer, Sprite, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import gameState from './gameState'
-import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
 import addPoints from './addPoints'
+import { initPowerups } from './powerup'
+import { createTrail, holeGenerator, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 
 window.debug = {
   ...window.debug,
   transitionToRoundEnd,
 }
 
-const { log, warn } = console
+const { warn } = console
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
-
-const GENERATE_HOLE_MAX_TIME = 300
-const GENERATE_HOLE_MIN_TIME = 60
-
-const HOLE_LENGTH_MAX_TIME = 30
-const HOLE_LENGTH_MIN_TIME = 10
 
 const WALL_THICKNESS = 6
 
 export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
 const PLAYER_HITBOX_SIZE = 14
-const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
 
@@ -74,20 +68,31 @@ export const transitionToGameScene = (maxPlayers) => {
     .then(() => {
       playerEntities.forEach((player) => {
         player.behaviors.pivot = pivot(player.id)
-        player.behaviors.holeGenerator = holeGenerator(player.speed)
-        player.behaviors.createTrail = createTrail(
-          player.id,
-          player.spriteId,
-          player.behaviors.holeGenerator,
-          player.speed,
-        )
+        player.behaviors.holeGenerator = holeGenerator(player.speed, SPEED_MULTIPLIER)
+        player.behaviors.createTrail = createTrail({
+          playerId:        player.id,
+          holeGenerator:   player.behaviors.holeGenerator,
+          speed:           player.speed,
+          speedMultiplier: SPEED_MULTIPLIER,
+        })
         player.behaviors.move = move()
-        player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
+        player.behaviors.collisionCheckerTrail = collisionCheckerTrail(player.id)
+        player.behaviors.collisionCheckerWalls = collisionCheckerWalls({
+          speedMultiplier: SPEED_MULTIPLIER,
+          wallThickness:   WALL_THICKNESS,
+        })
 
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
 
         Entity.destroy(`${player.id}:direction`)
+      })
+      initPowerups({
+        playerCountFactor,
+        snakeSpeed:      playerEntities[0].speed,
+        speedMultiplier: SPEED_MULTIPLIER,
+        gameWidth:       GAME_WIDTH,
+        gameHeight:      GAME_HEIGHT,
       })
     })
 }
@@ -224,7 +229,10 @@ const bouncePlayers = players => new Promise((resolve) => {
 
         const sprite = Sprite.show(
           player,
-          { texture: `circle-${player.color}` },
+          {
+            texture: `circle-${player.color}`,
+            zIndex:  layers.FOREGROUND,
+          },
         )
         sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
@@ -282,156 +290,6 @@ const pivot = playerId => ({
       e.degrees -= TURN_RADIUS
     } else {
       // Do nothing
-    }
-  },
-})
-
-const createTrail = (playerId, spriteId, holeGenerator, speed) => ({
-  timer: Timer.create({ duration: Math.ceil(2) }),
-  run:   (b, e) => {
-    if (holeGenerator.preventTrail) {
-      return
-    }
-    const width = TRAIL_HITBOX_SIZE * (speed / SPEED_MULTIPLIER)
-    const height = TRAIL_HITBOX_SIZE * (speed / SPEED_MULTIPLIER)
-
-    // Find the middle of the player entity so that
-    // we can put the trails' middle point in the same spot
-    const middleX = Entity.getX(e) + (e.width / 2)
-    const middleY = Entity.getY(e) + (e.height / 2)
-
-    if (Timer.run(b.timer)) {
-      const trailE = Entity.addChild(
-        Entity.get(Scene.GAME),
-        {
-          x: middleX - (width / 2),
-          y: middleY - (height / 2),
-          width,
-          height,
-        },
-      )
-      trailE.active = false
-      trailE.player = playerId
-      Entity.addType(trailE, 'trail')
-      const sprite = Sprite.show(
-        trailE,
-        { texture: `circle-${e.color}` },
-      )
-      sprite.scale.set(speed / SPEED_MULTIPLIER / 2)
-      Timer.reset(b.timer)
-
-      trailE.behaviors.activate = activate()
-    }
-  },
-})
-
-const holeGenerator = speed => ({
-  preventTrail:      false,
-  generateHoleTimer: Timer
-    .create({
-      duration: Util.getRandomInRange(
-        GENERATE_HOLE_MIN_TIME,
-        GENERATE_HOLE_MAX_TIME,
-      ),
-    }),
-  holeLengthTimer: null,
-  run:             (b) => {
-    if (b.generateHoleTimer && Timer.run(b.generateHoleTimer)) {
-      b.preventTrail = true
-
-      const rand = Util.getRandomInRange(
-        Math.ceil(HOLE_LENGTH_MIN_TIME * (SPEED_MULTIPLIER / speed)),
-        Math.ceil(HOLE_LENGTH_MAX_TIME * (SPEED_MULTIPLIER / speed)),
-      )
-      b.holeLengthTimer = Timer.create({ duration: rand })
-
-      b.generateHoleTimer = null
-    } else if (b.holeLengthTimer && Timer.run(b.holeLengthTimer)) {
-      b.preventTrail = false
-
-      const rand = Util.getRandomInRange(
-        GENERATE_HOLE_MIN_TIME,
-        GENERATE_HOLE_MAX_TIME,
-      )
-      b.generateHoleTimer = Timer.create({ duration: rand })
-
-      b.holeLengthTimer = null
-    }
-  },
-})
-
-/*
- * This behavior is needed so that the player wont immediately collide with its own tail.
- */
-const activate = () => ({
-  timer: Timer.create({ duration: 15 }),
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      e.active = true
-    }
-  },
-})
-
-const killPlayer = (e) => {
-  const particles = Entity.addChild(e)
-  Particles.emit(particles, {
-    ...explode({
-      degrees:     e.degrees,
-      scaleFactor: SPEED_MULTIPLIER / e.speed,
-      radius:      e.width,
-      x:           Entity.getX(e),
-      y:           Entity.getY(e),
-    }),
-    zIndex: layers.FOREGROUND,
-  })
-
-  const sound = Entity.addChild(e)
-
-  Sound.play(sound, { src: './sounds/explosion.wav', volume: 0.6 })
-
-  e.killed = true
-  /* eslint-disable fp/no-delete */
-  delete e.behaviors.collisionChecker
-  delete e.behaviors.holeGenerator
-  delete e.behaviors.createTrail
-  delete e.behaviors.move
-  delete e.behaviors.pivot
-  /* eslint-enable fp/no-delete */
-
-  gameState.events.emit(GameEvent.PLAYER_COLLISION, e.color)
-  e.event.emit(GameEvent.PLAYER_COLLISION)
-}
-
-const collisionChecker = playerId => ({
-  timer: Timer.create({ duration: 2 }),
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      const allTrails = Entity
-        .getByType('trail')
-        .filter(t => t.active || t.player !== playerId)
-
-      if (allTrails.some(t => Entity.isColliding(t, e))) {
-        killPlayer(e)
-      } else if (
-        Entity.getX(e) < WALL_THICKNESS ||
-        Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.width ||
-        Entity.getY(e) < WALL_THICKNESS ||
-        Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
-        killPlayer(e)
-        log('PLAYER DIED DUE TO OUT OF BOUNDS!')
-      }
-      const playersAlive = Entity
-        .getByType('player')
-        .filter(p => !p.killed)
-
-      if (playersAlive.length === 1 && gameState.started) {
-        gameState.lastRoundResult.winner = playersAlive[0].color
-        gameState.lastRoundResult.playerFinishOrder =
-          gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
-
-        transitionToRoundEnd()
-      }
-      Timer.reset(b.timer)
     }
   },
 })
