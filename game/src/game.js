@@ -310,11 +310,7 @@ const createTrail = (playerId, spriteId, holeGenerator, speed) => ({
         trailE,
         { texture: `circle-${e.color}` },
       )
-<<<<<<< HEAD
-      sprite.scale.set(0.5 / playerCountFactor)
-=======
-      sprite.scale.set(speed / SPEED_MULTIPLIER)
->>>>>>> Refactor dependency on playerCountFactor
+      sprite.scale.set(speed / SPEED_MULTIPLIER / 2)
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
