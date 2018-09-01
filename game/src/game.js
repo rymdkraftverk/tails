@@ -400,7 +400,6 @@ const killPlayer = (e) => {
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
 
-  gameState.events.emit(GameEvent.PLAYER_COLLISION)
   e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
