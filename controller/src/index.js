@@ -31,7 +31,6 @@ injectGlobal`
     letter-spacing: 0.1em;
     font-size: 8vw;
     background: transparent;
-    color: #4085af;
     font-family: 'patchy-robots';
     border: 0.1em solid #4085af;
     border-radius: 0.12em;

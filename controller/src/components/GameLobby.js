@@ -6,26 +6,32 @@ import styled, { css } from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   height: 100vh;
   touch-action: manipulation;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `
 
-const StartGameContainer = styled.div`
+const Instructions = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  height: 25vh;
 `
 
 const label = css`
   user-select: none;
-  height: 30vh;
+  padding: 16px 8px;
   font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `
 
-const StartGameButton = styled.div`
+const StartGameButton = styled.button`
   ${label};
   touch-action: manipulation;
+  border: 0.1em solid black;
 `
 
 const AwaitingPlayers = styled.div`
@@ -52,28 +58,26 @@ class GameLobby extends Component {
         {
           playerCount > 1
             ?
-              <StartGameContainer>
-                <div>
-                  {`
+              <Fragment>
+                <Instructions>
+                  <div>
+                    {`
                     Your phone is the controller
                   `}
-                </div>
-                <div>
-                  {`
+                  </div>
+                  <div>
+                    {`
                     The game is played on the other screen
                   `}
-                </div>
-                <div>
-                  {`
-                    Press start when ready
-                  `}
-                </div>
+                  </div>
+                </Instructions>
                 <StartGameButton
                   onClick={startGame}
                 >
-                Start Game!
+                  {'I\'m ready!'}
                 </StartGameButton>
-              </StartGameContainer>
+              </Fragment>
+
             :
               <AwaitingPlayers>
                 Awaiting more players...
