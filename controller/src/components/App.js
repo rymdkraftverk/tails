@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import { Event, Color } from 'common'
+import { Event, Color, Channel } from 'common'
 import signaling from 'signaling'
 import styled from 'styled-components'
 
@@ -60,8 +60,8 @@ class App extends Component {
       onClose,
     })
       .then((send) => {
-        this.sendUnreliable = send('unreliable')
-        this.sendReliable = send('reliable')
+        this.sendUnreliable = send(Channel.UNRELIABLE)
+        this.sendReliable = send(Channel.RELIABLE)
       })
       .catch((error) => {
         const message = {

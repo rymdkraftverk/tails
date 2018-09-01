@@ -1,5 +1,5 @@
 import _ from 'lodash/fp'
-import { Event, Color } from 'common'
+import { Event, Color, Channel } from 'common'
 import { Entity, Sprite, Graphics, Text } from 'l1'
 import R from 'ramda'
 import Scene from './Scene'
@@ -88,7 +88,7 @@ export const transitionToScoreScene = () => {
         Object
           .values(controllers)
           .forEach((controller) => {
-            controller.send('reliable', { event: Event.Rtc.ROUND_END, payload: {} })
+            controller.send(Channel.RELIABLE, { event: Event.Rtc.ROUND_END, payload: {} })
           })
       })
   }
