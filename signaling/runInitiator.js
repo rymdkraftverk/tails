@@ -113,10 +113,10 @@ const init = ({
     onClose,
   }]
 
-  const promisedChannels = channelConfigs
-    .map(setUpChannel(rtc))
-
-  Promise.all(promisedChannels)
+  R.pipe(
+    R.map(setUpChannel(rtc)),
+    Promise.all.bind(Promise),
+  )(channelConfigs)
     .then(R.pipe(
       makeRtcSend,
       resolve,
