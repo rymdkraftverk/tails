@@ -204,7 +204,7 @@ const createOutline = (index) => {
     texture: 'square-outline',
     zIndex:  layers.BACKGROUND + 10,
   })
-  sprite.scale.set(3)
+  sprite.scale.set(1.5)
   sprite.anchor.set(0.5)
 }
 
