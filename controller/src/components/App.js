@@ -103,6 +103,8 @@ class App extends Component {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
       })
+    } else if (event === Event.Rtc.A_PLAYER_JOINED) {
+      this.setState(payload)
     } else if (event === Event.Rtc.PLAYER_DIED) {
       this.setState({
         appState: APP_STATE.PLAYER_DEAD,
@@ -154,6 +156,7 @@ class App extends Component {
       gameCode,
       appState,
       playerColor,
+      playerCount,
     } = this.state
 
     return (
@@ -184,6 +187,7 @@ class App extends Component {
               <GameLobby
                 startGame={this.startGame}
                 playerColor={playerColor}
+                playerCount={playerCount}
               />
             : null
         }

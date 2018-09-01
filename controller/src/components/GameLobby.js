@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled.div`
   display: flex;
@@ -11,14 +11,22 @@ const Container = styled.div`
   background-color: ${({ backgroundColor }) => backgroundColor};
 `
 
-const StartGameButton = styled.div`
+const label = css`
   user-select: none;
   height: 30vh;
   font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const StartGameButton = styled.div`
+  ${label};
   touch-action: manipulation;
+`
+
+const AwaitingPlayers = styled.div`
+  ${label};
 `
 
 const playerColorToBackgroundColor = (player) => {
@@ -30,6 +38,7 @@ class GameLobby extends Component {
   render() {
     const {
       playerColor,
+      playerCount,
       startGame,
     } = this.props
 
@@ -37,11 +46,19 @@ class GameLobby extends Component {
       <Container
         backgroundColor={playerColorToBackgroundColor(playerColor)}
       >
-        <StartGameButton
-          onClick={startGame}
-        >
-          Start Game!
-        </StartGameButton>
+        {
+          playerCount > 1
+            ?
+              <StartGameButton
+                onClick={startGame}
+              >
+                Start Game!
+              </StartGameButton>
+            :
+              <AwaitingPlayers>
+                Awaiting more players...
+              </AwaitingPlayers>
+        }
       </Container>
     )
   }
@@ -49,6 +66,7 @@ class GameLobby extends Component {
 
 GameLobby.propTypes = {
   playerColor: PropTypes.string.isRequired,
+  playerCount: PropTypes.number,
   startGame:   PropTypes.func.isRequired,
 }
 

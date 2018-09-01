@@ -134,6 +134,16 @@ const onControllerData = id => (message) => {
   f(id, payload)
 }
 
+const broadcast = (message) => {
+  Object.values(gameState.controllers)
+    .forEach((c) => {
+      c.send(
+        Channel.RELIABLE,
+        message,
+      )
+    })
+}
+
 const moreControllersAllowed = () =>
   playerCount(gameState.players) < MAX_PLAYERS_ALLOWED
 
@@ -168,6 +178,13 @@ export const onControllerJoin = ({
         playerId: id,
         color:    player.color,
         started:  gameState.started,
+      },
+    })
+
+    broadcast({
+      event:   Event.Rtc.A_PLAYER_JOINED,
+      payload: {
+        playerCount: playerCount(gameState.players),
       },
     })
   } else {
