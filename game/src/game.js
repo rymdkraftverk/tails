@@ -95,7 +95,7 @@ export const getPlayersWithHighestScore = players =>
     R.reduce(R.max, 0),
     R.map(parseInt),
     Object.keys,
-    R.groupBy(R.lensProp('score')),
+    R.groupBy(R.prop('score')),
     Object.values,
   )(players)
 
