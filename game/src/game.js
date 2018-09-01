@@ -2,7 +2,7 @@ import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { Event } from 'common'
+import { Event, Channel } from 'common'
 import { LEFT, RIGHT, GAME_WIDTH, GAME_HEIGHT, gameState, playerCount } from '.'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
@@ -175,7 +175,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     }
 
     controller
-      .send({
+      .send(Channel.RELIABLE, {
         event:   Event.Rtc.PLAYER_DIED,
         payload: {},
       })

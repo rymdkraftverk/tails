@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import { Event, Color } from 'common'
+import { Event, Color, Channel } from 'common'
 import signaling from 'signaling'
 import styled from 'styled-components'
 
@@ -16,7 +16,7 @@ const StyledFullscreen = styled(Fullscreen)`
   touch-action: manipulation;
 `
 
-const { log } = console
+const { error: logError, log } = console
 
 const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
@@ -56,22 +56,27 @@ class App extends Component {
     signaling.runInitiator({
       wsAddress:  WS_ADDRESS,
       receiverId: gameCode,
-      onData:     this.onReceiverData,
+      onData:     this.onData,
       onClose,
     })
-      .then(({ send }) => {
-        this.send = send
+      .then((send) => {
+        this.sendUnreliable = send(Channel.UNRELIABLE)
+        this.sendReliable = send(Channel.RELIABLE)
       })
-      .catch(({ cause }) => {
+      .catch((error) => {
         const message = {
           NOT_FOUND: `Game with code ${gameCode} not found`,
-        }[cause]
+        }[error.cause]
 
-        this.displayError(message)
+        if (message) {
+          this.displayError(message)
+        } else {
+          logError(error)
+        }
       })
   }
 
-  onReceiverData = ({ event, payload }) => {
+  onData = ({ event, payload }) => {
     if (event === Event.Rtc.CONTROLLER_COLOR) {
       if (!payload.started) {
         this.setState({
@@ -130,7 +135,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.send({ event: Event.Rtc.ROUND_START })
+    this.sendReliable({ event: Event.Rtc.ROUND_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 
@@ -184,7 +189,7 @@ class App extends Component {
           appState === APP_STATE.GAME_PLAYING
             ?
               <GamePlaying
-                send={this.send}
+                send={this.sendUnreliable}
                 playerColor={Color[playerColor]}
               />
             : null

@@ -1,5 +1,5 @@
 import { Game, Entity, Sprite, Key } from 'l1'
-import { Event, prettyId, Color } from 'common'
+import { Event, prettyId, Color, Channel } from 'common'
 import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
@@ -76,7 +76,7 @@ const roundStart = () => {
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
-        gameState.controllers[id].send({
+        gameState.controllers[id].send(Channel.RELIABLE, {
           event:   Event.Rtc.ROUND_STARTED,
           payload: {},
         })
@@ -158,7 +158,7 @@ export const onControllerJoin = ({
       send,
     }
 
-    send({
+    send(Channel.RELIABLE, {
       event:   Event.Rtc.CONTROLLER_COLOR,
       payload: {
         playerId: id,
@@ -170,7 +170,6 @@ export const onControllerJoin = ({
     close()
   }
 
-  // TODO: rambdify
   setOnData(onControllerData(id))
 }
 

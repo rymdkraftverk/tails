@@ -1,5 +1,5 @@
 import { Entity, Timer, Text } from 'l1'
-import { Event, Color } from 'common'
+import { Event, Color, Channel } from 'common'
 import { gameState, GAME_WIDTH } from '.'
 import { getPlayersWithHighestScore, resetPlayersScore } from './game'
 import { transitionToLobby } from './lobby'
@@ -63,7 +63,7 @@ const pause = () => ({
       Object
         .values(gameState.controllers)
         .forEach((controller) => {
-          controller.send({ event: Event.Rtc.ROUND_END, payload: {} })
+          controller.send(Channel.RELIABLE, { event: Event.Rtc.ROUND_END, payload: {} })
         })
 
       gameState.players = resetPlayersScore(gameState.players)
