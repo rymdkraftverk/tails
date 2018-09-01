@@ -1,4 +1,4 @@
-import { Game, Entity, Sprite, Key } from 'l1'
+import { Game, Entity, Sprite, Key, PIXI } from 'l1'
 import { Event, prettyId, Color, Channel } from 'common'
 import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
@@ -208,7 +208,8 @@ Game
     debug:   false,
     element: document.getElementById('game'),
     pixi:    {
-      antialias: true,
+      options:  { antialias: true },
+      settings: { SCALE_MODE: PIXI.SCALE_MODES.LINEAR },
     },
   })
   .then(() => {

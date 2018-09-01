@@ -56,7 +56,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:      TextAnchor.INSTRUCTION_START_X,
     y:      100,
     text:   'Grab your phone',
-    style:  { ...medium, fill: TextColor.TEXT },
+    style:  { ...medium, fontSize: 50, fill: TextColor.TEXT },
     parent: lobbyScene,
   })
 
@@ -64,15 +64,15 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:      TextAnchor.INSTRUCTION_START_X,
     y:      300,
     text:   'Go to',
-    style:  { ...medium, fill: TextColor.TEXT },
+    style:  { ...medium, fontSize: 50, fill: TextColor.TEXT },
     parent: lobbyScene,
   })
 
   createText({
-    x:      TextAnchor.INSTRUCTION_START_X + 154,
-    y:      294,
+    x:      TextAnchor.INSTRUCTION_START_X + 210,
+    y:      292,
     text:   getControllerUrl(),
-    style:  { ...code, fontSize: 45, fill: TextColor.HIGHLIGHT },
+    style:  { ...code, fontSize: 58, fill: TextColor.HIGHLIGHT },
     parent: lobbyScene,
   })
 
@@ -80,17 +80,17 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     x:      TextAnchor.INSTRUCTION_START_X,
     y:      520,
     text:   'Enter Code',
-    style:  { ...medium, fill: TextColor.TEXT },
+    style:  { ...medium, fontSize: 50, fill: TextColor.TEXT },
     parent: lobbyScene,
   })
 
   createText({
-    x:     TextAnchor.INSTRUCTION_START_X + 294,
+    x:     TextAnchor.INSTRUCTION_START_X + 400,
     y:     514,
     text:  gameCode,
     style: {
       ...code,
-      fontSize:      45,
+      fontSize:      58,
       padding:       10,
       letterSpacing: 3,
       fill:          TextColor.HIGHLIGHT,
@@ -130,7 +130,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   playersDividerGraphics.lineTo(875, 700)
 
   drawInstructionArrow({
-    x:            325,
+    x:            400,
     y:            170,
     angle:        90,
     id:           '1',
@@ -138,7 +138,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   })
 
   drawInstructionArrow({
-    x:            325,
+    x:            400,
     y:            400,
     angle:        90,
     id:           '2',
@@ -146,12 +146,11 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   })
 
   drawInstructionArrow({
-    x:            580,
-    y:            450,
+    x:            700,
+    y:            500,
     angle:        0,
     id:           '3',
     parentEntity: lobbyScene,
-    scale:        2,
   })
 
   _
@@ -165,7 +164,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 }
 
 const drawInstructionArrow = ({
-  x, y, id, angle, parentEntity, scale = 1,
+  x, y, id, angle, parentEntity,
 }) => {
   const instructionArrowOne = Entity
     .addChild(
@@ -186,7 +185,7 @@ const drawInstructionArrow = ({
       },
     )
 
-  instructionArrowOneSprite.scale.set(scale)
+  instructionArrowOneSprite.scale.set(1)
   instructionArrowOneSprite.rotation = toRadians(angle)
 }
 
