@@ -10,7 +10,7 @@ import { big } from './util/textStyles'
 import layers from './util/layers'
 import Scene from './Scene'
 
-const TIME_UNTIL_MATCH_END_TRANSITION = 500
+const TIME_UNTIL_LOBBY_TRANSITION = 500
 
 const createText = (entity, content, color) => {
   const text = Text.show(
@@ -99,7 +99,7 @@ const createFireworks = color => ({
 })
 
 const pause = () => ({
-  timer: Timer.create({ duration: TIME_UNTIL_MATCH_END_TRANSITION }),
+  timer: Timer.create({ duration: TIME_UNTIL_LOBBY_TRANSITION }),
   run:   ({ timer }) => {
     if (Timer.run(timer)) {
       Object
