@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
@@ -9,6 +9,9 @@ const Container = styled.div`
   height: 100vh;
   touch-action: manipulation;
   background-color: ${({ backgroundColor }) => backgroundColor};
+`
+
+const StartGameContainer = styled.div`
 `
 
 const label = css`
@@ -49,11 +52,28 @@ class GameLobby extends Component {
         {
           playerCount > 1
             ?
-              <StartGameButton
-                onClick={startGame}
-              >
+              <StartGameContainer>
+                <div>
+                  {`
+                    Your phone is the controller
+                  `}
+                </div>
+                <div>
+                  {`
+                    The game is played on the other screen
+                  `}
+                </div>
+                <div>
+                  {`
+                    Press start when ready
+                  `}
+                </div>
+                <StartGameButton
+                  onClick={startGame}
+                >
                 Start Game!
-              </StartGameButton>
+                </StartGameButton>
+              </StartGameContainer>
             :
               <AwaitingPlayers>
                 Awaiting more players...
