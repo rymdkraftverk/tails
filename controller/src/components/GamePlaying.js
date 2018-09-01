@@ -1,16 +1,25 @@
+import * as R from 'ramda'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import createCommand from '../util/createCommand'
 
-const buttonStyle = css`
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
+const SteerButton = styled.div`
   flex: 1;
   user-select: none;
   touch-action: manipulation;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 100pt;
+  background: ${R.prop('playerColor')}
+`
+
+const Separator = styled.div`
+  width: 20px;
+  background: black;
 `
 
 const Container = styled.div`
@@ -18,19 +27,7 @@ const Container = styled.div`
   height: 100vh;
   overflow: hidden;
   touch-action: manipulation;
-  border: ${({ playerColor }) => `2rem solid ${playerColor}`};
 `
-
-const ButtonLeft = styled.div`
-  ${buttonStyle}
-  background: #be5d4b;
-`
-
-const ButtonRight = styled.div`
-  ${buttonStyle}
-  background: #839870;
-`
-
 const COMMANDS = {
   NONE:  'none',
   LEFT:  'left',
@@ -78,25 +75,26 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <Container
-        playerColor={playerColor}
-      >
-        <ButtonLeft
+      <Container>
+        <SteerButton
+          playerColor={playerColor}
           onMouseDown={this.sendCommand(COMMANDS.LEFT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.LEFT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
-          LEFT
-        </ButtonLeft>
-        <ButtonRight
+          <div>{'<'} </div>
+        </SteerButton>
+        <Separator />
+        <SteerButton
+          playerColor={playerColor}
           onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
           onMouseUp={this.sendCommand(COMMANDS.NONE)}
           onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
-          RIGHT
-        </ButtonRight>
+          <div>{'>'} </div>
+        </SteerButton>
       </Container>
     )
   }
