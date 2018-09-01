@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3'
 
 const gameState = {
   started:                        false,
+  playingRound:                   false,
   gameCode:                       '',
   hasReceivedControllerCandidate: false,
   // TODO: change to array
@@ -13,7 +14,8 @@ const gameState = {
     playerFinishOrder: [],
     winner:            null,
   },
-  events: new EventEmitter(),
+  events:          new EventEmitter(),
+  availableColors: Object.keys(Color),
 }
 
 export default gameState

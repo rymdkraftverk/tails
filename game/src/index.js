@@ -52,6 +52,7 @@ const playerMovement = (id, { command, ordering }) => {
 const roundStart = () => {
   if (!gameState.started) {
     gameState.started = true
+    gameState.playingRound = true
 
     Object
       .values(gameState.controllers)
@@ -180,8 +181,8 @@ export const onControllerJoin = ({
 }
 
 const createNewPlayer = ({ playerId }) => {
-  const numOfPlayers = playerCount(gameState.players)
-  const color = Object.keys(Color)[numOfPlayers]
+  const [color] = gameState.availableColors
+  gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
     playerId,
     spriteId: `square-${color}`,
@@ -197,8 +198,21 @@ const onControllerLeave = (id) => {
   log(`[Controller Leave] ${id}`)
   gameState.controllers = R.pickBy((val, key) => key !== id, gameState.controllers)
 
-  // delete game.controllers[id]
-  // TODO: remove from controllers and lobby
+  const player = gameState.players[id]
+  gameState.availableColors = [player.color].concat(...gameState.availableColors)
+  gameState.players = R.pickBy((val, key) => key !== id, gameState.players)
+
+  if (!gameState.started && !gameState.playingRound) {
+    Entity
+      .getByType('lobby-square')
+      .forEach(e => Entity.destroy(e))
+
+    Object
+      .values(gameState.players)
+      .forEach((p, i) => {
+        createPlayerEntity(p, i, { newPlayer: false })
+      })
+  }
 }
 
 const resizeGame = () => {

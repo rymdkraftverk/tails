@@ -5,6 +5,7 @@ import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import { code, medium } from './util/textStyles'
 import { GameColor, toRadians } from './game'
+import gameState from './gameState'
 import layers from './util/layers'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -45,6 +46,7 @@ const getPlayerPosition = Util.grid({
 })
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
+  gameState.playingRound = false
   const lobbyScene = Entity
     .addChild(
       Entity.getRoot(),
@@ -234,9 +236,10 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const square = Entity.addChild(
     Entity.get(Scene.LOBBY),
     {
-      id: `square-${color}`,
+      id:    `square-${color}`,
       x,
       y,
+      types: ['lobby-square'],
     },
   )
   const sprite = Sprite.show(square, { texture: `square-${color}` })
