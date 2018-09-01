@@ -52,12 +52,12 @@ const setUpChannel = rtc => ({
   )
 
   channel.onerror = R.pipe(
-    error.bind(null, 'WebRTC error'),
+    R.tap(() => error('WebRTC error')),
     closeConnections,
   )
 
   channel.onclose = R.pipe(
-    warn.bind(null, 'RTC connection closed'),
+    R.tap(() => warn('RTC connection closed')),
     onClose,
   )
 
