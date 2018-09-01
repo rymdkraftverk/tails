@@ -11,6 +11,7 @@ import layers from './util/layers'
 import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
+import addPoints from './addPoints'
 
 window.debug = {
   ...window.debug,
@@ -36,6 +37,10 @@ const PLAYER_HITBOX_SIZE = 14
 const TRAIL_HITBOX_SIZE = 24
 
 const TOTAL_BOUNCE_DURATION = 50
+
+gameState
+  .events
+  .on(GameEvent.PLAYER_COLLISION, addPoints)
 
 export const GameColor = {
   BLUE:  '0x04A4EC',
@@ -393,6 +398,7 @@ const killPlayer = (e) => {
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
 
+  gameState.events.emit(GameEvent.PLAYER_COLLISION, e.color)
   e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
