@@ -24,7 +24,7 @@ const makeWsSend = ws => (event, payload) => {
 
 const rtcSend = (channel, data) => {
   if (channel.readyState !== ReadyState.OPEN) {
-    warn(`Attempt to send ${data} to closed channel ${channel.label}`)
+    warn(`Attempt to send ${data} to channel ${channel.label} in state ${channel.readyState}`)
     return
   }
 
