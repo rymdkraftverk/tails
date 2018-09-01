@@ -189,7 +189,7 @@ export const resetPlayersScore = players => R.compose(
 )(players)
 
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
-  R.zip(R.range(1, playerFinishOrder.length), playerFinishOrder)
+  R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
 export const applyPlayerScores = (players, scores) => {
   const scoreDict = scores
