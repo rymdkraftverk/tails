@@ -16,21 +16,6 @@ window.debug = {
   transitionToRoundEnd,
 }
 
-// hack to give the gameState object time to initialize
-setTimeout(
-  () =>
-    gameState
-      .events
-      .on(GameEvent.PLAYER_COLLISION, () =>
-        Object
-          .keys(gameState.players)
-          .map(Entity.get)
-          .forEach((p) => {
-            p.speed *= 1.05
-          })),
-  1000,
-)
-
 const { log, warn } = console
 
 const TURN_RADIUS = 3
@@ -77,21 +62,19 @@ export const transitionToGameScene = (maxPlayers) => {
 
   createWalls()
 
-  bouncePlayers(playerEntities, playerCountFactor)
+  bouncePlayers(playerEntities)
     .then(countdown)
     .then(() => {
       playerEntities.forEach((player) => {
         player.behaviors.pivot = pivot(player.id)
-        player.behaviors.holeGenerator = holeGenerator(playerCountFactor)
+        player.behaviors.holeGenerator = holeGenerator(player.speed)
         player.behaviors.createTrail = createTrail(
-          playerCountFactor,
           player.id,
           player.spriteId,
           player.behaviors.holeGenerator,
+          player.speed,
         )
-        player.behaviors.move = move({
-          // playerCountFactor,
-        })
+        player.behaviors.move = move()
         player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
 
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
@@ -166,18 +149,20 @@ const getStartingPosition = Util.grid({
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
   const { x, y } = getStartingPosition(index)
 
+  const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
+
   const square = Entity.addChild(
     Entity.get(Scene.GAME),
     {
       id:     playerId,
       x,
       y,
-      width:  PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
-      height: PLAYER_HITBOX_SIZE * (1 / playerCountFactor),
+      width:  PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
+      height: PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
     },
   )
 
-  square.speed = SPEED_MULTIPLIER / playerCountFactor
+  square.speed = snakeSpeed
   square.degrees = Util.getRandomInRange(0, 360)
   square.event = new EventEmitter()
 
@@ -221,7 +206,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   return square
 })
 
-const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
+const bouncePlayers = players => new Promise((resolve) => {
   const bouncer = Entity.addChild(Entity.getRoot())
   bouncer.behaviors.bouncePlayers = {
     timer: Timer.create({ duration: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15 }),
@@ -234,7 +219,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           player,
           { texture: `circle-${player.color}` },
         )
-        sprite.scale.set(0.5 / playerCountFactor)
+        sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
         // Offset the sprite so that the entity hitbox is in the middle
         sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
@@ -255,7 +240,12 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
           directionIndicator,
           { texture: `arrow-${player.color}` },
         )
+<<<<<<< HEAD
         directionSprite.scale.set(1.5 / playerCountFactor)
+=======
+        directionSprite.scale.set((3 * player.speed) / SPEED_MULTIPLIER)
+        // directionSprite.scale.set(3 / playerCountFactor)
+>>>>>>> Refactor dependency on playerCountFactor
         directionSprite.anchor.set(0.5)
         directionSprite.rotation = toRadians(player.degrees)
       }
@@ -266,17 +256,11 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = () => ({
-// const move = ({ playerCountFactor }) => ({
   init: () => {},
   run:  (b, e) => {
     const radians = toRadians(e.degrees)
-    // const y = Math.sin(radians)
-    // const x = Math.cos(radians)
     e.x += Math.cos(radians) * e.speed
     e.y += Math.sin(radians) * e.speed
-    console.log(e.speed)
-    // e.x += (x * SPEED_MULTIPLIER) / playerCountFactor
-    // e.y += (y * SPEED_MULTIPLIER) / playerCountFactor
   },
 })
 
@@ -300,14 +284,14 @@ const pivot = playerId => ({
   },
 })
 
-const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
+const createTrail = (playerId, spriteId, holeGenerator, speed) => ({
   timer: Timer.create({ duration: Math.ceil(2) }),
   run:   (b, e) => {
     if (holeGenerator.preventTrail) {
       return
     }
-    const width = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
-    const height = TRAIL_HITBOX_SIZE * (1 / playerCountFactor)
+    const width = TRAIL_HITBOX_SIZE * (speed / SPEED_MULTIPLIER)
+    const height = TRAIL_HITBOX_SIZE * (speed / SPEED_MULTIPLIER)
 
     // Find the middle of the player entity so that
     // we can put the trails' middle point in the same spot
@@ -331,7 +315,11 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
         trailE,
         { texture: `circle-${e.color}` },
       )
+<<<<<<< HEAD
       sprite.scale.set(0.5 / playerCountFactor)
+=======
+      sprite.scale.set(speed / SPEED_MULTIPLIER)
+>>>>>>> Refactor dependency on playerCountFactor
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
@@ -339,7 +327,7 @@ const createTrail = (playerCountFactor, playerId, spriteId, holeGenerator) => ({
   },
 })
 
-const holeGenerator = playerCountFactor => ({
+const holeGenerator = speed => ({
   preventTrail:      false,
   generateHoleTimer: Timer
     .create({
@@ -354,8 +342,8 @@ const holeGenerator = playerCountFactor => ({
       b.preventTrail = true
 
       const rand = Util.getRandomInRange(
-        Math.ceil(HOLE_LENGTH_MIN_TIME * playerCountFactor),
-        Math.ceil(HOLE_LENGTH_MAX_TIME * playerCountFactor),
+        Math.ceil(HOLE_LENGTH_MIN_TIME * (SPEED_MULTIPLIER / speed)),
+        Math.ceil(HOLE_LENGTH_MAX_TIME * (SPEED_MULTIPLIER / speed)),
       )
       b.holeLengthTimer = Timer.create({ duration: rand })
 
@@ -386,12 +374,12 @@ const activate = () => ({
   },
 })
 
-const killPlayer = (e, playerCountFactor) => {
+const killPlayer = (e) => {
   const particles = Entity.addChild(e)
   Particles.emit(particles, {
     ...explode({
       degrees:     e.degrees,
-      scaleFactor: playerCountFactor,
+      scaleFactor: SPEED_MULTIPLIER / e.speed,
       radius:      e.width,
       x:           Entity.getX(e),
       y:           Entity.getY(e),
@@ -416,7 +404,7 @@ const killPlayer = (e, playerCountFactor) => {
   e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
-const collisionChecker = (playerId, playerCountFactor) => ({
+const collisionChecker = playerId => ({
   timer: Timer.create({ duration: 2 }),
   run:   (b, e) => {
     if (Timer.run(b.timer)) {
@@ -425,13 +413,13 @@ const collisionChecker = (playerId, playerCountFactor) => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        killPlayer(e, playerCountFactor)
+        killPlayer(e)
       } else if (
         Entity.getX(e) < WALL_THICKNESS ||
         Entity.getX(e) > GAME_WIDTH - WALL_THICKNESS - e.width ||
         Entity.getY(e) < WALL_THICKNESS ||
         Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
-        killPlayer(e, playerCountFactor)
+        killPlayer(e)
         log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       }
       const playersAlive = Entity
