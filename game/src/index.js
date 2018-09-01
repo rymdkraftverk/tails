@@ -1,5 +1,5 @@
 import { Game, Entity, Sprite, Key, PIXI } from 'l1'
-import { Event, prettyId, Color, Channel, SteeringCommand } from 'common'
+import { Event, prettyId, Channel, SteeringCommand } from 'common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'

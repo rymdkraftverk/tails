@@ -1,4 +1,5 @@
 import { EventEmitter } from 'eventemitter3'
+import { Color } from 'common'
 
 const gameState = {
   started:                        false,
