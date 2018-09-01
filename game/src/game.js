@@ -277,7 +277,6 @@ const pivot = playerId => ({
       }
       e.degrees -= TURN_RADIUS
     } else {
-      console.log()
       // Do nothing
     }
   },
