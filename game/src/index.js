@@ -1,7 +1,6 @@
 import { Game, Entity, Sprite, Key, PIXI } from 'l1'
-import { Event, prettyId, Color, Channel } from 'common'
+import { Event, prettyId, Color, Channel, Command } from 'common'
 import R from 'ramda'
-import { EventEmitter } from 'eventemitter3'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
@@ -9,31 +8,12 @@ import http from './http'
 import Scene from './Scene'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
+import gameState from './gameState'
+import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
 export const MAX_PLAYERS_ALLOWED = 10
-export const LEFT = 'left'
-export const RIGHT = 'right'
-
-export const GAME_WIDTH = 1280
-export const GAME_HEIGHT = 720
-
-export const gameState = {
-  started:                        false,
-  gameCode:                       '',
-  hasReceivedControllerCandidate: false,
-  // TODO: change to array
-  controllers:                    {
-  },
-  players: {
-  },
-  lastRoundResult: {
-    playerFinishOrder: [],
-    winner:            null,
-  },
-  events: new EventEmitter(),
-}
 
 const movePlayer = (pId, direction) => {
   const playerEntity = Entity.get(`${pId}controller`)
@@ -47,8 +27,8 @@ const movePlayer = (pId, direction) => {
 
 export const playerCount = R.compose(R.length, R.values)
 
-const moveLeft = playerId => movePlayer(playerId, LEFT)
-const moveRight = playerId => movePlayer(playerId, RIGHT)
+const moveLeft = playerId => movePlayer(playerId, Command.LEFT)
+const moveRight = playerId => movePlayer(playerId, Command.RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
 const registerPlayerFinished = ({ id }) => () => {
@@ -107,9 +87,9 @@ const rtcEvents = {
 }
 
 const commands = {
-  [LEFT]:  moveLeft,
-  [RIGHT]: moveRight,
-  none:    moveStraight,
+  [Command.LEFT]:  moveLeft,
+  [Command.RIGHT]: moveRight,
+  [Command.None]:  moveStraight,
 }
 
 const createGame = ({ gameCode }) => {
