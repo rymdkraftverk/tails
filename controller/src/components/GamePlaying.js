@@ -5,12 +5,14 @@ import styled, { css } from 'styled-components'
 import createCommand from '../util/createCommand'
 
 const buttonStyle = css`
-  padding-top: 15px;
-  letter-spacing: 0.3em;
-  text-align: center;
   flex: 1;
   user-select: none;
   touch-action: manipulation;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 100pt;
 `
 
 const Container = styled.div`
@@ -87,7 +89,7 @@ class GamePlaying extends Component {
           onTouchStart={this.sendCommand(COMMANDS.LEFT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
-          LEFT
+          {'<'}
         </ButtonLeft>
         <ButtonRight
           onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
@@ -95,7 +97,7 @@ class GamePlaying extends Component {
           onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
           onTouchEnd={this.sendCommand(COMMANDS.NONE)}
         >
-          RIGHT
+          {'>'}
         </ButtonRight>
       </Container>
     )
