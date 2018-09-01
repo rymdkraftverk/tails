@@ -38,7 +38,8 @@ const TRAIL_HITBOX_SIZE = 24
 const TOTAL_BOUNCE_DURATION = 50
 
 export const GameColor = {
-  BLUE: '0x004275',
+  BLUE:  '0x04A4EC',
+  WHITE: '0xeeeeee',
 }
 
 export const transitionToGameScene = (maxPlayers) => {
@@ -247,7 +248,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   }
 })
 
-const toRadians = angle => angle * (Math.PI / 180)
+export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = ({ playerCountFactor }) => ({
   init: () => {},

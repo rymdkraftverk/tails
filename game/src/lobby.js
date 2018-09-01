@@ -2,15 +2,23 @@ import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
 import _ from 'lodash/fp'
 import R from 'ramda'
 import { GAME_WIDTH, GAME_HEIGHT, MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
-import { code, big, small } from './util/textStyles'
-import { GameColor } from './game'
+import { code, medium } from './util/textStyles'
+import { GameColor, toRadians } from './game'
 import layers from './util/layers'
 import bounce from './bounce'
 import Scene from './Scene'
 
 const CONTROLLER_PORT = '4001'
+const TextAnchor = {
+  INSTRUCTION_START_X: 64,
+}
 
-const TITLE_BACKGROUND_HEIGHT = 120
+const TextColor = {
+  TEXT:      'white',
+  HIGHLIGHT: '#04A4EC',
+}
+
+const TITLE_BACKGROUND_HEIGHT = 40
 
 const deployedURLs = {
   'game.rymdkraftverk.com': 'rymdkraftverk.com',
@@ -28,11 +36,11 @@ const getControllerUrl = () => {
 }
 
 const getPlayerPosition = Util.grid({
-  x:           480,
-  y:           400,
-  marginX:     150,
-  marginY:     150,
-  itemsPerRow: 5,
+  x:           1000,
+  y:           100,
+  marginX:     170,
+  marginY:     130,
+  itemsPerRow: 2,
 })
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
@@ -45,56 +53,58 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     )
 
   createText({
-    x:      50,
-    y:      30,
-    text:   'LOBBY',
-    style:  { ...big, fill: 'white' },
+    x:      TextAnchor.INSTRUCTION_START_X,
+    y:      100,
+    text:   'Grab your phone',
+    style:  { ...medium, fill: TextColor.TEXT },
     parent: lobbyScene,
   })
 
   createText({
-    x:      50,
-    y:      340,
-    text:   'Go to:',
-    style:  { ...small, fill: 'white' },
+    x:      TextAnchor.INSTRUCTION_START_X,
+    y:      300,
+    text:   'Go to',
+    style:  { ...medium, fill: TextColor.TEXT },
     parent: lobbyScene,
   })
 
   createText({
-    x:     50,
-    y:     370,
-    text:  getControllerUrl(),
+    x:      TextAnchor.INSTRUCTION_START_X + 154,
+    y:      294,
+    text:   getControllerUrl(),
+    style:  { ...code, fontSize: 45, fill: TextColor.HIGHLIGHT },
+    parent: lobbyScene,
+  })
+
+  createText({
+    x:      TextAnchor.INSTRUCTION_START_X,
+    y:      520,
+    text:   'Enter Code',
+    style:  { ...medium, fill: TextColor.TEXT },
+    parent: lobbyScene,
+  })
+
+  createText({
+    x:     TextAnchor.INSTRUCTION_START_X + 294,
+    y:     514,
+    text:  gameCode,
     style: {
       ...code,
-      fontSize: 30,
+      fontSize:      45,
+      padding:       10,
+      letterSpacing: 3,
+      fill:          TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
   })
 
-
   createText({
-    x:      50,
-    y:      480,
-    text:   'Code:',
-    style:  { ...small, fill: 'white' },
-    parent: lobbyScene,
-  })
-
-  createText({
-    x:      50,
-    y:      520,
-    text:   gameCode,
-    style:  code,
-    parent: lobbyScene,
-  })
-
-  createText({
-    x:     GAME_WIDTH - 230,
-    y:     GAME_HEIGHT - 48,
+    x:     GAME_WIDTH - 300,
+    y:     GAME_HEIGHT - 40,
     text:  '© Rymdkraftverk 2018',
     style: {
       ...code,
-      fontSize: 20,
+      fontSize: 18,
     },
     parent: lobbyScene,
   })
@@ -111,6 +121,39 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   titleBackgroundGraphics.lineTo(0, 0)
   titleBackgroundGraphics.endFill()
 
+  const playersDivider = Entity.addChild(lobbyScene)
+  const playersDividerGraphics = Graphics
+    .create(playersDivider, { zIndex: layers.BACKGROUND + 10 })
+
+  playersDividerGraphics.lineStyle(4, GameColor.WHITE, 1)
+  playersDividerGraphics.moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
+  playersDividerGraphics.lineTo(875, 700)
+
+  drawInstructionArrow({
+    x:            325,
+    y:            170,
+    angle:        90,
+    id:           '1',
+    parentEntity: lobbyScene,
+  })
+
+  drawInstructionArrow({
+    x:            325,
+    y:            400,
+    angle:        90,
+    id:           '2',
+    parentEntity: lobbyScene,
+  })
+
+  drawInstructionArrow({
+    x:            580,
+    y:            450,
+    angle:        0,
+    id:           '3',
+    parentEntity: lobbyScene,
+    scale:        2,
+  })
+
   _
     .times(index => alreadyConnectedPlayers[index], MAX_PLAYERS_ALLOWED)
     .forEach((player, index) => {
@@ -119,6 +162,32 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       }
       createOutline(index)
     })
+}
+
+const drawInstructionArrow = ({
+  x, y, id, angle, parentEntity, scale = 1,
+}) => {
+  const instructionArrowOne = Entity
+    .addChild(
+      parentEntity,
+      {
+        id: `instruction-arrow-${id}`,
+        x,
+        y,
+      },
+    )
+
+  const instructionArrowOneSprite = Sprite
+    .show(
+      instructionArrowOne,
+      {
+        texture: 'expand-arrow-one',
+        zIndex:  layers.FOREGROUND + 10,
+      },
+    )
+
+  instructionArrowOneSprite.scale.set(scale)
+  instructionArrowOneSprite.rotation = toRadians(angle)
 }
 
 const createOutline = (index) => {
@@ -151,7 +220,7 @@ const createText = ({
     },
   )
 
-  Text.show(
+  return Text.show(
     textEntity,
     {
       text,
