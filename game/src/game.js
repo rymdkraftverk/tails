@@ -16,6 +16,21 @@ window.debug = {
   transitionToRoundEnd,
 }
 
+// hack to give the gameState object time to initialize
+setTimeout(
+  () =>
+    gameState
+      .events
+      .on(GameEvent.PLAYER_COLLISION, () =>
+        Object
+          .keys(gameState.players)
+          .map(Entity.get)
+          .forEach((p) => {
+            p.speed *= 1.05
+          })),
+  1000,
+)
+
 const { log, warn } = console
 
 const TURN_RADIUS = 3
@@ -75,7 +90,7 @@ export const transitionToGameScene = (maxPlayers) => {
           player.behaviors.holeGenerator,
         )
         player.behaviors.move = move({
-          playerCountFactor,
+          // playerCountFactor,
         })
         player.behaviors.collisionChecker = collisionChecker(player.id, playerCountFactor)
 
@@ -162,6 +177,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     },
   )
 
+  square.speed = SPEED_MULTIPLIER / playerCountFactor
   square.degrees = Util.getRandomInRange(0, 360)
   square.event = new EventEmitter()
 
@@ -249,14 +265,18 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 
 export const toRadians = angle => angle * (Math.PI / 180)
 
-const move = ({ playerCountFactor }) => ({
+const move = () => ({
+// const move = ({ playerCountFactor }) => ({
   init: () => {},
   run:  (b, e) => {
     const radians = toRadians(e.degrees)
-    const y = Math.sin(radians)
-    const x = Math.cos(radians)
-    e.x += (x * SPEED_MULTIPLIER) / playerCountFactor
-    e.y += (y * SPEED_MULTIPLIER) / playerCountFactor
+    // const y = Math.sin(radians)
+    // const x = Math.cos(radians)
+    e.x += Math.cos(radians) * e.speed
+    e.y += Math.sin(radians) * e.speed
+    console.log(e.speed)
+    // e.x += (x * SPEED_MULTIPLIER) / playerCountFactor
+    // e.y += (y * SPEED_MULTIPLIER) / playerCountFactor
   },
 })
 
@@ -392,6 +412,7 @@ const killPlayer = (e, playerCountFactor) => {
   delete e.behaviors.pivot
   /* eslint-enable fp/no-delete */
 
+  gameState.events.emit(GameEvent.PLAYER_COLLISION)
   e.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
