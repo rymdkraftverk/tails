@@ -195,6 +195,8 @@ const createNewPlayer = ({ playerId }) => {
 
 const onControllerLeave = (id) => {
   log(`[Controller Leave] ${id}`)
+  gameState.controllers = R.pickBy((val, key) => key !== id, gameState.controllers)
+
   // delete game.controllers[id]
   // TODO: remove from controllers and lobby
 }
