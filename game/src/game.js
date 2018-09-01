@@ -18,7 +18,7 @@ window.debug = {
   transitionToRoundEnd,
 }
 
-const { log, warn } = console
+const { warn } = console
 
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
@@ -505,7 +505,6 @@ const collisionCheckerWalls = () => ({
       Entity.getY(e) < WALL_THICKNESS ||
       Entity.getY(e) > GAME_HEIGHT - WALL_THICKNESS - e.height) {
       killPlayer(e)
-      log('PLAYER DIED DUE TO OUT OF BOUNDS!')
       checkPlayersAlive()
     }
   },
