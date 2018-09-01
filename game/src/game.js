@@ -2,7 +2,7 @@ import _ from 'lodash/fp'
 import R from 'ramda'
 import { Entity, Util, Timer, Sound, Sprite, Particles, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { Event, Channel, Command } from 'common'
+import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './renderingConstant'
 import gameState from './gameState'
 import explode from './particleEmitter/explode'
@@ -264,13 +264,13 @@ const move = ({ playerCountFactor }) => ({
 
 const pivot = playerId => ({
   run: (b, e) => {
-    if (Entity.get(`${playerId}controller`).direction === Command.RIGHT) {
+    if (Entity.get(`${playerId}controller`).direction === SteeringCommand.RIGHT) {
       if (e.degrees >= 360) {
         e.degrees = 0
         return
       }
       e.degrees += TURN_RADIUS
-    } else if (Entity.get(`${playerId}controller`).direction === Command.LEFT) {
+    } else if (Entity.get(`${playerId}controller`).direction === SteeringCommand.LEFT) {
       if (e.degrees < 0) {
         e.degrees = 360
         return

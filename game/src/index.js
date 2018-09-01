@@ -1,5 +1,5 @@
 import { Game, Entity, Sprite, Key, PIXI } from 'l1'
-import { Event, prettyId, Color, Channel, Command } from 'common'
+import { Event, prettyId, Color, Channel, SteeringCommand } from 'common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
@@ -27,8 +27,8 @@ const movePlayer = (pId, direction) => {
 
 export const playerCount = R.compose(R.length, R.values)
 
-const moveLeft = playerId => movePlayer(playerId, Command.LEFT)
-const moveRight = playerId => movePlayer(playerId, Command.RIGHT)
+const moveLeft = playerId => movePlayer(playerId, SteeringCommand.LEFT)
+const moveRight = playerId => movePlayer(playerId, SteeringCommand.RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
 const registerPlayerFinished = ({ id }) => () => {
@@ -87,9 +87,9 @@ const rtcEvents = {
 }
 
 const commands = {
-  [Command.LEFT]:  moveLeft,
-  [Command.RIGHT]: moveRight,
-  [Command.None]:  moveStraight,
+  [SteeringCommand.LEFT]:  moveLeft,
+  [SteeringCommand.RIGHT]: moveRight,
+  [SteeringCommand.None]:  moveStraight,
 }
 
 const createGame = ({ gameCode }) => {
