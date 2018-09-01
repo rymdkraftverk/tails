@@ -89,7 +89,46 @@ export const transitionToGameScene = (maxPlayers) => {
 
         Entity.destroy(`${player.id}:direction`)
       })
+      initPowerups()
     })
+}
+
+const initPowerups = () => {
+  const powerupGenerator = Entity.addChild(Entity.get(Scene.GAME))
+  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(120, 140) })
+  powerupGenerator.behaviors.generatePowerups = {
+    init: (b) => {
+      b.timer = getNewPowerupTimer()
+    },
+    run: (b) => {
+      if (Timer.run(b.timer)) {
+        const powerup = Entity.addChild(powerupGenerator, {
+          x:      Util.getRandomInRange(100, GAME_WIDTH - 100),
+          y:      Util.getRandomInRange(100, GAME_HEIGHT - 100),
+          width:  32,
+          height: 32,
+        })
+        const sprite = Sprite.show(powerup, {
+          texture: 'powerup-ghost',
+        })
+        sprite.scale.set(0.5)
+
+        powerup.behaviors.collisionChecker = {
+          run: () => {
+            const collidingEntity = Entity
+              .getByType('player')
+              .find(e => Entity.isColliding(e, powerup))
+            if (collidingEntity) {
+              const soundEntity = Entity.addChild(collidingEntity)
+              Sound.play(soundEntity, { src: './sounds/join1.wav', volume: 0.6 })
+              Entity.destroy(powerup)
+              b.timer = getNewPowerupTimer()
+            }
+          },
+        }
+      }
+    },
+  }
 }
 
 export const getPlayersWithHighestScore = players =>
