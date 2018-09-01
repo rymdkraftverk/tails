@@ -219,7 +219,7 @@ const createText = ({
     },
   )
 
-  return Text.show(
+  Text.show(
     textEntity,
     {
       text,
