@@ -45,20 +45,27 @@ const displayGainedPoint = R.curry((color, player) => {
     },
   )
 
-  const textDuration = 1000
+  const textDuration = 60 // ticks
 
   scoreGainEntity.behaviors.move = {
     tick: 0,
-    init: () => {},
     run:  (b, e) => {
       b.tick += 1
       e.y -= 1
 
-      text.alpha = 1 - (b.tick / ((textDuration / 1000) * 60))
+      text.alpha = 1 - (b.tick / textDuration)
     },
   }
 
-  setTimeout(() => Entity.destroy(scoreGainEntity), textDuration)
+  scoreGainEntity.behaviors.suicide = {
+    tick: 0,
+    run:  (b, e) => {
+      b.tick += 1
+      if (b.tick > textDuration) {
+        Entity.destroy(e)
+      }
+    },
+  }
 })
 
 export default addPoints
