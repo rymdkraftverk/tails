@@ -23,14 +23,15 @@ const makeWsSend = ws => (event, payload) => {
 }
 
 const rtcSend = (channel, data) => {
-  if (channel.readyState === ReadyState.OPEN) {
-    R.pipe(
-      serialize,
-      channel.send.bind(channel),
-    )(data)
-  } else {
+  if (channel.readyState !== ReadyState.OPEN) {
     warn(`Attempt to send ${data} to closed channel ${channel.label}`)
+    return
   }
+
+  R.pipe(
+    serialize,
+    channel.send.bind(channel),
+  )(data)
 }
 
 const onWsMessage = eventMap => (message) => {
