@@ -54,7 +54,7 @@ const ghost = ({
   speedMultiplier,
 }) => ({
   timer: Timer.create({ duration: GHOST_POWERUP_DURATION }),
-  init:  (be, e) => {
+  init:  (b, e) => {
     // Scale up player 3 times
     e.asset.scale.set((e.speed / speedMultiplier / 2) * 3)
     e.asset.alpha = 0.4
@@ -64,8 +64,8 @@ const ghost = ({
     delete e.behaviors.collisionCheckerTrail
     /* eslint-enable fp/no-delete */
   },
-  run: (be, e) => {
-    if (Timer.run(be.timer) && !e.killed) {
+  run: (b, e) => {
+    if (Timer.run(b.timer) && !e.killed) {
       // Reset player
       e.asset.scale.set((e.speed / speedMultiplier / 2))
       e.asset.alpha = 1
