@@ -84,9 +84,13 @@ const roundStart = () => {
 
     fullscreenFadeInOut()
       .then(() => {
+        const entitiesToKeep = [
+          'background',
+          'fadeInOut',
+        ]
         Entity
           .getAll()
-          .filter(e => e.id !== 'background')
+          .filter(e => !entitiesToKeep.includes(e.id))
           .map(Entity.destroy)
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 

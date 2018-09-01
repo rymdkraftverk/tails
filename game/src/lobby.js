@@ -181,7 +181,6 @@ const drawInstructionArrow = ({
       instructionArrowOne,
       {
         texture: 'expand-arrow-one',
-        zIndex:  layers.FOREGROUND + 10,
       },
     )
 
