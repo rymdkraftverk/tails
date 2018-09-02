@@ -116,13 +116,12 @@ class App extends Component {
     this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
   }
 
-  gameCodeChange = ({ target: { value } }) => {
-    const prunedValue = value.length > 4
-      ? value.substr(0, 4)
-      : value
-
-    this.setState({ gameCode: prunedValue.toUpperCase() })
-  };
+  gameCodeChange = ({ target: { value } }) =>
+    this.setState({
+      gameCode: value
+        .substr(0, 4)
+        .toUpperCase(),
+    })
 
   checkConnectionTimeout = () => {
     if (this.state.appState === APP_STATE.GAME_CONNECTING) {
