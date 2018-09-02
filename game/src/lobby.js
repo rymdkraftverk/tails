@@ -5,7 +5,7 @@ import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import { code, medium } from './util/textStyles'
 import { GameColor, toRadians } from './game'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 import layers from './util/layers'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -46,7 +46,7 @@ const getPlayerPosition = Util.grid({
 })
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
-  gameState.playingRound = false
+  gameState.currentState = CurrentState.LOBBY
   const lobbyScene = Entity
     .addChild(
       Entity.getRoot(),

@@ -8,7 +8,7 @@ import http from './http'
 import Scene from './Scene'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -50,10 +50,8 @@ const playerMovement = (id, { command, ordering }) => {
 }
 
 const roundStart = () => {
-  if (!gameState.started) {
-    gameState.started = true
-    gameState.playingRound = true
-
+  if (gameState.currentState === CurrentState.LOBBY
+    || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
@@ -158,7 +156,7 @@ export const onControllerJoin = ({
       payload: {
         playerId: id,
         color:    player.color,
-        started:  gameState.started,
+        started:  gameState.currentState === CurrentState.PLAYING_ROUND,
       },
     })
 
@@ -202,7 +200,7 @@ const onControllerLeave = (id) => {
   gameState.availableColors = [player.color].concat(gameState.availableColors)
   gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
 
-  if (!gameState.started && !gameState.playingRound) {
+  if (gameState.currentState === CurrentState.LOBBY) {
     Entity
       .getByType('lobby-square')
       .forEach(Entity.destroy)
