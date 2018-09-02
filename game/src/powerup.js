@@ -90,6 +90,9 @@ const ghost = ({
         speed:         e.speed,
         speedMultiplier,
       })
+
+      const powerupExpired = Entity.addChild(e)
+      Sound.play(powerupExpired, { src: './sounds/powerup-expired.wav', volume: 0.6 })
       /* eslint-disable fp/no-delete */
       delete e.behaviors.ghost
       /* eslint-enable fp/no-delete */
