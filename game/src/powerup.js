@@ -3,6 +3,8 @@ import Scene from './Scene'
 import { createTrail, holeGenerator, collisionCheckerTrail } from './behavior'
 
 const GHOST_POWERUP_DURATION = 500
+const MINIMUM_GHOST_APPEAR_TIME = 400
+const MAXIMUM_GHOST_APPEAR_TIME = 600
 
 export const initPowerups = ({
   playerCountFactor,
@@ -12,7 +14,11 @@ export const initPowerups = ({
   gameHeight,
 }) => {
   const powerupGenerator = Entity.addChild(Entity.get(Scene.GAME))
-  const getNewPowerupTimer = () => Timer.create({ duration: Util.getRandomInRange(120, 240) })
+  const getNewPowerupTimer = () => Timer
+    .create({
+      duration: Util.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
+    })
+
   powerupGenerator.behaviors.generatePowerups = {
     init: (b) => {
       b.timer = getNewPowerupTimer()
