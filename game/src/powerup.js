@@ -69,7 +69,7 @@ const ghost = ({
   expirationState: null,
   timer:           Timer.create({ duration: GHOST_POWERUP_DURATION }),
   init:            (b, e) => {
-    e.asset.scale.set((e.speed / speedMultiplier / 2) * 2)
+    e.asset.scale.set(e.speed / speedMultiplier)
     e.asset.alpha = 0.4
     /* eslint-disable fp/no-delete */
     delete e.behaviors.holeGenerator
