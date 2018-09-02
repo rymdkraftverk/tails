@@ -205,7 +205,7 @@ const onControllerLeave = (id) => {
   if (!gameState.started && !gameState.playingRound) {
     Entity
       .getByType('lobby-square')
-      .forEach(e => Entity.destroy(e))
+      .forEach(Entity.destroy)
 
     Object
       .values(gameState.players)
