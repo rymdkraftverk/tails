@@ -64,7 +64,6 @@ const ghost = ({
   indicatingTimeout2: false,
   timer:              Timer.create({ duration: GHOST_POWERUP_DURATION }),
   init:               (b, e) => {
-    // Scale up player 3 times
     e.asset.scale.set((e.speed / speedMultiplier / 2) * 2)
     e.asset.alpha = 0.4
     /* eslint-disable fp/no-delete */
