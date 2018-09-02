@@ -14,6 +14,7 @@ const Container = styled.div`
 `
 
 const Instructions = styled.div`
+  user-select: none;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
