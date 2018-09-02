@@ -199,7 +199,7 @@ const onControllerLeave = (id) => {
   gameState.controllers = R.pickBy((_val, key) => key !== id, gameState.controllers)
 
   const player = gameState.players[id]
-  gameState.availableColors = [player.color].concat(...gameState.availableColors)
+  gameState.availableColors = [player.color].concat(gameState.availableColors)
   gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
 
   if (!gameState.started && !gameState.playingRound) {
