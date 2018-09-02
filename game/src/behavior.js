@@ -2,7 +2,7 @@ import { Entity, Timer, Sprite, Util, Particles, Sound } from 'l1'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 import { GameEvent } from './game'
 import layers from './util/layers'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
@@ -173,7 +173,7 @@ const checkPlayersAlive = () => {
     .getByType('player')
     .filter(p => !p.killed)
 
-  if (playersAlive.length === 1 && gameState.started) {
+  if (playersAlive.length === 1 && gameState.currentState === CurrentState.PLAYING_ROUND) {
     gameState.lastRoundResult.winner = playersAlive[0].color
     gameState.lastRoundResult.playerFinishOrder =
             gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])

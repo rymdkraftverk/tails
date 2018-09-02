@@ -7,12 +7,12 @@ import { big } from './util/textStyles'
 import layers from './util/layers'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
-  gameState.started = false
+  gameState.currentState = CurrentState.SCORE_OVERVIEW
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
 

@@ -4,7 +4,7 @@ import { Entity, Util, Timer, Sprite, Graphics } from 'l1'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
 import layers from './util/layers'
 import countdown from './countdown'
@@ -42,6 +42,7 @@ export const GameColor = {
 }
 
 export const transitionToGameScene = (maxPlayers) => {
+  gameState.currentState = CurrentState.PLAYING_ROUND
   Entity.addChild(
     Entity.getRoot(),
     {

@@ -1,5 +1,5 @@
 import { Game, Entity, Sprite, Key, PIXI } from 'l1'
-import { Event, prettyId, Color, Channel, SteeringCommand } from 'common'
+import { Event, prettyId, Channel, SteeringCommand } from 'common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene, GameEvent } from './game'
@@ -8,7 +8,7 @@ import http from './http'
 import Scene from './Scene'
 import layers from './util/layers'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
-import gameState from './gameState'
+import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -50,9 +50,8 @@ const playerMovement = (id, { command, ordering }) => {
 }
 
 const roundStart = () => {
-  if (!gameState.started) {
-    gameState.started = true
-
+  if (gameState.currentState === CurrentState.LOBBY
+    || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
     Object
       .values(gameState.controllers)
       .forEach(({ id }) => {
@@ -157,7 +156,7 @@ export const onControllerJoin = ({
       payload: {
         playerId: id,
         color:    player.color,
-        started:  gameState.started,
+        started:  gameState.currentState === CurrentState.PLAYING_ROUND,
       },
     })
 
@@ -180,8 +179,8 @@ export const onControllerJoin = ({
 }
 
 const createNewPlayer = ({ playerId }) => {
-  const numOfPlayers = playerCount(gameState.players)
-  const color = Object.keys(Color)[numOfPlayers]
+  const [color] = gameState.availableColors
+  gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
     playerId,
     spriteId: `square-${color}`,
@@ -195,8 +194,23 @@ const createNewPlayer = ({ playerId }) => {
 
 const onControllerLeave = (id) => {
   log(`[Controller Leave] ${id}`)
-  // delete game.controllers[id]
-  // TODO: remove from controllers and lobby
+  gameState.controllers = R.pickBy((_val, key) => key !== id, gameState.controllers)
+
+  const player = gameState.players[id]
+  gameState.availableColors = [player.color].concat(gameState.availableColors)
+  gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
+
+  if (gameState.currentState === CurrentState.LOBBY) {
+    Entity
+      .getByType('lobby-square')
+      .forEach(Entity.destroy)
+
+    Object
+      .values(gameState.players)
+      .forEach((p, i) => {
+        createPlayerEntity(p, i, { newPlayer: false })
+      })
+  }
 }
 
 const resizeGame = () => {
