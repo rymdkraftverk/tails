@@ -196,11 +196,11 @@ const createNewPlayer = ({ playerId }) => {
 
 const onControllerLeave = (id) => {
   log(`[Controller Leave] ${id}`)
-  gameState.controllers = R.pickBy((val, key) => key !== id, gameState.controllers)
+  gameState.controllers = R.pickBy((_val, key) => key !== id, gameState.controllers)
 
   const player = gameState.players[id]
   gameState.availableColors = [player.color].concat(...gameState.availableColors)
-  gameState.players = R.pickBy((val, key) => key !== id, gameState.players)
+  gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
 
   if (!gameState.started && !gameState.playingRound) {
     Entity
