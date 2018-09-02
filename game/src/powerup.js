@@ -2,7 +2,7 @@ import { Entity, Timer, Util, Sound, Sprite } from 'l1'
 import Scene from './Scene'
 import { createTrail, holeGenerator, collisionCheckerTrail } from './behavior'
 
-const GHOST_POWERUP_DURATION = 500
+const GHOST_POWERUP_DURATION = 380
 const MINIMUM_GHOST_APPEAR_TIME = 400
 const MAXIMUM_GHOST_APPEAR_TIME = 600
 
