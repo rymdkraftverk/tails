@@ -1,6 +1,7 @@
 import { Entity, Timer, Util, Sound, Sprite } from 'l1'
 import Scene from './Scene'
 import { createTrail, holeGenerator, collisionCheckerTrail } from './behavior'
+import { createSine } from './magic'
 
 const GHOST_POWERUP_DURATION = 380
 const MINIMUM_GHOST_APPEAR_TIME = 400
@@ -59,10 +60,12 @@ const ghost = ({
   playerCountFactor,
   speedMultiplier,
 }) => ({
-  timer: Timer.create({ duration: GHOST_POWERUP_DURATION }),
-  init:  (b, e) => {
+  indicatingTimeout1: false,
+  indicatingTimeout2: false,
+  timer:              Timer.create({ duration: GHOST_POWERUP_DURATION }),
+  init:               (b, e) => {
     // Scale up player 3 times
-    e.asset.scale.set((e.speed / speedMultiplier / 2) * 3)
+    e.asset.scale.set((e.speed / speedMultiplier / 2) * 2)
     e.asset.alpha = 0.4
     /* eslint-disable fp/no-delete */
     delete e.behaviors.holeGenerator
@@ -72,6 +75,9 @@ const ghost = ({
   },
   run: (b, e) => {
     if (Timer.run(b.timer) && !e.killed) {
+      // eslint-disable-next-line fp/no-delete
+      delete e.behaviors.indicateTimeout
+
       // Reset player
       e.asset.scale.set((e.speed / speedMultiplier / 2))
       e.asset.alpha = 1
@@ -84,6 +90,30 @@ const ghost = ({
         speed:         e.speed,
         speedMultiplier,
       })
+      /* eslint-disable fp/no-delete */
+      delete e.behaviors.ghost
+      /* eslint-enable fp/no-delete */
     }
+
+    if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.6) && !b.indicatingTimeout1) {
+      b.indicatingTimeout1 = true
+      e.behaviors.indicateTimeout = indicateTimeout(60)
+    } else if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.8) && !b.indicatingTimeout2) {
+      b.indicatingTimeout2 = true
+      e.behaviors.indicateTimeout = indicateTimeout(20)
+    }
+  },
+})
+
+const indicateTimeout = speed => ({
+  sine: createSine({
+    start: 0.2,
+    end:   0.8,
+    speed,
+  }),
+  tick: 0,
+  run:  (b, e) => {
+    e.asset.alpha = b.sine(b.tick)
+    b.tick += 1
   },
 })
