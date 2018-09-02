@@ -100,15 +100,15 @@ const ghost = ({
 
     if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.6) && !b.indicatingTimeout1) {
       b.indicatingTimeout1 = true
-      e.behaviors.indicateTimeout = indicateTimeout(60)
+      e.behaviors.indicateTimeout = indicateTimeout(60, GHOST_POWERUP_DURATION * 0.4)
     } else if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.8) && !b.indicatingTimeout2) {
       b.indicatingTimeout2 = true
-      e.behaviors.indicateTimeout = indicateTimeout(20)
+      e.behaviors.indicateTimeout = indicateTimeout(20, GHOST_POWERUP_DURATION * 0.2)
     }
   },
 })
 
-const indicateTimeout = speed => ({
+const indicateTimeout = (speed, duration) => ({
   sine: createSine({
     start: 0.2,
     end:   0.8,
@@ -116,6 +116,11 @@ const indicateTimeout = speed => ({
   }),
   tick: 0,
   run:  (b, e) => {
+    // Safeguarding against this behavior affecting alpha after it's removed
+    if (b.tick >= duration - 1) {
+      e.asset.alpha = 1
+      return
+    }
     e.asset.alpha = b.sine(b.tick)
     b.tick += 1
   },
