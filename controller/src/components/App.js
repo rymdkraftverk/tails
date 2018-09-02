@@ -117,7 +117,11 @@ class App extends Component {
   }
 
   gameCodeChange = ({ target: { value } }) => {
-    this.setState({ gameCode: value.toUpperCase() })
+    const prunedValue = value.length > 4
+      ? value.substr(0, 4)
+      : value
+
+    this.setState({ gameCode: prunedValue.toUpperCase() })
   };
 
   checkConnectionTimeout = () => {
