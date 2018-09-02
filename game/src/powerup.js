@@ -56,14 +56,19 @@ export const initPowerups = ({
   }
 }
 
+const ExpirationState = {
+  SOON:     'soon',
+  IMMINENT: 'imminent',
+}
+
+
 const ghost = ({
   playerCountFactor,
   speedMultiplier,
 }) => ({
-  indicatingTimeout1: false,
-  indicatingTimeout2: false,
-  timer:              Timer.create({ duration: GHOST_POWERUP_DURATION }),
-  init:               (b, e) => {
+  expirationState: null,
+  timer:           Timer.create({ duration: GHOST_POWERUP_DURATION }),
+  init:            (b, e) => {
     e.asset.scale.set((e.speed / speedMultiplier / 2) * 2)
     e.asset.alpha = 0.4
     /* eslint-disable fp/no-delete */
@@ -75,7 +80,7 @@ const ghost = ({
   run: (b, e) => {
     if (Timer.run(b.timer) && !e.killed) {
       // eslint-disable-next-line fp/no-delete
-      delete e.behaviors.indicateTimeout
+      delete e.behaviors.indicateExpiration
 
       // Reset player
       e.asset.scale.set((e.speed / speedMultiplier / 2))
@@ -97,17 +102,23 @@ const ghost = ({
       /* eslint-enable fp/no-delete */
     }
 
-    if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.6) && !b.indicatingTimeout1) {
-      b.indicatingTimeout1 = true
-      e.behaviors.indicateTimeout = indicateTimeout(60, GHOST_POWERUP_DURATION * 0.4)
-    } else if (b.timer.counter > (GHOST_POWERUP_DURATION * 0.8) && !b.indicatingTimeout2) {
-      b.indicatingTimeout2 = true
-      e.behaviors.indicateTimeout = indicateTimeout(20, GHOST_POWERUP_DURATION * 0.2)
+    if (
+      b.timer.counter > (GHOST_POWERUP_DURATION * 0.6) &&
+      !b.expirationState
+    ) {
+      b.expirationState = ExpirationState.SOON
+      e.behaviors.indicateExpiration = indicateExpiration(60, GHOST_POWERUP_DURATION * 0.4)
+    } else if (
+      b.timer.counter > (GHOST_POWERUP_DURATION * 0.8) &&
+      b.expirationState === ExpirationState.SOON
+    ) {
+      b.expirationState = ExpirationState.IMMINENT
+      e.behaviors.indicateExpiration = indicateExpiration(20, GHOST_POWERUP_DURATION * 0.2)
     }
   },
 })
 
-const indicateTimeout = (speed, duration) => ({
+const indicateExpiration = (speed, duration) => ({
   sine: createSine({
     start: 0.2,
     end:   0.8,
