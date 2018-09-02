@@ -36,6 +36,7 @@ const GameCodeInput = styled.input`
 `
 
 const GameJoinButton = styled.button`
+  user-select: none;
   align-self: flex-start;
   touch-action: manipulation;
   color: #4085af;
