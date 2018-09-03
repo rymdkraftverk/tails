@@ -63,19 +63,19 @@ class GameLobby extends Component {
                 <Instructions>
                   <div>
                     {`
-                    Your phone is the controller
-                  `}
+                      Your phone is the controller
+                    `}
                   </div>
                   <div>
-                    {`
-                    The game is played on the other screen
-                  `}
+                    {` 
+                      The game is played on the other screen
+                    `}
                   </div>
                 </Instructions>
                 <StartGameButton
                   onClick={startGame}
                 >
-                  {'I\'m ready!'}
+                  {'Start game!'}
                 </StartGameButton>
               </Fragment>
 
