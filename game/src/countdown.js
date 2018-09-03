@@ -1,6 +1,6 @@
 import { Entity, Text, Timer } from 'l1'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import { big } from './util/textStyles'
+import * as TextStyle from './util/textStyle'
 import bounce from './bounce'
 
 const TIME_BETWEEN_NUMBERS = 40
@@ -28,7 +28,7 @@ const showText = (entity, text) => {
   const asset = Text.show(entity, {
     text,
     style: {
-      ...big,
+      ...TextStyle.BIG,
       fill: 'white',
     },
   })

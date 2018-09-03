@@ -6,9 +6,9 @@ import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
 import { scoreToWin } from './game'
 import delay from './delay'
-import { small, big } from './util/textStyles'
+import * as TextStyle from './util/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
-import layers from './util/layers'
+import Layer from './util/layer'
 import gameState from './gameState'
 
 const WORM_START_Y = 80
@@ -40,7 +40,7 @@ export const transitionToScoreScene = () => {
       goal,
       {
         texture: 'goal-flag',
-        zIndex:  layers.BACKGROUND,
+        zIndex:  Layer.BACKGROUND,
       },
     )
   goalSprite.scale.set(1.5)
@@ -57,7 +57,10 @@ export const transitionToScoreScene = () => {
     goalScore,
     {
       text:  scoreToWin(gameState.players),
-      style: { ...big, fill: 'white' },
+      style: {
+        ...TextStyle.BIG,
+        fill: 'white',
+      },
     },
   )
 
@@ -180,7 +183,7 @@ const createPlayerScore = ({ parent, score }) => {
     {
       text:  score,
       style: {
-        ...small,
+        ...TextStyle.SMALL,
         fill: 'white',
       },
       zIndex: 1,
