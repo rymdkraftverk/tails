@@ -93,7 +93,6 @@ class LockerRoom extends Component {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            maxLength="4"
           />
         </ContainerRow>
         <ContainerRow>
