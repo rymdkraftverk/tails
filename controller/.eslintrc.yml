@@ -3,7 +3,8 @@ plugins:
   - react
 parser: babel-eslint
 extends:
-  plugin:react/recommended
+  - airbnb
+  - plugin:react/recommended
 env:
   browser: true
 rules:
@@ -13,6 +14,8 @@ rules:
   react/jsx-max-props-per-line: error
   react/jsx-first-prop-new-line: error
   react/jsx-closing-bracket-location: error
+  react/jsx-filename-extension: off
+  react/prefer-stateless-function: off
   react/jsx-tag-spacing:
     - error
     - 
@@ -30,3 +33,11 @@ rules:
   fp/no-let: off
   fp/no-class: off
   import/prefer-default-export: off
+  key-spacing:
+    - error
+    -
+      align: value
+  semi:
+    - error
+    - never
+

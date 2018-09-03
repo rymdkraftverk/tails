@@ -36,8 +36,6 @@ class App extends Component {
     appState:    APP_STATE.LOCKER_ROOM,
     fullscreen:  false,
     gameCode:    '',
-    channel:     null,
-    playerId:    null,
     playerColor: null,
     error:       '',
   }
@@ -48,41 +46,12 @@ class App extends Component {
     this.setState({ gameCode })
   }
 
-  connectToGame(gameCode) {
-    const onClose = () => {
-      this.displayError('Connection closed')
-    }
-
-    signaling.runInitiator({
-      wsAddress:  WS_ADDRESS,
-      receiverId: gameCode,
-      onData:     this.onData,
-      onClose,
-    })
-      .then((send) => {
-        this.sendUnreliable = send(Channel.UNRELIABLE)
-        this.sendReliable = send(Channel.RELIABLE)
-      })
-      .catch((error) => {
-        const message = {
-          NOT_FOUND: `Game with code ${gameCode} not found`,
-        }[error.cause]
-
-        if (message) {
-          this.displayError(message)
-        } else {
-          logError(error)
-        }
-      })
-  }
-
   onData = ({ event, payload }) => {
     if (event === Event.Rtc.CONTROLLER_COLOR) {
       if (!payload.started) {
         this.setState({
           appState:    APP_STATE.GAME_LOBBY,
           playerColor: payload.color,
-          playerId:    payload.playerId,
         })
       } else {
         this.setState({
@@ -112,6 +81,14 @@ class App extends Component {
     }
   }
 
+  onJoin = () => {
+    const { gameCode } = this.state
+    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
+    setLastGameCode(gameCode)
+    setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
+    this.connectToGame(gameCode)
+  };
+
   displayError = (message) => {
     this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
   }
@@ -129,13 +106,33 @@ class App extends Component {
     }
   };
 
-  onJoin = () => {
-    const { gameCode } = this.state
-    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
-    setLastGameCode(gameCode)
-    setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
-    this.connectToGame(gameCode)
-  };
+  connectToGame(gameCode) {
+    const onClose = () => {
+      this.displayError('Connection closed')
+    }
+
+    signaling.runInitiator({
+      wsAddress:  WS_ADDRESS,
+      receiverId: gameCode,
+      onData:     this.onData,
+      onClose,
+    })
+      .then((send) => {
+        this.sendUnreliable = send(Channel.UNRELIABLE)
+        this.sendReliable = send(Channel.RELIABLE)
+      })
+      .catch((error) => {
+        const message = {
+          NOT_FOUND: `Game with code ${gameCode} not found`,
+        }[error.cause]
+
+        if (message) {
+          this.displayError(message)
+        } else {
+          logError(error)
+        }
+      })
+  }
 
   clearError = () => {
     this.setState({ error: '' })

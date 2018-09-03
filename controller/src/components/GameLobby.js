@@ -95,4 +95,8 @@ GameLobby.propTypes = {
   startGame:   PropTypes.func.isRequired,
 }
 
+GameLobby.defaultProps = {
+  playerCount: 0,
+}
+
 export default GameLobby
