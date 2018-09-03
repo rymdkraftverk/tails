@@ -57,16 +57,15 @@ class LockerRoom extends Component {
     }
   }
 
-  gameCodeFilled = () => this.props.gameCode.length === 4
+  onKeyPress = (e) => {
+    if (this.isSubmit(e.key)) this.props.onJoin()
+  }
 
   isSubmit = pressed =>
     this.gameCodeFilled() &&
     pressed === 'Enter'
 
-  onKeyPress = (e) => {
-    if (this.isSubmit(e.key)) this.props.onJoin()
-  }
-
+  gameCodeFilled = () => this.props.gameCode.length === 4
 
   render() {
     const {
