@@ -3,8 +3,8 @@ import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, applyPlayerScores } from './game'
 import { GAME_WIDTH } from './rendering'
-import { big } from './util/textStyles'
-import layers from './util/layers'
+import * as TextStyle from './util/textStyle'
+import Layer from './util/layer'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
 import gameState, { CurrentState } from './gameState'
@@ -30,9 +30,9 @@ export const transitionToRoundEnd = () => {
     roundEnd,
     {
       text:   `Winner is ${winner}!`,
-      zIndex: layers.FOREGROUND + 10,
+      zIndex: Layer.FOREGROUND + 10,
       style:  {
-        ...big,
+        ...TextStyle.BIG,
         fill: Color[winner],
       },
     },

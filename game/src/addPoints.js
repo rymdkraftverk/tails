@@ -1,8 +1,8 @@
 import R from 'ramda'
 import { Entity, Text } from 'l1'
 import gameState from './gameState'
-import { small } from './util/textStyles'
-import { FOREGROUND } from './util/layers'
+import * as TextStyle from './util/textStyle'
+import Layer from './util/layer'
 
 const addPoints = (color) => {
   const livingPlayers = Object
@@ -38,10 +38,10 @@ const displayGainedPoint = R.curry((color, player) => {
       text:    '+1',
       texture: `circle-${player.color}`,
       style:   {
-        ...small,
+        ...TextStyle.SMALL,
         fill: color,
       },
-      zIndex: FOREGROUND,
+      zIndex: Layer.FOREGROUND,
     },
   )
 

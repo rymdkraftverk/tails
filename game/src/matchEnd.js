@@ -6,8 +6,8 @@ import { createSine } from './magic'
 import { resetPlayersScore, getPlayersWithHighestScore } from './game'
 import firework from './particleEmitter/firework'
 import { transitionToLobby } from './lobby'
-import { big } from './util/textStyles'
-import layers from './util/layers'
+import * as TextStyle from './util/textStyle'
+import Layer from './util/layer'
 import Scene from './Scene'
 import gameState from './gameState'
 
@@ -18,9 +18,9 @@ const createText = (entity, content, color) => {
     entity,
     {
       text:   content,
-      zIndex: layers.FOREGROUND,
+      zIndex: Layer.FOREGROUND,
       style:  {
-        ...big,
+        ...TextStyle.BIG,
         fill: color,
       },
     },
@@ -92,7 +92,7 @@ const createFireworks = color => ({
           x,
           y,
         }),
-        zIndex: layers.BACKGROUND,
+        zIndex: Layer.BACKGROUND,
       })
       Timer.reset(b.timer)
     }

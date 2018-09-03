@@ -4,7 +4,7 @@ import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import gameState, { CurrentState } from './gameState'
 import { GameEvent } from './game'
-import layers from './util/layers'
+import Layer from './util/layer'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
 const TRAIL_HITBOX_SIZE = 24
@@ -131,7 +131,7 @@ const killPlayer = (e, speedMultiplier) => {
       x:           Entity.getX(e),
       y:           Entity.getY(e),
     }),
-    zIndex: layers.FOREGROUND,
+    zIndex: Layer.FOREGROUND,
   })
 
   const sound = Entity.addChild(e)

@@ -6,7 +6,7 @@ import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import gameState, { CurrentState } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
-import layers from './util/layers'
+import Layer from './util/layer'
 import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -232,7 +232,7 @@ const bouncePlayers = players => new Promise((resolve) => {
           player,
           {
             texture: `circle-${player.color}`,
-            zIndex:  layers.FOREGROUND,
+            zIndex:  Layer.FOREGROUND,
           },
         )
         sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
