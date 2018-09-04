@@ -244,13 +244,13 @@ const bouncePlayers = players => new Promise((resolve) => {
         const glow = Filter.add(
           player,
           new Filter.Filter.GlowFilter(
-            (player.speed / SPEED_MULTIPLIER) * 30,
-            10,
-            5,
-            0.3,
+            (player.speed / SPEED_MULTIPLIER) * 24,
+            (player.speed / SPEED_MULTIPLIER) * 10,
+            (player.speed / SPEED_MULTIPLIER) * 5,
+            0.1,
           ),
         )
-        glow.padding = 15
+        glow.padding = (player.speed / SPEED_MULTIPLIER) * 13
         glow.color = convertColorHex(Color[player.color])
 
         // Offset the sprite so that the entity hitbox is in the middle

@@ -36,13 +36,13 @@ export const createTrail = ({
     const glow = Filter.add(
       graphicsEntity,
       new Filter.Filter.GlowFilter(
-        (speed / speedMultiplier) * 30,
-        10,
-        5,
-        0.3,
+        (speed / speedMultiplier) * 24,
+        (speed / speedMultiplier) * 10,
+        (speed / speedMultiplier) * 5,
+        0.1,
       ),
     )
-    glow.padding = 15
+    glow.padding = (speed / speedMultiplier) * 13
     glow.color = convertColorHex(Color[e.color])
   },
   run: (b, e) => {
