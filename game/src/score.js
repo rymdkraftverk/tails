@@ -184,7 +184,7 @@ const createHead = ({
   )
 
   if (shouldGlow) {
-    const glow = Filter.add(
+    Filter.add(
       head,
       new Filter.Filter.GlowFilter(20, 4, 0, convertColorHex(Color[color]), 0.3),
     )
