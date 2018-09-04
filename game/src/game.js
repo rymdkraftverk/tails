@@ -1,8 +1,8 @@
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Sprite, Graphics } from 'l1'
+import { Entity, Util, Timer, Sprite, Graphics, Filter } from 'l1'
 import EventEmitter from 'eventemitter3'
-import { Event, Channel, SteeringCommand } from 'common'
+import { Color, Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import gameState, { CurrentState } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
@@ -13,6 +13,7 @@ import Scene from './Scene'
 import addPoints from './addPoints'
 import { initPowerups } from './powerup'
 import { createTrail, holeGenerator, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
+import convertColorHex from './util/convertColorHex'
 
 window.debug = {
   ...window.debug,
@@ -240,6 +241,8 @@ const bouncePlayers = players => new Promise((resolve) => {
           },
         )
         sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
+        const glow = Filter.add(player, Filter.Filter.GlowFilter)
+        glow.color = convertColorHex(Color[player.color])
 
         // Offset the sprite so that the entity hitbox is in the middle
         sprite.anchor.set((1 - (player.width / sprite.width)) / 2)

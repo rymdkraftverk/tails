@@ -10,6 +10,7 @@ import * as TextStyle from './util/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
 import Layer from './util/layer'
 import gameState from './gameState'
+import convertColorHex from './util/convertColorHex'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
@@ -200,7 +201,7 @@ const animate = ({
     Entity.setX(e, Entity.getX(e) + diffX)
     tailGraphics.clear()
     // Pixi.Graphics requires color code to start with 0x instead of #
-    tailGraphics.beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
+    tailGraphics.beginFill(convertColorHex(Color[color]), 1)
     tailGraphics.moveTo(0, 0)
     tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0)
     tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0 + e.asset.height)
