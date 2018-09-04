@@ -28,7 +28,10 @@ export const createTrail = ({
     const middleY = Entity.getY(e) + (e.height / 2)
     const graphicsEntity = Entity.addChild(Entity.get(Scene.GAME))
     const graphics = Graphics.create(graphicsEntity)
-    const glow = Filter.add(graphicsEntity, Filter.Filter.GlowFilter)
+    const glow = Filter.add(
+      graphicsEntity,
+      new Filter.Filter.GlowFilter((speed / speedMultiplier) * 16),
+    )
     glow.color = convertColorHex(Color[e.color])
     graphics.lineStyle(
       (speed / speedMultiplier) * 16,

@@ -241,7 +241,10 @@ const bouncePlayers = players => new Promise((resolve) => {
           },
         )
         sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
-        const glow = Filter.add(player, Filter.Filter.GlowFilter)
+        const glow = Filter.add(
+          player,
+          new Filter.Filter.GlowFilter((player.speed / SPEED_MULTIPLIER) * 16),
+        )
         glow.color = convertColorHex(Color[player.color])
 
         // Offset the sprite so that the entity hitbox is in the middle
