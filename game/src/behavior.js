@@ -20,14 +20,19 @@ const HOLE_LENGTH_MIN_TIME = 10
 export const createTrail = ({
   playerId, holeGenerator, speed, speedMultiplier,
 }) => ({
-  coordinateList: [],
-  timer:          Timer.create({ duration: Math.ceil(2) }),
-  graphics:       null,
-  init:           (b, e) => {
+  timer:    Timer.create({ duration: Math.ceil(2) }),
+  graphics: null,
+  init:     (b, e) => {
     const middleX = Entity.getX(e) + (e.width / 2)
     const middleY = Entity.getY(e) + (e.height / 2)
     const graphicsEntity = Entity.addChild(Entity.get(Scene.GAME))
-    const graphics = Graphics.create(graphicsEntity)
+    b.graphics = Graphics.create(graphicsEntity)
+    b.graphics.lineStyle(
+      (speed / speedMultiplier) * 16,
+      convertColorHex(Color[e.color]),
+      1,
+    )
+    b.graphics.moveTo(middleX, middleY)
     const glow = Filter.add(
       graphicsEntity,
       new Filter.Filter.GlowFilter(
@@ -39,13 +44,6 @@ export const createTrail = ({
     )
     glow.padding = 15
     glow.color = convertColorHex(Color[e.color])
-    graphics.lineStyle(
-      (speed / speedMultiplier) * 16,
-      convertColorHex(Color[e.color]),
-      1,
-    )
-    graphics.moveTo(middleX, middleY)
-    b.graphics = graphics
   },
   run: (b, e) => {
     if (Timer.run(b.timer)) {
@@ -72,32 +70,16 @@ export const createTrail = ({
         trailE.behaviors.activate = activate()
       }
 
-      if (holeGenerator.preventTrail) {
-        b.coordinateList = b.coordinateList.concat({ x: middleX, y: middleY, hole: true })
-      } else {
-        b.coordinateList = b.coordinateList.concat({ x: middleX, y: middleY, hole: false })
-      }
-
-      b.graphics.clear()
       b.graphics.lineStyle(
         (speed / speedMultiplier) * 16,
         convertColorHex(Color[e.color]),
         1,
       )
-
-      const {
-        x: startX,
-        y: startY,
-      } = b.coordinateList[0]
-      b.graphics.moveTo(startX, startY)
-
-      b.coordinateList.forEach(({ x, y, hole }) => {
-        if (hole) {
-          b.graphics.moveTo(x, y)
-        } else {
-          b.graphics.lineTo(x, y)
-        }
-      })
+      if (holeGenerator.preventTrail) {
+        b.graphics.moveTo(middleX, middleY)
+      } else {
+        b.graphics.lineTo(middleX, middleY)
+      }
 
       Timer.reset(b.timer)
     }
