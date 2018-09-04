@@ -30,8 +30,14 @@ export const createTrail = ({
     const graphics = Graphics.create(graphicsEntity)
     const glow = Filter.add(
       graphicsEntity,
-      new Filter.Filter.GlowFilter((speed / speedMultiplier) * 16),
+      new Filter.Filter.GlowFilter(
+        (speed / speedMultiplier) * 30,
+        10,
+        5,
+        0.3,
+      ),
     )
+    glow.padding = 15
     glow.color = convertColorHex(Color[e.color])
     graphics.lineStyle(
       (speed / speedMultiplier) * 16,
