@@ -155,9 +155,9 @@ const createPlayer = (index) => {
   if (player) {
     const glow = Filter.add(
       tail,
-      new Filter.Filter.GlowFilter(20, 4, 0, convertColorHex(Color[currentColor]), 0.2),
+      new Filter.Filter.GlowFilter(16, 4, 0, convertColorHex(Color[currentColor]), 0.3),
     )
-    glow.color = convertColorHex(Color[currentColor])
+    glow.padding = 12
   }
 
   head.behaviors.animate = animate({
@@ -186,9 +186,8 @@ const createHead = ({
   if (shouldGlow) {
     const glow = Filter.add(
       head,
-      new Filter.Filter.GlowFilter(20, 4, 0, convertColorHex(Color[color]), 0.2),
+      new Filter.Filter.GlowFilter(20, 4, 0, convertColorHex(Color[color]), 0.3),
     )
-    glow.color = convertColorHex(Color[color])
   }
 
   return head
