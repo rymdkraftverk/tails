@@ -155,7 +155,7 @@ const createPlayer = (index) => {
   if (player) {
     const glow = Filter.add(
       tail,
-      new Filter.Filter.GlowFilter(16, 4, 0, convertColorHex(Color[currentColor]), 0.3),
+      new Filter.Filter.GlowFilter(20, 6, 0, convertColorHex(Color[currentColor]), 0.1),
     )
     glow.padding = 12
   }
