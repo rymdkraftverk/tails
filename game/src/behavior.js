@@ -131,7 +131,7 @@ const killPlayer = (e, speedMultiplier) => {
       x:           Entity.getX(e),
       y:           Entity.getY(e),
     }),
-    zIndex: Layer.FOREGROUND,
+    zIndex: Layer.FOREGROUND + 1,
   })
 
   const sound = Entity.addChild(e)
