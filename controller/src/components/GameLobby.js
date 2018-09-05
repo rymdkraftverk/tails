@@ -9,7 +9,6 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 100vh;
-  touch-action: manipulation;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `
 
@@ -31,7 +30,6 @@ const label = css`
 
 const StartGameButton = styled.button`
   ${label};
-  touch-action: manipulation;
   border: 0.1em solid black;
 `
 

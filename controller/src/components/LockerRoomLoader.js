@@ -6,9 +6,6 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `
 
-const Container = styled.div`
-  touch-action: manipulation;
-`
 const Spinner = styled.div`
   position: absolute;
   left: 50%;
@@ -21,13 +18,12 @@ const Spinner = styled.div`
   width: 120px;
   height: 120px;
   animation: ${spin} 2s linear infinite;
-  touch-action: manipulation;
 `
 
 const LockerRoomLoader = () => (
-  <Container>
+  <div>
     <Spinner />
-  </Container>
+  </div>
 )
 
 export default LockerRoomLoader

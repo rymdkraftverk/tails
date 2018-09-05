@@ -6,7 +6,6 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  touch-action: manipulation;
 `
 
 const ContainerRow = styled.div`
@@ -15,7 +14,6 @@ const ContainerRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: manipulation;
 `
 
 const GameCodeInput = styled.input`
@@ -32,18 +30,12 @@ const GameCodeInput = styled.input`
   width: 40%;
   caret-color: #4085af;
   color: #4085af;
-  touch-action: manipulation;
 `
 
 const GameJoinButton = styled.button`
   user-select: none;
   align-self: flex-start;
-  touch-action: manipulation;
   color: #4085af;
-`
-
-const NotificationsStyled = styled(Notifications)`
-  touch-action: manipulation;
 `
 
 class LockerRoom extends Component {
@@ -106,7 +98,7 @@ class LockerRoom extends Component {
               : null
           }
         </ContainerRow>
-        <NotificationsStyled />
+        <Notifications />
       </Container>
     )
   }
