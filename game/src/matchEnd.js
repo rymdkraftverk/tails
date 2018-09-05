@@ -72,10 +72,13 @@ const textMovement = () => ({
     speed: 120,
   }),
   tick: 0,
-  run:  (b, e) => {
-    const foo = b.sine(b.tick)
+  init: (b, e) => {
+    b.originalSize = e.asset.style.fontSize
+  },
+  run: (b, e) => {
+    const scale = b.sine(b.tick)
     b.tick += 1
-    e.asset.style.fontSize = e.originalSize * foo
+    Text.scale(e, b.originalSize * scale)
   },
 })
 
