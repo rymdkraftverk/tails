@@ -110,7 +110,7 @@ export const getPlayersWithHighestScore = players =>
     Object.values,
   )(players)
 
-export const scoreToWin = players => (Object.keys(players).length - 1) * 5
+export const scoreToWin = players => (Object.keys(players).length - 1) * 4
 
 export const resetPlayerScore = (acc, player) => {
   acc[player.playerId] = { ...player, score: 0 }
