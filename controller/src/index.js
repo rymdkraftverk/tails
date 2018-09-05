@@ -1,12 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import styled, { injectGlobal } from 'styled-components'
+import { injectGlobal } from 'styled-components'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
-
-const StyledApp = styled(App)`
-  touch-action: manipulation;
-`
 
 /* eslint-disable-next-line no-unused-expressions */
 injectGlobal`
@@ -16,6 +12,7 @@ injectGlobal`
   }
   
   html {
+    /* This is needed to prevent double tap zoom on iOS Safari */
     touch-action: manipulation;
   }
 
@@ -24,7 +21,7 @@ injectGlobal`
     padding: 0;
     font-family: 'patchy-robots';
     background: #414844;
-    touch-action: manipulation;
+    height: 100%;
   }
 
   button {
@@ -48,5 +45,5 @@ injectGlobal`
   }
 `
 
-ReactDOM.render(<StyledApp />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))
 registerServiceWorker()

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
 import { Event, Color, Channel } from 'common'
 import signaling from 'signaling'
-import styled from 'styled-components'
 
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
@@ -11,10 +10,6 @@ import GamePlaying from './GamePlaying'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
-
-const StyledFullscreen = styled(Fullscreen)`
-  touch-action: manipulation;
-`
 
 const { error: logError, log } = console
 
@@ -160,7 +155,7 @@ class App extends Component {
     } = this.state
 
     return (
-      <StyledFullscreen
+      <Fullscreen
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
@@ -206,7 +201,7 @@ class App extends Component {
               <PlayerDead />
             : null
         }
-      </StyledFullscreen>
+      </Fullscreen>
     )
   }
 }

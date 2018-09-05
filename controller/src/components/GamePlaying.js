@@ -8,7 +8,6 @@ import createCommand from '../util/createCommand'
 const SteerButton = styled.div`
   flex: 1;
   user-select: none;
-  touch-action: manipulation;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,8 +25,8 @@ const Container = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
-  touch-action: manipulation;
 `
+
 const COMMANDS = {
   NONE:  'none',
   LEFT:  'left',
@@ -75,7 +74,8 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <Container>
+      <Container onClick={() => {}}>
+        { /* The empty onClick above disables double tap zoom on iOS Safari */}
         <SteerButton
           playerColor={playerColor}
           onMouseDown={this.sendCommand(COMMANDS.LEFT)}
