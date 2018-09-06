@@ -37,6 +37,7 @@ export const initPowerups = ({
         })
         sprite.scale.set((snakeSpeed / speedMultiplier))
 
+        b.timer = getNewPowerupTimer()
         powerup.behaviors.collisionChecker = {
           run: () => {
             const collidingEntity = Entity
@@ -46,7 +47,6 @@ export const initPowerups = ({
               const soundEntity = Entity.addChild(collidingEntity)
               Sound.play(soundEntity, { src: './sounds/join1.wav', volume: 0.6 })
               Entity.destroy(powerup)
-              b.timer = getNewPowerupTimer()
               collidingEntity.behaviors.ghost = ghost({ playerCountFactor, speedMultiplier })
             }
           },
@@ -60,7 +60,6 @@ const ExpirationState = {
   SOON:     'soon',
   IMMINENT: 'imminent',
 }
-
 
 const ghost = ({
   playerCountFactor,
