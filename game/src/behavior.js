@@ -103,7 +103,7 @@ export const holeGenerator = (speed, speedMultiplier) => ({
   },
 })
 
-export const collisionCheckerTrail = playerId => ({
+export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
   timer: Timer.create({ duration: 2 }),
   run:   (b, e) => {
     if (Timer.run(b.timer)) {
@@ -112,7 +112,7 @@ export const collisionCheckerTrail = playerId => ({
         .filter(t => t.active || t.player !== playerId)
 
       if (allTrails.some(t => Entity.isColliding(t, e))) {
-        killPlayer(e)
+        killPlayer(e, speedMultiplier)
         checkPlayersAlive()
       }
 
@@ -131,7 +131,7 @@ const killPlayer = (e, speedMultiplier) => {
       x:           Entity.getX(e),
       y:           Entity.getY(e),
     }),
-    zIndex: Layer.FOREGROUND,
+    zIndex: Layer.FOREGROUND + 1,
   })
 
   const sound = Entity.addChild(e)

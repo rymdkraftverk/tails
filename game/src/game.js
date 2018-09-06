@@ -77,11 +77,15 @@ export const transitionToGameScene = (maxPlayers) => {
           speedMultiplier: SPEED_MULTIPLIER,
         })
         player.behaviors.move = move()
-        player.behaviors.collisionCheckerTrail = collisionCheckerTrail(player.id)
-        player.behaviors.collisionCheckerWalls = collisionCheckerWalls({
-          speedMultiplier: SPEED_MULTIPLIER,
-          wallThickness:   WALL_THICKNESS,
-        })
+
+        player.behaviors.collisionCheckerTrail =
+          collisionCheckerTrail(player.id, SPEED_MULTIPLIER)
+
+        player.behaviors.collisionCheckerWalls =
+          collisionCheckerWalls({
+            speedMultiplier: SPEED_MULTIPLIER,
+            wallThickness:   WALL_THICKNESS,
+          })
 
         const controller = Entity.addChild(player, { id: `${player.id}controller` })
         controller.direction = null
