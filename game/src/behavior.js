@@ -17,10 +17,11 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+
 export const createTrail = ({
   playerId, holeGenerator, speed, speedMultiplier,
 }) => ({
-  timer:    Timer.create({ duration: Math.ceil(2) }),
+  timer:    Timer.create({ duration: 4 }),
   graphics: null,
   init:     (b, e) => {
     const middleX = Entity.getX(e) + (e.width / 2)
