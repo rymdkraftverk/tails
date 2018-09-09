@@ -9,7 +9,7 @@ import Layer from './util/layer'
 import convertColorHex from './util/convertColorHex'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
-const TRAIL_HITBOX_SIZE = 24
+const TRAIL_HITBOX_SIZE = 20
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
