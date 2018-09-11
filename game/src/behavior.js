@@ -17,6 +17,10 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+const GLOW_DISTANCE = 16
+const GLOW_OUTER = 6
+const GLOW_INNER = 1
+const GLOW_PADDING = 7
 
 export const createTrail = ({
   playerId, holeGenerator, speed, speedMultiplier,
@@ -37,13 +41,13 @@ export const createTrail = ({
     const glow = Filter.add(
       graphicsEntity,
       new Filter.Filter.GlowFilter(
-        (speed / speedMultiplier) * 24,
-        (speed / speedMultiplier) * 10,
-        (speed / speedMultiplier) * 5,
+        (speed / speedMultiplier) * GLOW_DISTANCE,
+        (speed / speedMultiplier) * GLOW_OUTER,
+        (speed / speedMultiplier) * GLOW_INNER,
         0.1,
       ),
     )
-    glow.padding = (speed / speedMultiplier) * 13
+    glow.padding = (speed / speedMultiplier) * GLOW_PADDING
     glow.color = convertColorHex(Color[e.color])
   },
   run: (b, e) => {
