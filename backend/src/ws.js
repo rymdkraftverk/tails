@@ -91,6 +91,7 @@ const init = (port, deleteReceiverId) => {
     const client = createClient(socket)
     clients.push(client)
     log(`[Client connected] ${prettyClient(client)}`)
+    emit(client, Event.CLIENT_ID, client.id)
 
     socket.on('message', onMessage(client))
     socket.on('close', onClose(deleteReceiverId, client))
