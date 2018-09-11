@@ -74,19 +74,18 @@ export const createTrail = ({
         Entity.addType(trailE, 'trail')
         trailE.behaviors.activate = activate()
       }
-
-      b.graphics.lineStyle(
-        (speed / speedMultiplier) * 16,
-        convertColorHex(Color[e.color]),
-        1,
-      )
-      if (holeGenerator.preventTrail) {
-        b.graphics.moveTo(middleX, middleY)
-      } else {
-        b.graphics.lineTo(middleX, middleY)
-      }
-
       Timer.reset(b.timer)
+    }
+
+    b.graphics.lineStyle(
+      (speed / speedMultiplier) * 16,
+      convertColorHex(Color[e.color]),
+      1,
+    )
+    if (holeGenerator.preventTrail) {
+      b.graphics.moveTo(middleX, middleY)
+    } else {
+      b.graphics.lineTo(middleX, middleY)
     }
   },
 })
