@@ -51,14 +51,13 @@ export const createTrail = ({
     glow.color = convertColorHex(Color[e.color])
   },
   run: (b, e) => {
+    const width = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
+    const height = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
+    // Find the middle of the player entity so that
+    // we can put the trails' middle point in the same spot
+    const middleX = Entity.getX(e) + (e.width / 2)
+    const middleY = Entity.getY(e) + (e.height / 2)
     if (Timer.run(b.timer)) {
-      const width = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
-      const height = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
-      // Find the middle of the player entity so that
-      // we can put the trails' middle point in the same spot
-      const middleX = Entity.getX(e) + (e.width / 2)
-      const middleY = Entity.getY(e) + (e.height / 2)
-
       if (!holeGenerator.preventTrail) {
         const trailE = Entity.addChild(
           Entity.get(Scene.GAME),
