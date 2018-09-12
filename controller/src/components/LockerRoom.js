@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  height: 100vh;
 `
 
-const ContainerRow = styled.div`
-  height: 30vh;
-  font-family: inherit;
+const ContainerColumn = styled.div`
+  width: 50vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,24 +18,22 @@ const ContainerRow = styled.div`
 
 const GameCodeInput = styled.input`
   letter-spacing: 0.5em;
-  font-size: 4vw;
+  font-size: 5vw;
   text-align: center;
   text-decoration: none;
   font-family: 'patchy-robots';
-  max-width: 100%;
   outline: none;
   border: 0;
   background: transparent;
   border-bottom: 3px solid #4085af;
-  width: 40%;
+  width: 70%;
   caret-color: #4085af;
   color: #4085af;
 `
-
 const GameJoinButton = styled.button`
   user-select: none;
-  align-self: flex-start;
   color: #4085af;
+  opacity: ${({ disabled }) => (disabled ? '0.2' : '1')};
 `
 
 class LockerRoom extends Component {
@@ -70,7 +68,7 @@ class LockerRoom extends Component {
 
     return (
       <Container>
-        <ContainerRow>
+        <ContainerColumn>
           <GameCodeInput
             type="text"
             value={gameCode}
@@ -85,19 +83,18 @@ class LockerRoom extends Component {
             autoCorrect="off"
             autoCapitalize="off"
           />
-        </ContainerRow>
-        <ContainerRow>
+        </ContainerColumn>
+        <ContainerColumn>
           {
-            this.gameCodeFilled()
-              ?
-                <GameJoinButton
-                  onClick={onJoin}
-                >
-                Join
-                </GameJoinButton>
-              : null
+
+            <GameJoinButton
+              disabled={!this.gameCodeFilled()}
+              onClick={onJoin}
+            >
+              Join
+            </GameJoinButton>
           }
-        </ContainerRow>
+        </ContainerColumn>
         <Notifications />
       </Container>
     )
