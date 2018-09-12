@@ -8,7 +8,6 @@ const MINIMUM_GHOST_APPEAR_TIME = 400
 const MAXIMUM_GHOST_APPEAR_TIME = 600
 
 export const initPowerups = ({
-  playerCountFactor,
   snakeSpeed,
   speedMultiplier,
   gameWidth,
@@ -47,7 +46,7 @@ export const initPowerups = ({
               const soundEntity = Entity.addChild(collidingEntity)
               Sound.play(soundEntity, { src: './sounds/join1.wav', volume: 0.6 })
               Entity.destroy(powerup)
-              collidingEntity.behaviors.ghost = ghost({ playerCountFactor, speedMultiplier })
+              collidingEntity.behaviors.ghost = ghost({ speedMultiplier })
             }
           },
         }
@@ -62,7 +61,6 @@ const ExpirationState = {
 }
 
 const ghost = ({
-  playerCountFactor,
   speedMultiplier,
 }) => ({
   expirationState: null,
@@ -85,7 +83,7 @@ const ghost = ({
       e.asset.scale.set((e.speed / speedMultiplier / 2))
       e.asset.alpha = 1
       e.behaviors.collisionCheckerTrail =
-          collisionCheckerTrail(e.id, playerCountFactor)
+          collisionCheckerTrail(e.id, speedMultiplier)
       e.behaviors.holeGenerator = holeGenerator(e.speed, speedMultiplier)
       e.behaviors.createTrail = createTrail({
         playerId:      e.id,

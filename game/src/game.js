@@ -93,7 +93,6 @@ export const transitionToGameScene = (maxPlayers) => {
         Entity.destroy(`${player.id}:direction`)
       })
       initPowerups({
-        playerCountFactor,
         snakeSpeed:      playerEntities[0].speed,
         speedMultiplier: SPEED_MULTIPLIER,
         gameWidth:       GAME_WIDTH,
