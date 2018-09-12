@@ -1,5 +1,4 @@
 const R = require('ramda')
-const { prettyId } = require('common')
 const Event = require('./Event')
 const Channel = require('./channel')
 const {
@@ -10,6 +9,7 @@ const {
   makeWsSend,
   mappify,
   onWsMessage,
+  prettyId,
   rtcSend,
 } = require('./common')
 

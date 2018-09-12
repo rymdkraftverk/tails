@@ -14,6 +14,8 @@ const WEB_RTC_CONFIG = {
   ],
 }
 
+const prettyId = id => id.substring(0, 4)
+
 const serialize = JSON.stringify
 const deserialize = JSON.parse
 
@@ -82,5 +84,6 @@ module.exports = {
   makeWsSend,
   mappify,
   onWsMessage,
+  prettyId,
   rtcSend,
 }
