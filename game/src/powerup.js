@@ -46,6 +46,8 @@ export const initPowerups = ({
               const soundEntity = Entity.addChild(collidingEntity)
               Sound.play(soundEntity, { src: './sounds/join1.wav', volume: 0.6 })
               Entity.destroy(powerup)
+              // eslint-disable-next-line fp/no-delete
+              delete collidingEntity.behaviors.indicateExpiration
               collidingEntity.behaviors.ghost = ghost({ speedMultiplier })
             }
           },
