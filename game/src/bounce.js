@@ -1,13 +1,13 @@
 import { createParabola } from './magic'
 
-export default () => ({
+export default modifier => ({
   tick: 0,
   init: (b, e) => {
     b.animation = createParabola({
-      start:    0,
-      end:      20,
-      offset:   -1 * e.asset.scale.x,
-      modifier: 0.08,
+      start:  0,
+      end:    20,
+      offset: -1 * e.asset.scale.x,
+      modifier,
     })
   },
   run: (b, e) => {

@@ -3,7 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './util/textStyle'
 import bounce from './bounce'
 
-const TIME_BETWEEN_NUMBERS = 40
+const TIME_BETWEEN_NUMBERS = 36
 
 const numbers = [
   '3',
@@ -29,11 +29,12 @@ const showText = (entity, text) => {
     text,
     style: {
       ...TextStyle.BIG,
-      fill: 'white',
+      fontSize: 92,
+      fill:     'white',
     },
   })
   asset.anchor.set(0.5)
-  entity.behaviors.bounce = bounce()
+  entity.behaviors.bounce = bounce(0.04)
 }
 
 const countdownBehavior = resolve => ({

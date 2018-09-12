@@ -243,7 +243,7 @@ const bouncePlayers = players => new Promise((resolve) => {
         // Offset the sprite so that the entity hitbox is in the middle
         sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
 
-        player.behaviors.bounce = bounce()
+        player.behaviors.bounce = bounce(0.05)
 
         b.index += 1
         Timer.reset(b.timer)
