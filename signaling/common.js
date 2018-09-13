@@ -14,6 +14,8 @@ const WEB_RTC_CONFIG = {
   ],
 }
 
+const prettyId = id => id.substring(0, 4)
+
 const serialize = JSON.stringify
 const deserialize = JSON.parse
 
@@ -22,7 +24,9 @@ const makeWsSend = ws => (event, payload) => {
   ws.send(message)
 }
 
-const rtcSend = (channel, data) => {
+const rtcSend = R.curry((channelMap, channelName, data) => {
+  const channel = channelMap[channelName]
+
   if (channel.readyState !== ReadyState.OPEN) {
     warn(`Attempt to send ${data} to channel ${channel.label} in state ${channel.readyState}`)
     return
@@ -32,7 +36,7 @@ const rtcSend = (channel, data) => {
     serialize,
     channel.send.bind(channel),
   )(data)
-}
+})
 
 const onWsMessage = eventMap => (message) => {
   const { event, payload } = deserialize(message.data)
@@ -54,26 +58,32 @@ const makeCloseConnections = connections => () => {
   })
 }
 
-const makeOnMessage = onData => R.pipe(
-  ({ data }) => data,
-  deserialize,
-  onData,
-)
-
-const makeRtcSend = (channels) => {
-  const channelMap = mappify(channels, 'label')
-
-  return R.curry((channelName, data) => {
-    const channel = channelMap[channelName]
-    rtcSend(channel, data)
-  })
+const sendTo = listeners => (data) => {
+  R.reduceWhile(
+    R.pipe(
+      R.prop('interupt'),
+      R.equals(!true),
+    ),
+    (_last, listener) => listener(data),
+    { interupt: false },
+    listeners,
+  )
 }
 
+const makeOnMessage = listeners => R.pipe(
+  ({ data }) => data,
+  deserialize,
+  sendTo(listeners),
+)
+
 module.exports = {
+  ReadyState,
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeRtcSend,
   makeWsSend,
+  mappify,
   onWsMessage,
+  prettyId,
+  rtcSend,
 }

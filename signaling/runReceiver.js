@@ -1,14 +1,19 @@
 const R = require('ramda')
-const { prettyId } = require('common')
 const Event = require('./Event')
 const Channel = require('./channel')
 const {
+  ReadyState,
   WEB_RTC_CONFIG,
+  makeCloseConnections,
   makeOnMessage,
-  makeRtcSend,
   makeWsSend,
+  mappify,
   onWsMessage,
+  prettyId,
+  rtcSend,
 } = require('./common')
+
+const HEARTBEAT_INTERVAL = 1000
 
 const { log } = console
 
@@ -27,6 +32,46 @@ const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
 
+const getInitiator = id => initiators.find(x => x.id === id)
+
+const getActiveInitiators = R.filter(R.pipe(
+  R.view(R.lensPath(['channelMap', Channel.RELIABLE, 'readyState'])),
+  R.equals(ReadyState.OPEN),
+))
+
+const beatHeart = R.pipe(
+  getActiveInitiators,
+  R.forEach((initiator) => {
+    if (initiator.alive) {
+      rtcSend(
+        initiator.channelMap,
+        Channel.RELIABLE,
+        { event: Event.HEARTBEAT },
+      )
+      initiator.alive = false
+      return
+    }
+
+    outputEvents.onInitiatorLeave(initiator.id)
+    removeInitiator(initiator.id)
+    initiator.closeConnections()
+  }),
+  R.tap(() => setTimeout(
+    // Insert fresh initiators into next heartbeat
+    () => { beatHeart(initiators) },
+    HEARTBEAT_INTERVAL,
+  )),
+)
+
+const listenForHeartbeat = ({ event, payload: initiatorId }) => {
+  const isHeartbeat = event === Event.HEARTBEAT
+  if (isHeartbeat) {
+    getInitiator(initiatorId).alive = true
+  }
+
+  return { interupt: isHeartbeat }
+}
+
 const onIceCandidate = initiator => ({ candidate }) => {
   if (candidate) {
     log(`[Ice Candidate] ${prettyId(initiator.id)}`)
@@ -38,9 +83,10 @@ const onIceCandidate = initiator => ({ candidate }) => {
 }
 
 const createInitiator = (initiatorId, offer) => ({
-  id:  initiatorId,
+  alive: true,
+  id:    initiatorId,
   offer,
-  rtc: new RTCPeerConnection(WEB_RTC_CONFIG),
+  rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
 })
 
 const createAnswer = (rtc, offer) => rtc
@@ -69,17 +115,13 @@ const setUpChannels = (rtc, channelNames, initiator) => {
           resolve(openChannels)
         }
       }
-
-      channel.onclose = () => {
-        outputEvents.onInitiatorLeave(initiator.id)
-      }
     }
   })
 }
 
 const makeSetOnData = channels => (onData) => {
   channels.forEach((channel) => {
-    channel.onmessage = makeOnMessage(onData)
+    channel.onmessage = makeOnMessage([listenForHeartbeat, onData])
   })
 }
 
@@ -89,6 +131,7 @@ const onOffer = ({ initiatorId, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
+  initiator.closeConnections = makeCloseConnections([initiator.rtc])
   initiators = initiators.concat(initiator)
   const { rtc } = initiator
 
@@ -99,14 +142,15 @@ const onOffer = ({ initiatorId, offer }) => {
   // to have joined
   setUpChannels(rtc, Object.values(Channel), initiator)
     .then((channels) => {
+      const channelMap = mappify(channels, 'label')
+      getInitiator(initiator.id).channelMap = channelMap
+
       outputEvents.onInitiatorJoin({
         id:        initiator.id,
         setOnData: makeSetOnData(channels),
-        send:      makeRtcSend(channels),
+        send:      rtcSend(channelMap),
         close:     rtc.close.bind(rtc),
       })
-
-      removeInitiator(initiator.id)
     })
 
   createAnswer(rtc, offer)
@@ -125,8 +169,10 @@ const init = ({
   wsSend = makeWsSend(ws)
   ws.onopen = () => { wsSend(Event.RECEIVER_UPGRADE, receiverId) }
   ws.onmessage = onWsMessage({
-    [Event.OFFER]: onOffer,
+    [Event.OFFER]:     onOffer,
+    [Event.CLIENT_ID]: R.pipe(prettyId, R.concat('[Id] '), log),
   })
+  beatHeart(initiators)
 }
 
 module.exports = init
