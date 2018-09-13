@@ -24,6 +24,10 @@ injectGlobal`
     height: 100%;
   }
 
+  .fullscreen-enabled {
+    background-color: #414844;
+  }
+
   button {
     letter-spacing: 0.1em;
     font-size: 8vw;
