@@ -10,6 +10,7 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   background-color: ${({ backgroundColor }) => backgroundColor};
+  font-size: 4vw;
 `
 
 const Instructions = styled.div`
