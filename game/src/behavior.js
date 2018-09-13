@@ -1,13 +1,15 @@
-import { Entity, Timer, Sprite, Util, Particles, Sound } from 'l1'
+import { Entity, Timer, Util, Particles, Sound, Filter, Graphics } from 'l1'
+import { Color } from 'common'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import gameState, { CurrentState } from './gameState'
 import { GameEvent } from './game'
 import Layer from './util/layer'
+import convertColorHex from './util/convertColorHex'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 
-const TRAIL_HITBOX_SIZE = 24
+const TRAIL_HITBOX_SIZE = 20
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -15,43 +17,74 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+const GLOW_DISTANCE = 16
+const GLOW_OUTER = 6
+const GLOW_INNER = 1
+const GLOW_PADDING = 7
+
 export const createTrail = ({
   playerId, holeGenerator, speed, speedMultiplier,
 }) => ({
-  timer: Timer.create({ duration: Math.ceil(2) }),
-  run:   (b, e) => {
-    if (holeGenerator.preventTrail) {
-      return
-    }
+  timer:    Timer.create({ duration: 4 }),
+  graphics: null,
+  init:     (b, e) => {
+    const middleX = Entity.getX(e) + (e.width / 2)
+    const middleY = Entity.getY(e) + (e.height / 2)
+    const graphicsEntity = Entity.addChild(Entity.get(Scene.GAME))
+    b.graphics = Graphics.create(graphicsEntity)
+    b.graphics.lineStyle(
+      (speed / speedMultiplier) * 16,
+      convertColorHex(Color[e.color]),
+      1,
+    )
+    b.graphics.moveTo(middleX, middleY)
+    const glow = Filter.add(
+      graphicsEntity,
+      new Filter.Filter.GlowFilter(
+        (speed / speedMultiplier) * GLOW_DISTANCE,
+        (speed / speedMultiplier) * GLOW_OUTER,
+        (speed / speedMultiplier) * GLOW_INNER,
+        0.1,
+      ),
+    )
+    glow.padding = (speed / speedMultiplier) * GLOW_PADDING
+    glow.color = convertColorHex(Color[e.color])
+  },
+  run: (b, e) => {
     const width = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
     const height = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
-
     // Find the middle of the player entity so that
     // we can put the trails' middle point in the same spot
     const middleX = Entity.getX(e) + (e.width / 2)
     const middleY = Entity.getY(e) + (e.height / 2)
-
     if (Timer.run(b.timer)) {
-      const trailE = Entity.addChild(
-        Entity.get(Scene.GAME),
-        {
-          x: middleX - (width / 2),
-          y: middleY - (height / 2),
-          width,
-          height,
-        },
-      )
-      trailE.active = false
-      trailE.player = playerId
-      Entity.addType(trailE, 'trail')
-      const sprite = Sprite.show(
-        trailE,
-        { texture: `circle-${e.color}` },
-      )
-      sprite.scale.set(speed / speedMultiplier / 2)
+      if (!holeGenerator.preventTrail) {
+        const trailE = Entity.addChild(
+          Entity.get(Scene.GAME),
+          {
+            x: middleX - (width / 2),
+            y: middleY - (height / 2),
+            width,
+            height,
+          },
+        )
+        trailE.active = false
+        trailE.player = playerId
+        Entity.addType(trailE, 'trail')
+        trailE.behaviors.activate = activate()
+      }
       Timer.reset(b.timer)
+    }
 
-      trailE.behaviors.activate = activate()
+    b.graphics.lineStyle(
+      (speed / speedMultiplier) * 16,
+      convertColorHex(Color[e.color]),
+      1,
+    )
+    if (holeGenerator.preventTrail) {
+      b.graphics.moveTo(middleX, middleY)
+    } else {
+      b.graphics.lineTo(middleX, middleY)
     }
   },
 })
