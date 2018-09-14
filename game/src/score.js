@@ -165,7 +165,7 @@ const createHead = ({
     { texture },
   )
   if (texture !== 'circle-none') {
-    sprite.scale.set(0.15)
+    sprite.scale.set(0.3)
   }
 
   return head

@@ -292,7 +292,7 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
     },
   )
   const sprite = Sprite.show(square, { texture: `square-${color}` })
-  sprite.scale.set(0.3)
+  sprite.scale.set(0.6)
   sprite.anchor.set(0.5)
 
   if (newPlayer) {

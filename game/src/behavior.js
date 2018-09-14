@@ -54,7 +54,7 @@ export const createTrail = ({
         },
       )
       b.index += 1
-      sprite.scale.set(speed / speedMultiplier / 10)
+      sprite.scale.set(speed / speedMultiplier / 5)
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()

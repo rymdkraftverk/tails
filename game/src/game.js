@@ -238,7 +238,7 @@ const bouncePlayers = players => new Promise((resolve) => {
             zIndex:  Layer.FOREGROUND,
           },
         )
-        sprite.scale.set(player.speed / SPEED_MULTIPLIER / 10)
+        sprite.scale.set(player.speed / SPEED_MULTIPLIER / 5)
 
         // Offset the sprite so that the entity hitbox is in the middle
         sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
