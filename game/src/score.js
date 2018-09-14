@@ -160,10 +160,13 @@ const createHead = ({
         y,
       },
     )
-  Sprite.show(
+  const sprite = Sprite.show(
     head,
     { texture },
   )
+  if (texture !== 'circle-none') {
+    sprite.scale.set(0.15)
+  }
 
   return head
 }
@@ -173,7 +176,7 @@ const createPlayerScore = ({ parent, score }) => {
     .addChild(
       parent,
       {
-        x: 0,
+        x: -30,
         y: 6,
       },
     )

@@ -65,10 +65,12 @@ const ExpirationState = {
 const ghost = ({
   speedMultiplier,
 }) => ({
+  originalScale:   null,
   expirationState: null,
   timer:           Timer.create({ duration: GHOST_POWERUP_DURATION }),
   init:            (b, e) => {
-    e.asset.scale.set(e.speed / speedMultiplier)
+    b.originalScale = e.asset.scale.x
+    e.asset.scale.set(b.originalScale * 2)
     e.asset.alpha = 0.4
     /* eslint-disable fp/no-delete */
     delete e.behaviors.holeGenerator
@@ -82,7 +84,7 @@ const ghost = ({
       delete e.behaviors.indicateExpiration
 
       // Reset player
-      e.asset.scale.set((e.speed / speedMultiplier / 2))
+      e.asset.scale.set(b.originalScale)
       e.asset.alpha = 1
       e.behaviors.collisionCheckerTrail =
           collisionCheckerTrail(e.id, speedMultiplier)

@@ -10,6 +10,7 @@ import * as TextStyle from './util/textStyle'
 import Layer from './util/layer'
 import Scene from './Scene'
 import gameState from './gameState'
+import Nordgrona from './nordgrona'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
@@ -31,7 +32,7 @@ const createText = (entity, content, color) => {
 }
 
 const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a draw, better luck next time!', 'white')
-const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, Color[color])
+const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${Nordgrona[color]} is the champion!`, Color[color])
 
 export const transitionToMatchEnd = () => {
   Entity

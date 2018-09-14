@@ -260,11 +260,11 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
     },
   )
   const sprite = Sprite.show(square, { texture: `square-${color}` })
-  sprite.scale.set(3)
+  sprite.scale.set(0.3)
   sprite.anchor.set(0.5)
 
   if (newPlayer) {
-    square.behaviors.bounce = bounce(0.08)
+    square.behaviors.bounce = bounce(0.02)
     const joinSounds = [
       'join1',
       'join2',

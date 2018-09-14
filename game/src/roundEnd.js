@@ -8,6 +8,7 @@ import Layer from './util/layer'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
 import gameState, { CurrentState } from './gameState'
+import Nordgrona from './nordgrona'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
@@ -29,7 +30,7 @@ export const transitionToRoundEnd = () => {
   const text = Text.show(
     roundEnd,
     {
-      text:   `Winner is ${winner}!`,
+      text:   `Winner is ${Nordgrona[winner]}!`,
       zIndex: Layer.FOREGROUND + 10,
       style:  {
         ...TextStyle.BIG,

@@ -19,6 +19,7 @@ export const createTrail = ({
   playerId, holeGenerator, speed, speedMultiplier,
 }) => ({
   timer: Timer.create({ duration: Math.ceil(2) }),
+  index: 0,
   run:   (b, e) => {
     if (holeGenerator.preventTrail) {
       return
@@ -44,11 +45,16 @@ export const createTrail = ({
       trailE.active = false
       trailE.player = playerId
       Entity.addType(trailE, 'trail')
+
       const sprite = Sprite.show(
         trailE,
-        { texture: `circle-${e.color}` },
+        {
+          texture: `circle-${e.color}`,
+          zIndex:  b.index,
+        },
       )
-      sprite.scale.set(speed / speedMultiplier / 2)
+      b.index += 1
+      sprite.scale.set(speed / speedMultiplier / 10)
       Timer.reset(b.timer)
 
       trailE.behaviors.activate = activate()
