@@ -123,7 +123,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     y:     GAME_HEIGHT - 40,
     text:  '© Rymdkraftverk 2018',
     style: {
-      ...TextStyle.codecode,
+      ...TextStyle.CODE,
       fontSize: 18,
     },
     parent: lobbyScene,
