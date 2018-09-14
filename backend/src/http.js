@@ -10,6 +10,7 @@ const init = (port, createGameCode) => {
   app.post('/game', (req, res) => {
     createGameCode()
       .then((gameCode) => {
+        gameCode = process.env.GAME_CODE || gameCode
         res.json({ gameCode })
         log(`[Game created] ${gameCode}`)
       })

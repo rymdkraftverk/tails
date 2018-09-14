@@ -6,6 +6,7 @@ services:
     backend:
         environment:
             - REDIS_PATH=rs://redis:6379
+            - GAME_CODE=${GAME_CODE}
         build:
             context: .
             dockerfile: ./backend/Dockerfile
