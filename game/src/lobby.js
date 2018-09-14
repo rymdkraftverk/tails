@@ -61,7 +61,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: 40,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -69,7 +69,31 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   createText({
     x:     TextAnchor.INSTRUCTION_START_X,
-    y:     300,
+    y:     250,
+    text:  'Join the wifi',
+    style: {
+      ...TextStyle.MEDIUM,
+      fontSize: 40,
+      fill:     TextColor.TEXT,
+    },
+    parent: lobbyScene,
+  })
+
+  createText({
+    x:     TextAnchor.INSTRUCTION_START_X + 370,
+    y:     230,
+    text:  'barlin',
+    style: {
+      ...TextStyle.CODE,
+      fontSize: 58,
+      fill:     TextColor.HIGHLIGHT,
+    },
+    parent: lobbyScene,
+  })
+
+  createText({
+    x:     TextAnchor.INSTRUCTION_START_X,
+    y:     400,
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
@@ -81,8 +105,8 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   createText({
     x:     TextAnchor.INSTRUCTION_START_X + 210,
-    y:     292,
-    text:  getControllerUrl(),
+    y:     385,
+    text:  'game.com',
     style: {
       ...TextStyle.CODE,
       fontSize: 58,
@@ -94,7 +118,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   createText({
     x:     TextAnchor.INSTRUCTION_START_X,
-    y:     520,
+    y:     600,
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
@@ -106,7 +130,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   createText({
     x:     TextAnchor.INSTRUCTION_START_X + 400,
-    y:     514,
+    y:     590,
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -151,7 +175,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   drawInstructionArrow({
     x:            400,
-    y:            170,
+    y:            150,
     angle:        90,
     id:           '1',
     parentEntity: lobbyScene,
@@ -159,17 +183,25 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   drawInstructionArrow({
     x:            400,
-    y:            400,
+    y:            300,
     angle:        90,
     id:           '2',
     parentEntity: lobbyScene,
   })
 
   drawInstructionArrow({
-    x:            700,
-    y:            500,
-    angle:        0,
+    x:            400,
+    y:            480,
+    angle:        90,
     id:           '3',
+    parentEntity: lobbyScene,
+  })
+
+  drawInstructionArrow({
+    x:            700,
+    y:            570,
+    angle:        0,
+    id:           '4',
     parentEntity: lobbyScene,
   })
 
