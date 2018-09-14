@@ -1,4 +1,4 @@
-import { Entity, Timer, Text, Particles, Util } from 'l1'
+import l1 from 'l1'
 import { Event, Color, Channel } from 'common'
 
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
@@ -13,112 +13,114 @@ import gameState from './gameState'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
-const createText = (entity, content, color) => {
-  const text = Text.show(
-    entity,
-    {
-      text:     content,
-      fontSize: 38,
-      zIndex:   Layer.FOREGROUND,
-      style:    {
-        ...TextStyle.BIG,
-        fill: color,
-      },
-    },
-  )
-  text.anchor.set(0.5)
-
-  return text
-}
-
-const createTextDraw = matchEndEntity => createText(matchEndEntity, 'It\'s a draw, better luck next time!', 'white')
-const createTextWinner = (matchEndEntity, [{ color }]) => createText(matchEndEntity, `${color} is the champion!`, Color[color])
-
 export const transitionToMatchEnd = () => {
-  Entity
-    .getAll()
+  l1
+    .getAllEntities()
     .filter(e => e.id !== 'background')
-    .map(Entity.destroy)
+    .forEach(l1.destroy)
 
-  const matchEnd = Entity.addChild(
-    Entity.getRoot(),
-    {
-      id: Scene.MATCH_END,
-      x:  GAME_WIDTH / 2,
-      y:  200,
-    },
-  )
+  const matchEnd = l1.entity({
+    id: Scene.MATCH_END,
+    x:  GAME_WIDTH / 2,
+    y:  200,
+  })
 
   const { players } = gameState
   const matchWinners = getPlayersWithHighestScore(players)
 
   if (matchWinners.length === 1) {
-    const winnerTextEntity = Entity.addChild(matchEnd)
-    createTextWinner(winnerTextEntity, matchWinners)
-    winnerTextEntity.behaviors.textMovement = textMovement()
+    const [{ color }] = matchWinners
+    const text = l1.text({
+      parent: matchEnd,
+      text:   `${color} is the champion!`,
+      zIndex: Layer.FOREGROUND,
+      style:  {
+        ...TextStyle.BIG,
+        fontSize: 38,
+        fill:     Color[color],
+      },
+    })
+    text.asset.anchor.set(0.5)
 
-    const fireworkCreator = Entity.addChild(matchEnd)
-    fireworkCreator.behaviors.createFireworks = createFireworks(matchWinners[0].color)
+    l1.addBehavior(
+      textMovement(),
+      text,
+    )
+
+    const fireworkCreator = l1.entity({ parent: matchEnd })
+    l1.addBehavior(
+      createFireworks(matchWinners[0].color),
+      fireworkCreator,
+    )
   } else {
-    createTextDraw(matchEnd)
+    const text = l1.text({
+      parent: matchEnd,
+      text:   'It\'s a draw, better luck next time!',
+      zIndex: Layer.FOREGROUND,
+      style:  {
+        ...TextStyle.BIG,
+        fontSize: 38,
+        fill:     'white',
+      },
+    })
+    text.asset.anchor.set(0.5)
   }
 
-  matchEnd.behaviors.pause = pause()
+  l1.addBehavior(
+    pause(),
+    matchEnd,
+  )
 }
 
 const textMovement = () => ({
-  sine: createSine({
-    start: 1,
-    end:   1.2,
-    speed: 120,
-  }),
-  tick: 0,
-  init: (b, e) => {
-    b.originalSize = e.asset.style.fontSize
+  data: {
+    sine: createSine({
+      start: 1,
+      end:   1.2,
+      speed: 120,
+    }),
   },
-  run: (b, e) => {
-    const scale = b.sine(b.tick)
-    b.tick += 1
-    Text.scale(e, b.originalSize * scale)
+  onInit: ({ data, entity }) => {
+    data.originalSize = entity.asset.style.fontSize
+  },
+  onUpdate: ({ entity, data, counter }) => {
+    const scale = data.sine(counter)
+    l1.scaleText(data.originalSize * scale, entity)
   },
 })
 
 const createFireworks = color => ({
-  timer: Timer.create({ duration: Util.getRandomInRange(5, 10) }),
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      const particles = Entity.addChild(e)
-      const x = Util.getRandomInRange(100, GAME_WIDTH - 100)
-      const y = Util.getRandomInRange(100, GAME_HEIGHT - 100)
-      Particles.emit(particles, {
-        ...firework({
-          color,
-          x,
-          y,
-        }),
-        zIndex: Layer.BACKGROUND,
-      })
-      Timer.reset(b.timer)
-    }
+  endTime:    l1.getRandomInRange(5, 10),
+  loop:       true,
+  onComplete: ({ entity }) => {
+    const x = l1.getRandomInRange(100, GAME_WIDTH - 100)
+    const y = l1.getRandomInRange(100, GAME_HEIGHT - 100)
+    l1.particles({
+      ...firework({
+        color,
+        x,
+        y,
+      }),
+      zIndex: Layer.BACKGROUND,
+      parent: entity,
+    })
   },
 })
 
 const pause = () => ({
-  timer: Timer.create({ duration: TIME_UNTIL_LOBBY_TRANSITION }),
-  run:   ({ timer }) => {
-    if (Timer.run(timer)) {
-      Object
-        .values(gameState.controllers)
-        .forEach((controller) => {
-          controller.send(Channel.RELIABLE, { event: Event.Rtc.ROUND_END, payload: {} })
-        })
+  endTime:    TIME_UNTIL_LOBBY_TRANSITION,
+  onComplete: () => {
+    Object
+      .values(gameState.controllers)
+      .forEach((controller) => {
+        controller.send(Channel.RELIABLE, { event: Event.Rtc.ROUND_END, payload: {} })
+      })
 
-      gameState.players = resetPlayersScore(gameState.players)
+    gameState.players = resetPlayersScore(gameState.players)
 
-      Entity.destroy(Scene.MATCH_END)
+    l1.destroy(Scene.MATCH_END)
 
-      transitionToLobby(gameState.gameCode, Object.values(gameState.players))
-    }
+    transitionToLobby(gameState.gameCode, Object.values(gameState.players))
   },
 })
 

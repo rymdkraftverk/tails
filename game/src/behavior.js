@@ -1,4 +1,5 @@
-import { Entity, Timer, Sprite, Util, Particles, Sound } from 'l1'
+import l1 from 'l1'
+import R from 'ramda'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
@@ -16,11 +17,12 @@ const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
 export const createTrail = ({
-  playerId, holeGenerator, speed, speedMultiplier,
+  playerId, speed, speedMultiplier,
 }) => ({
-  timer: Timer.create({ duration: Math.ceil(2) }),
-  run:   (b, e) => {
-    if (holeGenerator.preventTrail) {
+  endTime:    2,
+  loop:       true,
+  onComplete: ({ entity }) => {
+    if (entity.preventTrail) {
       return
     }
     const width = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
@@ -28,31 +30,27 @@ export const createTrail = ({
 
     // Find the middle of the player entity so that
     // we can put the trails' middle point in the same spot
-    const middleX = Entity.getX(e) + (e.width / 2)
-    const middleY = Entity.getY(e) + (e.height / 2)
+    const middleX = l1.getX(entity) + (entity.width / 2)
+    const middleY = l1.getY(entity) + (entity.height / 2)
 
-    if (Timer.run(b.timer)) {
-      const trailE = Entity.addChild(
-        Entity.get(Scene.GAME),
-        {
-          x: middleX - (width / 2),
-          y: middleY - (height / 2),
-          width,
-          height,
-        },
-      )
-      trailE.active = false
-      trailE.player = playerId
-      Entity.addType(trailE, 'trail')
-      const sprite = Sprite.show(
-        trailE,
-        { texture: `circle-${e.color}` },
-      )
-      sprite.scale.set(speed / speedMultiplier / 2)
-      Timer.reset(b.timer)
+    const trailE = l1.sprite({
+      x:       middleX - (width / 2),
+      y:       middleY - (height / 2),
+      width,
+      height,
+      parent:  l1.get(Scene.GAME),
+      types:   ['trail'],
+      texture: `circle-${entity.color}`,
+    })
+    trailE.active = false
+    trailE.player = playerId
 
-      trailE.behaviors.activate = activate()
-    }
+    trailE.asset.scale.set(speed / speedMultiplier / 2)
+
+    l1.addBehavior(
+      activate(),
+      trailE,
+    )
   },
 })
 
@@ -60,116 +58,112 @@ export const createTrail = ({
  * This behavior is needed so that the player wont immediately collide with its own tail.
  */
 const activate = () => ({
-  timer: Timer.create({ duration: 15 }),
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      e.active = true
-    }
+  endTime:    15,
+  onComplete: ({ entity }) => {
+    entity.active = true
   },
 })
 
-export const holeGenerator = (speed, speedMultiplier) => ({
-  preventTrail:      false,
-  generateHoleTimer: Timer
-    .create({
-      duration: Util.getRandomInRange(
-        GENERATE_HOLE_MIN_TIME,
-        GENERATE_HOLE_MAX_TIME,
-      ),
-    }),
-  holeLengthTimer: null,
-  run:             (b) => {
-    if (b.generateHoleTimer && Timer.run(b.generateHoleTimer)) {
-      b.preventTrail = true
+const holeMaker = (speed, speedMultiplier) => ({
+  id:      'holeMaker',
+  endTime: l1.getRandomInRange(
+    Math.ceil(HOLE_LENGTH_MIN_TIME * (speedMultiplier / speed)),
+    Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
+  ),
+  onInit: ({ entity }) => {
+    entity.preventTrail = true
+  },
+  onRemove: ({ entity }) => {
+    entity.preventTrail = false
+    l1.addBehavior(
+      createHoleMaker(speed, speedMultiplier),
+      entity,
+    )
+  },
+})
 
-      const rand = Util.getRandomInRange(
-        Math.ceil(HOLE_LENGTH_MIN_TIME * (speedMultiplier / speed)),
-        Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
-      )
-      b.holeLengthTimer = Timer.create({ duration: rand })
-
-      b.generateHoleTimer = null
-    } else if (b.holeLengthTimer && Timer.run(b.holeLengthTimer)) {
-      b.preventTrail = false
-
-      const rand = Util.getRandomInRange(
-        GENERATE_HOLE_MIN_TIME,
-        GENERATE_HOLE_MAX_TIME,
-      )
-      b.generateHoleTimer = Timer.create({ duration: rand })
-
-      b.holeLengthTimer = null
-    }
+export const createHoleMaker = (speed, speedMultiplier) => ({
+  id:      'createHoleMaker',
+  endTime: l1.getRandomInRange(
+    GENERATE_HOLE_MIN_TIME,
+    GENERATE_HOLE_MAX_TIME,
+  ),
+  onRemove: ({ entity }) => {
+    l1.addBehavior(
+      holeMaker(speed, speedMultiplier),
+      entity,
+    )
   },
 })
 
 export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
-  timer: Timer.create({ duration: 2 }),
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      const allTrails = Entity
-        .getByType('trail')
-        .filter(t => t.active || t.player !== playerId)
+  endTime:    2,
+  loop:       true,
+  onComplete: ({ entity }) => {
+    const allTrails = l1
+      .getByType('trail')
+      .filter(t => t.active || t.player !== playerId)
 
-      if (allTrails.some(t => Entity.isColliding(t, e))) {
-        killPlayer(e, speedMultiplier)
-        checkPlayersAlive()
-      }
-
-      Timer.reset(b.timer)
+    if (allTrails.some(t => l1.isColliding(t, entity))) {
+      killPlayer(entity, speedMultiplier)
+      checkPlayersAlive()
     }
   },
 })
 
-const killPlayer = (e, speedMultiplier) => {
-  const particles = Entity.addChild(e)
-  Particles.emit(particles, {
+const killPlayer = (entity, speedMultiplier) => {
+  l1.particles({
     ...explode({
-      degrees:     e.degrees,
-      scaleFactor: speedMultiplier / e.speed,
-      radius:      e.width,
-      x:           Entity.getX(e),
-      y:           Entity.getY(e),
+      degrees:     entity.degrees,
+      scaleFactor: speedMultiplier / entity.speed,
+      radius:      entity.width,
+      x:           l1.getX(entity),
+      y:           l1.getY(entity),
     }),
     zIndex: Layer.FOREGROUND + 1,
+    parent: entity,
   })
 
-  const sound = Entity.addChild(e)
+  l1.sound({
+    src:    './sounds/explosion.wav',
+    volume: 0.6,
+    parent: entity,
+  })
 
-  Sound.play(sound, { src: './sounds/explosion.wav', volume: 0.6 })
+  entity.killed = true
 
-  e.killed = true
-  /* eslint-disable fp/no-delete */
-  delete e.behaviors.collisionCheckerTrail
-  delete e.behaviors.collisionCheckerWalls
-  delete e.behaviors.holeGenerator
-  delete e.behaviors.createTrail
-  delete e.behaviors.move
-  delete e.behaviors.pivot
-  /* eslint-enable fp/no-delete */
+  R.pipe(
+    l1.removeBehavior('collisionCheckerTrail'),
+    l1.removeBehavior('collisionCheckerWalls'),
+    l1.removeBehavior('createHoleMaker'),
+    l1.removeBehavior('createTrail'),
+    l1.removeBehavior('move'),
+    l1.removeBehavior('pivot'),
+  )(entity)
 
-  gameState.events.emit(GameEvent.PLAYER_COLLISION, e.color)
-  e.event.emit(GameEvent.PLAYER_COLLISION)
+  gameState.events.emit(GameEvent.PLAYER_COLLISION, entity.color)
+  entity.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
 export const collisionCheckerWalls = ({
   speedMultiplier, wallThickness,
 }) => ({
-  timer: Timer.create({ duration: 2 }),
-  run:   (b, e) => {
+  endTime:    2,
+  loop:       true,
+  onComplete: ({ entity }) => {
     if (
-      Entity.getX(e) < wallThickness ||
-      Entity.getX(e) > GAME_WIDTH - wallThickness - e.width ||
-      Entity.getY(e) < wallThickness ||
-      Entity.getY(e) > GAME_HEIGHT - wallThickness - e.height) {
-      killPlayer(e, speedMultiplier)
+      l1.getX(entity) < wallThickness ||
+      l1.getX(entity) > GAME_WIDTH - wallThickness - entity.width ||
+      l1.getY(entity) < wallThickness ||
+      l1.getY(entity) > GAME_HEIGHT - wallThickness - entity.height) {
+      killPlayer(entity, speedMultiplier)
       checkPlayersAlive()
     }
   },
 })
 
 const checkPlayersAlive = () => {
-  const playersAlive = Entity
+  const playersAlive = l1
     .getByType('player')
     .filter(p => !p.killed)
 

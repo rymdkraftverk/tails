@@ -1,6 +1,6 @@
 import _ from 'lodash/fp'
 import { Event, Color, Channel } from 'common'
-import { Entity, Sprite, Graphics, Text } from 'l1'
+import l1 from 'l1'
 import R from 'ramda'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
@@ -19,50 +19,30 @@ const GOAL_Y = 70
 const ANIMATION_DURATION = 60
 
 export const transitionToScoreScene = () => {
-  const scoreScene = Entity
-    .addChild(
-      Entity.getRoot(),
-      {
-        id: Scene.SCORE,
-      },
-    )
-  const goal = Entity
-    .addChild(
-      scoreScene,
-      {
-        x: GOAL_X,
-        y: GOAL_Y,
-      },
-    )
+  const scoreScene = l1.entity({
+    id: Scene.SCORE,
+  })
 
-  const goalSprite = Sprite
-    .show(
-      goal,
-      {
-        texture: 'goal-flag',
-        zIndex:  Layer.BACKGROUND,
-      },
-    )
-  goalSprite.scale.set(1.5)
+  const goal = l1.sprite({
+    x:       GOAL_X,
+    y:       GOAL_Y,
+    parent:  scoreScene,
+    texture: 'goal-flag',
+    zIndex:  Layer.BACKGROUND,
+  })
 
-  const goalScore = Entity.addChild(
-    goal,
-    {
-      y: -60,
-      x: 10,
+  goal.asset.scale.set(1.5)
+
+  l1.text({
+    y:      -60,
+    x:      10,
+    parent: goal,
+    text:   scoreToWin(gameState.players),
+    style:  {
+      ...TextStyle.BIG,
+      fill: 'white',
     },
-  )
-
-  Text.show(
-    goalScore,
-    {
-      text:  scoreToWin(gameState.players),
-      style: {
-        ...TextStyle.BIG,
-        fill: 'white',
-      },
-    },
-  )
+  })
 
   // eslint-disable-next-line lodash-fp/no-unused-result
   _
@@ -83,7 +63,7 @@ export const transitionToScoreScene = () => {
   if (matchWinnerCount > 0) {
     delay(120)
       .then(() => {
-        Entity.destroy(scoreScene)
+        l1.destroy(scoreScene)
         transitionToMatchEnd()
       })
   } else {
@@ -130,88 +110,66 @@ const createPlayer = (index) => {
   })
 
   if (player) {
-    createPlayerScore({ parent: head, score: player.score })
+    l1.text({
+      parent: head,
+      x:      0,
+      y:      6,
+      text:   player.score,
+      style:  {
+        ...TextStyle.SMALL,
+        fill: 'white',
+      },
+      zIndex: 1,
+    })
   }
 
-  const tail = Entity
-    .addChild(
-      Entity.get(Scene.SCORE),
-      {
-        x: 0,
-        y,
-      },
-    )
-
-  const tailGraphics = Graphics.create(tail, { zIndex: -10 })
-
-  head.behaviors.animate = animate({
-    tailGraphics, fromX: Entity.getX(head), toX:   currentX, color: (player && player.color) || 'none',
+  const tail = l1.graphics({
+    x:      0,
+    y,
+    parent: l1.get(Scene.SCORE),
+    zIndex: -10,
   })
+
+  l1.addBehavior(
+    animate({
+      tail,
+      fromX: l1.getX(head),
+      toX:   currentX,
+      color: (player && player.color) || 'none',
+    }),
+    head,
+  )
 }
 
 const createHead = ({
   x, y, texture,
 }) => {
-  const head = Entity
-    .addChild(
-      Entity.get(Scene.SCORE),
-      {
-        x,
-        y,
-      },
-    )
-  Sprite.show(
-    head,
-    { texture },
-  )
-
+  const head = l1.sprite({
+    x,
+    y,
+    parent: l1.get(Scene.SCORE),
+    texture,
+  })
   return head
 }
 
-const createPlayerScore = ({ parent, score }) => {
-  const playerScore = Entity
-    .addChild(
-      parent,
-      {
-        x: 0,
-        y: 6,
-      },
-    )
-
-  Text.show(
-    playerScore,
-    {
-      text:  score,
-      style: {
-        ...TextStyle.SMALL,
-        fill: 'white',
-      },
-      zIndex: 1,
-    },
-  )
-}
-
 const animate = ({
-  tailGraphics, fromX, toX, color,
+  tail, fromX, toX, color,
 }) => ({
-  tick: 0,
-  run:  (b, e) => {
+  endTime:  ANIMATION_DURATION,
+  onUpdate: ({ entity }) => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
-    Entity.setX(e, Entity.getX(e) + diffX)
-    tailGraphics.clear()
-    // Pixi.Graphics requires color code to start with 0x instead of #
-    tailGraphics.beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
-    tailGraphics.moveTo(0, 0)
-    tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0)
-    tailGraphics.lineTo(Entity.getX(e) + (e.asset.width / 2), 0 + e.asset.height)
-    tailGraphics.lineTo(0, 0 + e.asset.height)
-    tailGraphics.lineTo(0, 0)
-    tailGraphics.endFill()
-
-    b.tick += 1
-    if (b.tick >= ANIMATION_DURATION) {
-      // eslint-disable-next-line fp/no-delete
-      delete e.behaviors.animate
-    }
+    entity.x = l1.getX(entity) + diffX
+    const { asset: graphics } = tail
+    graphics.clear()
+    graphics
+      // Pixi.Graphics requires color code to start with 0x instead of #
+      .beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
+      .moveTo(0, 0)
+      .lineTo(l1.getX(entity) + (entity.asset.width / 2), 0)
+      .lineTo(l1.getX(entity) + (entity.asset.width / 2), 0 + entity.asset.height)
+      .lineTo(0, 0 + entity.asset.height)
+      .lineTo(0, 0)
+      .endFill()
   },
 })

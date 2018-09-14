@@ -1,4 +1,4 @@
-import { Entity, Text, Timer } from 'l1'
+import l1 from 'l1'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './util/textStyle'
 import bounce from './bounce'
@@ -13,43 +13,51 @@ const numbers = [
 ]
 
 export default () => new Promise((resolve) => {
-  const countdown = Entity.addChild(
-    Entity.getRoot(),
-    {
-      x: GAME_WIDTH / 2,
-      y: GAME_HEIGHT / 2,
-    },
+  const countdown = l1.entity({
+    x: GAME_WIDTH / 2,
+    y: GAME_HEIGHT / 2,
+  })
+  l1.addBehavior(
+    countdownBehavior(resolve),
+    countdown,
   )
-  countdown.behaviors.countdown = countdownBehavior(resolve)
 })
 
-const showText = (entity, text) => {
-  Text.hide(entity)
-  const asset = Text.show(entity, {
-    text,
-    style: {
-      ...TextStyle.BIG,
-      fontSize: 92,
-      fill:     'white',
-    },
-  })
-  asset.anchor.set(0.5)
-  entity.behaviors.bounce = bounce(0.04)
-}
-
 const countdownBehavior = resolve => ({
-  timer: Timer.create({ duration: TIME_BETWEEN_NUMBERS }),
-  index: 0,
-  run:   (b, e) => {
-    if (Timer.run(b.timer)) {
-      showText(e, numbers[b.index])
+  endTime: TIME_BETWEEN_NUMBERS,
+  data:    {
+    index: 0,
+  },
+  loop:     true,
+  onUpdate: ({ counter }) => {
+    console.log('UPDATING!!', counter)
+  },
+  onComplete: ({ data, entity }) => {
+    console.log('SHOW TEXT!!')
+    if (data.text) {
+      l1.destroy(data.text)
+    }
+    const text = l1.text({
+      text:  numbers[data.index],
+      style: {
+        ...TextStyle.BIG,
+        fontSize: 92,
+        fill:     'white',
+        parent:   entity,
+      },
+    })
 
-      b.index += 1
-      Timer.reset(b.timer)
-      if (b.index === numbers.length + 1) {
-        resolve()
-        Entity.destroy(e)
-      }
+    text.asset.anchor.set(0.5)
+    l1.addBehavior(
+      bounce(0.04),
+      text,
+    )
+    data.text = text
+
+    data.index += 1
+    if (data.index === numbers.length) {
+      resolve()
+      l1.destroy(entity)
     }
   },
 })
