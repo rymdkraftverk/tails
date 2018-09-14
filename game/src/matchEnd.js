@@ -18,9 +18,10 @@ const createText = (entity, content, color) => {
   const text = Text.show(
     entity,
     {
-      text:   content,
-      zIndex: Layer.FOREGROUND,
-      style:  {
+      text:     content,
+      fontSize: 38,
+      zIndex:   Layer.FOREGROUND,
+      style:    {
         ...TextStyle.BIG,
         fill: color,
       },
