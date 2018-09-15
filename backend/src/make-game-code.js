@@ -45,7 +45,7 @@ const randomizeCode = () => R
   .reduce(R.concat, '')
 
 const makeGameCode = (set, exists) => {
-  const candidateCode = randomizeCode()
+  const candidateCode = 'NORD'
 
   return exists(candidateCode)
     .then(doesExist => (doesExist
@@ -57,7 +57,7 @@ const makeGameCode = (set, exists) => {
 const connectToRedis = (redisPath) => {
   if (!redisPath) {
     return {
-      createGameCode: () => Promise.resolve(randomizeCode()),
+      createGameCode: () => Promise.resolve('NORD'),
       deleteGameCode: Promise.resolve,
     }
   }
