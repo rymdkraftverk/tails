@@ -8,7 +8,7 @@ const addPoints = (color) => {
   const livingPlayers = Object
     .keys(gameState.players)
     .map(Entity.get)
-    .filter(e => !e.killed)
+    .filter(e => e && !e.killed)
 
     // TODO refactor score gain
     /*
