@@ -70,6 +70,18 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   createText({
     x:     TextAnchor.INSTRUCTION_START_X,
     y:     250,
+    text:  'IMPORTANT',
+    style: {
+      ...TextStyle.MEDIUM,
+      fontSize: 30,
+      fill:     'red',
+    },
+    parent: lobbyScene,
+  })
+
+  createText({
+    x:     TextAnchor.INSTRUCTION_START_X + 230,
+    y:     250,
     text:  'Join the wifi',
     style: {
       ...TextStyle.MEDIUM,
@@ -80,9 +92,9 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   })
 
   createText({
-    x:     TextAnchor.INSTRUCTION_START_X + 370,
+    x:     TextAnchor.INSTRUCTION_START_X + 600,
     y:     230,
-    text:  'barlin',
+    text:  'game',
     style: {
       ...TextStyle.CODE,
       fontSize: 58,
