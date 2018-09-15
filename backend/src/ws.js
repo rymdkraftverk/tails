@@ -5,6 +5,8 @@ const { clients } = require('./state')
 const { prettyId } = require('common')
 const { Event } = require('signaling')
 
+const gameCode = require('./gameCode')
+
 const Type = {
   INITIATOR: 'initiator',
   RECEIVER:  'receiver',
@@ -74,18 +76,19 @@ const onMessage = client => (message) => {
   f(client)(event, payload)
 }
 
-const onClose = (deleteReceiverId, client) => () => {
+const onClose = client => () => {
   const i = clients.indexOf(client)
   clients.splice(i, 1)
 
   if (client.type === Type.RECEIVER) {
-    deleteReceiverId(client.receiverId)
+    // TODO: use emitter instead not to leak "game" into signaling
+    gameCode.delete(client.receiverId)
   }
 }
 
-const init = (port, deleteReceiverId) => {
+const init = (port) => {
   const server = new WebSocket.Server({ port })
-  log(`ws listening on port ${port}`)
+  log(`[WS] Listening on port ${port}`)
 
   server.on('connection', (socket) => {
     const client = createClient(socket)
@@ -94,7 +97,7 @@ const init = (port, deleteReceiverId) => {
     emit(client, Event.CLIENT_ID, client.id)
 
     socket.on('message', onMessage(client))
-    socket.on('close', onClose(deleteReceiverId, client))
+    socket.on('close', onClose(client))
   })
 }
 
