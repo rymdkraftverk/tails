@@ -7,6 +7,7 @@ const redis = require('redis')
 const { error, log } = console
 
 const CODE_LENGTH = 4
+const MAX_ATTEMPTS = 10
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
@@ -39,13 +40,16 @@ const gameCodeLog = R.pipe(
   log,
 )
 
-const createUniqueRandomCode = (set, exists) => {
+const createUniqueRandomCode = (set, exists, attempts) => {
+  if (attempts > MAX_ATTEMPTS) {
+    return Promise.reject(new Error(`Failed to find a unique code in ${MAX_ATTEMPTS} attempts`))
+  }
   const candidateCode = randomizeCode()
 
   return exists(candidateCode)
     .then(doesExist => (
       doesExist
-        ? createUniqueRandomCode(set, exists)
+        ? createUniqueRandomCode(set, exists, attempts + 1)
         : set(candidateCode, candidateCode)
           .then(() => candidateCode)
           .catch(logRedisError)
@@ -65,6 +69,7 @@ const createRedisInterface = () => {
     null,
     p('set'),
     p('exists'),
+    0,
   )
 
   gameCodeLog('Powered by redis')

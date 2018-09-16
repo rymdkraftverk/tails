@@ -3,7 +3,7 @@ const cors = require('cors')
 
 const gameCode = require('./gameCode')
 
-const { log } = console
+const { error, log } = console
 
 const init = (port) => {
   const app = express()
@@ -15,6 +15,7 @@ const init = (port) => {
         res.json({ gameCode: code })
         log(`[Game created] ${code}`)
       })
+      .catch(error)
   })
 
   app.listen(port)
