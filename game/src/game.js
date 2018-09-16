@@ -162,8 +162,54 @@ const getStartingPosition = l1.grid({
   itemsPerRow: 5,
 })
 
-const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) =>
-  ({ playerId, spriteId, color }))
+const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
+  const { x, y } = getStartingPosition(index)
+
+  const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
+
+  const player = l1.sprite({
+    id:      playerId,
+    x,
+    y,
+    width:   PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
+    height:  PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
+    parent:  l1.get(Scene.GAME),
+    types:   ['player'],
+    texture: `circle-${color}`,
+    zIndex:  Layer.FOREGROUND,
+  })
+
+  player.speed = snakeSpeed
+  player.degrees = l1.getRandomInRange(0, 360)
+  player.event = new EventEmitter()
+  player.color = color
+  player.isAlive = true
+  player.spriteId = spriteId
+  player.playerId = playerId
+
+  player.event.on(GameEvent.PLAYER_COLLISION, () => {
+    const controller = gameState
+      .controllers[playerId]
+
+    if (!controller) {
+      warn(`controller with id: ${playerId} not found`)
+      return
+    }
+
+    controller
+      .send(Channel.RELIABLE, {
+        event:   Event.Rtc.PLAYER_DIED,
+        payload: {},
+      })
+  })
+
+  player.asset.scale.set(player.speed / SPEED_MULTIPLIER / 2)
+
+  // Offset the sprite so that the entity hitbox is in the middle
+  player.asset.anchor.set((1 - (player.width / player.asset.width)) / 2)
+
+  return player
+})
 
 const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   const bouncer = l1.entity()
@@ -175,52 +221,13 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
     },
     loop:       true,
     onComplete: ({ data }) => {
-      const { playerId, spriteId, color } = players[data.index]
-      const { x, y } = getStartingPosition(data.index)
+      if (data.index === players.length) {
+        l1.destroy(bouncer)
+        resolve()
+        return
+      }
 
-      const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
-
-      const player = l1.sprite({
-        id:      playerId,
-        x,
-        y,
-        width:   PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
-        height:  PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
-        parent:  l1.get(Scene.GAME),
-        types:   ['player'],
-        texture: `circle-${color}`,
-        zIndex:  Layer.FOREGROUND,
-      })
-
-      player.speed = snakeSpeed
-      player.degrees = l1.getRandomInRange(0, 360)
-      player.event = new EventEmitter()
-
-      player.event.on(GameEvent.PLAYER_COLLISION, () => {
-        const controller = gameState
-          .controllers[playerId]
-
-        if (!controller) {
-          warn(`controller with id: ${playerId} not found`)
-          return
-        }
-
-        controller
-          .send(Channel.RELIABLE, {
-            event:   Event.Rtc.PLAYER_DIED,
-            payload: {},
-          })
-      })
-
-      player.color = color
-      player.isAlive = true
-      player.spriteId = spriteId
-      player.playerId = playerId
-
-      player.asset.scale.set(player.speed / SPEED_MULTIPLIER / 2)
-
-      // Offset the sprite so that the entity hitbox is in the middle
-      player.asset.anchor.set((1 - (player.width / player.asset.width)) / 2)
+      const player = players[data.index]
 
       l1.addBehavior(
         bounce(0.05),
@@ -228,12 +235,6 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       )
 
       data.index += 1
-
-      if (data.index === players.length - 1) {
-        l1.destroy(bouncer)
-        resolve()
-        console.log('resolving!!')
-      }
 
       const directionRadians = toRadians(player.degrees)
       const directionDistanceScale = 100 / playerCountFactor
@@ -263,15 +264,16 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = () => ({
-  init: () => {},
-  run:  (b, e) => {
-    const radians = toRadians(e.degrees)
-    e.x += Math.cos(radians) * e.speed
-    e.y += Math.sin(radians) * e.speed
+  id:       'move',
+  onUpdate: ({ entity }) => {
+    const radians = toRadians(entity.degrees)
+    entity.x += Math.cos(radians) * entity.speed
+    entity.y += Math.sin(radians) * entity.speed
   },
 })
 
 const pivot = playerId => ({
+  id:       'pivot',
   onUpdate: ({ entity }) => {
     if (l1.get(`${playerId}controller`).direction === SteeringCommand.RIGHT) {
       if (entity.degrees >= 360) {

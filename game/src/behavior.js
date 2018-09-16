@@ -19,6 +19,7 @@ const HOLE_LENGTH_MIN_TIME = 10
 export const createTrail = ({
   playerId, speed, speedMultiplier,
 }) => ({
+  id:         'createTrail',
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {
@@ -97,6 +98,7 @@ export const createHoleMaker = (speed, speedMultiplier) => ({
 })
 
 export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
+  id:         'collisionCheckerTrail',
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {
@@ -148,6 +150,7 @@ const killPlayer = (entity, speedMultiplier) => {
 export const collisionCheckerWalls = ({
   speedMultiplier, wallThickness,
 }) => ({
+  id:         'collisionCheckerWalls',
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {

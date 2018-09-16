@@ -13,10 +13,7 @@ const numbers = [
 ]
 
 export default () => new Promise((resolve) => {
-  const countdown = l1.entity({
-    x: GAME_WIDTH / 2,
-    y: GAME_HEIGHT / 2,
-  })
+  const countdown = l1.entity()
   l1.addBehavior(
     countdownBehavior(resolve),
     countdown,
@@ -28,18 +25,23 @@ const countdownBehavior = resolve => ({
   data:    {
     index: 0,
   },
-  loop:     true,
-  onUpdate: ({ counter }) => {
-    console.log('UPDATING!!', counter)
-  },
+  loop:       true,
   onComplete: ({ data, entity }) => {
-    console.log('SHOW TEXT!!')
     if (data.text) {
       l1.destroy(data.text)
     }
+    if (data.index === numbers.length) {
+      l1.destroy(entity)
+      resolve()
+      return
+    }
+
     const text = l1.text({
-      text:  numbers[data.index],
-      style: {
+      parent: entity,
+      x:      GAME_WIDTH / 2,
+      y:      GAME_HEIGHT / 2,
+      text:   numbers[data.index],
+      style:  {
         ...TextStyle.BIG,
         fontSize: 92,
         fill:     'white',
@@ -55,9 +57,5 @@ const countdownBehavior = resolve => ({
     data.text = text
 
     data.index += 1
-    if (data.index === numbers.length) {
-      resolve()
-      l1.destroy(entity)
-    }
   },
 })

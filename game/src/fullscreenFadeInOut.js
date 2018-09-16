@@ -19,7 +19,8 @@ export default () => new Promise((resolve) => {
 })
 
 const fadeInOut = (duration, resolve) => ({
-  data: {
+  endTime: duration,
+  data:    {
     hasResolved: false,
     animation:   createParabola({
       start:    0,

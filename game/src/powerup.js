@@ -17,11 +17,6 @@ export const initPowerups = ({
     parent: l1.get(Scene.GAME),
   })
 
-  l1.addBehavior(
-    generatePowerups(),
-    powerupGenerator,
-  )
-
   const generatePowerups = () => ({
     endTime:    l1.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
     loop:       true,
@@ -36,10 +31,6 @@ export const initPowerups = ({
       })
 
       powerup.asset.scale.set((snakeSpeed / speedMultiplier))
-      l1.addBehavior(
-        collisionChecker(),
-        powerup,
-      )
       const collisionChecker = () => ({
         onUpdate: () => {
           const collidingEntity = l1
@@ -66,8 +57,17 @@ export const initPowerups = ({
           }
         },
       })
+      l1.addBehavior(
+        collisionChecker(),
+        powerup,
+      )
     },
   })
+
+  l1.addBehavior(
+    generatePowerups(),
+    powerupGenerator,
+  )
 }
 
 const ExpirationState = {
