@@ -23,6 +23,22 @@ const { log, warn } = console
 let clients = []
 // end state
 
+const newClient = socket => ({
+  id:   uuid(),
+  socket,
+  type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
+})
+
+const addClient = (client) => {
+  clients = clients.concat(client)
+  return client
+}
+
+const createClient = R.pipe(
+  newClient,
+  addClient,
+)
+
 const removeClient = (id) => {
   clients = clients.filter(c => c.id !== id)
 }
@@ -34,12 +50,6 @@ const getReceiverClient = receiverId =>
     x.receiverId === receiverId.toUpperCase())
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
-
-const createClient = socket => ({
-  id:   uuid(),
-  socket,
-  type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
-})
 
 const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
@@ -126,7 +136,6 @@ const init = (port) => {
 
   server.on('connection', (socket) => {
     const client = createClient(socket)
-    clients.push(client)
     log(`[Client connect] ${prettyClient(client)}`)
     wsSend(
       client.socket,

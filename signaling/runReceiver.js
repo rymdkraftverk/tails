@@ -28,6 +28,33 @@ const outputEvents = {
 let initiators = []
 // end state
 
+const newInitiator = (initiatorId, offer) => ({
+  alive: true,
+  id:    initiatorId,
+  offer,
+  rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
+})
+
+// TODO: use spread operator once available
+const appendMethods = initiator => Object.assign(
+  {},
+  initiator,
+  {
+    closeConnections: makeCloseConnections([initiator.rtc]),
+  },
+)
+
+const addInitiator = (initiator) => {
+  initiators = initiators.concat(initiator)
+  return initiator
+}
+
+const createInitiator = R.pipe(
+  newInitiator,
+  appendMethods,
+  addInitiator,
+)
+
 const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
 }
@@ -82,13 +109,6 @@ const onIceCandidate = initiator => ({ candidate }) => {
   wsSendX(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
 
-const createInitiator = (initiatorId, offer) => ({
-  alive: true,
-  id:    initiatorId,
-  offer,
-  rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
-})
-
 const createAnswer = (rtc, offer) => rtc
   .setRemoteDescription(new RTCSessionDescription(offer))
   .then(() => rtc.createAnswer())
@@ -131,8 +151,6 @@ const onOffer = ({ initiatorId, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
-  initiator.closeConnections = makeCloseConnections([initiator.rtc])
-  initiators = initiators.concat(initiator)
   const { rtc } = initiator
 
   // Start collecting receiver candidates to be sent to this initiator
