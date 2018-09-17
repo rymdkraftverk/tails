@@ -6,7 +6,7 @@ const {
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
+  wsSend,
   mappify,
   onWsMessage,
   prettyId,
@@ -18,7 +18,7 @@ const HEARTBEAT_INTERVAL = 3000
 const { log } = console
 
 // state
-let wsSend = null
+let wsSendX = null
 
 const outputEvents = {
   onInitiatorJoin:  null,
@@ -79,7 +79,7 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Sending answer] ${prettyId(initiator.id)} Last candidate retrieved`)
-  wsSend(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
+  wsSendX(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
 
 const createInitiator = (initiatorId, offer) => ({
@@ -166,8 +166,8 @@ const init = ({
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
   const ws = new WebSocket(wsAddress)
-  wsSend = makeWsSend(ws)
-  ws.onopen = () => { wsSend(Event.RECEIVER_UPGRADE, receiverId) }
+  wsSendX = wsSend(ws)
+  ws.onopen = () => { wsSendX(Event.RECEIVER_UPGRADE, receiverId) }
 
   ws.onmessage = R.pipe(
     R.prop('data'),

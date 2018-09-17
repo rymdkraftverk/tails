@@ -19,10 +19,12 @@ const prettyId = id => id.substring(0, 4)
 const serialize = JSON.stringify
 const deserialize = JSON.parse
 
-const makeWsSend = ws => (event, payload) => {
-  const message = serialize({ event, payload })
-  ws.send(message)
-}
+const wsSend = R.curry((ws, event, payload) => {
+  R.pipe(
+    serialize,
+    ws.send.bind(ws),
+  )({ event, payload })
+})
 
 const rtcSend = R.curry((channelMap, channelName, data) => {
   const channel = channelMap[channelName]
@@ -81,9 +83,9 @@ module.exports = {
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
   mappify,
   onWsMessage,
   prettyId,
   rtcSend,
+  wsSend,
 }

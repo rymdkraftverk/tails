@@ -5,17 +5,17 @@ const {
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
   mappify,
   onWsMessage,
   prettyId,
   rtcSend,
+  wsSend,
 } = require('./common')
 
 const { error, log, warn } = console
 
 // state
-let wsSend = null
+let wsSendX = null
 let closeConnections = null
 let channelMap = null
 let id = null
@@ -41,7 +41,7 @@ const onIceCandidate = (rtc, receiverId) => ({ candidate }) => {
   }
 
   log('[Sending offer] Last candidate retrieved')
-  wsSend(Event.OFFER, { receiverId, offer: rtc.localDescription })
+  wsSendX(Event.OFFER, { receiverId, offer: rtc.localDescription })
 }
 
 const createOffer = rtc => () => rtc
@@ -104,7 +104,7 @@ const init = ({
   rtc.onicecandidate = onIceCandidate(rtc, receiverId)
 
   const ws = new WebSocket(wsAddress)
-  wsSend = makeWsSend(ws)
+  wsSendX = wsSend(ws)
   ws.onopen = createOffer(rtc)
   ws.onmessage = R.pipe(
     R.prop('data'),

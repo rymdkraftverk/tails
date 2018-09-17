@@ -1,3 +1,4 @@
+const R = require('ramda')
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
@@ -5,6 +6,7 @@ const { clients } = require('./state')
 const { Event } = require('signaling')
 
 const {
+  wsSend,
   onWsMessage,
   prettyId,
 } = require('signaling/common')
@@ -32,11 +34,6 @@ const createClient = socket => ({
   type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
 })
 
-const emit = (client, event, payload) => {
-  const message = JSON.stringify({ event, payload })
-  client.socket.send(message)
-}
-
 const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
   client.receiverId = receiverId
@@ -47,11 +44,22 @@ const onOffer = client => ({ receiverId, offer }) => {
   const receiver = getReceiverClient(receiverId)
   if (!receiver) {
     warn(`Receiver with id ${receiverId} not found`)
-    emit(client, Event.NOT_FOUND, { receiverId })
+    wsSend(
+      client.socket,
+      Event.NOT_FOUND,
+      { receiverId },
+    )
     return
   }
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-  emit(receiver, Event.OFFER, { offer, initiatorId: client.id })
+  wsSend(
+    receiver.socket,
+    Event.OFFER,
+    {
+      offer,
+      initiatorId: client.id,
+    },
+  )
 }
 
 const onAnswer = client => ({ answer, initiatorId }) => {
@@ -61,7 +69,11 @@ const onAnswer = client => ({ answer, initiatorId }) => {
     return
   }
   log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-  emit(initiator, Event.ANSWER, { answer })
+  wsSend(
+    initiator.socket,
+    Event.ANSWER,
+    { answer },
+  )
 }
 
 const onClose = client => () => {
@@ -82,7 +94,11 @@ const init = (port) => {
     const client = createClient(socket)
     clients.push(client)
     log(`[Client connected] ${prettyClient(client)}`)
-    emit(client, Event.CLIENT_ID, client.id)
+    wsSend(
+      client.socket,
+      Event.CLIENT_ID,
+      client.id,
+    )
 
     socket.on('message', onWsMessage({
       [Event.RECEIVER_UPGRADE]: onReceiverUpgrade(client),
