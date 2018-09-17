@@ -22,7 +22,7 @@ const deserialize = JSON.parse
 const wsSend = R.curry((ws, event, payload) => {
   R.pipe(
     serialize,
-    ws.send.bind(ws),
+    R.bind(ws.send, ws),
   )({ event, payload })
 })
 
@@ -36,7 +36,7 @@ const rtcSend = R.curry((channelMap, channelName, data) => {
 
   R.pipe(
     serialize,
-    channel.send.bind(channel),
+    R.bind(channel.send, channel),
   )(data)
 })
 

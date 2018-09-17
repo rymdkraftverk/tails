@@ -167,7 +167,7 @@ const onOffer = ({ initiatorId, offer }) => {
         id:        initiator.id,
         setOnData: makeSetOnData(channels),
         send:      rtcSend(channelMap),
-        close:     rtc.close.bind(rtc),
+        close:     R.bind(rtc.close, rtc),
       })
     })
 

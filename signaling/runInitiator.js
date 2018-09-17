@@ -51,7 +51,7 @@ const createOffer = rtc => () => rtc
     rtc.setLocalDescription(offer),
   ]))
 
-const onAnswer = rtc => rtc.setRemoteDescription.bind(rtc)
+const onAnswer = rtc => R.bind(rtc.setRemoteDescription, rtc)
 
 const onReceiverNotFound = onFailure => (receiverId) => {
   warn(`[Reciver not found] ${receiverId}`)
@@ -140,7 +140,7 @@ const init = ({
 
   R.pipe(
     R.map(setUpChannel(rtc)),
-    Promise.all.bind(Promise),
+    R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
       R.flip(mappify)('label'),
