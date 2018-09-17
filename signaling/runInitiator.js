@@ -51,8 +51,7 @@ const createOffer = rtc => () => rtc
     rtc.setLocalDescription(offer),
   ]))
 
-const onAnswer = rtc => ({ answer }) => rtc
-  .setRemoteDescription(answer)
+const onAnswer = rtc => rtc.setRemoteDescription.bind(rtc)
 
 const onReceiverNotFound = onFailure => () => {
   warn('Reciver not found')

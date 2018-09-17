@@ -76,7 +76,7 @@ const onOffer = client => R.pipe(
       wsSend(
         client.socket,
         Event.NOT_FOUND,
-        { receiverId },
+        receiverId,
       )
     },
     ({ receiver, offer }) => {
@@ -114,7 +114,7 @@ const onAnswer = client => R.pipe(
       wsSend(
         initiator.socket,
         Event.ANSWER,
-        { answer },
+        answer,
       )
     },
   ),
