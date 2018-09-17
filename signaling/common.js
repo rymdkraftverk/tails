@@ -39,10 +39,10 @@ const rtcSend = R.curry((channelMap, channelName, data) => {
 })
 
 const onWsMessage = eventMap => (message) => {
-  const { event, payload } = deserialize(message.data)
+  const { event, payload } = deserialize(message)
   const f = eventMap[event]
   if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
+    warn(`Unhandled event for message: ${message}`)
     return
   }
   f(payload)

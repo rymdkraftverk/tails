@@ -5,6 +5,10 @@ const { clients } = require('./state')
 const { prettyId } = require('common')
 const { Event } = require('signaling')
 
+const {
+  onWsMessage,
+} = require('signaling/common')
+
 const gameCode = require('./gameCode')
 
 const Type = {
@@ -33,13 +37,13 @@ const emit = (client, event, payload) => {
   client.socket.send(message)
 }
 
-const onReceiverUpgrade = client => (event, receiverId) => {
+const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
   client.receiverId = receiverId
   log(`[Receiver upgrade] ${prettyClient(client)}`)
 }
 
-const onOffer = client => (event, { receiverId, offer }) => {
+const onOffer = client => ({ receiverId, offer }) => {
   const receiver = getReceiverClient(receiverId)
   if (!receiver) {
     warn(`Receiver with id ${receiverId} not found`)
@@ -47,33 +51,17 @@ const onOffer = client => (event, { receiverId, offer }) => {
     return
   }
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-  emit(receiver, event, { offer, initiatorId: client.id })
+  emit(receiver, Event.OFFER, { offer, initiatorId: client.id })
 }
 
-const onAnswer = client => (event, { answer, initiatorId }) => {
+const onAnswer = client => ({ answer, initiatorId }) => {
   const initiator = getClient(initiatorId)
   if (!initiator) {
     warn(`Initiator with id ${initiatorId} not found`)
     return
   }
   log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-  emit(initiator, event, { answer })
-}
-
-const EventFunctions = {
-  [Event.RECEIVER_UPGRADE]: onReceiverUpgrade,
-  [Event.ANSWER]:           onAnswer,
-  [Event.OFFER]:            onOffer,
-}
-
-const onMessage = client => (message) => {
-  const { event, payload } = JSON.parse(message)
-  const f = EventFunctions[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message}`)
-    return
-  }
-  f(client)(event, payload)
+  emit(initiator, Event.ANSWER, { answer })
 }
 
 const onClose = client => () => {
@@ -96,7 +84,11 @@ const init = (port) => {
     log(`[Client connected] ${prettyClient(client)}`)
     emit(client, Event.CLIENT_ID, client.id)
 
-    socket.on('message', onMessage(client))
+    socket.on('message', onWsMessage({
+      [Event.RECEIVER_UPGRADE]: onReceiverUpgrade(client),
+      [Event.ANSWER]:           onAnswer(client),
+      [Event.OFFER]:            onOffer(client),
+    }))
     socket.on('close', onClose(client))
   })
 }

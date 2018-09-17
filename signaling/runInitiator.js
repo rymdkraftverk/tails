@@ -106,11 +106,14 @@ const init = ({
   const ws = new WebSocket(wsAddress)
   wsSend = makeWsSend(ws)
   ws.onopen = createOffer(rtc)
-  ws.onmessage = onWsMessage({
-    [Event.ANSWER]:    onAnswer(rtc),
-    [Event.NOT_FOUND]: onReceiverNotFound(reject),
-    [Event.CLIENT_ID]: onInitiatorId,
-  })
+  ws.onmessage = R.pipe(
+    R.prop('data'),
+    onWsMessage({
+      [Event.ANSWER]:    onAnswer(rtc),
+      [Event.NOT_FOUND]: onReceiverNotFound(reject),
+      [Event.CLIENT_ID]: onInitiatorId,
+    }),
+  )
 
   closeConnections = makeCloseConnections([rtc, ws])
 

@@ -168,10 +168,15 @@ const init = ({
   const ws = new WebSocket(wsAddress)
   wsSend = makeWsSend(ws)
   ws.onopen = () => { wsSend(Event.RECEIVER_UPGRADE, receiverId) }
-  ws.onmessage = onWsMessage({
-    [Event.OFFER]:     onOffer,
-    [Event.CLIENT_ID]: R.pipe(prettyId, R.concat('[Id] '), log),
-  })
+
+  ws.onmessage = R.pipe(
+    R.prop('data'),
+    onWsMessage({
+      [Event.OFFER]:     onOffer,
+      [Event.CLIENT_ID]: R.pipe(prettyId, R.concat('[Id] '), log),
+    }),
+  )
+
   beatHeart(initiators)
 }
 
