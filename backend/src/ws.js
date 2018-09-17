@@ -40,41 +40,69 @@ const onReceiverUpgrade = client => (receiverId) => {
   log(`[Receiver upgrade] ${prettyClient(client)}`)
 }
 
-const onOffer = client => ({ receiverId, offer }) => {
-  const receiver = getReceiverClient(receiverId)
-  if (!receiver) {
-    warn(`Receiver with id ${receiverId} not found`)
-    wsSend(
-      client.socket,
-      Event.NOT_FOUND,
-      { receiverId },
-    )
-    return
-  }
-  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-  wsSend(
-    receiver.socket,
-    Event.OFFER,
-    {
-      offer,
-      initiatorId: client.id,
+const onOffer = client => R.pipe(
+  R.ap(
+    R.merge,
+    R.pipe(
+      R.prop('receiverId'),
+      getReceiverClient,
+      R.objOf('receiver'),
+    ),
+  ),
+  R.ifElse(
+    R.pipe(
+      R.prop('receiver'),
+      R.isNil,
+    ),
+    ({ receiverId }) => {
+      warn(`Receiver with id ${receiverId} not found`)
+      wsSend(
+        client.socket,
+        Event.NOT_FOUND,
+        { receiverId },
+      )
     },
-  )
-}
+    ({ receiver, offer }) => {
+      log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
 
-const onAnswer = client => ({ answer, initiatorId }) => {
-  const initiator = getClient(initiatorId)
-  if (!initiator) {
-    warn(`Initiator with id ${initiatorId} not found`)
-    return
-  }
-  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-  wsSend(
-    initiator.socket,
-    Event.ANSWER,
-    { answer },
-  )
-}
+      wsSend(
+        receiver.socket,
+        Event.OFFER,
+        {
+          offer,
+          initiatorId: client.id,
+        },
+      )
+    },
+  ),
+)
+
+const onAnswer = client => R.pipe(
+  R.ap(
+    R.merge,
+    R.pipe(
+      R.prop('initiatorId'),
+      getClient,
+      R.objOf('initiator'),
+    ),
+  ),
+  R.ifElse(
+    R.pipe(
+      R.prop('initiator'),
+      R.isNil,
+    ),
+    ({ initiatorId }) => { warn(`Initiator with id ${initiatorId} not found`) },
+    ({ initiator, answer }) => {
+      log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
+      wsSend(
+        initiator.socket,
+        Event.ANSWER,
+        { answer },
+      )
+    },
+  ),
+
+)
 
 const onClose = client => () => {
   const i = clients.indexOf(client)
