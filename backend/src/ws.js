@@ -2,11 +2,11 @@ const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 const { clients } = require('./state')
 
-const { prettyId } = require('common')
 const { Event } = require('signaling')
 
 const {
   onWsMessage,
+  prettyId,
 } = require('signaling/common')
 
 const gameCode = require('./gameCode')
