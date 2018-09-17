@@ -53,8 +53,8 @@ const createOffer = rtc => () => rtc
 
 const onAnswer = rtc => rtc.setRemoteDescription.bind(rtc)
 
-const onReceiverNotFound = onFailure => () => {
-  warn('Reciver not found')
+const onReceiverNotFound = onFailure => (receiverId) => {
+  warn(`[Reciver not found] ${receiverId}`)
   closeConnections()
   onFailure({ cause: 'NOT_FOUND' })
 }
@@ -73,12 +73,12 @@ const setUpChannel = rtc => ({
   )
 
   channel.onerror = R.pipe(
-    R.tap(() => error('WebRTC error')),
+    R.tap(error),
     closeConnections,
   )
 
   channel.onclose = R.pipe(
-    R.tap(() => warn('RTC connection closed')),
+    R.tap(warn),
     onClose,
   )
 
