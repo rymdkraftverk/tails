@@ -127,7 +127,7 @@ const init = (port) => {
   server.on('connection', (socket) => {
     const client = createClient(socket)
     clients.push(client)
-    log(`[Client connected] ${prettyClient(client)}`)
+    log(`[Client connect] ${prettyClient(client)}`)
     wsSend(
       client.socket,
       Event.CLIENT_ID,
