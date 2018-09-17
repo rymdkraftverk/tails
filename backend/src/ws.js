@@ -11,8 +11,6 @@ const {
   prettyId,
 } = require('signaling/common')
 
-const gameCode = require('./gameCode')
-
 const Type = {
   INITIATOR: 'initiator',
   RECEIVER:  'receiver',
@@ -130,16 +128,15 @@ const onAnswer = client => R.pipe(
 
 )
 
-const onClose = client => () => {
+const onClose = (client, onReceiverDelete) => () => {
   log(`[Client close] ${prettyClient(client)}`)
   removeClient(client.id)
   if (client.type === Type.RECEIVER) {
-    // TODO: use emitter instead not to leak "game" into signaling
-    gameCode.delete(client.receiverId)
+    onReceiverDelete(client.receiverId)
   }
 }
 
-const init = (port) => {
+const init = (port, onReceiverDelete) => {
   const server = new WebSocket.Server({ port })
   log(`[WS] Listening on port ${port}`)
 
@@ -157,7 +154,7 @@ const init = (port) => {
       [Event.ANSWER]:           onAnswer(client),
       [Event.OFFER]:            onOffer(client),
     }))
-    socket.on('close', onClose(client))
+    socket.on('close', onClose(client, onReceiverDelete))
   })
 }
 
