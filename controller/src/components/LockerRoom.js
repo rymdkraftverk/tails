@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 import styled from 'styled-components'

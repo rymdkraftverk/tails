@@ -1,22 +1,25 @@
 const express = require('express')
 const cors = require('cors')
 
-const { log } = console
+const gameCode = require('./gameCode')
 
-const init = (port, createGameCode) => {
+const { error, log } = console
+
+const init = (port) => {
   const app = express()
   app.use(cors())
 
   app.post('/game', (req, res) => {
-    createGameCode()
-      .then((gameCode) => {
-        res.json({ gameCode })
-        log(`[Game created] ${gameCode}`)
+    gameCode.create()
+      .then((code) => {
+        res.json({ gameCode: code })
+        log(`[Game created] ${code}`)
       })
+      .catch(error)
   })
 
   app.listen(port)
-  log(`http listening on port ${port}`)
+  log(`[HTTP] Listening on port ${port}`)
 }
 
 module.exports = {
