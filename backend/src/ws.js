@@ -1,7 +1,6 @@
 const R = require('ramda')
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
-const { clients } = require('./state')
 
 const { Event } = require('signaling')
 
@@ -19,6 +18,14 @@ const Type = {
 }
 
 const { log, warn } = console
+
+// state
+let clients = []
+// end state
+
+const removeClient = (id) => {
+  clients = clients.filter(c => c.id !== id)
+}
 
 const getClient = id => clients.find(x => x.id === id)
 const getReceiverClient = receiverId =>
@@ -105,9 +112,8 @@ const onAnswer = client => R.pipe(
 )
 
 const onClose = client => () => {
-  const i = clients.indexOf(client)
-  clients.splice(i, 1)
-
+  log(`[Client close] ${prettyClient(client)}`)
+  removeClient(client.id)
   if (client.type === Type.RECEIVER) {
     // TODO: use emitter instead not to leak "game" into signaling
     gameCode.delete(client.receiverId)
