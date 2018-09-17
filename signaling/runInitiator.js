@@ -1,5 +1,5 @@
 const R = require('ramda')
-const Event = require('./Event')
+const Event = require('./event')
 const Channel = require('./channel')
 const {
   WEB_RTC_CONFIG,
