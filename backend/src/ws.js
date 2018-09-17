@@ -5,6 +5,7 @@ const uuid = require('uuid/v4')
 const { Event } = require('signaling')
 
 const {
+  warnNotFound,
   wsSend,
   onWsMessage,
   prettyId,
@@ -17,7 +18,7 @@ const Type = {
   RECEIVER:  'receiver',
 }
 
-const { log, warn } = console
+const { log } = console
 
 // state
 let clients = []
@@ -71,14 +72,19 @@ const onOffer = client => R.pipe(
       R.prop('receiver'),
       R.isNil,
     ),
-    ({ receiverId }) => {
-      warn(`Receiver with id ${receiverId} not found`)
-      wsSend(
-        client.socket,
-        Event.NOT_FOUND,
-        receiverId,
-      )
-    },
+    R.pipe(
+      R.tap(R.pipe(
+        R.prop('receiverId'),
+        warnNotFound('receiver'),
+      )),
+      ({ receiverId }) => {
+        wsSend(
+          client.socket,
+          Event.NOT_FOUND,
+          receiverId,
+        )
+      },
+    ),
     ({ receiver, offer }) => {
       log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
 
@@ -108,7 +114,10 @@ const onAnswer = client => R.pipe(
       R.prop('initiator'),
       R.isNil,
     ),
-    ({ initiatorId }) => { warn(`Initiator with id ${initiatorId} not found`) },
+    R.pipe(
+      R.prop('initiatorId'),
+      warnNotFound('initiator'),
+    ),
     ({ initiator, answer }) => {
       log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
       wsSend(

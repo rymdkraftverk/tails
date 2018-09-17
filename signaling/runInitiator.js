@@ -9,6 +9,7 @@ const {
   onWsMessage,
   prettyId,
   rtcSend,
+  warnNotFound,
   wsSend,
 } = require('./common')
 
@@ -54,7 +55,7 @@ const createOffer = rtc => () => rtc
 const onAnswer = rtc => R.bind(rtc.setRemoteDescription, rtc)
 
 const onReceiverNotFound = onFailure => (receiverId) => {
-  warn(`[Reciver not found] ${receiverId}`)
+  warnNotFound('receiver')(receiverId)
   closeConnections()
   onFailure({ cause: 'NOT_FOUND' })
 }

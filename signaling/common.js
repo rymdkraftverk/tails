@@ -14,6 +14,22 @@ const WEB_RTC_CONFIG = {
   ],
 }
 
+const capitalize = R.pipe(
+  R.juxt([
+    R.pipe(
+      R.head,
+      R.toUpper,
+    ),
+    R.tail,
+  ]),
+  R.join(''),
+)
+
+const warnNotFound = targetName => R.pipe(
+  targetId => `[${capitalize(targetName)} not found] ${targetId}`,
+  warn,
+)
+
 const prettyId = id => id.substring(0, 4)
 
 const serialize = JSON.stringify
@@ -87,5 +103,6 @@ module.exports = {
   onWsMessage,
   prettyId,
   rtcSend,
+  warnNotFound,
   wsSend,
 }
