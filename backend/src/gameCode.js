@@ -66,11 +66,13 @@ const createRedisInterface = () => {
   const p = promisify(client)
 
   // Fully apply function but defer execution
-  const create = createUniqueRandomCode.bind(
-    null,
-    p('set'),
-    p('exists'),
-    0,
+  const create = R.partial(
+    createUniqueRandomCode,
+    [
+      p('set'),
+      p('exists'),
+      0,
+    ],
   )
 
   gameCodeLog('Powered by redis')
