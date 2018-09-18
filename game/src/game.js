@@ -13,7 +13,7 @@ import Scene from './Scene'
 import addPoints from './addPoints'
 import { initPowerups } from './powerup'
 import { createTrail, holeGenerator, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
-import { TRACKS, playTrack } from './music'
+import { Track, playTrack } from './music'
 
 window.debug = {
   ...window.debug,
@@ -101,7 +101,7 @@ export const transitionToGameScene = (maxPlayers) => {
       })
     })
 
-  playTrack(TRACKS.GAME, { loop: true })
+  playTrack(Track.GAME, { loop: true })
 }
 
 export const getPlayersWithHighestScore = players =>
