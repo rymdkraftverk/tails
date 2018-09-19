@@ -18,7 +18,7 @@ const HEARTBEAT_INTERVAL = 3000
 const { log } = console
 
 // state
-let wsSendX = null
+let send = null
 
 const outputEvents = {
   onInitiatorJoin:  null,
@@ -106,7 +106,7 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Sending answer] ${prettyId(initiator.id)} Last candidate retrieved`)
-  wsSendX(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
+  send(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
 
 const createAnswer = (rtc, offer) => rtc
@@ -184,8 +184,8 @@ const init = ({
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
   const ws = new WebSocket(wsAddress)
-  wsSendX = wsSend(ws)
-  ws.onopen = () => { wsSendX(Event.RECEIVER_UPGRADE, receiverId) }
+  send = wsSend(ws)
+  ws.onopen = () => { send(Event.RECEIVER_UPGRADE, receiverId) }
 
   ws.onmessage = R.pipe(
     R.prop('data'),

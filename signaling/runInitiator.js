@@ -16,7 +16,7 @@ const {
 const { error, log, warn } = console
 
 // state
-let wsSendX = null
+let send = null
 let closeConnections = null
 let channelMap = null
 let id = null
@@ -42,7 +42,7 @@ const onIceCandidate = (rtc, receiverId) => ({ candidate }) => {
   }
 
   log('[Sending offer] Last candidate retrieved')
-  wsSendX(Event.OFFER, { receiverId, offer: rtc.localDescription })
+  send(Event.OFFER, { receiverId, offer: rtc.localDescription })
 }
 
 const createOffer = rtc => () => rtc
@@ -104,7 +104,7 @@ const init = ({
   rtc.onicecandidate = onIceCandidate(rtc, receiverId)
 
   const ws = new WebSocket(wsAddress)
-  wsSendX = wsSend(ws)
+  send = wsSend(ws)
   ws.onopen = createOffer(rtc)
   ws.onmessage = R.pipe(
     R.prop('data'),
