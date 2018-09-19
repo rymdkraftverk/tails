@@ -59,6 +59,49 @@ const fetchAndMerge = (idKey, fetcher, destKey) => R.ap(
   ),
 )
 
+const receiverIsNil = R.pipe(
+  R.prop('receiver'),
+  R.isNil,
+)
+
+const warnReceiverNotFoundAndSend = socket => R.pipe(
+  R.prop('receiverId'),
+  R.tap(warnNotFound('receiver')),
+  wsSend(socket, Event.NOT_FOUND),
+)
+
+const logAndSendOffer = client => ({ receiver, offer }) => {
+  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
+
+  wsSend(
+    receiver.socket,
+    Event.OFFER,
+    {
+      offer,
+      initiatorId: client.id,
+    },
+  )
+}
+
+const initiatorIsNil = R.pipe(
+  R.prop('initiator'),
+  R.isNil,
+)
+
+const warnInitatorNotFound = R.pipe(
+  R.prop('initiatorId'),
+  warnNotFound('initiator'),
+)
+
+const logAndSendAnswer = client => ({ initiator, answer }) => {
+  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
+  wsSend(
+    initiator.socket,
+    Event.ANSWER,
+    answer,
+  )
+}
+
 const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
   client.receiverId = receiverId
@@ -72,30 +115,9 @@ const onOffer = client => R.pipe(
     'receiver',
   ),
   R.ifElse(
-    R.pipe(
-      R.prop('receiver'),
-      R.isNil,
-    ),
-    R.pipe(
-      R.prop('receiverId'),
-      R.tap(warnNotFound('receiver')),
-      wsSend(
-        client.socket,
-        Event.NOT_FOUND,
-      ),
-    ),
-    ({ receiver, offer }) => {
-      log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-
-      wsSend(
-        receiver.socket,
-        Event.OFFER,
-        {
-          offer,
-          initiatorId: client.id,
-        },
-      )
-    },
+    receiverIsNil,
+    warnReceiverNotFoundAndSend(client.socket),
+    logAndSendOffer(client),
   ),
 )
 
@@ -106,24 +128,10 @@ const onAnswer = client => R.pipe(
     'initiator',
   ),
   R.ifElse(
-    R.pipe(
-      R.prop('initiator'),
-      R.isNil,
-    ),
-    R.pipe(
-      R.prop('initiatorId'),
-      warnNotFound('initiator'),
-    ),
-    ({ initiator, answer }) => {
-      log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-      wsSend(
-        initiator.socket,
-        Event.ANSWER,
-        answer,
-      )
-    },
+    initiatorIsNil,
+    warnInitatorNotFound,
+    logAndSendAnswer(client),
   ),
-
 )
 
 const onClose = (client, onReceiverDelete) => () => {
