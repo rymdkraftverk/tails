@@ -50,6 +50,15 @@ const getReceiverClient = receiverId =>
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
+const fetchNMerge = (idKey, fetcher, destKey) => R.ap(
+  R.merge,
+  R.pipe(
+    R.prop(idKey),
+    fetcher,
+    R.objOf(destKey),
+  ),
+)
+
 const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
   client.receiverId = receiverId
@@ -57,13 +66,10 @@ const onReceiverUpgrade = client => (receiverId) => {
 }
 
 const onOffer = client => R.pipe(
-  R.ap(
-    R.merge,
-    R.pipe(
-      R.prop('receiverId'),
-      getReceiverClient,
-      R.objOf('receiver'),
-    ),
+  fetchNMerge(
+    'receiverId',
+    getReceiverClient,
+    'receiver',
   ),
   R.ifElse(
     R.pipe(
@@ -99,13 +105,10 @@ const onOffer = client => R.pipe(
 )
 
 const onAnswer = client => R.pipe(
-  R.ap(
-    R.merge,
-    R.pipe(
-      R.prop('initiatorId'),
-      getClient,
-      R.objOf('initiator'),
-    ),
+  fetchNMerge(
+    'initiatorId',
+    getClient,
+    'initiator',
   ),
   R.ifElse(
     R.pipe(
