@@ -9,6 +9,7 @@ import gameState, { CurrentState } from './gameState'
 import Layer from './util/layer'
 import bounce from './bounce'
 import Scene from './Scene'
+import { Track, playTrack } from './music'
 
 const CONTROLLER_PORT = '4001'
 const TextAnchor = {
@@ -181,6 +182,8 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       }
       createOutline(index)
     })
+
+  playTrack(Track.LOBBY, { loop: true })
 }
 
 const drawInstructionArrow = ({
