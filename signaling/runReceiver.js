@@ -36,7 +36,7 @@ const instantiateInitiator = (initiatorId, offer) => ({
 })
 
 // TODO: use spread operator once available
-const appendMethods = initiator => Object.assign(
+const appendInitiatorMethods = initiator => Object.assign(
   {},
   initiator,
   {
@@ -51,7 +51,7 @@ const addInitiator = (initiator) => {
 
 const createInitiator = R.pipe(
   instantiateInitiator,
-  appendMethods,
+  appendInitiatorMethods,
   addInitiator,
 )
 
