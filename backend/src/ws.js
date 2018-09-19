@@ -77,17 +77,12 @@ const onOffer = client => R.pipe(
       R.isNil,
     ),
     R.pipe(
-      R.tap(R.pipe(
-        R.prop('receiverId'),
-        warnNotFound('receiver'),
-      )),
-      ({ receiverId }) => {
-        wsSend(
-          client.socket,
-          Event.NOT_FOUND,
-          receiverId,
-        )
-      },
+      R.prop('receiverId'),
+      R.tap(warnNotFound('receiver')),
+      wsSend(
+        client.socket,
+        Event.NOT_FOUND,
+      ),
     ),
     ({ receiver, offer }) => {
       log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
