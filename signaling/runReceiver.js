@@ -35,9 +35,7 @@ const instantiateInitiator = (initiatorId, offer) => ({
   rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
 })
 
-// TODO: use spread operator once available
-const appendInitiatorMethods = initiator => Object.assign(
-  {},
+const appendInitiatorMethods = initiator => R.merge(
   initiator,
   {
     closeConnections: makeCloseConnections([initiator.rtc]),
