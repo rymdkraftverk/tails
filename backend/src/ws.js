@@ -22,7 +22,7 @@ const { log } = console
 let clients = []
 // end state
 
-const newClient = socket => ({
+const instantiateClient = socket => ({
   id:   uuid(),
   socket,
   type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
@@ -34,7 +34,7 @@ const addClient = (client) => {
 }
 
 const createClient = R.pipe(
-  newClient,
+  instantiateClient,
   addClient,
 )
 

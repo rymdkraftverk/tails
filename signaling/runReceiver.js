@@ -28,7 +28,7 @@ const outputEvents = {
 let initiators = []
 // end state
 
-const newInitiator = (initiatorId, offer) => ({
+const instantiateInitiator = (initiatorId, offer) => ({
   alive: true,
   id:    initiatorId,
   offer,
@@ -50,7 +50,7 @@ const addInitiator = (initiator) => {
 }
 
 const createInitiator = R.pipe(
-  newInitiator,
+  instantiateInitiator,
   appendMethods,
   addInitiator,
 )
