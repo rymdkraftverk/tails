@@ -66,21 +66,26 @@ export const transitionToGameScene = (maxPlayers) => {
     .then(countdown)
     .then(() => {
       players.forEach((player) => {
-        R.pipe(
-          l1.addBehavior(pivot(player.id)),
-          l1.addBehavior(createHoleMaker(player.speed, SPEED_MULTIPLIER)),
-          l1.addBehavior(createTrail({
+        const behaviorsToAdd = [
+          pivot(player.id),
+          createHoleMaker(player.speed, SPEED_MULTIPLIER),
+          createTrail({
             playerId:        player.id,
             speed:           player.speed,
             speedMultiplier: SPEED_MULTIPLIER,
-          })),
-          l1.addBehavior(move()),
-          l1.addBehavior(collisionCheckerTrail(player.id, SPEED_MULTIPLIER)),
-          l1.addBehavior(collisionCheckerWalls({
+          }),
+          move(),
+          collisionCheckerTrail(player.id, SPEED_MULTIPLIER),
+          collisionCheckerWalls({
             speedMultiplier: SPEED_MULTIPLIER,
             wallThickness:   WALL_THICKNESS,
-          })),
-        )(player)
+          }),
+        ]
+
+        R.pipe(
+          R.map(l1.addBehavior),
+          R.map(f => f(player)),
+        )(behaviorsToAdd)
 
         const controller = l1.entity({
           id:     `${player.id}controller`,

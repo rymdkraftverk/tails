@@ -1,4 +1,5 @@
 import l1 from 'l1'
+import R from 'ramda'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, applyPlayerScores } from './game'
@@ -32,15 +33,16 @@ export const transitionToRoundEnd = () => {
   })
 
   roundEnd.asset.anchor.set(0.5)
-  l1.addBehavior(
-    roundWinnerTextAnimation(),
-    roundEnd,
-  )
 
-  l1.addBehavior(
+  const behaviorsToAdd = [
+    roundWinnerTextAnimation(),
     pauseAndTransitionToScoreScene(),
-    roundEnd,
-  )
+  ]
+
+  R.pipe(
+    R.map(l1.addBehavior),
+    R.map(f => f(roundEnd)),
+  )(behaviorsToAdd)
 }
 
 const pauseAndTransitionToScoreScene = () => ({

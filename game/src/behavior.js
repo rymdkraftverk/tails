@@ -134,14 +134,20 @@ const killPlayer = (entity, speedMultiplier) => {
 
   entity.killed = true
 
+  const behaviorsToRemove = [
+    'collisionCheckerTrail',
+    'collisionCheckerWalls',
+    'createHoleMaker',
+    'holeMaker',
+    'createTrail',
+    'move',
+    'pivot',
+  ]
+
   R.pipe(
-    l1.removeBehavior('collisionCheckerTrail'),
-    l1.removeBehavior('collisionCheckerWalls'),
-    l1.removeBehavior('createHoleMaker'),
-    l1.removeBehavior('createTrail'),
-    l1.removeBehavior('move'),
-    l1.removeBehavior('pivot'),
-  )(entity)
+    R.map(l1.removeBehavior),
+    R.forEach(f => f(entity)),
+  )(behaviorsToRemove)
 
   gameState.events.emit(GameEvent.PLAYER_COLLISION, entity.color)
   entity.event.emit(GameEvent.PLAYER_COLLISION)

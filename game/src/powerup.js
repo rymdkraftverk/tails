@@ -1,4 +1,5 @@
 import l1 from 'l1'
+import R from 'ramda'
 import Scene from './Scene'
 import { createTrail, collisionCheckerTrail, createHoleMaker } from './behavior'
 import { createSine } from './magic'
@@ -42,14 +43,17 @@ export const initPowerups = ({
               volume: 0.6,
             })
             l1.destroy(powerup)
-            l1.removeBehavior(
+
+            const behaviorsToRemove = [
               'indicateExpiration',
-              collidingEntity,
-            )
-            l1.removeBehavior(
               'ghost',
-              collidingEntity,
-            )
+            ]
+
+            R.pipe(
+              R.map(l1.removeBehavior),
+              R.map(f => f(collidingEntity)),
+            )(behaviorsToRemove)
+
             l1.addBehavior(
               ghost({ speedMultiplier }),
               collidingEntity,
@@ -87,20 +91,16 @@ const ghost = ({
     entity.asset.scale.set(entity.speed / speedMultiplier)
     entity.asset.alpha = 0.4
 
-    l1.removeBehavior(
+    const behaviorsToRemove = [
       'createHoleMaker',
-      entity,
-    )
-
-    l1.removeBehavior(
+      'holeMaker',
       'createTrail',
-      entity,
-    )
-
-    l1.removeBehavior(
       'collisionCheckerTrail',
-      entity,
-    )
+    ]
+    R.pipe(
+      R.map(l1.removeBehavior),
+      R.map(f => f(entity)),
+    )(behaviorsToRemove)
   },
   onUpdate: ({ counter, data, entity }) => {
     if (
@@ -142,22 +142,20 @@ const ghost = ({
       entity.asset.scale.set((entity.speed / speedMultiplier / 2))
       entity.asset.alpha = 1
 
-      l1.addBehavior(
+      const behaviorsToAdd = [
         collisionCheckerTrail(entity.id, speedMultiplier),
-        entity,
-      )
-      l1.addBehavior(
         createHoleMaker(entity.speed, speedMultiplier),
-        entity,
-      )
-      l1.addBehavior(
         createTrail({
           playerId: entity.id,
           speed:    entity.speed,
           speedMultiplier,
         }),
-        entity,
-      )
+      ]
+
+      R.pipe(
+        R.map(l1.addBehavior),
+        R.map(f => f(entity)),
+      )(behaviorsToAdd)
 
       l1.sound({
         src:    './sounds/powerup-expired.wav',

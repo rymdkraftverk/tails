@@ -52,8 +52,6 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     id: Scene.LOBBY,
   })
 
-  console.log('lobbyScene', lobbyScene)
-
   l1.text({
     x:     TextAnchor.INSTRUCTION_START_X,
     y:     100,
