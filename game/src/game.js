@@ -184,6 +184,8 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     zIndex:  Layer.FOREGROUND,
   })
 
+  player.asset.visible = false
+
   player.speed = snakeSpeed
   player.degrees = l1.getRandomInRange(0, 360)
   player.event = new EventEmitter()
@@ -226,13 +228,8 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
     },
     loop:       true,
     onComplete: ({ data }) => {
-      if (data.index === players.length) {
-        l1.destroy(bouncer)
-        resolve()
-        return
-      }
-
       const player = players[data.index]
+      player.asset.visible = true
 
       l1.addBehavior(
         bounce(0.05),
@@ -257,6 +254,11 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       directionIndicator.asset.scale.set((1.5 * player.speed) / SPEED_MULTIPLIER)
       directionIndicator.asset.anchor.set(0.5)
       directionIndicator.asset.rotation = toRadians(player.degrees)
+
+      if (data.index === players.length) {
+        l1.destroy(bouncer)
+        resolve()
+      }
     },
   })
 
