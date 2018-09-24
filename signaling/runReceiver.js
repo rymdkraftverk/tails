@@ -13,7 +13,7 @@ const {
   rtcSend,
 } = require('./common')
 
-const HEARTBEAT_INTERVAL = 3000
+const HEARTBEAT_INTERVAL = 10000
 
 const { log } = console
 
