@@ -15,6 +15,7 @@ import { initPowerups } from './powerup'
 import { Track, playTrack } from './music'
 import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 import GameEvent from './util/gameEvent'
+import { initEmptyTree } from './kd-tree'
 
 window.debug = {
   ...window.debug,
@@ -43,6 +44,8 @@ export const GameColor = {
 
 export const transitionToGameScene = (maxPlayers) => {
   gameState.currentState = CurrentState.PLAYING_ROUND
+  gameState.kdTree = initEmptyTree()
+
   l1.container({
     id: Scene.GAME,
   })

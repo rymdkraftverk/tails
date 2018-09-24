@@ -7,6 +7,7 @@ import gameState, { CurrentState } from './gameState'
 import Layer from './util/layer'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './util/gameEvent'
+import { addEntityToTree, nearestNeighbour } from './kd-tree'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -52,6 +53,8 @@ export const createTrail = ({
       trailE,
       activate(),
     )
+
+    gameState.kdTree = addEntityToTree(gameState.kdTree, trailE)
   },
 })
 
@@ -102,11 +105,9 @@ export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {
-    const allTrails = l1
-      .getByType('trail')
-      .filter(t => t.active || t.player !== playerId)
+    const closestEntity = nearestNeighbour(gameState.kdTree, entity, t => t.active || t.player !== playerId)
 
-    if (allTrails.some(l1.isColliding(entity))) {
+    if (closestEntity && l1.isColliding(closestEntity, entity)) {
       killPlayer(entity, speedMultiplier)
       checkPlayersAlive()
     }
