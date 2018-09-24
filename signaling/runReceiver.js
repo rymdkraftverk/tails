@@ -59,6 +59,13 @@ const removeInitiator = (id) => {
 
 const getInitiator = id => initiators.find(x => x.id === id)
 
+const killInitiator = (id) => {
+  getInitiator(id)
+    .closeConnections()
+  outputEvents.onInitiatorLeave(id)
+  removeInitiator(id)
+}
+
 const getActiveInitiators = R.filter(R.pipe(
   R.view(R.lensPath(['channelMap', Channel.RELIABLE, 'readyState'])),
   R.equals(ReadyState.OPEN),
@@ -77,9 +84,7 @@ const beatHeart = R.pipe(
       return
     }
 
-    outputEvents.onInitiatorLeave(initiator.id)
-    removeInitiator(initiator.id)
-    initiator.closeConnections()
+    killInitiator(initiator.id)
   }),
   R.tap(() => setTimeout(
     // Insert fresh initiators into next heartbeat
@@ -131,6 +136,20 @@ const setUpChannels = (rtc, channelNames, initiator) => {
 
         if (allOpened) {
           resolve(openChannels)
+        }
+      }
+
+      channel.onclose = () => {
+        // Make sure all data channels closes asap
+        initiator.closeConnections()
+
+        initiator.channelMap = R.omit(
+          [channel.label],
+          initiator.channelMap,
+        )
+
+        if (R.isEmpty(initiator.channelMap)) {
+          killInitiator(initiator.id)
         }
       }
     }
