@@ -1,12 +1,12 @@
 const R = require('ramda')
-const Event = require('./Event')
+const Event = require('./event')
 const Channel = require('./channel')
 const {
   ReadyState,
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
+  wsSend,
   mappify,
   onWsMessage,
   prettyId,
@@ -18,7 +18,7 @@ const HEARTBEAT_INTERVAL = 3000
 const { log } = console
 
 // state
-let wsSend = null
+let send = null
 
 const outputEvents = {
   onInitiatorJoin:  null,
@@ -27,6 +27,31 @@ const outputEvents = {
 
 let initiators = []
 // end state
+
+const instantiateInitiator = (initiatorId, offer) => ({
+  alive: true,
+  id:    initiatorId,
+  offer,
+  rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
+})
+
+const appendInitiatorMethods = initiator => R.merge(
+  initiator,
+  {
+    closeConnections: makeCloseConnections([initiator.rtc]),
+  },
+)
+
+const addInitiator = (initiator) => {
+  initiators = initiators.concat(initiator)
+  return initiator
+}
+
+const createInitiator = R.pipe(
+  instantiateInitiator,
+  appendInitiatorMethods,
+  addInitiator,
+)
 
 const removeInitiator = (id) => {
   initiators = initiators.filter(c => c.id !== id)
@@ -79,15 +104,8 @@ const onIceCandidate = initiator => ({ candidate }) => {
   }
 
   log(`[Sending answer] ${prettyId(initiator.id)} Last candidate retrieved`)
-  wsSend(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
+  send(Event.ANSWER, { answer: initiator.rtc.localDescription, initiatorId: initiator.id })
 }
-
-const createInitiator = (initiatorId, offer) => ({
-  alive: true,
-  id:    initiatorId,
-  offer,
-  rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
-})
 
 const createAnswer = (rtc, offer) => rtc
   .setRemoteDescription(new RTCSessionDescription(offer))
@@ -131,8 +149,6 @@ const onOffer = ({ initiatorId, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
-  initiator.closeConnections = makeCloseConnections([initiator.rtc])
-  initiators = initiators.concat(initiator)
   const { rtc } = initiator
 
   // Start collecting receiver candidates to be sent to this initiator
@@ -149,7 +165,7 @@ const onOffer = ({ initiatorId, offer }) => {
         id:        initiator.id,
         setOnData: makeSetOnData(channels),
         send:      rtcSend(channelMap),
-        close:     rtc.close.bind(rtc),
+        close:     R.bind(rtc.close, rtc),
       })
     })
 
@@ -166,12 +182,17 @@ const init = ({
   outputEvents.onInitiatorLeave = onInitiatorLeave
 
   const ws = new WebSocket(wsAddress)
-  wsSend = makeWsSend(ws)
-  ws.onopen = () => { wsSend(Event.RECEIVER_UPGRADE, receiverId) }
-  ws.onmessage = onWsMessage({
-    [Event.OFFER]:     onOffer,
-    [Event.CLIENT_ID]: R.pipe(prettyId, R.concat('[Id] '), log),
-  })
+  send = wsSend(ws)
+  ws.onopen = () => { send(Event.RECEIVER_UPGRADE, receiverId) }
+
+  ws.onmessage = R.pipe(
+    R.prop('data'),
+    onWsMessage({
+      [Event.OFFER]:     onOffer,
+      [Event.CLIENT_ID]: R.pipe(prettyId, R.concat('[Id] '), log),
+    }),
+  )
+
   beatHeart(initiators)
 }
 

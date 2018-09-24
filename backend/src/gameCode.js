@@ -26,9 +26,10 @@ const randomizeCode = () => R
   .reduce(R.concat, '')
 
 const promisify = R.curry((client, method) =>
-  util
-    .promisify(client[method])
-    .bind(client))
+  R.bind(
+    util.promisify(client[method]),
+    client,
+  ))
 
 const logRedisError = R.pipe(
   R.concat('[Redis error] '),
@@ -65,11 +66,13 @@ const createRedisInterface = () => {
   const p = promisify(client)
 
   // Fully apply function but defer execution
-  const create = createUniqueRandomCode.bind(
-    null,
-    p('set'),
-    p('exists'),
-    0,
+  const create = R.partial(
+    createUniqueRandomCode,
+    [
+      p('set'),
+      p('exists'),
+      0,
+    ],
   )
 
   gameCodeLog('Powered by redis')

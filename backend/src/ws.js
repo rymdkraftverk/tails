@@ -1,18 +1,46 @@
+const R = require('ramda')
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
-const { clients } = require('./state')
 
-const { prettyId } = require('common')
 const { Event } = require('signaling')
 
-const gameCode = require('./gameCode')
+const {
+  warnNotFound,
+  wsSend,
+  onWsMessage,
+  prettyId,
+} = require('signaling/common')
 
 const Type = {
   INITIATOR: 'initiator',
   RECEIVER:  'receiver',
 }
 
-const { log, warn } = console
+const { log } = console
+
+// state
+let clients = []
+// end state
+
+const instantiateClient = socket => ({
+  id:   uuid(),
+  socket,
+  type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
+})
+
+const addClient = (client) => {
+  clients = clients.concat(client)
+  return client
+}
+
+const createClient = R.pipe(
+  instantiateClient,
+  addClient,
+)
+
+const removeClient = (id) => {
+  clients = clients.filter(c => c.id !== id)
+}
 
 const getClient = id => clients.find(x => x.id === id)
 const getReceiverClient = receiverId =>
@@ -22,82 +50,117 @@ const getReceiverClient = receiverId =>
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
-const createClient = socket => ({
-  id:   uuid(),
-  socket,
-  type: Type.INITIATOR, // receiver clients get upgraded in onReceiverCreate
-})
+const fetchAndMerge = (idKey, fetcher, destKey) => R.ap(
+  R.merge,
+  R.pipe(
+    R.prop(idKey),
+    fetcher,
+    R.objOf(destKey),
+  ),
+)
 
-const emit = (client, event, payload) => {
-  const message = JSON.stringify({ event, payload })
-  client.socket.send(message)
+const receiverIsNil = R.pipe(
+  R.prop('receiver'),
+  R.isNil,
+)
+
+const warnReceiverNotFoundAndSend = socket => R.pipe(
+  R.prop('receiverId'),
+  R.tap(warnNotFound('receiver')),
+  wsSend(socket, Event.NOT_FOUND),
+)
+
+const logAndSendOffer = client => ({ receiver, offer }) => {
+  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
+
+  wsSend(
+    receiver.socket,
+    Event.OFFER,
+    {
+      offer,
+      initiatorId: client.id,
+    },
+  )
 }
 
-const onReceiverUpgrade = client => (event, receiverId) => {
+const initiatorIsNil = R.pipe(
+  R.prop('initiator'),
+  R.isNil,
+)
+
+const warnInitatorNotFound = R.pipe(
+  R.prop('initiatorId'),
+  warnNotFound('initiator'),
+)
+
+const logAndSendAnswer = client => ({ initiator, answer }) => {
+  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
+  wsSend(
+    initiator.socket,
+    Event.ANSWER,
+    answer,
+  )
+}
+
+const onReceiverUpgrade = client => (receiverId) => {
   client.type = Type.RECEIVER
   client.receiverId = receiverId
   log(`[Receiver upgrade] ${prettyClient(client)}`)
 }
 
-const onOffer = client => (event, { receiverId, offer }) => {
-  const receiver = getReceiverClient(receiverId)
-  if (!receiver) {
-    warn(`Receiver with id ${receiverId} not found`)
-    emit(client, Event.NOT_FOUND, { receiverId })
-    return
-  }
-  log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
-  emit(receiver, event, { offer, initiatorId: client.id })
-}
+const onOffer = client => R.pipe(
+  fetchAndMerge(
+    'receiverId',
+    getReceiverClient,
+    'receiver',
+  ),
+  R.ifElse(
+    receiverIsNil,
+    warnReceiverNotFoundAndSend(client.socket),
+    logAndSendOffer(client),
+  ),
+)
 
-const onAnswer = client => (event, { answer, initiatorId }) => {
-  const initiator = getClient(initiatorId)
-  if (!initiator) {
-    warn(`Initiator with id ${initiatorId} not found`)
-    return
-  }
-  log(`[Answer] ${prettyClient(client)} -> ${prettyClient(initiator)}`)
-  emit(initiator, event, { answer })
-}
+const onAnswer = client => R.pipe(
+  fetchAndMerge(
+    'initiatorId',
+    getClient,
+    'initiator',
+  ),
+  R.ifElse(
+    initiatorIsNil,
+    warnInitatorNotFound,
+    logAndSendAnswer(client),
+  ),
+)
 
-const EventFunctions = {
-  [Event.RECEIVER_UPGRADE]: onReceiverUpgrade,
-  [Event.ANSWER]:           onAnswer,
-  [Event.OFFER]:            onOffer,
-}
-
-const onMessage = client => (message) => {
-  const { event, payload } = JSON.parse(message)
-  const f = EventFunctions[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message}`)
-    return
-  }
-  f(client)(event, payload)
-}
-
-const onClose = client => () => {
-  const i = clients.indexOf(client)
-  clients.splice(i, 1)
-
+const onClose = (client, onReceiverDelete) => () => {
+  log(`[Client close] ${prettyClient(client)}`)
+  removeClient(client.id)
   if (client.type === Type.RECEIVER) {
-    // TODO: use emitter instead not to leak "game" into signaling
-    gameCode.delete(client.receiverId)
+    onReceiverDelete(client.receiverId)
   }
 }
 
-const init = (port) => {
+const init = (port, onReceiverDelete) => {
   const server = new WebSocket.Server({ port })
   log(`[WS] Listening on port ${port}`)
 
   server.on('connection', (socket) => {
     const client = createClient(socket)
-    clients.push(client)
-    log(`[Client connected] ${prettyClient(client)}`)
-    emit(client, Event.CLIENT_ID, client.id)
+    log(`[Client connect] ${prettyClient(client)}`)
+    wsSend(
+      client.socket,
+      Event.CLIENT_ID,
+      client.id,
+    )
 
-    socket.on('message', onMessage(client))
-    socket.on('close', onClose(client))
+    socket.on('message', onWsMessage({
+      [Event.RECEIVER_UPGRADE]: onReceiverUpgrade(client),
+      [Event.ANSWER]:           onAnswer(client),
+      [Event.OFFER]:            onOffer(client),
+    }))
+    socket.on('close', onClose(client, onReceiverDelete))
   })
 }
 

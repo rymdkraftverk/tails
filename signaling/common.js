@@ -14,15 +14,33 @@ const WEB_RTC_CONFIG = {
   ],
 }
 
+const capitalize = R.pipe(
+  R.juxt([
+    R.pipe(
+      R.head,
+      R.toUpper,
+    ),
+    R.tail,
+  ]),
+  R.join(''),
+)
+
+const warnNotFound = targetName => R.pipe(
+  targetId => `[${capitalize(targetName)} not found] ${targetId}`,
+  warn,
+)
+
 const prettyId = id => id.substring(0, 4)
 
 const serialize = JSON.stringify
 const deserialize = JSON.parse
 
-const makeWsSend = ws => (event, payload) => {
-  const message = serialize({ event, payload })
-  ws.send(message)
-}
+const wsSend = R.curry((ws, event, payload) => {
+  R.pipe(
+    serialize,
+    R.bind(ws.send, ws),
+  )({ event, payload })
+})
 
 const rtcSend = R.curry((channelMap, channelName, data) => {
   const channel = channelMap[channelName]
@@ -34,15 +52,15 @@ const rtcSend = R.curry((channelMap, channelName, data) => {
 
   R.pipe(
     serialize,
-    channel.send.bind(channel),
+    R.bind(channel.send, channel),
   )(data)
 })
 
 const onWsMessage = eventMap => (message) => {
-  const { event, payload } = deserialize(message.data)
+  const { event, payload } = deserialize(message)
   const f = eventMap[event]
   if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
+    warn(`Unhandled event for message: ${message}`)
     return
   }
   f(payload)
@@ -81,9 +99,10 @@ module.exports = {
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
   mappify,
   onWsMessage,
   prettyId,
   rtcSend,
+  warnNotFound,
+  wsSend,
 }

@@ -1,21 +1,22 @@
 const R = require('ramda')
-const Event = require('./Event')
+const Event = require('./event')
 const Channel = require('./channel')
 const {
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
-  makeWsSend,
   mappify,
   onWsMessage,
   prettyId,
   rtcSend,
+  warnNotFound,
+  wsSend,
 } = require('./common')
 
 const { error, log, warn } = console
 
 // state
-let wsSend = null
+let send = null
 let closeConnections = null
 let channelMap = null
 let id = null
@@ -41,7 +42,7 @@ const onIceCandidate = (rtc, receiverId) => ({ candidate }) => {
   }
 
   log('[Sending offer] Last candidate retrieved')
-  wsSend(Event.OFFER, { receiverId, offer: rtc.localDescription })
+  send(Event.OFFER, { receiverId, offer: rtc.localDescription })
 }
 
 const createOffer = rtc => () => rtc
@@ -51,11 +52,10 @@ const createOffer = rtc => () => rtc
     rtc.setLocalDescription(offer),
   ]))
 
-const onAnswer = rtc => ({ answer }) => rtc
-  .setRemoteDescription(answer)
+const onAnswer = rtc => R.bind(rtc.setRemoteDescription, rtc)
 
-const onReceiverNotFound = onFailure => () => {
-  warn('Reciver not found')
+const onReceiverNotFound = onFailure => (receiverId) => {
+  warnNotFound('receiver')(receiverId)
   closeConnections()
   onFailure({ cause: 'NOT_FOUND' })
 }
@@ -74,12 +74,12 @@ const setUpChannel = rtc => ({
   )
 
   channel.onerror = R.pipe(
-    R.tap(() => error('WebRTC error')),
+    R.tap(error),
     closeConnections,
   )
 
   channel.onclose = R.pipe(
-    R.tap(() => warn('RTC connection closed')),
+    R.tap(warn),
     onClose,
   )
 
@@ -104,13 +104,16 @@ const init = ({
   rtc.onicecandidate = onIceCandidate(rtc, receiverId)
 
   const ws = new WebSocket(wsAddress)
-  wsSend = makeWsSend(ws)
+  send = wsSend(ws)
   ws.onopen = createOffer(rtc)
-  ws.onmessage = onWsMessage({
-    [Event.ANSWER]:    onAnswer(rtc),
-    [Event.NOT_FOUND]: onReceiverNotFound(reject),
-    [Event.CLIENT_ID]: onInitiatorId,
-  })
+  ws.onmessage = R.pipe(
+    R.prop('data'),
+    onWsMessage({
+      [Event.ANSWER]:    onAnswer(rtc),
+      [Event.NOT_FOUND]: onReceiverNotFound(reject),
+      [Event.CLIENT_ID]: onInitiatorId,
+    }),
+  )
 
   closeConnections = makeCloseConnections([rtc, ws])
 
@@ -138,7 +141,7 @@ const init = ({
 
   R.pipe(
     R.map(setUpChannel(rtc)),
-    Promise.all.bind(Promise),
+    R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
       R.flip(mappify)('label'),
