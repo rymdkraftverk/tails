@@ -69,6 +69,8 @@ class App extends Component {
       })
     } else if (event === Event.Rtc.A_PLAYER_JOINED) {
       this.setState(payload)
+    } else if (event === Event.Rtc.A_PLAYER_LEFT) {
+      this.setState(payload)
     } else if (event === Event.Rtc.PLAYER_DIED) {
       this.setState({
         appState: APP_STATE.PLAYER_DEAD,

@@ -211,6 +211,13 @@ const onControllerLeave = (id) => {
         createPlayerEntity(p, i, { newPlayer: false })
       })
   }
+
+  broadcast({
+    event:   Event.Rtc.A_PLAYER_LEFT,
+    payload: {
+      playerCount: playerCount(gameState.players),
+    },
+  })
 }
 
 const resizeGame = () => {
