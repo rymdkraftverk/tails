@@ -14,6 +14,14 @@ const WEB_RTC_CONFIG = {
   ],
 }
 
+// reliable
+const INTERNAL_CHANNEL = {
+  name:   'internal',
+  config: {
+    ordered: true,
+  },
+}
+
 const capitalize = R.pipe(
   R.juxt([
     R.pipe(
@@ -42,7 +50,11 @@ const wsSend = R.curry((ws, event, payload) => {
   )({ event, payload })
 })
 
-const rtcSend = R.curry((channelMap, channelName, data) => {
+const rtcSend = (channel, data) => {
+  channel.send(serialize(data))
+}
+
+const rtcMapSend = R.curry((channelMap, channelName, data) => {
   const channel = channelMap[channelName]
 
   if (channel.readyState !== ReadyState.OPEN) {
@@ -50,10 +62,7 @@ const rtcSend = R.curry((channelMap, channelName, data) => {
     return
   }
 
-  R.pipe(
-    serialize,
-    R.bind(channel.send, channel),
-  )(data)
+  rtcSend(channel, data)
 })
 
 const onWsMessage = eventMap => (message) => {
@@ -66,9 +75,14 @@ const onWsMessage = eventMap => (message) => {
   f(payload)
 }
 
-const mappify = (list, key) => list
+const partitionInternal = R.pipe(
+  R.partition(R.propEq('label', INTERNAL_CHANNEL.name)),
+  ([internals, externals]) => [R.head(internals), externals],
+)
+
+const mappify = R.curry((key, list) => list
   .map(x => ({ [x[key]]: x }))
-  .reduce(R.merge)
+  .reduce(R.merge))
 
 const makeCloseConnections = connections => () => {
   connections.forEach((c) => {
@@ -76,32 +90,23 @@ const makeCloseConnections = connections => () => {
   })
 }
 
-const sendTo = listeners => (data) => {
-  R.reduceWhile(
-    R.pipe(
-      R.prop('interupt'),
-      R.equals(!true),
-    ),
-    (_last, listener) => listener(data),
-    { interupt: false },
-    listeners,
-  )
-}
-
-const makeOnMessage = listeners => R.pipe(
-  ({ data }) => data,
+const makeOnMessage = onData => R.pipe(
+  R.prop('data'),
   deserialize,
-  sendTo(listeners),
+  onData,
 )
 
 module.exports = {
+  INTERNAL_CHANNEL,
   ReadyState,
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
   mappify,
   onWsMessage,
+  partitionInternal,
   prettyId,
+  rtcMapSend,
   rtcSend,
   warnNotFound,
   wsSend,
