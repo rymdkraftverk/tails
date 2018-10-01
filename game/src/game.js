@@ -103,7 +103,7 @@ export const transitionToGameScene = (maxPlayers) => {
       })
     })
 
-  playTrack(Track.GAME, { loop: true })
+  playTrack(Track.GAME, { loop: true, id: 'gameMusic' })
 }
 
 export const getPlayersWithHighestScore = players =>

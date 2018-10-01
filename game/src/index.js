@@ -67,6 +67,7 @@ const roundStart = () => {
         const entitiesToKeep = [
           'background',
           'fadeInOut',
+          'gameMusic',
         ]
 
         l1
