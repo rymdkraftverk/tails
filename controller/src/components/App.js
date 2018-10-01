@@ -3,6 +3,7 @@ import Fullscreen from 'react-full-screen'
 import { Event, Color, Channel } from 'common'
 import signaling from 'signaling'
 
+import channelConfigs from '../channelConfigs'
 import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
@@ -109,10 +110,11 @@ class App extends Component {
     }
 
     signaling.runInitiator({
-      wsAddress:  WS_ADDRESS,
-      receiverId: gameCode,
-      onData:     this.onData,
+      channelConfigs,
       onClose,
+      onData:     this.onData,
+      receiverId: gameCode,
+      wsAddress:  WS_ADDRESS,
     })
       .then((send) => {
         this.sendUnreliable = send(Channel.UNRELIABLE)

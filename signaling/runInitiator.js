@@ -1,13 +1,15 @@
 const R = require('ramda')
 const Event = require('./event')
-const Channel = require('./channel')
 const {
+  INTERNAL_CHANNEL,
   WEB_RTC_CONFIG,
   makeCloseConnections,
   makeOnMessage,
   mappify,
   onWsMessage,
+  partitionInternal,
   prettyId,
+  rtcMapSend,
   rtcSend,
   warnNotFound,
   wsSend,
@@ -16,33 +18,43 @@ const {
 const { error, log, warn } = console
 
 // state
-let send = null
 let closeConnections = null
-let channelMap = null
+let internalChannel
 let id = null
 // end state
 
-const listenForHeartbeat = ({ event }) => {
-  const isHeartbeat = event === Event.HEARTBEAT
-  if (isHeartbeat) {
-    rtcSend(
-      channelMap,
-      Channel.RELIABLE,
-      { event: Event.HEARTBEAT, payload: id },
-    )
+const onInternalData = ({ event }) => {
+  if (event !== Event.HEARTBEAT) {
+    warn(`Unhandled internal event ${event}`)
+    return
   }
 
-  return { interupt: isHeartbeat }
+  rtcSend(
+    internalChannel,
+    { event: Event.HEARTBEAT, payload: id },
+  )
 }
 
-const onIceCandidate = (rtc, receiverId) => ({ candidate }) => {
+const onIceCandidate = ({
+  channelNames,
+  receiverId,
+  rtc,
+  send,
+}) => ({ candidate }) => {
   if (candidate) {
     log('[Ice Candidate]')
     return
   }
 
   log('[Sending offer] Last candidate retrieved')
-  send(Event.OFFER, { receiverId, offer: rtc.localDescription })
+  send(
+    Event.OFFER,
+    {
+      channelNames,
+      offer: rtc.localDescription,
+      receiverId,
+    },
+  )
 }
 
 const createOffer = rtc => () => rtc
@@ -65,6 +77,15 @@ const onInitiatorId = (initiatorId) => {
   log(`[Id] ${prettyId(id)}`)
 }
 
+const plumbChannelConfig = external => R.ifElse(
+  R.equals(INTERNAL_CHANNEL),
+  R.merge({
+    onData:  onInternalData,
+    onClose: () => warn('Internal channel closed'),
+  }),
+  R.merge(external),
+)
+
 const setUpChannel = rtc => ({
   name, config, onClose, onData,
 }) => {
@@ -83,7 +104,7 @@ const setUpChannel = rtc => ({
     onClose,
   )
 
-  channel.onmessage = makeOnMessage([listenForHeartbeat, onData])
+  channel.onmessage = makeOnMessage(onData)
 
   // Channel considered "set up" once it's opened
   return new Promise((resolve) => {
@@ -95,16 +116,27 @@ const setUpChannel = rtc => ({
 }
 
 const init = ({
+  channelConfigs: externalChannelConfigs,
   onClose,
   onData,
   receiverId,
   wsAddress,
 }) => new Promise((resolve, reject) => {
   const rtc = new RTCPeerConnection(WEB_RTC_CONFIG)
-  rtc.onicecandidate = onIceCandidate(rtc, receiverId)
-
   const ws = new WebSocket(wsAddress)
-  send = wsSend(ws)
+
+  const channelConfigs = R.append(
+    INTERNAL_CHANNEL,
+    externalChannelConfigs,
+  )
+
+  rtc.onicecandidate = onIceCandidate({
+    channelNames: R.pluck('name', channelConfigs),
+    receiverId,
+    rtc,
+    send:         wsSend(ws),
+  })
+
   ws.onopen = createOffer(rtc)
   ws.onmessage = R.pipe(
     R.prop('data'),
@@ -117,36 +149,24 @@ const init = ({
 
   closeConnections = makeCloseConnections([rtc, ws])
 
-  // configuration explanation:
-  // https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability.html
-  const channelConfigs = [{
-    // "udpLike"
-    name:   Channel.UNRELIABLE,
-    config: {
-      ordered:        false,
-      maxRetransmits: 0,
-    },
-    onData,
-    onClose,
-  },
-  {
-    // "tcpLike"
-    name:   Channel.RELIABLE,
-    config: {
-      ordered: true,
-    },
-    onData,
-    onClose,
-  }]
-
   R.pipe(
-    R.map(setUpChannel(rtc)),
+    R.map(R.pipe(
+      plumbChannelConfig({
+        onData,
+        onClose,
+      }),
+      setUpChannel(rtc),
+    )),
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      R.flip(mappify)('label'),
-      R.tap((cm) => { channelMap = cm }),
-      rtcSend,
+      partitionInternal,
+      ([internal, externals]) => {
+        internalChannel = internal
+        return externals
+      },
+      mappify('label'),
+      rtcMapSend,
       resolve,
     ))
 })

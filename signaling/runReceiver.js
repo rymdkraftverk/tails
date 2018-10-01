@@ -1,6 +1,5 @@
 const R = require('ramda')
 const Event = require('./event')
-const Channel = require('./channel')
 const {
   ReadyState,
   WEB_RTC_CONFIG,
@@ -9,13 +8,15 @@ const {
   wsSend,
   mappify,
   onWsMessage,
+  partitionInternal,
   prettyId,
+  rtcMapSend,
   rtcSend,
 } = require('./common')
 
 const HEARTBEAT_INTERVAL = 10000
 
-const { log } = console
+const { log, warn } = console
 
 // state
 let send = null
@@ -60,14 +61,16 @@ const removeInitiator = (id) => {
 const getInitiator = id => initiators.find(x => x.id === id)
 
 const killInitiator = (id) => {
-  getInitiator(id)
-    .closeConnections()
+  const initiator = getInitiator(id)
+  if (!initiator) return
+
+  initiator.closeConnections()
   outputEvents.onInitiatorLeave(id)
   removeInitiator(id)
 }
 
 const getActiveInitiators = R.filter(R.pipe(
-  R.view(R.lensPath(['channelMap', Channel.RELIABLE, 'readyState'])),
+  R.view(R.lensPath(['internalChannel', 'readyState'])),
   R.equals(ReadyState.OPEN),
 ))
 
@@ -76,8 +79,7 @@ const beatHeart = R.pipe(
   R.forEach((initiator) => {
     if (initiator.alive) {
       rtcSend(
-        initiator.channelMap,
-        Channel.RELIABLE,
+        initiator.internalChannel,
         { event: Event.HEARTBEAT },
       )
       initiator.alive = false
@@ -93,13 +95,13 @@ const beatHeart = R.pipe(
   )),
 )
 
-const listenForHeartbeat = ({ event, payload: initiatorId }) => {
-  const isHeartbeat = event === Event.HEARTBEAT
-  if (isHeartbeat) {
-    getInitiator(initiatorId).alive = true
+const onInternalData = ({ event, payload: initiatorId }) => {
+  if (event !== Event.HEARTBEAT) {
+    warn(`Unhandled internal event ${event}`)
+    return
   }
 
-  return { interupt: isHeartbeat }
+  getInitiator(initiatorId).alive = true
 }
 
 const onIceCandidate = initiator => ({ candidate }) => {
@@ -140,17 +142,7 @@ const setUpChannels = (rtc, channelNames, initiator) => {
       }
 
       channel.onclose = () => {
-        // Make sure all data channels closes asap
-        initiator.closeConnections()
-
-        initiator.channelMap = R.omit(
-          [channel.label],
-          initiator.channelMap,
-        )
-
-        if (R.isEmpty(initiator.channelMap)) {
-          killInitiator(initiator.id)
-        }
+        killInitiator(initiator.id)
       }
     }
   })
@@ -158,13 +150,28 @@ const setUpChannels = (rtc, channelNames, initiator) => {
 
 const makeSetOnData = channels => (onData) => {
   channels.forEach((channel) => {
-    channel.onmessage = makeOnMessage([listenForHeartbeat, onData])
+    channel.onmessage = makeOnMessage(onData)
   })
 }
 
+const plumbInternalChannel = ({ channel, initiator }) => {
+  initiator.internalChannel = channel
+  channel.onmessage = makeOnMessage(onInternalData)
+}
+
+const outputExternalChannels = ({ channels, initiator, rtc }) => {
+  const channelMap = mappify('label', channels)
+
+  outputEvents.onInitiatorJoin({
+    id:        initiator.id,
+    setOnData: makeSetOnData(channels),
+    send:      rtcMapSend(channelMap),
+    close:     R.bind(rtc.close, rtc),
+  })
+}
 
 // First point of contact from initiator
-const onOffer = ({ initiatorId, offer }) => {
+const onOffer = ({ initiatorId, channelNames, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
@@ -173,18 +180,21 @@ const onOffer = ({ initiatorId, offer }) => {
   // Start collecting receiver candidates to be sent to this initiator
   rtc.onicecandidate = onIceCandidate(initiator)
 
-  // Wait for both known channels to be opened before considering initiator
+  // Wait for all known channels to be opened before considering initiator
   // to have joined
-  setUpChannels(rtc, Object.values(Channel), initiator)
+  setUpChannels(rtc, channelNames, initiator)
     .then((channels) => {
-      const channelMap = mappify(channels, 'label')
-      getInitiator(initiator.id).channelMap = channelMap
+      const [internal, externals] = partitionInternal(channels)
 
-      outputEvents.onInitiatorJoin({
-        id:        initiator.id,
-        setOnData: makeSetOnData(channels),
-        send:      rtcSend(channelMap),
-        close:     R.bind(rtc.close, rtc),
+      plumbInternalChannel({
+        channel: internal,
+        initiator,
+      })
+
+      outputExternalChannels({
+        channels: externals,
+        initiator,
+        rtc,
       })
     })
 
