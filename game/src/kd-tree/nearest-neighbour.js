@@ -7,7 +7,7 @@ const calculateDistance = (e1, e2) =>
     .map(distance => distance * distance)
     .reduce(add, 0))
 
-const nearestNeighbour = (tree, entity, filter = always(true)) => {
+export const nearestNeighbour = (tree, entity, filter = always(true)) => {
   if (isNil(tree)) {
     return null
   }
@@ -51,5 +51,3 @@ const nearestNeighbour = (tree, entity, filter = always(true)) => {
     ? candidate
     : otherCandidate
 }
-
-export default nearestNeighbour
