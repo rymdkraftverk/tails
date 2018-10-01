@@ -106,7 +106,7 @@ export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
       .getByType('trail')
       .filter(t => t.active || t.player !== playerId)
 
-    if (allTrails.some(t => l1.isColliding(t, entity))) {
+    if (allTrails.some(l1.isColliding(entity))) {
       killPlayer(entity, speedMultiplier)
       checkPlayersAlive()
     }

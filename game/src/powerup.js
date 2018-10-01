@@ -36,7 +36,7 @@ export const initPowerups = ({
         onUpdate: () => {
           const collidingEntity = l1
             .getByType('player')
-            .find(e => l1.isColliding(e, powerup))
+            .find(l1.isColliding(powerup))
           if (collidingEntity) {
             l1.sound({
               src:    './sounds/join1.wav',
