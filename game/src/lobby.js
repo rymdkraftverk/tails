@@ -55,7 +55,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   l1.text({
     x:     TextAnchor.INSTRUCTION_START_X,
     y:     100,
-    text:  'Grab your phoneff',
+    text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
       fontSize: 50,
