@@ -77,7 +77,7 @@ const onInitiatorId = (initiatorId) => {
   log(`[Id] ${prettyId(id)}`)
 }
 
-const plumChannelConfig = external => R.ifElse(
+const plumbChannelConfig = external => R.ifElse(
   R.equals(INTERNAL_CHANNEL),
   R.merge({
     onData:  onInternalData,
@@ -151,7 +151,7 @@ const init = ({
 
   R.pipe(
     R.map(R.pipe(
-      plumChannelConfig({
+      plumbChannelConfig({
         onData,
         onClose,
       }),

@@ -154,7 +154,7 @@ const makeSetOnData = channels => (onData) => {
   })
 }
 
-const plumInternalChannel = ({ channel, initiator }) => {
+const plumbInternalChannel = ({ channel, initiator }) => {
   initiator.internalChannel = channel
   channel.onmessage = makeOnMessage(onInternalData)
 }
@@ -186,7 +186,7 @@ const onOffer = ({ initiatorId, channelNames, offer }) => {
     .then((channels) => {
       const [internal, externals] = partitionInternal(channels)
 
-      plumInternalChannel({
+      plumbInternalChannel({
         channel: internal,
         initiator,
       })
