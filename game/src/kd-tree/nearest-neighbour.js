@@ -13,26 +13,29 @@ export const nearestNeighbour = (
   earlyReturn = always(false),
   filter = always(true),
 ) => {
+  // empty branch
   if (isNil(tree)) {
     return null
   }
 
+  // leaf
   if (tree.value) {
     return filter(tree.value)
       ? tree.value
       : null
   }
 
+  // empty tree
   if (!tree.true && !tree.false) {
     return null
   }
 
-  const nodeDivider = calculateLimit(tree.borders, tree.dimension)
-  const surpassesLimit = entity[tree.dimension] > nodeDivider
+  const limit = calculateLimit(tree.borders, tree.dimension)
+  const surpassesLimit = entity[tree.dimension] > limit
 
   const candidate = nearestNeighbour(tree[surpassesLimit], entity, earlyReturn, filter)
 
-  if (candidate === null) {
+  if (isNil(candidate)) {
     return nearestNeighbour(tree[!surpassesLimit], entity, earlyReturn, filter)
   }
 
@@ -42,9 +45,9 @@ export const nearestNeighbour = (
 
   const candidateDistance = calculateDistance(entity, candidate)
 
-  const dividerDistance = Math.abs(entity[tree.dimension] - nodeDivider)
+  const limitDistance = Math.abs(entity[tree.dimension] - limit)
 
-  if (candidateDistance < dividerDistance) {
+  if (candidateDistance < limitDistance) {
     return candidate
   }
 

@@ -40,7 +40,10 @@ const splitLeafIntoNode = ({ dimension, borders, value }) => {
   return {
     dimension,
     borders,
-    [greaterThanLimit]: addEntityToTree({ dimension: nextDimension, borders: childBorders }, entity),
+    [greaterThanLimit]: addEntityToTree(
+      { dimension: nextDimension, borders: childBorders },
+      entity,
+    ),
   }
 }
 
