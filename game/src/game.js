@@ -239,7 +239,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       data.index += 1
 
       const directionRadians = toRadians(player.degrees)
-      const directionDistanceScale = 100 / playerCountFactor
+      const directionDistanceScale = 200 / playerCountFactor
 
       const directionIndicator = l1.sprite({
         id:      `${player.playerId}:direction`,
@@ -251,10 +251,10 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       directionIndicator.color = player.color
 
       directionIndicator.asset.x =
-        (directionDistanceScale * Math.cos(directionRadians)) + (player.width / 2)
+        (directionDistanceScale * Math.cos(directionRadians)) + (player.asset.width * 2)
       directionIndicator.asset.y =
-        (directionDistanceScale * Math.sin(directionRadians)) + (player.height / 2)
-      directionIndicator.asset.scale.set((1.5 * player.speed) / SPEED_MULTIPLIER)
+        (directionDistanceScale * Math.sin(directionRadians)) + (player.asset.height * 2)
+      directionIndicator.asset.scale.set((3 * player.speed) / SPEED_MULTIPLIER)
       directionIndicator.asset.anchor.set(0.5)
       directionIndicator.asset.rotation = toRadians(player.degrees)
 
