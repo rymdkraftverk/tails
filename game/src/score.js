@@ -34,15 +34,15 @@ export const transitionToScoreScene = () => {
   goal.asset.scale.set(1.5)
 
   l1.text({
-    parent: goal,
+    parent: scoreScene,
     text:   scoreToWin(gameState.players),
     style:  {
       ...TextStyle.BIG,
       fill: 'white',
     },
   }).asset.position.set(
-    -60,
-    10,
+    GOAL_X + 10,
+    GOAL_Y - 60,
   )
 
   // eslint-disable-next-line lodash-fp/no-unused-result
