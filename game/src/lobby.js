@@ -48,13 +48,11 @@ const getPlayerPosition = l1.grid({
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   gameState.currentState = CurrentState.LOBBY
-  const lobbyScene = l1.entity({
+  const lobbyScene = l1.container({
     id: Scene.LOBBY,
   })
 
   l1.text({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     100,
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
@@ -62,11 +60,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    100,
+  )
 
   l1.text({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     300,
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
@@ -74,11 +73,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    300,
+  )
 
   l1.text({
-    x:     TextAnchor.INSTRUCTION_START_X + 210,
-    y:     292,
     text:  getControllerUrl(),
     style: {
       ...TextStyle.CODE,
@@ -87,11 +87,13 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X + 210,
+    292,
+  )
+
 
   l1.text({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     520,
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
@@ -99,11 +101,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    520,
+  )
 
   l1.text({
-    x:     TextAnchor.INSTRUCTION_START_X + 400,
-    y:     514,
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -113,18 +116,24 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:          TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X + 400,
+    514,
+  )
 
   l1.text({
-    x:     GAME_WIDTH - 300,
-    y:     GAME_HEIGHT - 40,
     text:  '© Rymdkraftverk 2018',
     style: {
       ...TextStyle.CODE,
       fontSize: 18,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    GAME_WIDTH - 300,
+    GAME_HEIGHT - 40,
+  )
+
+  console.log('lobbyScene.asset', lobbyScene)
 
   const titleBackground = l1.graphics({
     parent: lobbyScene,
@@ -191,12 +200,12 @@ const drawInstructionArrow = ({
 }) => {
   const instructionArrowOne = l1.sprite({
     id:      `instruction-arrow-${id}`,
-    x,
-    y,
     texture: 'expand-arrow-one',
     parent,
   })
 
+  instructionArrowOne.asset.x = x
+  instructionArrowOne.asset.y = y
   instructionArrowOne.asset.scale.set(1)
   instructionArrowOne.asset.rotation = toRadians(angle)
 }
@@ -206,13 +215,13 @@ const createOutline = (index) => {
 
   const outline = l1.sprite({
     id:      `outline-${index}`,
-    x,
-    y,
     parent:  l1.get(Scene.LOBBY),
     texture: 'square-outline',
     zIndex:  Layer.BACKGROUND + 10,
   })
 
+  outline.asset.x = x
+  outline.asset.y = y
   outline.asset.scale.set(1.5)
   outline.asset.anchor.set(0.5)
 }
@@ -222,19 +231,20 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
 
   const square = l1.sprite({
     id:      `square-${color}`,
-    x,
-    y,
     types:   ['lobby-square'],
     parent:  l1.get(Scene.LOBBY),
     texture: `square-${color}`,
   })
+
+  square.asset.x = x
+  square.asset.y = y
   square.asset.scale.set(3)
   square.asset.anchor.set(0.5)
 
   if (newPlayer) {
     l1.addBehavior(
-      bounce(0.08),
       square,
+      bounce(0.08),
     )
     const joinSounds = [
       'join1',

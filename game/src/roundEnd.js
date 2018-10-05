@@ -21,8 +21,6 @@ export const transitionToRoundEnd = () => {
 
   const roundEnd = l1.text({
     id:     Scene.ROUND_END,
-    x:      -300,
-    y:      200,
     parent: l1.get(Scene.GAME),
     text:   `Winner is ${winner}!`,
     zIndex: Layer.FOREGROUND + 10,
@@ -32,6 +30,8 @@ export const transitionToRoundEnd = () => {
     },
   })
 
+  roundEnd.asset.x = -300
+  roundEnd.asset.y = 200
   roundEnd.asset.anchor.set(0.5)
 
   const behaviorsToAdd = [
@@ -39,10 +39,10 @@ export const transitionToRoundEnd = () => {
     pauseAndTransitionToScoreScene(),
   ]
 
-  R.pipe(
-    R.map(l1.addBehavior),
-    R.map(f => f(roundEnd)),
-  )(behaviorsToAdd)
+  R.forEach(
+    l1.addBehavior(roundEnd),
+    behaviorsToAdd,
+  )
 }
 
 const pauseAndTransitionToScoreScene = () => ({
@@ -62,7 +62,7 @@ const roundWinnerTextAnimation = () => ({
     })
   },
   onUpdate: ({ counter, entity, data }) => {
-    entity.x = data.animation(counter)
+    entity.asset.x = data.animation(counter)
   },
 })
 

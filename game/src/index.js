@@ -69,11 +69,12 @@ const roundStart = () => {
           'fadeInOut',
           'gameMusic',
         ]
-
         l1
           .getAllEntities()
           .filter(e => !entitiesToKeep.includes(e.id))
-          .forEach(l1.destroy)
+          .forEach((e) => {
+            l1.destroy(e)
+          })
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
@@ -225,7 +226,7 @@ const onControllerLeave = (id) => {
 
 const resizeGame = () => {
   const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
+  const screenHeight = window.innerHeight - 100
   l1.resize(screenWidth, screenHeight)
 }
 
@@ -235,7 +236,7 @@ l1
   .init({
     width:   GAME_WIDTH,
     height:  GAME_HEIGHT,
-    debug:   false,
+    debug:   true,
     element: document.getElementById('game'),
     pixi:    {
       options:  { antialias: true },

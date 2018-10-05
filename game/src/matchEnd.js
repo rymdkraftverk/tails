@@ -19,10 +19,8 @@ export const transitionToMatchEnd = () => {
     .filter(e => e.id !== 'background')
     .forEach(l1.destroy)
 
-  const matchEnd = l1.entity({
+  const matchEnd = l1.container({
     id: Scene.MATCH_END,
-    x:  GAME_WIDTH / 2,
-    y:  200,
   })
 
   const { players } = gameState
@@ -40,17 +38,20 @@ export const transitionToMatchEnd = () => {
         fill:     Color[color],
       },
     })
+
+    text.asset.x = GAME_WIDTH / 2
+    text.asset.y = 200
     text.asset.anchor.set(0.5)
 
     l1.addBehavior(
-      textMovement(),
       text,
+      textMovement(),
     )
 
-    const fireworkCreator = l1.entity({ parent: matchEnd })
+    const fireworkCreator = l1.container({ parent: matchEnd })
     l1.addBehavior(
-      createFireworks(matchWinners[0].color),
       fireworkCreator,
+      createFireworks(matchWinners[0].color),
     )
   } else {
     const text = l1.text({
@@ -67,8 +68,8 @@ export const transitionToMatchEnd = () => {
   }
 
   l1.addBehavior(
-    pause(),
     matchEnd,
+    pause(),
   )
 }
 
@@ -85,7 +86,7 @@ const textMovement = () => ({
   },
   onUpdate: ({ entity, data, counter }) => {
     const scale = data.sine(counter)
-    l1.scaleText(data.originalSize * scale, entity)
+    l1.scaleText(entity, data.originalSize * scale)
   },
 })
 

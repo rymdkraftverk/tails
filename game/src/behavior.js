@@ -31,26 +31,34 @@ export const createTrail = ({
 
     // Find the middle of the player entity so that
     // we can put the trails' middle point in the same spot
-    const middleX = l1.getX(entity) + (entity.width / 2)
-    const middleY = l1.getY(entity) + (entity.height / 2)
+    const middleX =
+      (entity
+        .asset
+        .toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()) + (entity.asset.width / 2)
+
+    const middleY =
+      (entity
+        .asset
+        .toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()) + (entity.asset.height / 2)
 
     const trailE = l1.sprite({
-      x:       middleX - (width / 2),
-      y:       middleY - (height / 2),
       width,
       height,
       parent:  l1.get(Scene.GAME),
       types:   ['trail'],
       texture: `circle-${entity.color}`,
     })
+
     trailE.active = false
     trailE.player = playerId
 
+    trailE.asset.x = middleX - (width / 2)
+    trailE.asset.y = middleY - (height / 2)
     trailE.asset.scale.set(speed / speedMultiplier / 2)
 
     l1.addBehavior(
-      activate(),
       trailE,
+      activate(),
     )
   },
 })
@@ -77,8 +85,8 @@ const holeMaker = (speed, speedMultiplier) => ({
   onRemove: ({ entity }) => {
     entity.preventTrail = false
     l1.addBehavior(
-      createHoleMaker(speed, speedMultiplier),
       entity,
+      createHoleMaker(speed, speedMultiplier),
     )
   },
 })
@@ -91,8 +99,8 @@ export const createHoleMaker = (speed, speedMultiplier) => ({
   ),
   onRemove: ({ entity }) => {
     l1.addBehavior(
-      holeMaker(speed, speedMultiplier),
       entity,
+      holeMaker(speed, speedMultiplier),
     )
   },
 })
@@ -118,9 +126,9 @@ const killPlayer = (entity, speedMultiplier) => {
     ...explode({
       degrees:     entity.degrees,
       scaleFactor: speedMultiplier / entity.speed,
-      radius:      entity.width,
-      x:           l1.getX(entity),
-      y:           l1.getY(entity),
+      radius:      entity.asset.width,
+      x:           entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale(),
+      y:           entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale(),
     }),
     zIndex: Layer.FOREGROUND + 1,
     parent: entity,
@@ -144,10 +152,10 @@ const killPlayer = (entity, speedMultiplier) => {
     'pivot',
   ]
 
-  R.pipe(
-    R.map(l1.removeBehavior),
-    R.forEach(f => f(entity)),
-  )(behaviorsToRemove)
+  R.forEach(
+    l1.removeBehavior(entity),
+    behaviorsToRemove,
+  )
 
   gameState.events.emit(GameEvent.PLAYER_COLLISION, entity.color)
   entity.event.emit(GameEvent.PLAYER_COLLISION)
@@ -160,11 +168,13 @@ export const collisionCheckerWalls = ({
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {
+    const x = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()
+    const y = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()
     if (
-      l1.getX(entity) < wallThickness ||
-      l1.getX(entity) > GAME_WIDTH - wallThickness - entity.width ||
-      l1.getY(entity) < wallThickness ||
-      l1.getY(entity) > GAME_HEIGHT - wallThickness - entity.height) {
+      x < wallThickness ||
+      x > GAME_WIDTH - wallThickness - entity.asset.width ||
+      y < wallThickness ||
+      y > GAME_HEIGHT - wallThickness - entity.asset.height) {
       killPlayer(entity, speedMultiplier)
       checkPlayersAlive()
     }

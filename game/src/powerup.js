@@ -14,7 +14,7 @@ export const initPowerups = ({
   gameWidth,
   gameHeight,
 }) => {
-  const powerupGenerator = l1.entity({
+  const powerupGenerator = l1.container({
     parent: l1.get(Scene.GAME),
   })
 
@@ -23,13 +23,14 @@ export const initPowerups = ({
     loop:       true,
     onComplete: () => {
       const powerup = l1.sprite({
-        x:       l1.getRandomInRange(100, gameWidth - 100),
-        y:       l1.getRandomInRange(100, gameHeight - 100),
-        width:   64 * (snakeSpeed / speedMultiplier),
-        height:  64 * (snakeSpeed / speedMultiplier),
         parent:  powerupGenerator,
         texture: 'powerup-ghost',
       })
+
+      powerup.asset.x = l1.getRandomInRange(100, gameWidth - 100)
+      powerup.asset.y = l1.getRandomInRange(100, gameHeight - 100)
+      powerup.asset.width = 64 * (snakeSpeed / speedMultiplier)
+      powerup.asset.height = 64 * (snakeSpeed / speedMultiplier)
 
       powerup.asset.scale.set((snakeSpeed / speedMultiplier))
       const collisionChecker = () => ({
@@ -49,28 +50,28 @@ export const initPowerups = ({
               'ghost',
             ]
 
-            R.pipe(
-              R.map(l1.removeBehavior),
-              R.map(f => f(collidingEntity)),
-            )(behaviorsToRemove)
+            R.forEach(
+              l1.removeBehavior(collidingEntity),
+              behaviorsToRemove,
+            )
 
             l1.addBehavior(
-              ghost({ speedMultiplier }),
               collidingEntity,
+              ghost({ speedMultiplier }),
             )
           }
         },
       })
       l1.addBehavior(
-        collisionChecker(),
         powerup,
+        collisionChecker(),
       )
     },
   })
 
   l1.addBehavior(
-    generatePowerups(),
     powerupGenerator,
+    generatePowerups(),
   )
 }
 
@@ -97,10 +98,10 @@ const ghost = ({
       'createTrail',
       'collisionCheckerTrail',
     ]
-    R.pipe(
-      R.map(l1.removeBehavior),
-      R.map(f => f(entity)),
-    )(behaviorsToRemove)
+    R.forEach(
+      l1.removeBehavior(entity),
+      behaviorsToRemove,
+    )
   },
   onUpdate: ({ counter, data, entity }) => {
     if (
@@ -109,12 +110,12 @@ const ghost = ({
     ) {
       data.expirationState = ExpirationState.SOON
       l1.removeBehavior(
-        'indicateExpiration',
         entity,
+        'indicateExpiration',
       )
       l1.addBehavior(
-        indicateExpiration(60, GHOST_POWERUP_DURATION * 0.4),
         entity,
+        indicateExpiration(60, GHOST_POWERUP_DURATION * 0.4),
       )
     } else if (
       counter > (GHOST_POWERUP_DURATION * 0.8) &&
@@ -122,12 +123,12 @@ const ghost = ({
     ) {
       data.expirationState = ExpirationState.IMMINENT
       l1.removeBehavior(
-        'indicateExpiration',
         entity,
+        'indicateExpiration',
       )
       l1.addBehavior(
-        indicateExpiration(20, GHOST_POWERUP_DURATION * 0.2),
         entity,
+        indicateExpiration(20, GHOST_POWERUP_DURATION * 0.2),
       )
     }
   },
@@ -153,9 +154,9 @@ const ghost = ({
       ]
 
       R.pipe(
-        R.map(l1.addBehavior),
-        R.map(f => f(entity)),
-      )(behaviorsToAdd)
+        l1.addBehavior(entity),
+        behaviorsToAdd,
+      )
 
       l1.sound({
         src:    './sounds/powerup-expired.wav',
@@ -164,8 +165,8 @@ const ghost = ({
       })
 
       l1.removeBehavior(
-        'ghost',
         entity,
+        'ghost',
       )
     }
   },

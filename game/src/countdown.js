@@ -13,10 +13,10 @@ const numbers = [
 ]
 
 export default () => new Promise((resolve) => {
-  const countdown = l1.entity()
+  const countdown = l1.container()
   l1.addBehavior(
-    countdownBehavior(resolve),
     countdown,
+    countdownBehavior(resolve),
   )
 })
 
@@ -38,8 +38,6 @@ const countdownBehavior = resolve => ({
 
     const text = l1.text({
       parent: entity,
-      x:      GAME_WIDTH / 2,
-      y:      GAME_HEIGHT / 2,
       text:   numbers[data.index],
       style:  {
         ...TextStyle.BIG,
@@ -48,11 +46,12 @@ const countdownBehavior = resolve => ({
         parent:   entity,
       },
     })
-
+    text.asset.x = GAME_WIDTH / 2
+    text.asset.y = GAME_HEIGHT / 2
     text.asset.anchor.set(0.5)
     l1.addBehavior(
-      bounce(0.04),
       text,
+      bounce(0.04),
     )
     data.text = text
 

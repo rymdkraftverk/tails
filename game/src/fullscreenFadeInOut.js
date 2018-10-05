@@ -13,8 +13,8 @@ export default () => new Promise((resolve) => {
     zIndex: Layer.FOREGROUND,
   })
   l1.addBehavior(
-    fadeInOut(DURATION, resolve),
     entity,
+    fadeInOut(DURATION, resolve),
   )
 })
 

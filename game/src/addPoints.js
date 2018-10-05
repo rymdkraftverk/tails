@@ -27,8 +27,6 @@ const addPoints = (color) => {
 
 const displayGainedPoint = R.curry((color, player) => {
   const scoreGainEntity = l1.text({
-    x:       player.x,
-    y:       player.y,
     text:    '+1',
     texture: `circle-${player.color}`,
     style:   {
@@ -38,9 +36,12 @@ const displayGainedPoint = R.curry((color, player) => {
     zIndex: Layer.FOREGROUND,
   })
 
+  scoreGainEntity.asset.x = player.x
+  scoreGainEntity.asset.y = player.y
+
   const move = () => ({
     onUpdate: ({ counter, entity }) => {
-      entity.y -= 1
+      entity.asset.y -= 1
       scoreGainEntity.asset.alpha = 1 - (counter / DURATION)
     },
   })
@@ -52,10 +53,14 @@ const displayGainedPoint = R.curry((color, player) => {
     },
   })
 
-  R.pipe(
-    l1.addBehavior(move()),
-    l1.addBehavior(suicide()),
-  )(scoreGainEntity)
+
+  R.forEach(
+    l1.addBehavior(scoreGainEntity),
+    [
+      move(),
+      suicide(),
+    ],
+  )
 })
 
 export default addPoints

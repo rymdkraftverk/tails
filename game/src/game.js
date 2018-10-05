@@ -44,7 +44,7 @@ export const GameColor = {
 
 export const transitionToGameScene = (maxPlayers) => {
   gameState.currentState = CurrentState.PLAYING_ROUND
-  l1.entity({
+  l1.container({
     id: Scene.GAME,
   })
 
@@ -82,12 +82,14 @@ export const transitionToGameScene = (maxPlayers) => {
           }),
         ]
 
-        R.pipe(
-          R.map(l1.addBehavior),
-          R.map(f => f(player)),
-        )(behaviorsToAdd)
+        R.forEach(
+          l1.addBehavior(player),
+          behaviorsToAdd,
+        )
 
-        const controller = l1.entity({
+        console.log('player', player)
+
+        const controller = l1.container({
           id:     `${player.id}controller`,
           parent: player,
         })
@@ -174,16 +176,16 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   const player = l1.sprite({
     id:      playerId,
-    x,
-    y,
-    width:   PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
-    height:  PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
     parent:  l1.get(Scene.GAME),
     types:   ['player'],
     texture: `circle-${color}`,
     zIndex:  Layer.FOREGROUND,
   })
 
+  player.asset.x = x
+  player.asset.y = y
+  player.asset.width = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
+  player.asset.height = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
   player.asset.visible = false
 
   player.speed = snakeSpeed
@@ -219,7 +221,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 })
 
 const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
-  const bouncer = l1.entity()
+  const bouncer = l1.container()
 
   const bouncePlayerBehavior = () => ({
     endTime: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15,
@@ -232,8 +234,8 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       player.asset.visible = true
 
       l1.addBehavior(
-        bounce(0.05),
         player,
+        bounce(0.05),
       )
 
       data.index += 1
@@ -243,14 +245,17 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 
       const directionIndicator = l1.sprite({
         id:      `${player.playerId}:direction`,
-        x:       (directionDistanceScale * Math.cos(directionRadians)) + (player.width / 2),
-        y:       (directionDistanceScale * Math.sin(directionRadians)) + (player.height / 2),
         parent:  player,
         texture: `arrow-${player.color}`,
       })
 
       directionIndicator.spriteId = player.spriteId
       directionIndicator.color = player.color
+
+      directionIndicator.asset.x =
+        (directionDistanceScale * Math.cos(directionRadians)) + (player.width / 2)
+      directionIndicator.asset.y =
+        (directionDistanceScale * Math.sin(directionRadians)) + (player.height / 2)
       directionIndicator.asset.scale.set((1.5 * player.speed) / SPEED_MULTIPLIER)
       directionIndicator.asset.anchor.set(0.5)
       directionIndicator.asset.rotation = toRadians(player.degrees)
@@ -263,8 +268,8 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   })
 
   l1.addBehavior(
-    bouncePlayerBehavior(),
     bouncer,
+    bouncePlayerBehavior(),
   )
 })
 
@@ -274,8 +279,8 @@ const move = () => ({
   id:       'move',
   onUpdate: ({ entity }) => {
     const radians = toRadians(entity.degrees)
-    entity.x += Math.cos(radians) * entity.speed
-    entity.y += Math.sin(radians) * entity.speed
+    entity.asset.x += Math.cos(radians) * entity.speed
+    entity.asset.y += Math.sin(radians) * entity.speed
   },
 })
 

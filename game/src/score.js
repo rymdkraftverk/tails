@@ -19,30 +19,31 @@ const GOAL_Y = 70
 const ANIMATION_DURATION = 60
 
 export const transitionToScoreScene = () => {
-  const scoreScene = l1.entity({
+  const scoreScene = l1.container({
     id: Scene.SCORE,
   })
 
   const goal = l1.sprite({
-    x:       GOAL_X,
-    y:       GOAL_Y,
     parent:  scoreScene,
     texture: 'goal-flag',
     zIndex:  Layer.BACKGROUND,
   })
 
+  goal.asset.x = GOAL_X
+  goal.asset.y = GOAL_Y
   goal.asset.scale.set(1.5)
 
   l1.text({
-    y:      -60,
-    x:      10,
     parent: goal,
     text:   scoreToWin(gameState.players),
     style:  {
       ...TextStyle.BIG,
       fill: 'white',
     },
-  })
+  }).asset.position.set(
+    -60,
+    10,
+  )
 
   // eslint-disable-next-line lodash-fp/no-unused-result
   _
@@ -112,32 +113,36 @@ const createPlayer = (index) => {
   if (player) {
     l1.text({
       parent: head,
-      x:      0,
-      y:      6,
       text:   player.score,
       style:  {
         ...TextStyle.SMALL,
         fill: 'white',
       },
       zIndex: 1,
-    })
+    }).asset.position.set(
+      0,
+      6,
+    )
   }
 
   const tail = l1.graphics({
-    x:      0,
-    y,
     parent: l1.get(Scene.SCORE),
     zIndex: -10,
   })
 
+  tail.asset.position.set(
+    0,
+    y,
+  )
+
   l1.addBehavior(
+    head,
     animate({
       tail,
-      fromX: l1.getX(head),
+      fromX: head.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale(),
       toX:   currentX,
       color: (player && player.color) || 'none',
     }),
-    head,
   )
 }
 
@@ -145,11 +150,11 @@ const createHead = ({
   x, y, texture,
 }) => {
   const head = l1.sprite({
-    x,
-    y,
     parent: l1.get(Scene.SCORE),
     texture,
   })
+  head.asset.x = x
+  head.asset.y = y
   return head
 }
 
@@ -159,15 +164,16 @@ const animate = ({
   endTime:  ANIMATION_DURATION,
   onUpdate: ({ entity }) => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
-    entity.x = l1.getX(entity) + diffX
+    entity.asset.x += diffX
+    const x = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()
     const { asset: graphics } = tail
     graphics.clear()
     graphics
       // Pixi.Graphics requires color code to start with 0x instead of #
       .beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
       .moveTo(0, 0)
-      .lineTo(l1.getX(entity) + (entity.asset.width / 2), 0)
-      .lineTo(l1.getX(entity) + (entity.asset.width / 2), 0 + entity.asset.height)
+      .lineTo(x + (entity.asset.width / 2), 0)
+      .lineTo(x + (entity.asset.width / 2), 0 + entity.asset.height)
       .lineTo(0, 0 + entity.asset.height)
       .lineTo(0, 0)
       .endFill()
