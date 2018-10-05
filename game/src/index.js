@@ -72,9 +72,8 @@ const roundStart = () => {
         l1
           .getAllEntities()
           .filter(e => !entitiesToKeep.includes(e.id))
-          .forEach((e) => {
-            l1.destroy(e)
-          })
+          .forEach(l1.destroy)
+
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []

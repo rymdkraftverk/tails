@@ -87,8 +87,6 @@ export const transitionToGameScene = (maxPlayers) => {
           behaviorsToAdd,
         )
 
-        console.log('player', player)
-
         const controller = l1.container({
           id:     `${player.id}controller`,
           parent: player,

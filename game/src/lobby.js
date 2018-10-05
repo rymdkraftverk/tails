@@ -133,8 +133,6 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     GAME_HEIGHT - 40,
   )
 
-  console.log('lobbyScene.asset', lobbyScene)
-
   const titleBackground = l1.graphics({
     parent: lobbyScene,
     zIndex: Layer.BACKGROUND + 10,
