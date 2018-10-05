@@ -135,8 +135,8 @@ const ghost = ({
   onComplete: ({ entity }) => {
     if (!entity.killed) {
       l1.removeBehavior(
-        'indicateExpiration',
         entity,
+        'indicateExpiration',
       )
 
       // Reset player
@@ -153,7 +153,7 @@ const ghost = ({
         }),
       ]
 
-      R.pipe(
+      R.forEach(
         l1.addBehavior(entity),
         behaviorsToAdd,
       )
