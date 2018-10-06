@@ -105,12 +105,12 @@ export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
   endTime:    2,
   loop:       true,
   onComplete: ({ entity }) => {
-    const closestEntity = nearestNeighbour(
-      gameState.kdTree,
-      entity,
-      t => l1.isColliding(entity, t),
-      t => t.active || t.player !== playerId,
-    )
+    const options = {
+      earlyReturn: t => l1.isColliding(entity, t),
+      filter:      t => t.active || t.player !== playerId,
+    }
+
+    const closestEntity = nearestNeighbour(options, gameState.kdTree, entity)
 
     if (closestEntity && l1.isColliding(closestEntity, entity)) {
       killPlayer(entity, speedMultiplier)

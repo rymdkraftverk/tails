@@ -7,12 +7,7 @@ const calculateDistance = (e1, e2) =>
     .map(distance => distance * distance)
     .reduce(add, 0))
 
-export const nearestNeighbour = (
-  tree,
-  entity,
-  earlyReturn = always(false),
-  filter = always(true),
-) => {
+export const nearestNeighbour = (options, tree, entity) => {
   // empty branch
   if (isNil(tree)) {
     return null
@@ -20,6 +15,8 @@ export const nearestNeighbour = (
 
   // leaf
   if (tree.value) {
+    const filter = options.filter || always(true)
+
     return filter(tree.value)
       ? tree.value
       : null
@@ -33,12 +30,13 @@ export const nearestNeighbour = (
   const limit = calculateLimit(tree.borders, tree.dimension)
   const surpassesLimit = entity[tree.dimension] > limit
 
-  const candidate = nearestNeighbour(tree[surpassesLimit], entity, earlyReturn, filter)
+  const candidate = nearestNeighbour(options, tree[surpassesLimit], entity)
 
   if (isNil(candidate)) {
-    return nearestNeighbour(tree[!surpassesLimit], entity, earlyReturn, filter)
+    return nearestNeighbour(options, tree[!surpassesLimit], entity)
   }
 
+  const earlyReturn = options.earlyReturn || always(false)
   if (earlyReturn(candidate)) {
     return candidate
   }
@@ -51,7 +49,7 @@ export const nearestNeighbour = (
     return candidate
   }
 
-  const otherCandidate = nearestNeighbour(tree[!surpassesLimit], entity, earlyReturn, filter)
+  const otherCandidate = nearestNeighbour(options, tree[!surpassesLimit], entity)
 
   if (otherCandidate === null) {
     return candidate
