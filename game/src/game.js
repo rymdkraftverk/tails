@@ -319,4 +319,8 @@ const createWalls = () => {
     .lineTo(GAME_WIDTH, GAME_HEIGHT)
     .lineTo(0, GAME_HEIGHT)
     .lineTo(0, 0)
+
+  /* cacheAsBitmap will crash if the empty filters array is not removed first */
+  walls.asset.filters = null
+  walls.asset.cacheAsBitmap = true
 }
