@@ -1,5 +1,5 @@
 import { GAME_WIDTH, GAME_HEIGHT } from '../rendering'
-import { dimensions, calculateLimit } from './common'
+import { dimensions, calculateLimit, isNode } from './common'
 
 const getNextDimension = (dim) => {
   const currentIndex = dimensions.indexOf(dim)
@@ -55,7 +55,7 @@ export const addEntityToTree = (tree, entity) => {
   }
 
   // check if node
-  if (tree.true || tree.false) {
+  if (isNode(tree)) {
     const surpassesLimit = entity[tree.dimension] > calculateLimit(tree.borders, tree.dimension)
     const subTree = tree[surpassesLimit] || initEmptyTree(
       createChildBorders(tree.borders, tree.dimension, surpassesLimit),

@@ -1,6 +1,6 @@
 import R from 'ramda'
-import { addEntityToTree, initEmptyTree } from './add-entity-to-tree'
-import { nearestNeighbour } from './nearest-neighbour'
+import { addEntityToTree, initEmptyTree } from '../src/kd-tree/add-entity-to-tree'
+import { nearestNeighbour } from '../src/kd-tree/nearest-neighbour'
 
 export const performanceTest = (entityCount) => {
   const entities = randomElements(entityCount)
@@ -31,10 +31,11 @@ const randomElements = entityCount => R
   }))
 
 const testKdTree = (tree, entitiesToFind) => {
+  // const updatedTree = tree
   const updatedTree = addEntityToTree(tree, randomElements(1)[0])
 
   return entitiesToFind
-    .map(e => [e, nearestNeighbour(updatedTree, e, isColliding(e))])
+    .map(e => [e, nearestNeighbour({ earlyReturn: isColliding(e) }, updatedTree, e)])
     .filter(([e, neighbour]) => isColliding(e, neighbour))
     .map(([e]) => e)
 }
@@ -59,5 +60,5 @@ const constructTree = entities => entities
 
 const isColliding = R.curry((e1, e2) => {
   const distance = Math.sqrt(((e1.x - e2.x) ** 2) + ((e1.y - e2.y) ** 2))
-  return distance < 4.43 // width & height of snake bodies at 10 playesr
+  return distance < 4.43 // width & height of snake bodies at 10 players
 })

@@ -1,21 +1,19 @@
-import { add, always, isNil } from 'ramda'
 import { dimensions, calculateLimit } from './common'
 
 const calculateDistance = (e1, e2) =>
   Math.sqrt(dimensions
-    .map(dim => e1[dim] - e2[dim])
-    .map(distance => distance * distance)
-    .reduce(add, 0))
+    .map(dim => Math.pow(e1[dim] - e2[dim], 2))
+    .reduce((a,b) => a + b, 0))
 
 export const nearestNeighbour = (options, tree, entity) => {
   // empty branch
-  if (isNil(tree)) {
+  if (!tree) {
     return null
   }
 
   // leaf
   if (tree.value) {
-    const filter = options.filter || always(true)
+    const filter = options.filter || (() => true)
 
     return filter(tree.value)
       ? tree.value
@@ -32,11 +30,11 @@ export const nearestNeighbour = (options, tree, entity) => {
 
   const candidate = nearestNeighbour(options, tree[surpassesLimit], entity)
 
-  if (isNil(candidate)) {
+  if (!candidate) {
     return nearestNeighbour(options, tree[!surpassesLimit], entity)
   }
 
-  const earlyReturn = options.earlyReturn || always(false)
+  const earlyReturn = options.earlyReturn || R.always(false)
   if (earlyReturn(candidate)) {
     return candidate
   }
