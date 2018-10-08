@@ -48,6 +48,9 @@ export const createTrail = ({
     trailE.asset.x = middle(entity, 'x', 'width') - (trailE.asset.width / 2)
     trailE.asset.y = middle(entity, 'y', 'height') - (trailE.asset.height / 2)
 
+    trailE.asset.filters = null
+    trailE.asset.cacheAsBitmap = true
+
     l1.addBehavior(
       trailE,
       activate(),
