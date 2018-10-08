@@ -182,8 +182,6 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   player.asset.x = x
   player.asset.y = y
-  player.asset.width = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
-  player.asset.height = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
   player.asset.visible = false
 
   player.speed = snakeSpeed
@@ -212,8 +210,16 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   player.asset.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
+  const playerSize = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
+
+  player.asset.hitArea = new l1.PIXI.Rectangle(
+    0,
+    0,
+    playerSize,
+    playerSize,
+  )
   // Offset the sprite so that the entity hitbox is in the middle
-  player.asset.anchor.set((1 - (player.width / player.asset.width)) / 2)
+  player.asset.anchor.set((1 - (playerSize / player.asset.width)) / 2)
 
   return player
 })
