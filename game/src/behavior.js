@@ -14,6 +14,10 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+const middle = (entity, dim, prop) =>
+  (entity.asset.toGlobal(new l1.PIXI.Point(0, 0))[dim] / l1.getScreenScale()) +
+  (entity.asset.hitArea[prop] / 2)
+
 export const createTrail = ({
   playerId, speed, speedMultiplier,
 }) => ({
@@ -28,20 +32,6 @@ export const createTrail = ({
       return
     }
 
-    // Find the middle of the player entity so that
-    // we can put the trails' middle point in the same spot
-    const middleX =
-      (entity
-        .asset
-        .toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()) +
-          (entity.asset.hitArea.width / 2)
-
-    const middleY =
-      (entity
-        .asset
-        .toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()) +
-          (entity.asset.hitArea.height / 2)
-
     const trailE = l1.sprite({
       parent:  data.parent,
       types:   ['trail'],
@@ -52,8 +42,11 @@ export const createTrail = ({
     trailE.player = playerId
 
     trailE.asset.scale.set(speed / speedMultiplier / 2)
-    trailE.asset.x = middleX - (trailE.asset.width / 2)
-    trailE.asset.y = middleY - (trailE.asset.height / 2)
+
+    // Find the middle of the player entity so that
+    // we can put the trails' middle point in the same spot
+    trailE.asset.x = middle(entity, 'x', 'width') - (trailE.asset.width / 2)
+    trailE.asset.y = middle(entity, 'y', 'height') - (trailE.asset.height / 2)
 
     l1.addBehavior(
       trailE,
