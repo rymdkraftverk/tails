@@ -26,7 +26,7 @@ const { warn } = console
 const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
 
-const WALL_THICKNESS = 6
+const WALL_THICKNESS = 3
 
 const PLAYER_HITBOX_SIZE = 14
 
@@ -312,13 +312,16 @@ const createWalls = () => {
   const walls = l1.graphics({
     parent: l1.get(Scene.GAME),
   })
+
+  const halfWallThickness = WALL_THICKNESS / 2
+
   walls.asset
     .lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
-    .moveTo(0, 0)
-    .lineTo(GAME_WIDTH, 0)
-    .lineTo(GAME_WIDTH, GAME_HEIGHT)
-    .lineTo(0, GAME_HEIGHT)
-    .lineTo(0, 0)
+    .moveTo(halfWallThickness, halfWallThickness)
+    .lineTo(GAME_WIDTH - halfWallThickness, halfWallThickness)
+    .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT - halfWallThickness)
+    .lineTo(halfWallThickness, GAME_HEIGHT - halfWallThickness)
+    .lineTo(halfWallThickness, halfWallThickness)
 
   /* cacheAsBitmap will crash if the empty filters array is not removed first */
   walls.asset.filters = null
