@@ -4,9 +4,9 @@ import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import { transitionToRoundEnd } from './roundEnd'
 import gameState, { CurrentState } from './gameState'
-import { GameEvent } from './game'
 import Layer from './util/layer'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
+import GameEvent from './util/gameEvent'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
