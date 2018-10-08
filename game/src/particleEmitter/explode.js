@@ -38,8 +38,8 @@ export default ({
       y,
     },
     lifetime: {
-      min: 0.4 * (1 / scaleFactor),
-      max: 1.6 * (1 / scaleFactor),
+      min: 0.2 * (1 / scaleFactor),
+      max: 0.8 * (1 / scaleFactor),
     },
     spawnCircle: {
       x: radius / 2,

@@ -124,10 +124,10 @@ const killPlayer = (entity, speedMultiplier) => {
   l1.particles({
     ...explode({
       degrees:     entity.degrees,
-      scaleFactor: speedMultiplier / entity.speed,
-      radius:      entity.asset.width,
-      x:           entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale(),
-      y:           entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale(),
+      scaleFactor: (speedMultiplier / entity.speed) / 4,
+      radius:      entity.asset.width * 2,
+      x:           0,
+      y:           0,
     }),
     zIndex: Layer.FOREGROUND + 1,
     parent: entity,
