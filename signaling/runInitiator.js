@@ -35,18 +35,12 @@ const onInternalData = ({ event }) => {
   )
 }
 
-const onIceCandidate = ({
+const sendOffer = ({
   channelNames,
   receiverId,
   rtc,
   send,
-}) => ({ candidate }) => {
-  if (candidate) {
-    log('[Ice Candidate]')
-    return
-  }
-
-  log('[Sending offer] Last candidate retrieved')
+}) => () => {
   send(
     Event.OFFER,
     {
@@ -56,6 +50,18 @@ const onIceCandidate = ({
     },
   )
 }
+
+const onIceCandidate = allReceived => R.ifElse(
+  R.pipe(
+    R.prop('candidate'),
+    R.isNil,
+  ),
+  () => log('[Ice Candidate]'),
+  () => {
+    log('[Ice Candidate] Last retrieved')
+    allReceived()
+  },
+)
 
 const createOffer = rtc => () => rtc
   .createOffer()
@@ -130,12 +136,14 @@ const init = ({
     externalChannelConfigs,
   )
 
-  rtc.onicecandidate = onIceCandidate({
+  const thunkedSendOffer = sendOffer({
     channelNames: R.pluck('name', channelConfigs),
     receiverId,
     rtc,
     send:         wsSend(ws),
   })
+
+  rtc.onicecandidate = onIceCandidate(thunkedSendOffer)
 
   ws.onopen = createOffer(rtc)
   ws.onmessage = R.pipe(
