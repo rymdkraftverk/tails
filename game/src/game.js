@@ -14,6 +14,7 @@ import addPoints from './addPoints'
 import { initPowerups } from './powerup'
 import { Track, playTrack } from './music'
 import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
+import GameEvent from './util/gameEvent'
 
 window.debug = {
   ...window.debug,
@@ -26,8 +27,6 @@ const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
 
 const WALL_THICKNESS = 6
-
-export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
 const PLAYER_HITBOX_SIZE = 14
 
