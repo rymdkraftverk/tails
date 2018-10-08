@@ -1,7 +1,7 @@
 import l1 from 'l1'
 import R from 'ramda'
 import Scene from './Scene'
-import { createTrail, collisionCheckerTrail, createHoleMaker } from './behavior'
+import { createTrail, collisionCheckerTrail } from './behavior'
 import { createSine } from './magic'
 
 const GHOST_POWERUP_DURATION = 380
@@ -93,8 +93,6 @@ const ghost = ({
     entity.asset.alpha = 0.4
 
     const behaviorsToRemove = [
-      'createHoleMaker',
-      'holeMaker',
       'createTrail',
       'collisionCheckerTrail',
     ]
@@ -145,7 +143,6 @@ const ghost = ({
 
       const behaviorsToAdd = [
         collisionCheckerTrail(entity.id, speedMultiplier),
-        createHoleMaker(entity.speed, speedMultiplier),
         createTrail({
           playerId: entity.id,
           speed:    entity.speed,
@@ -157,6 +154,8 @@ const ghost = ({
         l1.addBehavior(entity),
         behaviorsToAdd,
       )
+
+      l1.resetBehavior(entity, 'createHoleMaker')
 
       l1.sound({
         src:    './sounds/powerup-expired.wav',
