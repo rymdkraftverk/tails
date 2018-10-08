@@ -4,7 +4,6 @@ import { nearestNeighbour } from '../src/kd-tree/nearest-neighbour'
 
 export const performanceTest = (entityCount) => {
   const entities = randomElements(entityCount)
-  const entitiesToFind = randomElements(entityCount / 10)
 
   const constructStart = performance.now()
   const tree = constructTree(entities)
@@ -12,15 +11,19 @@ export const performanceTest = (entityCount) => {
 
   console.log(`constructing KD-tree with ${entityCount} entities took ${constructEnd - constructStart} ms`)
 
+  const testIterations = 5000
+  const entitiesToFind = randomElements(testIterations)
+  const entitiesToAdd = randomElements(testIterations)
+
   const treeStart = performance.now()
-  testKdTree(tree, entitiesToFind)
+  entitiesToFind.forEach(e => testKdTree(tree, e))
   const treeEnd = performance.now()
 
   const listStart = performance.now()
-  testList(entities, entitiesToFind)
+  entitiesToFind.forEach(e => testList(entities, e))
   const listEnd = performance.now()
 
-  console.log(`checking if ${entitiesToFind.length} entities collide with any of ${entityCount} entities took ${treeEnd - treeStart} ms using KD-Tree and ${listEnd - listStart} ms using a list`)
+  console.log(`adding one element and checking if it collides with any of ${entityCount} entities took on average ${(treeEnd - treeStart) / testIterations} ms using KD-Tree and ${(listEnd - listStart) / testIterations} ms using a list`)
 }
 
 const randomElements = entityCount => R
@@ -30,21 +33,22 @@ const randomElements = entityCount => R
     y: 720 * Math.random(),
   }))
 
-const testKdTree = (tree, entitiesToFind) => {
-  // const updatedTree = tree
-  const updatedTree = addEntityToTree(tree, randomElements(1)[0])
+const testKdTree = (tree, entity) => {
+  const updatedTree = addEntityToTree(tree, entity)
 
-  return entitiesToFind
-    .map(e => [e, nearestNeighbour({ earlyReturn: isColliding(e) }, updatedTree, e)])
-    .filter(([e, neighbour]) => isColliding(e, neighbour))
-    .map(([e]) => e)
+  const options = {
+    earlyReturn: isColliding(entity),
+    filter: e => e !== entity,
+  }
+  return nearestNeighbour(options, updatedTree, entity)
 }
 
-const testList = (entities, entitiesToFind) => {
-  const updatedEntities = entities.concat(randomElements(1))
+const testList = (entities, entity) => {
+  const updatedEntities = entities.concat(entity)
 
-  return entitiesToFind
-    .filter(e1 => updatedEntities.some(e2 => isColliding(e1, e2)))
+  return updatedEntities
+    .filter(e => e !== entity)
+    .some(e2 => isColliding(entity, e2))
 }
 const constructTree = entities => entities
   .reduce(addEntityToTree, initEmptyTree({
