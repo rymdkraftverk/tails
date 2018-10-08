@@ -19,10 +19,13 @@ const HOLE_LENGTH_MIN_TIME = 10
 export const createTrail = ({
   playerId, speed, speedMultiplier,
 }) => ({
-  id:         'createTrail',
-  endTime:    2,
-  loop:       true,
-  onComplete: ({ entity }) => {
+  id:      'createTrail',
+  endTime: 2,
+  loop:    true,
+  onInit:  ({ data }) => {
+    data.parent = l1.container({ parent: l1.get(Scene.GAME) })
+  },
+  onComplete: ({ entity, data }) => {
     if (entity.preventTrail) {
       return
     }
@@ -44,7 +47,7 @@ export const createTrail = ({
     const trailE = l1.sprite({
       width,
       height,
-      parent:  l1.get(Scene.GAME),
+      parent:  data.parent,
       types:   ['trail'],
       texture: `circle-${entity.color}`,
     })
