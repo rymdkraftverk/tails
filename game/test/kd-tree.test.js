@@ -67,3 +67,64 @@ describe.each`
       .toEqual(expected)
   })
 })
+
+/*
+ * Explanation of test 3
+ *
+ * x = (6, 10)
+ * a = (0, 0)
+ * b = (10, 10)
+ * c = (4, 10)
+ * ____________________
+ * |        c|x       b|
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * +---------+---------+
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * |a________|_________|
+ *
+ * x is closer to c than b. But x and b
+ * are in the same quadrant
+ *
+ * Thus the algorithm will find b first and then early return
+ */
+
+/*
+ * Explanation of test 4
+ *
+ * x = (6, 10)
+ * a = (0, 0)
+ * b = (10, 10)
+ * c = (4, 10)
+ * d = (10, 0)
+ * ____________________
+ * |        c|x       b|
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * +---------+---------+
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * |         |         |
+ * |a________|________d|
+ *
+ * x is closest to b, but that is ignored by the filter option.
+ * Ignoring b, c will be the closest. But when the algorithm starts backing
+ * up the tree it will hit d first because of the order that the dimensions
+ * are being cycled through.
+ *
+ * Since the early return predicate will accept anything we will never check c.
+ * d will be what's returned in the end.
+ *
+ * This is dependent on an implementation detail on the order of the
+ * dimensions in the tree. That doesn't really feel good from a unit test
+ * perspective, but I couldn't come up with a good way of testing the early
+ * return functionality as the caller, by definition, doesn't care what's
+ * returned as long as it fulfills the early return predicate.
+ */

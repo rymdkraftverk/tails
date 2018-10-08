@@ -1,9 +1,10 @@
-import { dimensions, calculateLimit } from './common'
+import { calculateMiddle } from './common'
+import DIMENSIONS from './dimensions'
 
 const calculateDistance = (e1, e2) =>
-  Math.sqrt(dimensions
-    .map(dim => Math.pow(e1[dim] - e2[dim], 2))
-    .reduce((a,b) => a + b, 0))
+  Math.sqrt(DIMENSIONS
+    .map(dim => (e1[dim] - e2[dim], 2) ** 2)
+    .reduce((a, b) => a + b, 0))
 
 export const nearestNeighbour = (options, tree, entity) => {
   // empty branch
@@ -25,16 +26,16 @@ export const nearestNeighbour = (options, tree, entity) => {
     return null
   }
 
-  const limit = calculateLimit(tree.borders, tree.dimension)
-  const surpassesLimit = entity[tree.dimension] > limit
+  const limit = calculateMiddle(tree.borders, tree.dimension)
+  const surpassesMiddle = entity[tree.dimension] > limit
 
-  const candidate = nearestNeighbour(options, tree[surpassesLimit], entity)
+  const candidate = nearestNeighbour(options, tree[surpassesMiddle], entity)
 
   if (!candidate) {
-    return nearestNeighbour(options, tree[!surpassesLimit], entity)
+    return nearestNeighbour(options, tree[!surpassesMiddle], entity)
   }
 
-  const earlyReturn = options.earlyReturn || R.always(false)
+  const earlyReturn = options.earlyReturn || (() => false)
   if (earlyReturn(candidate)) {
     return candidate
   }
@@ -47,7 +48,7 @@ export const nearestNeighbour = (options, tree, entity) => {
     return candidate
   }
 
-  const otherCandidate = nearestNeighbour(options, tree[!surpassesLimit], entity)
+  const otherCandidate = nearestNeighbour(options, tree[!surpassesMiddle], entity)
 
   if (otherCandidate === null) {
     return candidate

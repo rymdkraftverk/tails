@@ -1,8 +1,6 @@
 import R from 'ramda'
 
-const dimensions = ['x', 'y']
-
-const calculateLimit = (borders, dimension) => {
+const calculateMiddle = (borders, dimension) => {
   const { min, max } = borders[dimension]
   return (min + max) / 2
 }
@@ -14,7 +12,6 @@ const isNode = tree =>
   )(tree.true || tree.false)
 
 module.exports = {
-  dimensions,
-  calculateLimit,
+  calculateMiddle,
   isNode,
 }

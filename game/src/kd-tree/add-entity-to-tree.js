@@ -1,20 +1,21 @@
 import { GAME_WIDTH, GAME_HEIGHT } from '../rendering'
-import { dimensions, calculateLimit, isNode } from './common'
+import { calculateMiddle, isNode } from './common'
+import DIMENSIONS from './dimensions'
 
 const getNextDimension = (dim) => {
-  const currentIndex = dimensions.indexOf(dim)
-  const nextIndex = (currentIndex + 1) % dimensions.length
-  return dimensions[nextIndex]
+  const currentIndex = DIMENSIONS.indexOf(dim)
+  const nextIndex = (currentIndex + 1) % DIMENSIONS.length
+  return DIMENSIONS[nextIndex]
 }
 
-const createChildBorders = (borders, dimension, greaterThanLimit) => {
-  const limit = calculateLimit(borders, dimension)
+const createChildBorders = (borders, dimension, greaterThanMiddle) => {
+  const limit = calculateMiddle(borders, dimension)
 
-  const newMin = greaterThanLimit
+  const newMin = greaterThanMiddle
     ? limit
     : borders[dimension].min
 
-  const newMax = greaterThanLimit
+  const newMax = greaterThanMiddle
     ? borders[dimension].max
     : limit
 
@@ -31,16 +32,16 @@ const splitLeafIntoNode = ({ dimension, borders, value }) => {
   const entity = value
   const nextDimension = getNextDimension(dimension)
 
-  const limit = calculateLimit(borders, dimension)
+  const limit = calculateMiddle(borders, dimension)
 
-  const greaterThanLimit = entity[dimension] > limit
+  const greaterThanMiddle = entity[dimension] > limit
 
-  const childBorders = createChildBorders(borders, dimension, greaterThanLimit)
+  const childBorders = createChildBorders(borders, dimension, greaterThanMiddle)
 
   return {
     dimension,
     borders,
-    [greaterThanLimit]: addEntityToTree(
+    [greaterThanMiddle]: addEntityToTree(
       { dimension: nextDimension, borders: childBorders },
       entity,
     ),
@@ -56,15 +57,15 @@ export const addEntityToTree = (tree, entity) => {
 
   // check if node
   if (isNode(tree)) {
-    const surpassesLimit = entity[tree.dimension] > calculateLimit(tree.borders, tree.dimension)
-    const subTree = tree[surpassesLimit] || initEmptyTree(
-      createChildBorders(tree.borders, tree.dimension, surpassesLimit),
+    const surpassesMiddle = entity[tree.dimension] > calculateMiddle(tree.borders, tree.dimension)
+    const subTree = tree[surpassesMiddle] || initEmptyTree(
+      createChildBorders(tree.borders, tree.dimension, surpassesMiddle),
       getNextDimension(tree.dimension),
     )
 
     return {
       ...tree,
-      [surpassesLimit]: addEntityToTree(subTree, entity),
+      [surpassesMiddle]: addEntityToTree(subTree, entity),
     }
   }
 
@@ -76,9 +77,9 @@ export const addEntityToTree = (tree, entity) => {
   }
 }
 
-export const initEmptyTree = (borders, dimension = dimensions[0]) => ({
-  dimension,
-  borders: borders || {
+export const initEmptyTree = (borders, dimension) => ({
+  dimension: dimension || DIMENSIONS[0],
+  borders:   borders || {
     x: {
       min: 0,
       max: GAME_WIDTH,
