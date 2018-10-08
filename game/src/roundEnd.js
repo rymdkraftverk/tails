@@ -1,4 +1,5 @@
-import { Entity, Timer, Text } from 'l1'
+import l1 from 'l1'
+import R from 'ramda'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { calculatePlayerScores, applyPlayerScores } from './game'
@@ -18,54 +19,50 @@ export const transitionToRoundEnd = () => {
 
   const { winner } = gameState.lastRoundResult
 
-  const roundEnd = Entity.addChild(
-    Entity.get(Scene.GAME),
-    {
-      id: Scene.ROUND_END,
-      x:  -300,
-      y:  200,
+  const roundEnd = l1.text({
+    id:     Scene.ROUND_END,
+    parent: l1.get(Scene.GAME),
+    text:   `Winner is ${winner}!`,
+    zIndex: Layer.FOREGROUND + 10,
+    style:  {
+      ...TextStyle.BIG,
+      fill: Color[winner],
     },
-  )
-  const text = Text.show(
-    roundEnd,
-    {
-      text:   `Winner is ${winner}!`,
-      zIndex: Layer.FOREGROUND + 10,
-      style:  {
-        ...TextStyle.BIG,
-        fill: Color[winner],
-      },
-    },
-  )
+  })
 
-  text.anchor.set(0.5)
-  roundEnd.behaviors.winnerTextAnimation = roundWinnerTextAnimation()
+  roundEnd.asset.x = -300
+  roundEnd.asset.y = 200
+  roundEnd.asset.anchor.set(0.5)
 
-  roundEnd.behaviors.pause = pauseAndTransitionToScoreScene()
+  const behaviorsToAdd = [
+    roundWinnerTextAnimation(),
+    pauseAndTransitionToScoreScene(),
+  ]
+
+  R.forEach(
+    l1.addBehavior(roundEnd),
+    behaviorsToAdd,
+  )
 }
 
 const pauseAndTransitionToScoreScene = () => ({
-  timer: Timer.create({ duration: TIME_UNTIL_ROUND_END_RESTARTS }),
-  run:   ({ timer }) => {
-    if (Timer.run(timer)) {
-      Entity.destroy(Scene.GAME)
-      transitionToScoreScene()
-    }
+  endTime:    TIME_UNTIL_ROUND_END_RESTARTS,
+  onComplete: () => {
+    l1.destroy(Scene.GAME)
+    transitionToScoreScene()
   },
 })
 
 const roundWinnerTextAnimation = () => ({
-  tick: 0,
-  init: (b, e) => {
-    b.animation = createEaseInAndOut({
-      start:    -(e.asset.width / 2),
-      end:      GAME_WIDTH + (e.asset.width / 2),
+  onInit: ({ entity, data }) => {
+    data.animation = createEaseInAndOut({
+      start:    -(entity.asset.width / 2),
+      end:      GAME_WIDTH + (entity.asset.width / 2),
       duration: 120,
     })
   },
-  run: (b, e) => {
-    e.x = b.animation(b.tick)
-    b.tick += 1
+  onUpdate: ({ counter, entity, data }) => {
+    entity.asset.x = data.animation(counter)
   },
 })
 

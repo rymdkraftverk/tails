@@ -1,14 +1,13 @@
-import { Timer, Entity } from 'l1'
+import l1 from 'l1'
 
-export default time => new Promise((res) => {
-  const delay = Entity.addChild(Entity.getRoot())
-  const timer = Timer.create({ duration: time })
-  delay.behaviors.delay = {
-    run: () => {
-      if (Timer.run(timer)) {
-        res()
-        Entity.destroy(delay)
-      }
+export default endTime => new Promise((res) => {
+  const delay = l1.container()
+  const delayBehavior = () => ({
+    endTime,
+    onComplete: () => {
+      res()
+      l1.destroy(delay)
     },
-  }
+  })
+  l1.addBehavior(delay, delayBehavior())
 })

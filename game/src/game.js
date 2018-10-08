@@ -1,6 +1,6 @@
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { Entity, Util, Timer, Sprite, Graphics } from 'l1'
+import l1 from 'l1'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
@@ -12,8 +12,9 @@ import bounce from './bounce'
 import Scene from './Scene'
 import addPoints from './addPoints'
 import { initPowerups } from './powerup'
-import { createTrail, holeGenerator, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 import { Track, playTrack } from './music'
+import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
+import GameEvent from './util/gameEvent'
 
 window.debug = {
   ...window.debug,
@@ -26,8 +27,6 @@ const TURN_RADIUS = 3
 const SPEED_MULTIPLIER = 3.6
 
 const WALL_THICKNESS = 6
-
-export const GameEvent = { PLAYER_COLLISION: 'player.collision' }
 
 const PLAYER_HITBOX_SIZE = 14
 
@@ -44,12 +43,9 @@ export const GameColor = {
 
 export const transitionToGameScene = (maxPlayers) => {
   gameState.currentState = CurrentState.PLAYING_ROUND
-  Entity.addChild(
-    Entity.getRoot(),
-    {
-      id: Scene.GAME,
-    },
-  )
+  l1.container({
+    id: Scene.GAME,
+  })
 
   const playerCountFactor = R.compose(
     Math.sqrt,
@@ -57,7 +53,7 @@ export const transitionToGameScene = (maxPlayers) => {
     R.values,
   )(gameState.players)
 
-  const playerEntities = R.compose(
+  const players = R.compose(
     R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
     _.shuffle,
     Object.values,
@@ -65,43 +61,48 @@ export const transitionToGameScene = (maxPlayers) => {
 
   createWalls()
 
-  bouncePlayers(playerEntities)
+  bouncePlayers(players, playerCountFactor)
     .then(countdown)
     .then(() => {
-      playerEntities.forEach((player) => {
-        player.behaviors.pivot = pivot(player.id)
-        player.behaviors.holeGenerator = holeGenerator(player.speed, SPEED_MULTIPLIER)
-        player.behaviors.createTrail = createTrail({
-          playerId:        player.id,
-          holeGenerator:   player.behaviors.holeGenerator,
-          speed:           player.speed,
-          speedMultiplier: SPEED_MULTIPLIER,
-        })
-        player.behaviors.move = move()
-
-        player.behaviors.collisionCheckerTrail =
-          collisionCheckerTrail(player.id, SPEED_MULTIPLIER)
-
-        player.behaviors.collisionCheckerWalls =
+      players.forEach((player) => {
+        const behaviorsToAdd = [
+          pivot(player.id),
+          createHoleMaker(player.speed, SPEED_MULTIPLIER),
+          createTrail({
+            playerId:        player.id,
+            speed:           player.speed,
+            speedMultiplier: SPEED_MULTIPLIER,
+          }),
+          move(),
+          collisionCheckerTrail(player.id, SPEED_MULTIPLIER),
           collisionCheckerWalls({
             speedMultiplier: SPEED_MULTIPLIER,
             wallThickness:   WALL_THICKNESS,
-          })
+          }),
+        ]
 
-        const controller = Entity.addChild(player, { id: `${player.id}controller` })
+        R.forEach(
+          l1.addBehavior(player),
+          behaviorsToAdd,
+        )
+
+        const controller = l1.container({
+          id:     `${player.id}controller`,
+          parent: player,
+        })
         controller.direction = null
 
-        Entity.destroy(`${player.id}:direction`)
+        l1.destroy(`${player.id}:direction`)
       })
       initPowerups({
-        snakeSpeed:      playerEntities[0].speed,
+        snakeSpeed:      l1.getByType('player')[0].speed,
         speedMultiplier: SPEED_MULTIPLIER,
         gameWidth:       GAME_WIDTH,
         gameHeight:      GAME_HEIGHT,
       })
     })
 
-  playTrack(Track.GAME, { loop: true })
+  playTrack(Track.GAME, { loop: true, id: 'gameMusic' })
 }
 
 export const getPlayersWithHighestScore = players =>
@@ -157,7 +158,7 @@ export const applyPlayerScores = (players, scores) => {
     ), {})
 }
 
-const getStartingPosition = Util.grid({
+const getStartingPosition = l1.grid({
   x:           150,
   y:           150,
   marginX:     200,
@@ -170,22 +171,27 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
-  const square = Entity.addChild(
-    Entity.get(Scene.GAME),
-    {
-      id:     playerId,
-      x,
-      y,
-      width:  PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
-      height: PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER),
-    },
-  )
+  const player = l1.sprite({
+    id:      playerId,
+    parent:  l1.get(Scene.GAME),
+    types:   ['player'],
+    texture: `circle-${color}`,
+    zIndex:  Layer.FOREGROUND,
+  })
 
-  square.speed = snakeSpeed
-  square.degrees = Util.getRandomInRange(0, 360)
-  square.event = new EventEmitter()
+  player.asset.x = x
+  player.asset.y = y
+  player.asset.visible = false
 
-  square.event.on(GameEvent.PLAYER_COLLISION, () => {
+  player.speed = snakeSpeed
+  player.degrees = l1.getRandomInRange(0, 360)
+  player.event = new EventEmitter()
+  player.color = color
+  player.isAlive = true
+  player.spriteId = spriteId
+  player.playerId = playerId
+
+  player.event.on(GameEvent.PLAYER_COLLISION, () => {
     const controller = gameState
       .controllers[playerId]
 
@@ -201,100 +207,101 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       })
   })
 
-  Entity.addType(square, 'player')
+  player.asset.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
-  square.color = color
-  square.isAlive = true
-  square.spriteId = spriteId
+  const playerSize = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
 
-  const directionRadians = toRadians(square.degrees)
-  const directionDistanceScale = 100 / playerCountFactor
-
-  const directionIndicator = Entity.addChild(
-    Entity.get(playerId),
-    {
-      id: `${playerId}:direction`,
-      x:  (directionDistanceScale * Math.cos(directionRadians)) + (square.width / 2),
-      y:  (directionDistanceScale * Math.sin(directionRadians)) + (square.height / 2),
-    },
+  player.asset.hitArea = new l1.PIXI.Rectangle(
+    0,
+    0,
+    playerSize,
+    playerSize,
   )
+  // Offset the sprite so that the entity hitbox is in the middle
+  player.asset.anchor.set((1 - (playerSize / player.asset.width)) / 2)
 
-  directionIndicator.spriteId = spriteId
-  directionIndicator.color = color
-
-  return square
+  return player
 })
 
-const bouncePlayers = players => new Promise((resolve) => {
-  const bouncer = Entity.addChild(Entity.getRoot())
-  bouncer.behaviors.bouncePlayers = {
-    timer: Timer.create({ duration: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15 }),
-    index: 0,
-    run:   (b) => {
-      if (Timer.run(b.timer)) {
-        const player = players[b.index]
+const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
+  const bouncer = l1.container()
 
-        const sprite = Sprite.show(
-          player,
-          {
-            texture: `circle-${player.color}`,
-            zIndex:  Layer.FOREGROUND,
-          },
-        )
-        sprite.scale.set(player.speed / SPEED_MULTIPLIER / 2)
+  const bouncePlayerBehavior = () => ({
+    endTime: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15,
+    data:    {
+      index: 0,
+    },
+    loop:       true,
+    onComplete: ({ data }) => {
+      const player = players[data.index]
+      player.asset.visible = true
 
-        // Offset the sprite so that the entity hitbox is in the middle
-        sprite.anchor.set((1 - (player.width / sprite.width)) / 2)
+      l1.addBehavior(
+        player,
+        bounce(0.05),
+      )
 
-        player.behaviors.bounce = bounce(0.05)
+      data.index += 1
 
-        b.index += 1
-        Timer.reset(b.timer)
+      const directionRadians = toRadians(player.degrees)
+      const directionDistanceScale = 200 / playerCountFactor
 
-        if (b.index === players.length) {
-          Entity.destroy(bouncer)
-          resolve()
-        }
+      const directionIndicator = l1.sprite({
+        id:      `${player.playerId}:direction`,
+        parent:  player,
+        texture: `arrow-${player.color}`,
+      })
 
-        const directionIndicator = Entity.get(`${player.id}:direction`)
+      directionIndicator.spriteId = player.spriteId
+      directionIndicator.color = player.color
 
-        const directionSprite = Sprite.show(
-          directionIndicator,
-          { texture: `arrow-${player.color}` },
-        )
-        directionSprite.scale.set((1.5 * player.speed) / SPEED_MULTIPLIER)
-        directionSprite.anchor.set(0.5)
-        directionSprite.rotation = toRadians(player.degrees)
+      directionIndicator.asset.x =
+        (directionDistanceScale * Math.cos(directionRadians)) + (player.asset.width * 2)
+      directionIndicator.asset.y =
+        (directionDistanceScale * Math.sin(directionRadians)) + (player.asset.height * 2)
+      directionIndicator.asset.scale.set((3 * player.speed) / SPEED_MULTIPLIER)
+      directionIndicator.asset.anchor.set(0.5)
+      directionIndicator.asset.rotation = toRadians(player.degrees)
+
+      if (data.index === players.length) {
+        l1.destroy(bouncer)
+        resolve()
       }
     },
-  }
+  })
+
+  l1.addBehavior(
+    bouncer,
+    bouncePlayerBehavior(),
+  )
 })
 
 export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = () => ({
-  init: () => {},
-  run:  (b, e) => {
-    const radians = toRadians(e.degrees)
-    e.x += Math.cos(radians) * e.speed
-    e.y += Math.sin(radians) * e.speed
+  id:       'move',
+  onUpdate: ({ entity }) => {
+    const radians = toRadians(entity.degrees)
+    entity.asset.x += Math.cos(radians) * entity.speed
+    entity.asset.y += Math.sin(radians) * entity.speed
   },
 })
 
 const pivot = playerId => ({
-  run: (b, e) => {
-    if (Entity.get(`${playerId}controller`).direction === SteeringCommand.RIGHT) {
-      if (e.degrees >= 360) {
-        e.degrees = 0
+  id:       'pivot',
+  onUpdate: ({ entity }) => {
+    if (l1.get(`${playerId}controller`).direction === SteeringCommand.RIGHT) {
+      if (entity.degrees >= 360) {
+        entity.degrees = 0
         return
       }
-      e.degrees += TURN_RADIUS
-    } else if (Entity.get(`${playerId}controller`).direction === SteeringCommand.LEFT) {
-      if (e.degrees < 0) {
-        e.degrees = 360
+      entity.degrees += TURN_RADIUS
+    } else if (l1.get(`${playerId}controller`).direction === SteeringCommand.LEFT) {
+      if (entity.degrees < 0) {
+        entity.degrees = 360
         return
       }
-      e.degrees -= TURN_RADIUS
+      entity.degrees -= TURN_RADIUS
     } else {
       // Do nothing
     }
@@ -302,13 +309,14 @@ const pivot = playerId => ({
 })
 
 const createWalls = () => {
-  const walls = Entity.addChild(Entity.get(Scene.GAME))
-  const graphics = Graphics.create(walls)
-  graphics.lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
-
-  graphics.moveTo(0, 0)
-  graphics.lineTo(GAME_WIDTH, 0)
-  graphics.lineTo(GAME_WIDTH, GAME_HEIGHT)
-  graphics.lineTo(0, GAME_HEIGHT)
-  graphics.lineTo(0, 0)
+  const walls = l1.graphics({
+    parent: l1.get(Scene.GAME),
+  })
+  walls.asset
+    .lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
+    .moveTo(0, 0)
+    .lineTo(GAME_WIDTH, 0)
+    .lineTo(GAME_WIDTH, GAME_HEIGHT)
+    .lineTo(0, GAME_HEIGHT)
+    .lineTo(0, 0)
 }

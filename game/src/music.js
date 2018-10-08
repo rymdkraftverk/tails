@@ -1,11 +1,11 @@
-import { Entity, Sound } from 'l1'
+import l1 from 'l1'
 
 export const Track = {
   GAME:  './sounds/music/zapper_64kbps.mp3',
   LOBBY: './sounds/music/lobby_music_64kbps.mp3',
 }
 
-const soundEntity = Entity.addChild(Entity.getRoot())
+let soundEntity
 let currentTrack
 
 export const playTrack = (track, options = {}) => {
@@ -21,8 +21,11 @@ export const playTrack = (track, options = {}) => {
     src: track,
   }
 
-  Sound.stop(soundEntity)
-  Sound.play(soundEntity, usedOptions)
+  if (soundEntity) {
+    l1.destroy(soundEntity)
+  }
+
+  soundEntity = l1.sound(usedOptions)
 
   currentTrack = track
 }

@@ -1,4 +1,4 @@
-import { Entity, Sound, Util, Sprite, Text, Graphics } from 'l1'
+import l1 from 'l1'
 import _ from 'lodash/fp'
 import R from 'ramda'
 import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
@@ -38,7 +38,7 @@ const getControllerUrl = () => {
   return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
-const getPlayerPosition = Util.grid({
+const getPlayerPosition = l1.grid({
   x:           1000,
   y:           100,
   marginX:     170,
@@ -48,17 +48,11 @@ const getPlayerPosition = Util.grid({
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   gameState.currentState = CurrentState.LOBBY
-  const lobbyScene = Entity
-    .addChild(
-      Entity.getRoot(),
-      {
-        id: Scene.LOBBY,
-      },
-    )
+  const lobbyScene = l1.container({
+    id: Scene.LOBBY,
+  })
 
-  createText({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     100,
+  l1.text({
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
@@ -66,11 +60,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    100,
+  )
 
-  createText({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     300,
+  l1.text({
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
@@ -78,11 +73,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    300,
+  )
 
-  createText({
-    x:     TextAnchor.INSTRUCTION_START_X + 210,
-    y:     292,
+  l1.text({
     text:  getControllerUrl(),
     style: {
       ...TextStyle.CODE,
@@ -91,11 +87,13 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X + 210,
+    292,
+  )
 
-  createText({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     520,
+
+  l1.text({
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
@@ -103,11 +101,12 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X,
+    520,
+  )
 
-  createText({
-    x:     TextAnchor.INSTRUCTION_START_X + 400,
-    y:     514,
+  l1.text({
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -117,38 +116,46 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:          TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  })
+  }).asset.position.set(
+    TextAnchor.INSTRUCTION_START_X + 400,
+    514,
+  )
 
-  createText({
-    x:     GAME_WIDTH - 300,
-    y:     GAME_HEIGHT - 40,
+  l1.text({
     text:  '© Rymdkraftverk 2018',
     style: {
       ...TextStyle.CODE,
       fontSize: 18,
     },
     parent: lobbyScene,
+  }).asset.position.set(
+    GAME_WIDTH - 300,
+    GAME_HEIGHT - 40,
+  )
+
+  const titleBackground = l1.graphics({
+    parent: lobbyScene,
+    zIndex: Layer.BACKGROUND + 10,
   })
 
-  const titleBackground = Entity.addChild(lobbyScene)
-  const titleBackgroundGraphics = Graphics
-    .create(titleBackground, { zIndex: Layer.BACKGROUND + 10 })
+  titleBackground.asset
+    .beginFill(GameColor.BLUE)
+    .moveTo(0, 0)
+    .lineTo(GAME_WIDTH, 0)
+    .lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
+    .lineTo(0, TITLE_BACKGROUND_HEIGHT)
+    .lineTo(0, 0)
+    .endFill()
 
-  titleBackgroundGraphics.beginFill(GameColor.BLUE)
-  titleBackgroundGraphics.moveTo(0, 0)
-  titleBackgroundGraphics.lineTo(GAME_WIDTH, 0)
-  titleBackgroundGraphics.lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
-  titleBackgroundGraphics.lineTo(0, TITLE_BACKGROUND_HEIGHT)
-  titleBackgroundGraphics.lineTo(0, 0)
-  titleBackgroundGraphics.endFill()
+  const playersDivider = l1.graphics({
+    parent: lobbyScene,
+    zIndex: Layer.BACKGROUND + 10,
+  })
 
-  const playersDivider = Entity.addChild(lobbyScene)
-  const playersDividerGraphics = Graphics
-    .create(playersDivider, { zIndex: Layer.BACKGROUND + 10 })
-
-  playersDividerGraphics.lineStyle(4, GameColor.WHITE, 1)
-  playersDividerGraphics.moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
-  playersDividerGraphics.lineTo(875, 700)
+  playersDivider.asset
+    .lineStyle(4, GameColor.WHITE, 1)
+    .moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
+    .lineTo(875, 700)
 
   drawInstructionArrow({
     x:            400,
@@ -187,96 +194,67 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 }
 
 const drawInstructionArrow = ({
-  x, y, id, angle, parentEntity,
+  x, y, id, angle, parent,
 }) => {
-  const instructionArrowOne = Entity
-    .addChild(
-      parentEntity,
-      {
-        id: `instruction-arrow-${id}`,
-        x,
-        y,
-      },
-    )
+  const instructionArrowOne = l1.sprite({
+    id:      `instruction-arrow-${id}`,
+    texture: 'expand-arrow-one',
+    parent,
+  })
 
-  const instructionArrowOneSprite = Sprite
-    .show(
-      instructionArrowOne,
-      {
-        texture: 'expand-arrow-one',
-      },
-    )
-
-  instructionArrowOneSprite.scale.set(1)
-  instructionArrowOneSprite.rotation = toRadians(angle)
+  instructionArrowOne.asset.x = x
+  instructionArrowOne.asset.y = y
+  instructionArrowOne.asset.scale.set(1)
+  instructionArrowOne.asset.rotation = toRadians(angle)
 }
 
 const createOutline = (index) => {
   const { x, y } = getPlayerPosition(index)
 
-  const e = Entity.addChild(
-    Entity.get(Scene.LOBBY),
-    {
-      id: `outline-${index}`,
-      x,
-      y,
-    },
-  )
-  const sprite = Sprite.show(e, {
+  const outline = l1.sprite({
+    id:      `outline-${index}`,
+    parent:  l1.get(Scene.LOBBY),
     texture: 'square-outline',
     zIndex:  Layer.BACKGROUND + 10,
   })
-  sprite.scale.set(1.5)
-  sprite.anchor.set(0.5)
-}
 
-const createText = ({
-  x, y, text, style, parent,
-}) => {
-  const textEntity = Entity.addChild(
-    parent,
-    {
-      x,
-      y,
-    },
-  )
-
-  Text.show(
-    textEntity,
-    {
-      text,
-      style,
-    },
-  )
+  outline.asset.x = x
+  outline.asset.y = y
+  outline.asset.scale.set(1.5)
+  outline.asset.anchor.set(0.5)
 }
 
 export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
-  const square = Entity.addChild(
-    Entity.get(Scene.LOBBY),
-    {
-      id:    `square-${color}`,
-      x,
-      y,
-      types: ['lobby-square'],
-    },
-  )
-  const sprite = Sprite.show(square, { texture: `square-${color}` })
-  sprite.scale.set(3)
-  sprite.anchor.set(0.5)
+  const square = l1.sprite({
+    id:      `square-${color}`,
+    types:   ['lobby-square'],
+    parent:  l1.get(Scene.LOBBY),
+    texture: `square-${color}`,
+  })
+
+  square.asset.x = x
+  square.asset.y = y
+  square.asset.scale.set(3)
+  square.asset.anchor.set(0.5)
 
   if (newPlayer) {
-    square.behaviors.bounce = bounce(0.08)
+    l1.addBehavior(
+      square,
+      bounce(0.08),
+    )
     const joinSounds = [
       'join1',
       'join2',
       'join3',
     ]
-    const joinSound = joinSounds[Util.getRandomInRange(0, 3)]
+    const joinSound = joinSounds[l1.getRandomInRange(0, 3)]
 
-    const sound = Entity.addChild(square)
-    Sound.play(sound, { src: `./sounds/${joinSound}.wav`, volume: 0.6 })
+    l1.sound({
+      src:    `./sounds/${joinSound}.wav`,
+      volume: 0.6,
+    })
   }
 }
 

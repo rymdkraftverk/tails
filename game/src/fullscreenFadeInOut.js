@@ -1,4 +1,4 @@
-import { Entity, Graphics } from 'l1'
+import l1 from 'l1'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import Layer from './util/layer'
 import { createParabola } from './magic'
@@ -6,49 +6,50 @@ import { createParabola } from './magic'
 const DURATION = 50
 
 export default () => new Promise((resolve) => {
-  const entity = Entity.addChild(
-    Entity.getRoot(),
-    {
-      id:     'fadeInOut',
-      width:  GAME_WIDTH,
-      height: GAME_HEIGHT,
-    },
+  const entity = l1.graphics({
+    id:     'fadeInOut',
+    width:  GAME_WIDTH,
+    height: GAME_HEIGHT,
+    zIndex: Layer.FOREGROUND,
+  })
+  l1.addBehavior(
+    entity,
+    fadeInOut(DURATION, resolve),
   )
-  Graphics.create(entity, { zIndex: Layer.FOREGROUND })
-  entity.behaviors.fadeInOut = fadeInOut(DURATION, resolve)
 })
 
 const fadeInOut = (duration, resolve) => ({
-  hasResolved: false,
-  tick:        0,
-  animation:   createParabola({
-    start:    0,
-    end:      duration,
-    offset:   0,
-    modifier: 100 / duration,
-  }),
-  run: (b, e) => {
-    const { asset: graphics } = e
-    const alpha = (b.animation(b.tick) * -1) / 100
-    b.tick += 1
-    graphics.clear()
-    graphics.beginFill('black', alpha)
-    graphics.moveTo(0, 0)
-    graphics.lineTo(GAME_WIDTH, 0)
-    graphics.lineTo(GAME_WIDTH, GAME_HEIGHT)
-    graphics.lineTo(0, GAME_HEIGHT)
-    graphics.lineTo(0, 0)
-    graphics.endFill()
+  endTime: duration,
+  data:    {
+    hasResolved: false,
+    animation:   createParabola({
+      start:    0,
+      end:      duration,
+      offset:   0,
+      modifier: 100 / duration,
+    }),
+  },
+  onComplete: ({ entity }) => {
+    l1.destroy(entity)
+  },
+  onUpdate: ({ entity, data, counter }) => {
+    const { asset: graphics } = entity
+    const alpha = (data.animation(counter) * -1) / 100
+    graphics
+      .clear()
+      .beginFill('black', alpha)
+      .moveTo(0, 0)
+      .lineTo(GAME_WIDTH, 0)
+      .lineTo(GAME_WIDTH, GAME_HEIGHT)
+      .lineTo(0, GAME_HEIGHT)
+      .lineTo(0, 0)
+      .endFill()
 
     // Resolve after half the duration has passed,
     // to allow the next screen to fade in
-    if (!b.hasResolved && (b.tick >= duration / 2)) {
-      b.hasResolved = true
+    if (!data.hasResolved && (counter >= duration / 2)) {
+      data.hasResolved = true
       resolve()
-    }
-
-    if (b.tick >= duration) {
-      Entity.destroy(e)
     }
   },
 })

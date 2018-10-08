@@ -1,9 +1,9 @@
-import { Game, Entity, Sprite, Key, PIXI } from 'l1'
+import l1 from 'l1'
 import { Event, Channel, SteeringCommand } from 'common'
 import { prettyId } from 'signaling/common'
 import R from 'ramda'
 import signaling from 'signaling'
-import { transitionToGameScene, GameEvent } from './game'
+import { transitionToGameScene } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
 import Scene from './Scene'
@@ -11,13 +11,14 @@ import Layer from './util/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
+import GameEvent from './util/gameEvent'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
 export const MAX_PLAYERS_ALLOWED = 10
 
 const movePlayer = (pId, direction) => {
-  const playerEntity = Entity.get(`${pId}controller`)
+  const playerEntity = l1.get(`${pId}controller`)
   if (playerEntity) {
     playerEntity.direction = direction
   } else {
@@ -67,15 +68,17 @@ const roundStart = () => {
         const entitiesToKeep = [
           'background',
           'fadeInOut',
+          'gameMusic',
         ]
-        Entity
-          .getAll()
+        l1
+          .getAllEntities()
           .filter(e => !entitiesToKeep.includes(e.id))
-          .map(Entity.destroy)
+          .forEach(l1.destroy)
+
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
-        Entity
+        l1
           .getByType('player')
           .forEach(player =>
             player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
@@ -136,7 +139,7 @@ export const onControllerJoin = ({
   if (moreControllersAllowed()) {
     const player = createNewPlayer({ playerId: id })
 
-    if (Entity.get(Scene.LOBBY)) {
+    if (l1.get(Scene.LOBBY)) {
       const numOfPlayers = playerCount(gameState.players)
       createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
     }
@@ -202,9 +205,9 @@ const onControllerLeave = (id) => {
   gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
 
   if (gameState.currentState === CurrentState.LOBBY) {
-    Entity
+    l1
       .getByType('lobby-square')
-      .forEach(Entity.destroy)
+      .forEach(l1.destroy)
 
     Object
       .values(gameState.players)
@@ -223,21 +226,21 @@ const onControllerLeave = (id) => {
 
 const resizeGame = () => {
   const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
-  Game.resize(screenWidth, screenHeight)
+  const screenHeight = window.innerHeight - 100
+  l1.resize(screenWidth, screenHeight)
 }
 
 window.addEventListener('resize', resizeGame)
 
-Game
+l1
   .init({
     width:   GAME_WIDTH,
     height:  GAME_HEIGHT,
-    debug:   false,
+    debug:   true,
     element: document.getElementById('game'),
     pixi:    {
       options:  { antialias: true },
-      settings: { SCALE_MODE: PIXI.SCALE_MODES.LINEAR },
+      settings: { SCALE_MODE: l1.PIXI.SCALE_MODES.LINEAR },
     },
   })
   .then(() => {
@@ -254,15 +257,13 @@ Game
         })
       })
 
-    const background = Entity.addChild(Entity.getRoot(), { id: 'background' })
-    Sprite.show(background, { texture: 'background', zIndex: Layer.ABSOLUTE_BACKGROUND })
+    l1.sprite({
+      id:      'background',
+      texture: 'background',
+      zIndex:  Layer.ABSOLUTE_BACKGROUND,
+    })
 
     resizeGame()
-
-    Key.add('up')
-    Key.add('down')
-    Key.add('left')
-    Key.add('right')
   })
 
 window.debug = {
