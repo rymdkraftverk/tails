@@ -9,7 +9,7 @@ const numbers = [
   '3',
   '2',
   '1',
-  'START!',
+  'SURVIVE!',
 ]
 
 export default () => new Promise((resolve) => {
