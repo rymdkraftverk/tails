@@ -171,9 +171,9 @@ export const collisionCheckerWalls = ({
     const y = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()
     if (
       x < wallThickness ||
-      x > GAME_WIDTH - wallThickness - entity.asset.width ||
+      x > GAME_WIDTH - wallThickness - entity.asset.hitArea.width ||
       y < wallThickness ||
-      y > GAME_HEIGHT - wallThickness - entity.asset.height) {
+      y > GAME_HEIGHT - wallThickness - entity.asset.hitArea.height) {
       killPlayer(entity, speedMultiplier)
       checkPlayersAlive()
     }
