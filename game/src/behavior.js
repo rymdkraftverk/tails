@@ -29,24 +29,22 @@ export const createTrail = ({
     if (entity.preventTrail) {
       return
     }
-    const width = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
-    const height = TRAIL_HITBOX_SIZE * (speed / speedMultiplier)
 
     // Find the middle of the player entity so that
     // we can put the trails' middle point in the same spot
     const middleX =
       (entity
         .asset
-        .toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()) + (entity.asset.width / 2)
+        .toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()) +
+          (entity.asset.hitArea.width / 2)
 
     const middleY =
       (entity
         .asset
-        .toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()) + (entity.asset.height / 2)
+        .toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()) +
+          (entity.asset.hitArea.height / 2)
 
     const trailE = l1.sprite({
-      width,
-      height,
       parent:  data.parent,
       types:   ['trail'],
       texture: `circle-${entity.color}`,
@@ -55,9 +53,9 @@ export const createTrail = ({
     trailE.active = false
     trailE.player = playerId
 
-    trailE.asset.x = middleX - (width / 2)
-    trailE.asset.y = middleY - (height / 2)
     trailE.asset.scale.set(speed / speedMultiplier / 2)
+    trailE.asset.x = middleX - (trailE.asset.width / 2)
+    trailE.asset.y = middleY - (trailE.asset.height / 2)
 
     l1.addBehavior(
       trailE,
