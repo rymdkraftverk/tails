@@ -32,6 +32,8 @@ export const transitionToScoreScene = () => {
   goal.asset.x = GOAL_X
   goal.asset.y = GOAL_Y
   goal.asset.scale.set(1.5)
+  goal.asset.filters = null
+  goal.asset.cacheAsBitmap = true
 
   l1.text({
     parent: scoreScene,

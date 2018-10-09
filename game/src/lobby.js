@@ -147,6 +147,9 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     .lineTo(0, 0)
     .endFill()
 
+  titleBackground.asset.filters = null
+  titleBackground.asset.cacheAsBitmap = true
+
   const playersDivider = l1.graphics({
     parent: lobbyScene,
     zIndex: Layer.BACKGROUND + 10,
@@ -156,6 +159,9 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     .lineStyle(4, GameColor.WHITE, 1)
     .moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
     .lineTo(875, 700)
+
+  playersDivider.asset.filters = null
+  playersDivider.asset.cacheAsBitmap = true
 
   drawInstructionArrow({
     x:            400,
@@ -206,6 +212,9 @@ const drawInstructionArrow = ({
   instructionArrowOne.asset.y = y
   instructionArrowOne.asset.scale.set(1)
   instructionArrowOne.asset.rotation = toRadians(angle)
+
+  instructionArrowOne.asset.filters = null
+  instructionArrowOne.asset.cacheAsBitmap = true
 }
 
 const createOutline = (index) => {
@@ -222,6 +231,9 @@ const createOutline = (index) => {
   outline.asset.y = y
   outline.asset.scale.set(1.5)
   outline.asset.anchor.set(0.5)
+
+  outline.asset.filters = null
+  outline.asset.cacheAsBitmap = true
 }
 
 export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
