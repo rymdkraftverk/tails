@@ -239,7 +239,7 @@ l1
     debug:   true,
     element: document.getElementById('game'),
     pixi:    {
-      options:  { antialias: true },
+      options:  { antialias: true, clearBeforeRender: false },
       settings: { SCALE_MODE: l1.PIXI.SCALE_MODES.LINEAR },
     },
   })
