@@ -257,11 +257,14 @@ l1
         })
       })
 
-    l1.sprite({
+    const background = l1.sprite({
       id:      'background',
       texture: 'background',
       zIndex:  Layer.ABSOLUTE_BACKGROUND,
     })
+
+    background.asset.filters = null
+    background.asset.cacheAsBitmap = true
 
     resizeGame()
   })
