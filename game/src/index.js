@@ -226,7 +226,7 @@ const onControllerLeave = (id) => {
 
 const resizeGame = () => {
   const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight - 100
+  const screenHeight = window.innerHeight
   l1.resize(screenWidth, screenHeight)
 }
 
@@ -239,7 +239,7 @@ l1
   .init({
     width:   GAME_WIDTH,
     height:  GAME_HEIGHT,
-    debug:   true,
+    debug:   false,
     element: document.getElementById('game'),
     pixi:    {
       options:  { antialias: true, clearBeforeRender: false },
