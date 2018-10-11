@@ -263,6 +263,8 @@ l1
       zIndex:  Layer.ABSOLUTE_BACKGROUND,
     })
 
+    background.asset.scale.set(10)
+
     background.asset.filters = null
     background.asset.cacheAsBitmap = true
 
