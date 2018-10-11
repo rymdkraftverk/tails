@@ -49,5 +49,9 @@ injectGlobal`
   }
 `
 
+window.addEventListener('devicemotion', (e) => {
+  e.preventDefault()
+})
+
 ReactDOM.render(<App />, document.getElementById('root'))
 registerServiceWorker()

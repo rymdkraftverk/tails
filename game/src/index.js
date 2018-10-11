@@ -231,9 +231,6 @@ const resizeGame = () => {
 }
 
 window.addEventListener('resize', resizeGame)
-window.addEventListener('devicemotion', (e) => {
-  e.preventDefault()
-})
 
 l1
   .init({
