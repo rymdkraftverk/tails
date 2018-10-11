@@ -227,8 +227,8 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   const bouncer = l1.container()
 
   const bouncePlayerBehavior = () => ({
-    endTime: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15,
-    data:    {
+    duration: Math.floor(TOTAL_BOUNCE_DURATION / players.length) + 15,
+    data:     {
       index: 0,
     },
     loop:       true,

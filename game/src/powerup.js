@@ -19,7 +19,7 @@ export const initPowerups = ({
   })
 
   const generatePowerups = () => ({
-    endTime:    l1.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
+    duration:   l1.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
     loop:       true,
     onComplete: () => {
       const powerup = l1.sprite({
@@ -87,8 +87,8 @@ const ghost = ({
   data: {
     expirationState: null,
   },
-  endTime: GHOST_POWERUP_DURATION,
-  onInit:  ({ entity }) => {
+  duration: GHOST_POWERUP_DURATION,
+  onInit:   ({ entity }) => {
     entity.asset.scale.set(entity.speed / speedMultiplier)
     entity.asset.alpha = 0.4
 
@@ -172,9 +172,9 @@ const ghost = ({
 })
 
 const indicateExpiration = (speed, duration) => ({
-  id:      'indicateExpiration',
-  endTime: duration,
-  data:    {
+  id:   'indicateExpiration',
+  duration,
+  data: {
     sine: createSine({
       start: 0.2,
       end:   0.8,

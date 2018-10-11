@@ -21,10 +21,10 @@ const middle = (entity, dim, prop) =>
 export const createTrail = ({
   playerId, speed, speedMultiplier,
 }) => ({
-  id:      'createTrail',
-  endTime: 2,
-  loop:    true,
-  onInit:  ({ data }) => {
+  id:       'createTrail',
+  duration: 2,
+  loop:     true,
+  onInit:   ({ data }) => {
     data.parent = l1.container({ parent: l1.get(Scene.GAME) })
   },
   onComplete: ({ entity, data }) => {
@@ -62,15 +62,15 @@ export const createTrail = ({
  * This behavior is needed so that the player wont immediately collide with its own tail.
  */
 const activate = () => ({
-  endTime:    15,
+  duration:   15,
   onComplete: ({ entity }) => {
     entity.active = true
   },
 })
 
 const holeMaker = (speed, speedMultiplier) => ({
-  id:      'holeMaker',
-  endTime: l1.getRandomInRange(
+  id:       'holeMaker',
+  duration: l1.getRandomInRange(
     Math.ceil(HOLE_LENGTH_MIN_TIME * (speedMultiplier / speed)),
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),
@@ -87,8 +87,8 @@ const holeMaker = (speed, speedMultiplier) => ({
 })
 
 export const createHoleMaker = (speed, speedMultiplier) => ({
-  id:      'createHoleMaker',
-  endTime: l1.getRandomInRange(
+  id:       'createHoleMaker',
+  duration: l1.getRandomInRange(
     GENERATE_HOLE_MIN_TIME,
     GENERATE_HOLE_MAX_TIME,
   ),
@@ -102,7 +102,7 @@ export const createHoleMaker = (speed, speedMultiplier) => ({
 
 export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
   id:         'collisionCheckerTrail',
-  endTime:    2,
+  duration:   2,
   loop:       true,
   onComplete: ({ entity }) => {
     const allTrails = l1
@@ -160,7 +160,7 @@ export const collisionCheckerWalls = ({
   speedMultiplier, wallThickness,
 }) => ({
   id:         'collisionCheckerWalls',
-  endTime:    2,
+  duration:   2,
   loop:       true,
   onComplete: ({ entity }) => {
     const x = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()

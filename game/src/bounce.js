@@ -1,8 +1,8 @@
 import { createParabola } from './magic'
 
 export default modifier => ({
-  endTime: 20,
-  onInit:  ({ data, entity }) => {
+  duration: 20,
+  onInit:   ({ data, entity }) => {
     data.animation = createParabola({
       start:  0,
       end:    20,

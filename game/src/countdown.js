@@ -21,8 +21,8 @@ export default () => new Promise((resolve) => {
 })
 
 const countdownBehavior = resolve => ({
-  endTime: TIME_BETWEEN_NUMBERS,
-  data:    {
+  duration: TIME_BETWEEN_NUMBERS,
+  data:     {
     index: 0,
   },
   loop:       true,
