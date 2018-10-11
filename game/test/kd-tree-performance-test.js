@@ -13,7 +13,6 @@ export const performanceTest = (entityCount) => {
 
   const testIterations = 5000
   const entitiesToFind = randomElements(testIterations)
-  const entitiesToAdd = randomElements(testIterations)
 
   const treeStart = performance.now()
   entitiesToFind.forEach(e => testKdTree(tree, e))
@@ -29,16 +28,24 @@ export const performanceTest = (entityCount) => {
 const randomElements = entityCount => R
   .range(0, entityCount)
   .map(() => ({
-    x: 1280 * Math.random(),
-    y: 720 * Math.random(),
+    asset: {
+      x: 1280 * Math.random(),
+      y: 720 * Math.random(),
+    },
   }))
 
 const testKdTree = (tree, entity) => {
-  const updatedTree = addEntityToTree(tree, entity)
+  const getCoord = (e, dim) => e.asset[dim]
+
+  const addEntityOptions = {
+    getCoord,
+  }
+  const updatedTree = addEntityToTree(addEntityOptions, tree, entity)
 
   const options = {
+    getCoord,
     earlyReturn: isColliding(entity),
-    filter: e => e !== entity,
+    filter:      e => e !== entity,
   }
   return nearestNeighbour(options, updatedTree, entity)
 }
@@ -50,8 +57,9 @@ const testList = (entities, entity) => {
     .filter(e => e !== entity)
     .some(e2 => isColliding(entity, e2))
 }
+
 const constructTree = entities => entities
-  .reduce(addEntityToTree, initEmptyTree({
+  .reduce(addEntityToTree({ getCoord: (en, d) => en.asset[d] }), initEmptyTree({
     x: {
       min: 0,
       max: 1280,
@@ -63,6 +71,8 @@ const constructTree = entities => entities
   }))
 
 const isColliding = R.curry((e1, e2) => {
-  const distance = Math.sqrt(((e1.x - e2.x) ** 2) + ((e1.y - e2.y) ** 2))
+  const p1 = e1.asset
+  const p2 = e2.asset
+  const distance = Math.sqrt(((p1.x - p2.x) ** 2) + ((p1.y - p2.y) ** 2))
   return distance < 4.43 // width & height of snake bodies at 10 players
 })

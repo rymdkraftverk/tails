@@ -1,6 +1,6 @@
 import { addEntityToTree, initEmptyTree, nearestNeighbour } from '../src/kd-tree'
 
-const constructTree = (entities) => {
+const constructTree = (options, entities) => {
   const emptyTree = initEmptyTree({
     x: {
       min: 0,
@@ -12,9 +12,10 @@ const constructTree = (entities) => {
     },
   })
 
+  console.log(emptyTree)
 
   return entities
-    .reduce(addEntityToTree, emptyTree)
+    .reduce((tree, entity) => addEntityToTree(options, tree, entity), emptyTree)
 }
 
 const parseOptions = ({ earlyReturn, filter }) => {
@@ -32,6 +33,7 @@ const parseOptions = ({ earlyReturn, filter }) => {
   return {
     earlyReturn: settings.earlyReturn[earlyReturn],
     filter:      settings.filter[filter],
+    getCoord:    (e, dim) => e.asset[dim],
   }
 }
 
@@ -48,19 +50,22 @@ describe.each`
   expectedNearestEntity,
 }) => {
   const parsedOptions = parseOptions(options)
-  const parsedEntities = entities.map(([x, y, include]) => ({ x, y, include }))
-  const parsedEntity = { x: entity[0], y: entity[1] }
+  const parsedEntities = entities.map(([x, y, include]) => ({ include, asset: { x, y } }))
+  const parsedEntity = { asset: { x: entity[0], y: entity[1] } }
   const expected = {
-    x:       expectedNearestEntity[0],
-    y:       expectedNearestEntity[1],
+    asset: {
+      x: expectedNearestEntity[0],
+      y: expectedNearestEntity[1],
+    },
     include: expectedNearestEntity[2],
   }
 
   const description = `The closest neighbour of ${JSON.stringify(parsedEntity)} should be ${JSON.stringify(expected)}`
 
   test(description, () => {
-    const tree = constructTree(parsedEntities)
+    const tree = constructTree(parsedOptions, parsedEntities)
 
+    console.log(tree)
     const nearestEntity = nearestNeighbour(parsedOptions, tree, parsedEntity)
 
     expect(nearestEntity)

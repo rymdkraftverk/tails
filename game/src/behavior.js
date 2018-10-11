@@ -54,7 +54,10 @@ export const createTrail = ({
       activate(),
     )
 
-    gameState.kdTree = addEntityToTree(gameState.kdTree, trailE)
+    const options = {
+      getCoord: (e, dim) => e.asset[dim],
+    }
+    gameState.kdTree = addEntityToTree(options, gameState.kdTree, trailE)
   },
 })
 
@@ -108,6 +111,7 @@ export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
     const options = {
       earlyReturn: t => l1.isColliding(entity, t),
       filter:      t => t.active || t.player !== playerId,
+      getCoord:    (e, dimension) => e.asset[dimension],
     }
 
     const closestEntity = nearestNeighbour(options, gameState.kdTree, entity)

@@ -1,9 +1,9 @@
 import { calculateMiddle } from './common'
 import DIMENSIONS from './dimensions'
 
-const calculateDistance = (e1, e2) =>
+const calculateDistance = (getCoord, e1, e2) =>
   Math.sqrt(DIMENSIONS
-    .map(dim => (e1[dim] - e2[dim], 2) ** 2)
+    .map(dim => (getCoord(e1, dim) - getCoord(e2, dim)) ** 2)
     .reduce((a, b) => a + b, 0))
 
 export const nearestNeighbour = (options, tree, entity) => {
@@ -40,7 +40,8 @@ export const nearestNeighbour = (options, tree, entity) => {
     return candidate
   }
 
-  const candidateDistance = calculateDistance(entity, candidate)
+  const getCoord = options.getCoord || ((e, d) => e[d])
+  const candidateDistance = calculateDistance(getCoord, entity, candidate)
 
   const limitDistance = Math.abs(entity[tree.dimension] - limit)
 
@@ -54,7 +55,7 @@ export const nearestNeighbour = (options, tree, entity) => {
     return candidate
   }
 
-  const otherCandidateDistance = calculateDistance(entity, otherCandidate)
+  const otherCandidateDistance = calculateDistance(getCoord, entity, otherCandidate)
 
   return candidateDistance < otherCandidateDistance
     ? candidate

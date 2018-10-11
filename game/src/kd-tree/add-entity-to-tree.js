@@ -1,3 +1,4 @@
+import R from 'ramda'
 import { GAME_WIDTH, GAME_HEIGHT } from '../rendering'
 import { calculateMiddle, isNode } from './common'
 import DIMENSIONS from './dimensions'
@@ -28,13 +29,14 @@ const createChildBorders = (borders, dimension, greaterThanMiddle) => {
   }
 }
 
-const splitLeafIntoNode = ({ dimension, borders, value }) => {
+const splitLeafIntoNode = (options, { dimension, borders, value }) => {
   const entity = value
   const nextDimension = getNextDimension(dimension)
 
   const limit = calculateMiddle(borders, dimension)
 
-  const greaterThanMiddle = entity[dimension] > limit
+  const { getCoord } = options
+  const greaterThanMiddle = getCoord(entity, dimension) > limit
 
   const childBorders = createChildBorders(borders, dimension, greaterThanMiddle)
 
@@ -42,22 +44,28 @@ const splitLeafIntoNode = ({ dimension, borders, value }) => {
     dimension,
     borders,
     [greaterThanMiddle]: addEntityToTree(
+      options,
       { dimension: nextDimension, borders: childBorders },
       entity,
     ),
   }
 }
 
-export const addEntityToTree = (tree, entity) => {
+const addEntityToTree = (options, tree, entity) => {
+  const { getCoord } = options
+
   // check if leaf
   if (tree.value) {
-    const node = splitLeafIntoNode(tree)
-    return addEntityToTree(node, entity)
+    const node = splitLeafIntoNode(options, tree)
+    return addEntityToTree(options, node, entity)
   }
 
   // check if node
   if (isNode(tree)) {
-    const surpassesMiddle = entity[tree.dimension] > calculateMiddle(tree.borders, tree.dimension)
+    const coord = getCoord(entity, tree.dimension)
+    const middle = calculateMiddle(tree.borders, tree.dimension)
+    const surpassesMiddle = coord > middle
+
     const subTree = tree[surpassesMiddle] || initEmptyTree(
       createChildBorders(tree.borders, tree.dimension, surpassesMiddle),
       getNextDimension(tree.dimension),
@@ -65,7 +73,7 @@ export const addEntityToTree = (tree, entity) => {
 
     return {
       ...tree,
-      [surpassesMiddle]: addEntityToTree(subTree, entity),
+      [surpassesMiddle]: addEntityToTree(options, subTree, entity),
     }
   }
 
@@ -90,3 +98,14 @@ export const initEmptyTree = (borders, dimension) => ({
     },
   },
 })
+
+const addEntityToTreeExport = R.curry((options, tree, entity) => {
+  const options2 = {
+    getCoord: (e, d) => e[d],
+    ...options,
+  }
+
+  return addEntityToTree(options2, tree, entity)
+})
+
+export { addEntityToTreeExport as addEntityToTree }
