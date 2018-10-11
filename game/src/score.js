@@ -163,7 +163,7 @@ const createHead = ({
 const animate = ({
   tail, fromX, toX, color,
 }) => ({
-  endTime:  ANIMATION_DURATION,
+  duration: ANIMATION_DURATION,
   onUpdate: ({ entity }) => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
     entity.asset.x += diffX

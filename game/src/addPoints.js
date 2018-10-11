@@ -47,7 +47,7 @@ const displayGainedPoint = R.curry((color, player) => {
   })
 
   const suicide = () => ({
-    endTime:    DURATION,
+    duration:   DURATION,
     onComplete: ({ entity }) => {
       l1.destroy(entity)
     },

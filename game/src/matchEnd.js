@@ -91,7 +91,7 @@ const textMovement = () => ({
 })
 
 const createFireworks = color => ({
-  endTime:    l1.getRandomInRange(5, 10),
+  duration:   l1.getRandomInRange(5, 10),
   loop:       true,
   onComplete: ({ entity }) => {
     const x = l1.getRandomInRange(100, GAME_WIDTH - 100)
@@ -109,7 +109,7 @@ const createFireworks = color => ({
 })
 
 const pause = () => ({
-  endTime:    TIME_UNTIL_LOBBY_TRANSITION,
+  duration:   TIME_UNTIL_LOBBY_TRANSITION,
   onComplete: () => {
     Object
       .values(gameState.controllers)

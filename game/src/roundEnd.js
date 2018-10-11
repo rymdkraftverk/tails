@@ -46,7 +46,7 @@ export const transitionToRoundEnd = () => {
 }
 
 const pauseAndTransitionToScoreScene = () => ({
-  endTime:    TIME_UNTIL_ROUND_END_RESTARTS,
+  duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
     l1.destroy(Scene.GAME)
     transitionToScoreScene()
