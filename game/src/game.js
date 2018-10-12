@@ -310,6 +310,7 @@ const pivot = playerId => ({
 
 const createWalls = () => {
   const walls = l1.graphics({
+    id:     'walls',
     parent: l1.get(Scene.GAME),
   })
 

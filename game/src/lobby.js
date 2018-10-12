@@ -134,6 +134,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   )
 
   const titleBackground = l1.graphics({
+    id:     'titleBackground',
     parent: lobbyScene,
     zIndex: Layer.BACKGROUND + 10,
   })
@@ -151,6 +152,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   titleBackground.asset.cacheAsBitmap = true
 
   const playersDivider = l1.graphics({
+    id:     'playersDivider',
     parent: lobbyScene,
     zIndex: Layer.BACKGROUND + 10,
   })

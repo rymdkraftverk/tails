@@ -24,8 +24,12 @@ export const createTrail = ({
   id:       'createTrail',
   duration: 2,
   loop:     true,
-  onInit:   ({ data }) => {
-    data.parent = l1.container({ parent: l1.get(Scene.GAME) })
+  onInit:   ({ data, entity }) => {
+    data.parent = l1.container({
+      id:     `trailContainer, player: ${entity.id}`,
+      parent: l1.get(Scene.GAME),
+    })
+    data.trailIndex = 0
   },
   onComplete: ({ entity, data }) => {
     if (entity.preventTrail) {
@@ -33,10 +37,13 @@ export const createTrail = ({
     }
 
     const trailE = l1.sprite({
+      id:      `player: ${entity.id}, trail: ${data.trailIndex}`,
       parent:  data.parent,
       types:   ['trail'],
       texture: `circle-${entity.color}`,
     })
+
+    data.trailIndex += 1
 
     trailE.active = false
     trailE.player = playerId
