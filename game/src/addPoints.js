@@ -27,17 +27,16 @@ const addPoints = (color) => {
 
 const displayGainedPoint = R.curry((color, player) => {
   const scoreGainEntity = l1.text({
-    text:    '+1',
-    texture: `circle-${player.color}`,
-    style:   {
+    text:  '+1',
+    style: {
       ...TextStyle.SMALL,
       fill: color,
     },
     zIndex: Layer.FOREGROUND,
   })
 
-  scoreGainEntity.asset.x = player.x
-  scoreGainEntity.asset.y = player.y
+  scoreGainEntity.asset.x = player.asset.x
+  scoreGainEntity.asset.y = player.asset.y
 
   const move = () => ({
     onUpdate: ({ counter, entity }) => {
