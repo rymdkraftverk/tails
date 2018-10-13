@@ -10,15 +10,15 @@ const getNextDimension = (dim) => {
 }
 
 const createChildBorders = (borders, dimension, greaterThanMiddle) => {
-  const limit = calculateMiddle(borders, dimension)
+  const middle = calculateMiddle(borders, dimension)
 
   const newMin = greaterThanMiddle
-    ? limit
+    ? middle
     : borders[dimension].min
 
   const newMax = greaterThanMiddle
     ? borders[dimension].max
-    : limit
+    : middle
 
   return {
     ...borders,
@@ -29,26 +29,24 @@ const createChildBorders = (borders, dimension, greaterThanMiddle) => {
   }
 }
 
-const splitLeafIntoNode = (options, { dimension, borders, value }) => {
-  const entity = value
+const createEmptySubTree = (greaterThanMiddle, { dimension, borders }) => {
   const nextDimension = getNextDimension(dimension)
-
-  const limit = calculateMiddle(borders, dimension)
-
-  const { getCoord } = options
-  const greaterThanMiddle = getCoord(entity, dimension) > limit
-
   const childBorders = createChildBorders(borders, dimension, greaterThanMiddle)
 
-  return {
-    dimension,
+  return initEmptyTree(childBorders, nextDimension)
+}
+
+const splitLeafIntoNode = (options, tree) => {
+  const { borders, dimension, value } = tree
+
+  const emptySubTree = {
     borders,
-    [greaterThanMiddle]: addEntityToTree(
-      options,
-      { dimension: nextDimension, borders: childBorders },
-      entity,
-    ),
+    dimension,
+    true:  createEmptySubTree(true, tree),
+    false: createEmptySubTree(false, tree),
   }
+
+  return addEntityToTree(options, emptySubTree, value)
 }
 
 const addEntityToTree = (options, tree, entity) => {
@@ -66,10 +64,7 @@ const addEntityToTree = (options, tree, entity) => {
     const middle = calculateMiddle(tree.borders, tree.dimension)
     const surpassesMiddle = coord > middle
 
-    const subTree = tree[surpassesMiddle] || initEmptyTree(
-      createChildBorders(tree.borders, tree.dimension, surpassesMiddle),
-      getNextDimension(tree.dimension),
-    )
+    const subTree = tree[surpassesMiddle]
 
     return {
       ...tree,
@@ -99,13 +94,12 @@ export const initEmptyTree = (borders, dimension) => ({
   },
 })
 
-const addEntityToTreeExport = R.curry((options, tree, entity) => {
-  const options2 = {
-    getCoord: (e, d) => e[d],
-    ...options,
+const addEntityToTreeExport = R.curry(({ getCoord }, tree, entity) => {
+  const options = {
+    getCoord: getCoord || ((e, d) => e[d]),
   }
 
-  return addEntityToTree(options2, tree, entity)
+  return addEntityToTree(options, tree, entity)
 })
 
 export { addEntityToTreeExport as addEntityToTree }
