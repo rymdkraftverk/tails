@@ -12,9 +12,6 @@ import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './util/gameEvent'
-import { performanceTest } from '../test/kd-tree-performance-test'
-
-performanceTest(500)
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
