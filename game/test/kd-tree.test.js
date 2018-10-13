@@ -12,8 +12,6 @@ const constructTree = (options, entities) => {
     },
   })
 
-  console.log(emptyTree)
-
   return entities
     .reduce((tree, entity) => addEntityToTree(options, tree, entity), emptyTree)
 }
@@ -65,7 +63,6 @@ describe.each`
   test(description, () => {
     const tree = constructTree(parsedOptions, parsedEntities)
 
-    console.log(tree)
     const nearestEntity = nearestNeighbour(parsedOptions, tree, parsedEntity)
 
     expect(nearestEntity)
