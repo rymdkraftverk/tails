@@ -30,17 +30,16 @@ const nearestNeighbour = (options, tree, entity) => {
     return nearestNeighbour(options, tree[!surpassesMiddle], entity)
   }
 
-  const earlyReturn = options.earlyReturn || (() => false)
-  if (earlyReturn(candidate)) {
+  if (options.earlyReturn(candidate)) {
     return candidate
   }
 
-  const getCoord = options.getCoord || ((e, d) => e[d])
+  const { getCoord } = options
   const candidateDistance = calculateDistance(getCoord, entity, candidate)
 
-  const limitDistance = Math.abs(entityCoord - middle)
+  const middleDistance = Math.abs(entityCoord - middle)
 
-  if (candidateDistance < limitDistance) {
+  if (candidateDistance < middleDistance) {
     return candidate
   }
 

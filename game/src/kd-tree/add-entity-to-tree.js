@@ -39,19 +39,17 @@ const createEmptySubTree = (greaterThanMiddle, { dimension, borders }) => {
 const splitLeafIntoNode = (options, tree) => {
   const { borders, dimension, value } = tree
 
-  const emptySubTree = {
+  const emptyTree = {
     borders,
     dimension,
     true:  createEmptySubTree(true, tree),
     false: createEmptySubTree(false, tree),
   }
 
-  return addEntityToTree(options, emptySubTree, value)
+  return addEntityToTree(options, emptyTree, value)
 }
 
 const addEntityToTree = (options, tree, entity) => {
-  const { getCoord } = options
-
   // check if leaf
   if (tree.value) {
     const node = splitLeafIntoNode(options, tree)
@@ -60,7 +58,7 @@ const addEntityToTree = (options, tree, entity) => {
 
   // check if node
   if (isNode(tree)) {
-    const coord = getCoord(entity, tree.dimension)
+    const coord = options.getCoord(entity, tree.dimension)
     const middle = calculateMiddle(tree.borders, tree.dimension)
     const surpassesMiddle = coord > middle
 
@@ -74,9 +72,8 @@ const addEntityToTree = (options, tree, entity) => {
 
   // empty tree
   return {
-    dimension: tree.dimension,
-    borders:   tree.borders,
-    value:     entity,
+    ...tree,
+    value: entity,
   }
 }
 
