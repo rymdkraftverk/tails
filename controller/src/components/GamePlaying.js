@@ -27,10 +27,11 @@ const Container = styled.div`
   overflow: hidden;
 `
 
+// TODO: centralize definition
 const COMMANDS = {
-  NONE:  'none',
-  LEFT:  'left',
-  RIGHT: 'right',
+  NONE:  0,
+  LEFT:  1,
+  RIGHT: 2,
 }
 
 const SEND_INTERVAL = 250

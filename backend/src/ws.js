@@ -70,14 +70,14 @@ const warnReceiverNotFoundAndSend = socket => R.pipe(
   wsSend(socket, Event.NOT_FOUND),
 )
 
-const logAndSendOffer = client => ({ receiver, channelNames, offer }) => {
+const logAndSendOffer = client => ({ receiver, channelInfos, offer }) => {
   log(`[Offer] ${prettyClient(client)} -> ${prettyClient(receiver)}`)
 
   wsSend(
     receiver.socket,
     Event.OFFER,
     {
-      channelNames,
+      channelInfos,
       initiatorId: client.id,
       offer,
     },

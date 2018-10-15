@@ -3,15 +3,17 @@ const Event = require('./event')
 const {
   ReadyState,
   WEB_RTC_CONFIG,
+  hoistInternal,
   makeCloseConnections,
   makeOnMessage,
-  wsSend,
   mappify,
   onWsMessage,
-  partitionInternal,
+  packageChannels,
   prettyId,
+  protobufDeserializer,
   rtcMapSend,
   rtcSend,
+  wsSend,
 } = require('./common')
 
 const HEARTBEAT_INTERVAL = 10000
@@ -79,6 +81,7 @@ const beatHeart = R.pipe(
   R.forEach((initiator) => {
     if (initiator.alive) {
       rtcSend(
+        JSON.stringify,
         initiator.internalChannel,
         { event: Event.HEARTBEAT },
       )
@@ -149,18 +152,21 @@ const setUpChannels = (rtc, channelNames, initiator) => {
 }
 
 const makeSetOnData = channels => (onData) => {
-  channels.forEach((channel) => {
-    channel.onmessage = makeOnMessage(onData)
+  channels.forEach(({ channel, protobuf }) => {
+    channel.onmessage = makeOnMessage(
+      protobuf ? protobufDeserializer(protobuf) : JSON.parse,
+      onData,
+    )
   })
 }
 
 const plumbInternalChannel = ({ channel, initiator }) => {
   initiator.internalChannel = channel
-  channel.onmessage = makeOnMessage(onInternalData)
+  channel.onmessage = makeOnMessage(JSON.parse, onInternalData)
 }
 
 const outputExternalChannels = ({ channels, initiator, rtc }) => {
-  const channelMap = mappify('label', channels)
+  const channelMap = mappify('name', channels)
 
   outputEvents.onInitiatorJoin({
     id:        initiator.id,
@@ -171,7 +177,7 @@ const outputExternalChannels = ({ channels, initiator, rtc }) => {
 }
 
 // First point of contact from initiator
-const onOffer = ({ initiatorId, channelNames, offer }) => {
+const onOffer = ({ initiatorId, channelInfos, offer }) => {
   log(`[Offer] ${prettyId(initiatorId)}`)
 
   const initiator = createInitiator(initiatorId, offer)
@@ -182,9 +188,10 @@ const onOffer = ({ initiatorId, channelNames, offer }) => {
 
   // Wait for all known channels to be opened before considering initiator
   // to have joined
+  const channelNames = R.pluck('name', channelInfos)
   setUpChannels(rtc, channelNames, initiator)
     .then((channels) => {
-      const [internal, externals] = partitionInternal(channels)
+      const [internal, externals] = hoistInternal(channels)
 
       plumbInternalChannel({
         channel: internal,
@@ -192,7 +199,7 @@ const onOffer = ({ initiatorId, channelNames, offer }) => {
       })
 
       outputExternalChannels({
-        channels: externals,
+        channels: packageChannels(channelInfos, externals),
         initiator,
         rtc,
       })

@@ -3,12 +3,14 @@ const Event = require('./event')
 const {
   INTERNAL_CHANNEL,
   WEB_RTC_CONFIG,
+  packageChannels,
+  hoistInternal,
   makeCloseConnections,
   makeOnMessage,
   mappify,
   onWsMessage,
-  partitionInternal,
   prettyId,
+  protobufDeserializer,
   rtcMapSend,
   rtcSend,
   warnNotFound,
@@ -30,13 +32,14 @@ const onInternalData = ({ event }) => {
   }
 
   rtcSend(
+    JSON.stringify,
     internalChannel,
     { event: Event.HEARTBEAT, payload: id },
   )
 }
 
 const sendOffer = ({
-  channelNames,
+  channelInfos,
   receiverId,
   rtc,
   send,
@@ -44,7 +47,7 @@ const sendOffer = ({
   send(
     Event.OFFER,
     {
-      channelNames,
+      channelInfos,
       offer: rtc.localDescription,
       receiverId,
     },
@@ -93,7 +96,11 @@ const plumbChannelConfig = external => R.ifElse(
 )
 
 const setUpChannel = rtc => ({
-  name, config, onClose, onData,
+  name,
+  config,
+  protobuf,
+  onClose,
+  onData,
 }) => {
   const channel = rtc.createDataChannel(
     name,
@@ -110,7 +117,10 @@ const setUpChannel = rtc => ({
     onClose,
   )
 
-  channel.onmessage = makeOnMessage(onData)
+  channel.onmessage = makeOnMessage(
+    protobuf ? protobufDeserializer(protobuf) : JSON.parse,
+    onData,
+  )
 
   // Channel considered "set up" once it's opened
   return new Promise((resolve) => {
@@ -136,11 +146,16 @@ const init = ({
     externalChannelConfigs,
   )
 
+  const channelInfos = R.map(
+    R.pick(['name', 'protobuf']),
+    channelConfigs,
+  )
+
   const thunkedSendOffer = sendOffer({
-    channelNames: R.pluck('name', channelConfigs),
+    channelInfos,
     receiverId,
     rtc,
-    send:         wsSend(ws),
+    send: wsSend(ws),
   })
 
   rtc.onicecandidate = onIceCandidate(thunkedSendOffer)
@@ -168,12 +183,13 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      partitionInternal,
+      hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal
         return externals
       },
-      mappify('label'),
+      packageChannels(channelInfos),
+      mappify('name'),
       rtcMapSend,
       resolve,
     ))

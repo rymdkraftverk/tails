@@ -1,7 +1,7 @@
 const Command = {
-  LEFT:  'left',
-  RIGHT: 'right',
-  NONE:  'none',
+  NONE:  0,
+  LEFT:  1,
+  RIGHT: 2,
 }
 
 module.exports = Command
