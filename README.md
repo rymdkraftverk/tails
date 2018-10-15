@@ -1,5 +1,12 @@
 # novelty
 
+## Index
+* [z-index](#z-index)
+* [eslint](#eslint)
+* [VS Code](#vs-code)
+   * [stylelint](#stylelint)
+* [debugging](#debugging)
+
 Env variable `REACT_APP_WS_ADDRESS` has to be set. 
 Otherwise app will crash.
 
