@@ -1,1 +1,1 @@
-./signaling/node_modules/.bin/pbjs -t json controller/src/protobuf/steering.proto > controller/src/protobuf/bundle.json
+./signaling/node_modules/.bin/pbjs -t json controller/src/protobuf/*.proto > controller/src/protobuf/bundle.json
