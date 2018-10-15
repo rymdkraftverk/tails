@@ -5,6 +5,7 @@
 * [eslint](#eslint)
 * [VS Code](#vs-code)
    * [stylelint](#stylelint)
+* [update protobuf schemas](#update-protobuf-schemas)
 * [debugging](#debugging)
 
 Env variable `REACT_APP_WS_ADDRESS` has to be set. 
@@ -49,6 +50,10 @@ With settings:
 ```js
 "stylelint.enable": true,
 ```
+
+### update protobuf schemas
+1. Add/modify .proto file in [controller/src/protobuf](controller/src/protobuf)
+1. ` ./update_proto.sh`
 
 ### debugging
 There are a few functions available to help with debugging from the game view.
