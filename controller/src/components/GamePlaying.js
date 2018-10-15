@@ -26,8 +26,6 @@ const Container = styled.div`
   overflow: hidden;
 `
 
-const SEND_INTERVAL = 250
-
 const noop = () => {}
 
 navigator.vibrate = (navigator.vibrate ||
@@ -36,28 +34,11 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.msVibrate || noop)
 
 class GamePlaying extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      lastCommand: SteeringCommand.NONE,
-    }
-
-    this.state.intervalId = setInterval(() => {
-      this.sendCommand({ command: this.state.lastCommand })
-    }, SEND_INTERVAL)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId)
-  }
-
   sendCommand = command => () => {
     this.props.send({
       event:   Event.PLAYER_MOVEMENT,
       payload: { command },
     })
-
-    this.setState({ lastCommand: command })
   }
 
   render() {
