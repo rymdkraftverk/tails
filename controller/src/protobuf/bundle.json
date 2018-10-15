@@ -7,20 +7,6 @@
         "RIGHT": 2
       }
     },
-    "Payload": {
-      "fields": {
-        "command": {
-          "rule": "required",
-          "type": "Command",
-          "id": 0
-        },
-        "ordering": {
-          "rule": "required",
-          "type": "int32",
-          "id": 1
-        }
-      }
-    },
     "Message": {
       "fields": {
         "event": {
@@ -30,7 +16,7 @@
         },
         "payload": {
           "rule": "required",
-          "type": "Payload",
+          "type": "Command",
           "id": 1
         }
       }

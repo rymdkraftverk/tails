@@ -83,7 +83,7 @@ const onControllerData = id => (message) => {
 
   switch (event) {
     case Event.PLAYER_MOVEMENT:
-      movePlayer(id, payload.command)
+      movePlayer(id, payload)
       break
     case Event.ROUND_START:
       roundStart()

@@ -1,17 +1,12 @@
 syntax = "proto3";
 
-enum Direction {
+enum Command {
   NONE = 0;
   LEFT = 1;
   RIGHT = 2;
 }
 
-message Payload {
-  required Direction command = 0;
-  required int32 ordering = 1;
-}
-
 message Message {
   required string event = 0;
-  required Payload payload = 1;
+  required Command payload = 1;
 }

@@ -37,7 +37,7 @@ class GamePlaying extends Component {
   sendCommand = command => () => {
     this.props.send({
       event:   Event.PLAYER_MOVEMENT,
-      payload: { command },
+      payload: command,
     })
   }
 
