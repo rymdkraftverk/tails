@@ -109,7 +109,7 @@ export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
   loop:       true,
   onComplete: ({ entity }) => {
     const options = {
-      earlyReturn: t => l1.isColliding(entity, t),
+      earlyReturn: l1.isColliding(entity),
       filter:      t => t.active || t.player !== playerId,
       getCoord:    (e, dimension) => e.asset[dimension],
     }

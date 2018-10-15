@@ -2,6 +2,8 @@ import R from 'ramda'
 import { addEntityToTree, initEmptyTree } from '../src/kd-tree/add-entity-to-tree'
 import { nearestNeighbour } from '../src/kd-tree/nearest-neighbour'
 
+const greenLogColor = '\x1b[32m'
+
 export const performanceTest = (entityCount) => {
   const entities = randomElements(entityCount)
 
@@ -9,7 +11,7 @@ export const performanceTest = (entityCount) => {
   const tree = constructTree(entities)
   const constructEnd = performance.now()
 
-  console.log(`constructing KD-tree with ${entityCount} entities took ${constructEnd - constructStart} ms`)
+  console.log(greenLogColor, `constructing KD-tree with ${entityCount} entities took ${constructEnd - constructStart} ms`)
 
   const testIterations = 5000
   const entitiesToFind = randomElements(testIterations)
@@ -22,7 +24,7 @@ export const performanceTest = (entityCount) => {
   entitiesToFind.forEach(e => testList(entities, e))
   const listEnd = performance.now()
 
-  console.log(`adding one element and checking if it collides with any of ${entityCount} entities took on average ${(treeEnd - treeStart) / testIterations} ms using KD-Tree and ${(listEnd - listStart) / testIterations} ms using a list`)
+  console.log(greenLogColor, `adding one element and checking if it collides with any of ${entityCount} entities took on average ${(treeEnd - treeStart) / testIterations} ms using KD-Tree and ${(listEnd - listStart) / testIterations} ms using a list`)
 }
 
 const randomElements = entityCount => R
@@ -75,4 +77,18 @@ const isColliding = R.curry((e1, e2) => {
   const p2 = e2.asset
   const distance = Math.sqrt(((p1.x - p2.x) ** 2) + ((p1.y - p2.y) ** 2))
   return distance < 4.43 // width & height of snake bodies at 10 players
+})
+
+describe('performance comparison, kd-tree vs list. Add one entity to the data structure and check if another collides with anything', () => {
+  test('100 entities in data structure before test', () => {
+    performanceTest(100)
+  })
+
+  test('200 entities in data structure before test', () => {
+    performanceTest(200)
+  })
+
+  test('300 entities in data structure before test', () => {
+    performanceTest(300)
+  })
 })

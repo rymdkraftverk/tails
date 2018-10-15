@@ -56,7 +56,6 @@ const addEntityToTree = (options, tree, entity) => {
     return addEntityToTree(options, node, entity)
   }
 
-  // check if node
   if (isNode(tree)) {
     const coord = options.getCoord(entity, tree.dimension)
     const middle = calculateMiddle(tree.borders, tree.dimension)

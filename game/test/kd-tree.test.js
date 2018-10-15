@@ -23,7 +23,7 @@ const parseOptions = ({ earlyReturn, filter }) => {
       false: null,
     },
     filter: {
-      true:  ({ include }) => include,
+      true:  e => e.filter,
       false: null,
     },
   }
@@ -35,6 +35,9 @@ const parseOptions = ({ earlyReturn, filter }) => {
   }
 }
 
+const parseEntity = ([x, y, filter]) => ({ filter, asset: { x, y } })
+
+// see explanations of tests 3 and 4 in the comments at the bottom of the file
 describe.each`
   options                                  | entities                                                         | entity     | expectedNearestEntity
   ${{ earlyReturn: false, filter: false }} | ${[[0, 0, true], [0, 10, true], [10, 10, true]]}                 | ${[8, 8]}  | ${[10, 10, true]}
@@ -48,15 +51,9 @@ describe.each`
   expectedNearestEntity,
 }) => {
   const parsedOptions = parseOptions(options)
-  const parsedEntities = entities.map(([x, y, include]) => ({ include, asset: { x, y } }))
-  const parsedEntity = { asset: { x: entity[0], y: entity[1] } }
-  const expected = {
-    asset: {
-      x: expectedNearestEntity[0],
-      y: expectedNearestEntity[1],
-    },
-    include: expectedNearestEntity[2],
-  }
+  const parsedEntities = entities.map(parseEntity)
+  const parsedEntity = parseEntity(entity)
+  const expected = parseEntity(expectedNearestEntity)
 
   const description = `The closest neighbour of ${JSON.stringify(parsedEntity)} should be ${JSON.stringify(expected)}`
 
