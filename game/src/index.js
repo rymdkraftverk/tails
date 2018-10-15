@@ -43,7 +43,7 @@ const roundStart = () => {
       .values(gameState.controllers)
       .forEach(({ id }) => {
         gameState.controllers[id].send(Channel.RELIABLE, {
-          event:   Event.Rtc.ROUND_STARTED,
+          event:   Event.ROUND_STARTED,
           payload: {},
         })
       })
@@ -82,10 +82,10 @@ const onControllerData = id => (message) => {
   const { event, payload } = message
 
   switch (event) {
-    case Event.Rtc.PLAYER_MOVEMENT:
+    case Event.PLAYER_MOVEMENT:
       movePlayer(id, payload.command)
       break
-    case Event.Rtc.ROUND_START:
+    case Event.ROUND_START:
       roundStart()
       break
     default:
@@ -131,7 +131,7 @@ export const onControllerJoin = ({
     }
 
     send(Channel.RELIABLE, {
-      event:   Event.Rtc.CONTROLLER_COLOR,
+      event:   Event.CONTROLLER_COLOR,
       payload: {
         playerId: id,
         color:    player.color,
@@ -140,14 +140,14 @@ export const onControllerJoin = ({
     })
 
     broadcast({
-      event:   Event.Rtc.A_PLAYER_JOINED,
+      event:   Event.A_PLAYER_JOINED,
       payload: {
         playerCount: playerCount(gameState.players),
       },
     })
   } else {
     send(Channel.RELIABLE, {
-      event:   Event.Rtc.GAME_FULL,
+      event:   Event.GAME_FULL,
       payload: {},
     })
 
@@ -192,7 +192,7 @@ const onControllerLeave = (id) => {
   }
 
   broadcast({
-    event:   Event.Rtc.A_PLAYER_LEFT,
+    event:   Event.A_PLAYER_LEFT,
     payload: {
       playerCount: playerCount(gameState.players),
     },
