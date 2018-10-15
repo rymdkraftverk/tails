@@ -52,8 +52,7 @@ const prettyId = id => id.substring(0, 4)
 const defaultSerialize = JSON.stringify
 const defaultDeserialize = JSON.parse
 
-// TODO: don't reload schema on every de(serialization)
-const protobufSchema = (descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey]
+const protobufSchema = R.memoize((descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey])
 
 const protobufSerializer = ({ descriptor, schemaKey }) => data =>
   protobufSchema(descriptor, schemaKey)
