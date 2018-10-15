@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
 import styled from 'styled-components'
-import createCommand from '../util/createCommand'
 
 const SteerButton = styled.div`
   flex: 1;
@@ -47,7 +46,6 @@ class GamePlaying extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ordering:    0,
       lastCommand: COMMANDS.NONE,
     }
 
@@ -63,10 +61,10 @@ class GamePlaying extends Component {
   sendCommand = command => () => {
     this.props.send({
       event:   Event.Rtc.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, command),
+      payload: { command },
     })
 
-    this.setState(state => ({ lastCommand: command, ordering: state.ordering + 1 }))
+    this.setState({ lastCommand: command })
   }
 
   render() {

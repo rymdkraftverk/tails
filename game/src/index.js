@@ -40,17 +40,8 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
-const playerMovement = (id, { command, ordering }) => {
-  if (gameState.controllers[id].lastOrder >= ordering) {
-    log(`dropping old move: ${ordering}`)
-    return
-  }
-
-  gameState.controllers[id].lastMoveOrder = ordering
-  const commandFn = commands[command]
-  if (commandFn) {
-    commandFn(id)
-  }
+const playerMovement = (id, { command }) => {
+  commands[command](id)
 }
 
 const roundStart = () => {
@@ -153,7 +144,6 @@ export const onControllerJoin = ({
 
     gameState.controllers[id] = {
       id,
-      lastMoveOrder: -1,
       send,
     }
 
