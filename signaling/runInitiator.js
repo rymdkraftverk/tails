@@ -6,11 +6,10 @@ const {
   packageChannels,
   hoistInternal,
   makeCloseConnections,
-  makeOnMessage,
+  makeOnRtcMessage,
   mappify,
   onWsMessage,
   prettyId,
-  protobufDeserializer,
   rtcMapSend,
   rtcSend,
   warnNotFound,
@@ -117,10 +116,10 @@ const setUpChannel = rtc => ({
     onClose,
   )
 
-  channel.onmessage = makeOnMessage(
-    protobuf ? protobufDeserializer(protobuf) : JSON.parse,
+  channel.onmessage = makeOnRtcMessage({
+    protobuf,
     onData,
-  )
+  })
 
   // Channel considered "set up" once it's opened
   return new Promise((resolve) => {

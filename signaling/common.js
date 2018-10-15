@@ -64,6 +64,11 @@ const protobufDeserializer = ({ descriptor, schemaKey }) => data =>
   protobufSchema(descriptor, schemaKey)
     .decode(new Uint8Array(data))
 
+const getSerializer = protobuf =>
+  (protobuf ? protobufSerializer(protobuf) : defaultSerialize)
+const getDeserializer = protobuf =>
+  (protobuf ? protobufDeserializer(protobuf) : defaultDeserialize)
+
 const wsSend = R.curry((ws, event, payload) => {
   R.pipe(
     defaultSerialize,
@@ -83,9 +88,11 @@ const rtcMapSend = R.curry((channelMap, channelName, data) => {
     return
   }
 
-  const serialize = protobuf ? protobufSerializer(protobuf) : defaultSerialize
-
-  rtcSend(serialize, channel, data)
+  rtcSend(
+    getSerializer(protobuf),
+    channel,
+    data,
+  )
 })
 
 const onWsMessage = eventMap => (message) => {
@@ -118,9 +125,9 @@ const makeCloseConnections = connections => () => {
   })
 }
 
-const makeOnMessage = (deserialize, onData) => R.pipe(
+const makeOnRtcMessage = ({ protobuf, onData }) => R.pipe(
   R.prop('data'),
-  deserialize,
+  getDeserializer(protobuf),
   onData,
 )
 
@@ -130,13 +137,11 @@ module.exports = {
   WEB_RTC_CONFIG,
   hoistInternal,
   makeCloseConnections,
-  makeOnMessage,
+  makeOnRtcMessage,
   mappify,
   onWsMessage,
   packageChannels,
   prettyId,
-  protobufDeserializer,
-  protobufSerializer,
   rtcMapSend,
   rtcSend,
   warnNotFound,

@@ -5,12 +5,11 @@ const {
   WEB_RTC_CONFIG,
   hoistInternal,
   makeCloseConnections,
-  makeOnMessage,
+  makeOnRtcMessage,
   mappify,
   onWsMessage,
   packageChannels,
   prettyId,
-  protobufDeserializer,
   rtcMapSend,
   rtcSend,
   wsSend,
@@ -153,16 +152,18 @@ const setUpChannels = (rtc, channelNames, initiator) => {
 
 const makeSetOnData = channels => (onData) => {
   channels.forEach(({ channel, protobuf }) => {
-    channel.onmessage = makeOnMessage(
-      protobuf ? protobufDeserializer(protobuf) : JSON.parse,
+    channel.onmessage = makeOnRtcMessage({
+      protobuf,
       onData,
-    )
+    })
   })
 }
 
 const plumbInternalChannel = ({ channel, initiator }) => {
   initiator.internalChannel = channel
-  channel.onmessage = makeOnMessage(JSON.parse, onInternalData)
+  channel.onmessage = makeOnRtcMessage({
+    onData: onInternalData,
+  })
 }
 
 const outputExternalChannels = ({ channels, initiator, rtc }) => {
