@@ -17,7 +17,6 @@ import { Track, playTrack } from './music'
 import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 import GameEvent from './util/gameEvent'
 import { initEmptyTree } from './kd-tree'
-import { app } from '.'
 
 window.debug = {
   ...window.debug,

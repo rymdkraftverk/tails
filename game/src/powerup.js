@@ -70,7 +70,6 @@ export const initPowerups = ({
               behaviorsToRemove,
             )
 
-
             l1.addBehavior(ghost({ player: collidingEntity, speedMultiplier }))
           }
         },
