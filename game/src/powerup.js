@@ -1,4 +1,5 @@
 import * as l1 from 'l1'
+import uuid from 'uuid/v4'
 import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
@@ -42,7 +43,10 @@ export const initPowerups = ({
       powerup.height = 64 * (snakeSpeed / speedMultiplier)
       powerup.scale.set((snakeSpeed / speedMultiplier))
 
+      const collisionCheckerId = uuid()
+
       const collisionChecker = () => ({
+        id:       collisionCheckerId,
         labels:   ['collisionCheckerPowerup'],
         onUpdate: () => {
           const collidingEntity = l1
@@ -56,6 +60,7 @@ export const initPowerups = ({
             l1.destroy(powerup)
 
             const behaviorsToRemove = [
+              collisionCheckerId,
               `indicateExpiration-${collidingEntity.playerId}`,
               `ghost-${collidingEntity.playerId}`,
             ]
@@ -65,7 +70,6 @@ export const initPowerups = ({
               behaviorsToRemove,
             )
 
-            l1.removeBehavior(collisionChecker)
 
             l1.addBehavior(ghost({ player: collidingEntity, speedMultiplier }))
           }
