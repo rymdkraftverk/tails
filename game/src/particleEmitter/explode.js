@@ -46,6 +46,8 @@ export default ({
       y: radius / 2,
       r: radius,
     },
+    emit:       true,
+    autoUpdate: true,
   }
 
   return {

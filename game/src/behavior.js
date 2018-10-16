@@ -1,4 +1,5 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
@@ -15,57 +16,50 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
-const middle = (entity, dim, prop) =>
-  (entity.asset.toGlobal(new l1.PIXI.Point(0, 0))[dim] / l1.getScreenScale()) +
-  (entity.asset.hitArea[prop] / 2)
+const middle = (displayObject, dim, prop) =>
+  (displayObject.toGlobal(new PIXI.Point(0, 0))[dim] / l1.getScale()) +
+  (displayObject.hitArea[prop] / 2)
 
 export const createTrail = ({
-  playerId, speed, speedMultiplier,
+  player, speed, speedMultiplier,
 }) => ({
-  id:       'createTrail',
+  id:       `createTrail-${player.playerId}`,
   duration: 2,
   loop:     true,
-  onInit:   ({ data, entity }) => {
-    data.parent = l1.container({
-      id:     `trailContainer, player: ${entity.id}`,
+  onInit:   ({ data }) => {
+    data.parent = new PIXI.Container()
+    l1.add(data.parent, {
       parent: l1.get(Scene.GAME),
     })
-    data.trailIndex = 0
   },
-  onComplete: ({ entity, data }) => {
-    if (entity.preventTrail) {
+  onComplete: ({ data }) => {
+    if (player.preventTrail) {
       return
     }
 
-    const trailE = l1.sprite({
-      id:      `player: ${entity.id}, trail: ${data.trailIndex}`,
-      parent:  data.parent,
-      types:   ['trail'],
-      texture: `circle-${entity.color}`,
-    })
-
-    data.trailIndex += 1
-
-    trailE.active = false
-    trailE.player = playerId
-
-    trailE.asset.scale.set(speed / speedMultiplier / 2)
-
-    // Find the middle of the player entity so that
-    // we can put the trails' middle point in the same spot
-    trailE.asset.x = middle(entity, 'x', 'width') - (trailE.asset.width / 2)
-    trailE.asset.y = middle(entity, 'y', 'height') - (trailE.asset.height / 2)
-
-    trailE.asset.filters = null
-    trailE.asset.cacheAsBitmap = true
-
-    l1.addBehavior(
+    const trailE = new PIXI.Sprite(l1.getTexture(`circle-${player.color}`))
+    l1.add(
       trailE,
-      activate(),
+      {
+        parent: data.parent,
+        labels: ['trail'],
+      },
     )
 
+    trailE.active = false
+    trailE.player = player.playerId
+
+    trailE.scale.set(speed / speedMultiplier / 2)
+
+    // Find the middle of the player so that
+    // we can put the trails' middle point in the same spot
+    trailE.x = middle(player, 'x', 'width') - (trailE.width / 2)
+    trailE.y = middle(player, 'y', 'height') - (trailE.height / 2)
+
+    l1.addBehavior(activate(trailE))
+
     const options = {
-      getCoord: (e, dim) => e.asset[dim],
+      getCoord: (e, dim) => e[dim],
     }
     gameState.kdTree = addEntityToTree(options, gameState.kdTree, trailE)
   },
@@ -74,122 +68,122 @@ export const createTrail = ({
 /*
  * This behavior is needed so that the player wont immediately collide with its own tail.
  */
-const activate = () => ({
+const activate = trail => ({
   duration:   15,
-  onComplete: ({ entity }) => {
-    entity.active = true
+  onComplete: () => {
+    trail.active = true
   },
 })
 
-const holeMaker = (speed, speedMultiplier) => ({
-  id:       'holeMaker',
+const holeMaker = (player, speed, speedMultiplier) => ({
+  id:       `holeMaker-${player.playerId}`,
   duration: l1.getRandomInRange(
     Math.ceil(HOLE_LENGTH_MIN_TIME * (speedMultiplier / speed)),
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),
-  onInit: ({ entity }) => {
-    entity.preventTrail = true
+  onInit: () => {
+    player.preventTrail = true
   },
-  onRemove: ({ entity }) => {
-    entity.preventTrail = false
-    l1.addBehavior(
-      entity,
-      createHoleMaker(speed, speedMultiplier),
-    )
+  onRemove: () => {
+    player.preventTrail = false
+    l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })
 
-export const createHoleMaker = (speed, speedMultiplier) => ({
-  id:       'createHoleMaker',
+export const createHoleMaker = (player, speed, speedMultiplier) => ({
+  id:       `createHoleMaker-${player.playerId}`,
   duration: l1.getRandomInRange(
     GENERATE_HOLE_MIN_TIME,
     GENERATE_HOLE_MAX_TIME,
   ),
-  onRemove: ({ entity }) => {
-    l1.addBehavior(
-      entity,
-      holeMaker(speed, speedMultiplier),
-    )
+  onRemove: () => {
+    l1.addBehavior(holeMaker(player, speed, speedMultiplier))
   },
 })
 
-export const collisionCheckerTrail = (playerId, speedMultiplier) => ({
-  id:         'collisionCheckerTrail',
+export const collisionCheckerTrail = (player, speedMultiplier) => ({
+  id:         `collisionCheckerTrail-${player.playerId}`,
   duration:   2,
   loop:       true,
-  onComplete: ({ entity }) => {
-    const isColliding = l1.isColliding(entity)
+  onComplete: () => {
+    const isColliding = R.curry(l1.isColliding)(player)
 
     const options = {
       earlyReturn: isColliding,
-      filter:      t => t.active || t.player !== playerId,
-      getCoord:    (e, dimension) => e.asset[dimension],
+      filter:      t => t.active || t.player !== player.playerId,
+      getCoord:    (e, dimension) => e[dimension],
     }
 
-    const closestOrFirstCollidingEntity = nearestNeighbour(options, gameState.kdTree, entity)
+    const closestOrFirstCollidingEntity = nearestNeighbour(options, gameState.kdTree, player)
 
     if (closestOrFirstCollidingEntity && isColliding(closestOrFirstCollidingEntity)) {
-      killPlayer(entity, speedMultiplier)
+      killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }
   },
 })
 
-const killPlayer = (entity, speedMultiplier) => {
-  l1.particles({
-    ...explode({
-      degrees:     entity.degrees,
-      scaleFactor: (speedMultiplier / entity.speed) / 4,
-      radius:      entity.asset.width * 2,
-      x:           0,
-      y:           0,
-    }),
-    zIndex: Layer.FOREGROUND + 1,
-    parent: entity,
+const killPlayer = (player, speedMultiplier) => {
+  const {
+    textures,
+    config,
+  } = explode({
+    degrees:     player.degrees,
+    scaleFactor: (speedMultiplier / player.speed) / 4,
+    radius:      player.width * 2,
+    x:           0,
+    y:           0,
   })
+  // eslint-disable-next-line no-new
+  new PIXI.particles.Emitter(
+    player,
+    textures.map(l1.getTexture),
+    config,
+  )
+  // TODO: Particles should have this zIndex
+  // zIndex: Layer.FOREGROUND + 1,
 
   l1.sound({
     src:    './sounds/explosion.wav',
     volume: 0.6,
-    parent: entity,
   })
 
-  entity.killed = true
+  player.killed = true
 
   const behaviorsToRemove = [
-    'collisionCheckerTrail',
-    'collisionCheckerWalls',
-    'createHoleMaker',
-    'holeMaker',
-    'createTrail',
-    'move',
-    'pivot',
+    `collisionCheckerTrail-${player.playerId}`,
+    `collisionCheckerWalls-${player.playerId}`,
+    `createHoleMaker-${player.playerId}`,
+    `holeMaker-${player.playerId}`,
+    `createTrail-${player.playerId}`,
+    `move-${player.playerId}`,
+    `pivot-${player.playerId}`,
   ]
 
   R.forEach(
-    l1.removeBehavior(entity),
+    l1.removeBehavior,
     behaviorsToRemove,
   )
 
-  gameState.events.emit(GameEvent.PLAYER_COLLISION, entity.color)
-  entity.event.emit(GameEvent.PLAYER_COLLISION)
+  gameState.events.emit(GameEvent.PLAYER_COLLISION, player.color)
+  player.event.emit(GameEvent.PLAYER_COLLISION)
 }
 
 export const collisionCheckerWalls = ({
-  speedMultiplier, wallThickness,
+  player, speedMultiplier, wallThickness,
 }) => ({
-  id:         'collisionCheckerWalls',
+  id:         `collisionCheckerWalls-${player.playerId}`,
   duration:   2,
   loop:       true,
-  onComplete: ({ entity }) => {
-    const x = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()
-    const y = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).y / l1.getScreenScale()
+  onComplete: () => {
+    const x = player.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale()
+    const y = player.toGlobal(new PIXI.Point(0, 0)).y / l1.getScale()
     if (
       x < wallThickness ||
-      x > GAME_WIDTH - wallThickness - entity.asset.hitArea.width ||
+      x > GAME_WIDTH - wallThickness - player.hitArea.width ||
       y < wallThickness ||
-      y > GAME_HEIGHT - wallThickness - entity.asset.hitArea.height) {
-      killPlayer(entity, speedMultiplier)
+      y > GAME_HEIGHT - wallThickness - player.hitArea.height) {
+      killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }
   },
@@ -197,13 +191,13 @@ export const collisionCheckerWalls = ({
 
 const checkPlayersAlive = () => {
   const playersAlive = l1
-    .getByType('player')
+    .getByLabel('player')
     .filter(p => !p.killed)
 
   if (playersAlive.length === 1 && gameState.currentState === CurrentState.PLAYING_ROUND) {
     gameState.lastRoundResult.winner = playersAlive[0].color
     gameState.lastRoundResult.playerFinishOrder =
-            gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].id])
+            gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0]._l1.id])
 
     transitionToRoundEnd()
   }

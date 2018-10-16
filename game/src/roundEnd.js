@@ -1,4 +1,5 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
@@ -19,28 +20,34 @@ export const transitionToRoundEnd = () => {
 
   const { winner } = gameState.lastRoundResult
 
-  const roundEnd = l1.text({
-    id:     Scene.ROUND_END,
-    parent: l1.get(Scene.GAME),
-    text:   `Winner is ${winner}!`,
-    zIndex: Layer.FOREGROUND + 10,
-    style:  {
+  const roundEndText = new PIXI.Text(
+    `Winner is ${winner}!`,
+    {
       ...TextStyle.BIG,
-      fill: Color[winner],
+      fontSize: TextStyle.BIG.fontSize * l1.getScale(),
+      fill:     Color[winner],
     },
-  })
+  )
+  l1.add(
+    roundEndText,
+    {
+      id:     Scene.ROUND_END,
+      parent: l1.get(Scene.GAME),
+      zIndex: Layer.FOREGROUND + 10,
+    },
+  )
 
-  roundEnd.asset.x = -300
-  roundEnd.asset.y = 200
-  roundEnd.asset.anchor.set(0.5)
+  roundEndText.x = -300
+  roundEndText.y = 200
+  roundEndText.anchor.set(0.5)
 
   const behaviorsToAdd = [
-    roundWinnerTextAnimation(),
+    roundWinnerTextAnimation(roundEndText),
     pauseAndTransitionToScoreScene(),
   ]
 
   R.forEach(
-    l1.addBehavior(roundEnd),
+    l1.addBehavior,
     behaviorsToAdd,
   )
 }
@@ -49,20 +56,27 @@ const pauseAndTransitionToScoreScene = () => ({
   duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
     l1.destroy(Scene.GAME)
+    l1.getAllBehaviors()
+      .map(l1.removeBehavior)
+    // l1.removeBehavior(l1.getBehaviorByLabel('collisionCheckerPowerup'))
+
     transitionToScoreScene()
   },
 })
 
-const roundWinnerTextAnimation = () => ({
-  onInit: ({ entity, data }) => {
+const WINNER_TEXT_ANIMATION_DURATION = 120
+
+const roundWinnerTextAnimation = roundEndText => ({
+  duration: WINNER_TEXT_ANIMATION_DURATION,
+  onInit:   ({ data }) => {
     data.animation = createEaseInAndOut({
-      start:    -(entity.asset.width / 2),
-      end:      GAME_WIDTH + (entity.asset.width / 2),
-      duration: 120,
+      start:    -(roundEndText.width / 2),
+      end:      GAME_WIDTH + (roundEndText.width / 2),
+      duration: WINNER_TEXT_ANIMATION_DURATION,
     })
   },
-  onUpdate: ({ counter, entity, data }) => {
-    entity.asset.x = data.animation(counter)
+  onUpdate: ({ counter, data }) => {
+    roundEndText.x = data.animation(counter)
   },
 })
 

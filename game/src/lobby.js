@@ -1,4 +1,5 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
 import R from 'ramda'
 import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
@@ -46,13 +47,46 @@ const getPlayerPosition = l1.grid({
   itemsPerRow: 2,
 })
 
+const addText = ({
+  x,
+  y,
+  text,
+  style,
+  parent,
+}) => {
+  const textObject = new PIXI.Text(
+    text,
+    {
+      ...style,
+      fontSize: style.fontSize * l1.getScale(),
+    },
+  )
+
+  textObject.x = x
+  textObject.y = y
+
+  l1.add(
+    textObject,
+    {
+      parent,
+    },
+  )
+}
+
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   gameState.currentState = CurrentState.LOBBY
-  const lobbyScene = l1.container({
-    id: Scene.LOBBY,
-  })
+  const lobbyScene = new PIXI.Container()
 
-  l1.text({
+  l1.add(
+    lobbyScene,
+    {
+      id: Scene.LOBBY,
+    },
+  )
+
+  addText({
+    x:     TextAnchor.INSTRUCTION_START_X,
+    y:     100,
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
@@ -60,12 +94,11 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    TextAnchor.INSTRUCTION_START_X,
-    100,
-  )
+  })
 
-  l1.text({
+  addText({
+    x:     TextAnchor.INSTRUCTION_START_X,
+    y:     300,
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
@@ -73,12 +106,11 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    TextAnchor.INSTRUCTION_START_X,
-    300,
-  )
+  })
 
-  l1.text({
+  addText({
+    x:     TextAnchor.INSTRUCTION_START_X + 210,
+    y:     292,
     text:  getControllerUrl(),
     style: {
       ...TextStyle.CODE,
@@ -87,13 +119,11 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    TextAnchor.INSTRUCTION_START_X + 210,
-    292,
-  )
+  })
 
-
-  l1.text({
+  addText({
+    x:     TextAnchor.INSTRUCTION_START_X,
+    y:     520,
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
@@ -101,12 +131,11 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    TextAnchor.INSTRUCTION_START_X,
-    520,
-  )
+  })
 
-  l1.text({
+  addText({
+    x:     TextAnchor.INSTRUCTION_START_X + 400,
+    y:     514,
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -116,30 +145,30 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
       fill:          TextColor.HIGHLIGHT,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    TextAnchor.INSTRUCTION_START_X + 400,
-    514,
-  )
+  })
 
-  l1.text({
+  addText({
+    x:     GAME_WIDTH - 300,
+    y:     GAME_HEIGHT - 40,
     text:  '© Rymdkraftverk 2018',
     style: {
       ...TextStyle.CODE,
       fontSize: 18,
     },
     parent: lobbyScene,
-  }).asset.position.set(
-    GAME_WIDTH - 300,
-    GAME_HEIGHT - 40,
-  )
-
-  const titleBackground = l1.graphics({
-    id:     'titleBackground',
-    parent: lobbyScene,
-    zIndex: Layer.BACKGROUND + 10,
   })
 
-  titleBackground.asset
+  const titleBackground = new PIXI.Graphics()
+  l1.add(
+    titleBackground,
+    {
+      id:     'titleBackground',
+      parent: lobbyScene,
+      zIndex: Layer.BACKGROUND + 10,
+    },
+  )
+
+  titleBackground
     .beginFill(GameColor.BLUE)
     .moveTo(0, 0)
     .lineTo(GAME_WIDTH, 0)
@@ -148,22 +177,24 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     .lineTo(0, 0)
     .endFill()
 
-  titleBackground.asset.filters = null
-  titleBackground.asset.cacheAsBitmap = true
+  titleBackground.cacheAsBitmap = true
 
-  const playersDivider = l1.graphics({
-    id:     'playersDivider',
-    parent: lobbyScene,
-    zIndex: Layer.BACKGROUND + 10,
-  })
+  const playersDivider = new PIXI.Graphics()
+  l1.add(
+    playersDivider,
+    {
+      id:     'playersDivider',
+      parent: lobbyScene,
+      zIndex: Layer.BACKGROUND + 10,
+    },
+  )
 
-  playersDivider.asset
+  playersDivider
     .lineStyle(4, GameColor.WHITE, 1)
     .moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
     .lineTo(875, 700)
 
-  playersDivider.asset.filters = null
-  playersDivider.asset.cacheAsBitmap = true
+  playersDivider.cacheAsBitmap = true
 
   drawInstructionArrow({
     x:            400,
@@ -204,60 +235,62 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 const drawInstructionArrow = ({
   x, y, id, angle, parent,
 }) => {
-  const instructionArrowOne = l1.sprite({
-    id:      `instruction-arrow-${id}`,
-    texture: 'expand-arrow-one',
-    parent,
-  })
+  const instructionArrowOne = new PIXI.Sprite(l1.getTexture('expand-arrow-one'))
+  l1.add(
+    instructionArrowOne,
+    {
+      id: `instruction-arrow-${id}`,
+      parent,
+    },
+  )
 
-  instructionArrowOne.asset.x = x
-  instructionArrowOne.asset.y = y
-  instructionArrowOne.asset.scale.set(1)
-  instructionArrowOne.asset.rotation = toRadians(angle)
+  instructionArrowOne.x = x
+  instructionArrowOne.y = y
+  instructionArrowOne.scale.set(1)
+  instructionArrowOne.rotation = toRadians(angle)
 
-  instructionArrowOne.asset.filters = null
-  instructionArrowOne.asset.cacheAsBitmap = true
+  instructionArrowOne.cacheAsBitmap = true
 }
 
 const createOutline = (index) => {
   const { x, y } = getPlayerPosition(index)
 
-  const outline = l1.sprite({
-    id:      `outline-${index}`,
-    parent:  l1.get(Scene.LOBBY),
-    texture: 'square-outline',
-    zIndex:  Layer.BACKGROUND + 10,
-  })
+  const outline = new PIXI.Sprite(l1.getTexture('square-outline'))
+  l1.add(
+    outline,
+    {
+      id:     `outline-${index}`,
+      parent: l1.get(Scene.LOBBY),
+      zIndex: Layer.BACKGROUND + 10,
+    },
+  )
 
-  outline.asset.x = x
-  outline.asset.y = y
-  outline.asset.scale.set(1.5)
-  outline.asset.anchor.set(0.5)
-
-  outline.asset.filters = null
-  outline.asset.cacheAsBitmap = true
+  outline.x = x
+  outline.y = y
+  outline.scale.set(1.5)
+  outline.anchor.set(0.5)
 }
 
 export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
-  const square = l1.sprite({
-    id:      `square-${color}`,
-    types:   ['lobby-square'],
-    parent:  l1.get(Scene.LOBBY),
-    texture: `square-${color}`,
-  })
+  const square = new PIXI.Sprite(l1.getTexture(`square-${color}`))
+  l1.add(
+    square,
+    {
+      id:     `square-${color}`,
+      labels: ['lobby-square'],
+      parent: l1.get(Scene.LOBBY),
+    },
+  )
 
-  square.asset.x = x
-  square.asset.y = y
-  square.asset.scale.set(3)
-  square.asset.anchor.set(0.5)
+  square.x = x
+  square.y = y
+  square.scale.set(3)
+  square.anchor.set(0.5)
 
   if (newPlayer) {
-    l1.addBehavior(
-      square,
-      bounce(0.08),
-    )
+    l1.addBehavior(bounce(square, 0.08))
     const joinSounds = [
       'join1',
       'join2',
