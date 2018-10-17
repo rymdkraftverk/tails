@@ -293,7 +293,17 @@ setInterval(() => {
   console.log()
 }, 1000)
 
+const printBehaviors = () => {
+  console.log('BEHAVIORS:')
+  l1.getAllBehaviors()
+    .forEach((b) => {
+      console.log(b.id)
+    })
+  console.log('==============')
+}
+
 window.debug = {
   ...window.debug,
   roundStart,
+  printBehaviors,
 }
