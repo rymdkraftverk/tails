@@ -226,14 +226,6 @@ const onControllerLeave = (id) => {
   })
 }
 
-const resizeGame = () => {
-  const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
-  l1.resize(screenWidth, screenHeight)
-}
-
-window.addEventListener('resize', resizeGame)
-
 export const app = new PIXI.Application({
   width:             GAME_WIDTH,
   height:            GAME_HEIGHT,
@@ -269,9 +261,16 @@ app.loader.load(() => {
     id:     'background',
     zIndex: Layer.ABSOLUTE_BACKGROUND,
   })
-
-  resizeGame()
 })
+
+const resizeGame = () => {
+  const screenWidth = window.innerWidth
+  const screenHeight = window.innerHeight
+  l1.resize(screenWidth, screenHeight)
+}
+resizeGame()
+
+window.addEventListener('resize', resizeGame)
 
 // setInterval(() => {
 //   console.log('FPS: ', Math.ceil(app.ticker.FPS))

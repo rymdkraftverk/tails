@@ -45,8 +45,7 @@ export const transitionToScoreScene = () => {
     scoreToWin(gameState.players),
     {
       ...TextStyle.BIG,
-      fontSize: TextStyle.BIG * l1.getScale(),
-      fill:     'white',
+      fill: 'white',
     },
   )
   l1.add(
@@ -132,8 +131,7 @@ const createPlayer = (index) => {
       player.score,
       {
         ...TextStyle.SMALL,
-        fontSize: TextStyle.SMALL.fontSize * l1.getScale(),
-        fill:     'white',
+        fill: 'white',
       },
     )
     l1.add(

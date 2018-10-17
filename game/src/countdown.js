@@ -41,7 +41,7 @@ const countdownBehavior = (countdown, resolve) => ({
       numbers[data.index],
       {
         ...TextStyle.BIG,
-        fontSize: 92 * l1.getScale(),
+        fontSize: 92,
         fill:     'white',
       },
     )

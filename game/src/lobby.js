@@ -56,10 +56,7 @@ const addText = ({
 }) => {
   const textObject = new PIXI.Text(
     text,
-    {
-      ...style,
-      fontSize: style.fontSize * l1.getScale(),
-    },
+    style,
   )
 
   textObject.x = x

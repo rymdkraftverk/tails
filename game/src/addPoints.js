@@ -31,7 +31,6 @@ const displayGainedPoint = R.curry((color, player) => {
     '+1',
     {
       ...TextStyle.SMALL,
-      fontSize: TextStyle.SMALL * l1.getScale(),
       fill:     color,
     },
   )

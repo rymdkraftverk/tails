@@ -24,8 +24,7 @@ export const transitionToRoundEnd = () => {
     `Winner is ${winner}!`,
     {
       ...TextStyle.BIG,
-      fontSize: TextStyle.BIG.fontSize * l1.getScale(),
-      fill:     Color[winner],
+      fill: Color[winner],
     },
   )
   l1.add(

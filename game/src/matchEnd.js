@@ -38,7 +38,7 @@ export const transitionToMatchEnd = () => {
       `${color} is the champion!`,
       {
         ...TextStyle.BIG,
-        fontSize: 38 * l1.getScale(),
+        fontSize: 38,
         fill:     Color[color],
       },
     )
@@ -71,7 +71,7 @@ export const transitionToMatchEnd = () => {
       'It\'s a draw, better luck next time!',
       {
         ...TextStyle.BIG,
-        fontSize: 38 * l1.getScale(),
+        fontSize: 38,
         fill:     'white',
       },
     )
