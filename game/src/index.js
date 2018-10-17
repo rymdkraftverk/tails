@@ -233,7 +233,9 @@ export const app = new PIXI.Application({
   clearBeforeRender: false,
 })
 
-document.body.appendChild(app.view)
+document
+  .getElementById('game')
+  .appendChild(app.view)
 
 l1.init(app)
 
