@@ -197,7 +197,7 @@ const checkPlayersAlive = () => {
   if (playersAlive.length === 1 && gameState.currentState === CurrentState.PLAYING_ROUND) {
     gameState.lastRoundResult.winner = playersAlive[0].color
     gameState.lastRoundResult.playerFinishOrder =
-            gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0]._l1.id])
+            gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].l1.id])
 
     transitionToRoundEnd()
   }

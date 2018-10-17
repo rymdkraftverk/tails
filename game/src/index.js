@@ -35,7 +35,7 @@ const moveLeft = playerId => movePlayer(playerId, SteeringCommand.LEFT)
 const moveRight = playerId => movePlayer(playerId, SteeringCommand.RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const registerPlayerFinished = ({ _l1: { id } }) => () => {
+const registerPlayerFinished = ({ l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
@@ -74,7 +74,7 @@ const roundStart = () => {
         ]
         l1
           .getAll()
-          .filter(e => !entitiesToKeep.includes(e._l1.id))
+          .filter(e => !entitiesToKeep.includes(e.l1.id))
           .forEach(l1.destroy)
 
         transitionToGameScene(MAX_PLAYERS_ALLOWED)

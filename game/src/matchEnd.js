@@ -17,7 +17,7 @@ const TIME_UNTIL_LOBBY_TRANSITION = 500
 export const transitionToMatchEnd = () => {
   l1
     .getAll()
-    .filter(e => e._l1.id !== 'background')
+    .filter(e => e.l1.id !== 'background')
     .forEach(l1.destroy)
 
   const matchEnd = new PIXI.Container()
