@@ -325,14 +325,6 @@ const pivot = player => ({
 })
 
 const createWalls = () => {
-  l1.addBehavior({
-    duration:   400,
-    onComplete: () => {
-      // app.ticker.stop()
-      // console.log('app', app.stage.children)
-      // console.log('stage')
-    },
-  })
   const walls = new PIXI.Graphics()
   l1.add(
     walls,

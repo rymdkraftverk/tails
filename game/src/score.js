@@ -124,8 +124,6 @@ const createPlayer = (index) => {
     x: previousX, y, texture,
   })
 
-  console.log('player', player)
-
   if (player) {
     const playerScore = new PIXI.Text(
       player.score,

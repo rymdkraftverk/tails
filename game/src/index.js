@@ -272,14 +272,6 @@ resizeGame()
 
 window.addEventListener('resize', resizeGame)
 
-// setInterval(() => {
-//   console.log('FPS: ', Math.ceil(app.ticker.FPS))
-// }, 1000)
-
-// setInterval(() => {
-//   console.log('Behaviors: ', l1.getAllBehaviors().length)
-// }, 1000)
-
 const div = document.createElement('div')
 div.style.color = 'red'
 div.style.position = 'absolute'
@@ -289,7 +281,6 @@ document.body.appendChild(div)
 
 setInterval(() => {
   div.innerHTML = `b: ${l1.getAllBehaviors().length}`
-  console.log()
 }, 1000)
 
 const printBehaviors = () => {
