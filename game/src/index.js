@@ -35,7 +35,7 @@ const moveLeft = playerId => movePlayer(playerId, SteeringCommand.LEFT)
 const moveRight = playerId => movePlayer(playerId, SteeringCommand.RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const registerPlayerFinished = ({ id }) => () => {
+const registerPlayerFinished = ({ _l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
