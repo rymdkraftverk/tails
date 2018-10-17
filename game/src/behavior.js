@@ -84,7 +84,7 @@ const holeMaker = (player, speed, speedMultiplier) => ({
   onInit: () => {
     player.preventTrail = true
   },
-  onRemove: () => {
+  onComplete: () => {
     player.preventTrail = false
     l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
@@ -96,7 +96,7 @@ export const createHoleMaker = (player, speed, speedMultiplier) => ({
     GENERATE_HOLE_MIN_TIME,
     GENERATE_HOLE_MAX_TIME,
   ),
-  onRemove: () => {
+  onComplete: () => {
     l1.addBehavior(holeMaker(player, speed, speedMultiplier))
   },
 })
