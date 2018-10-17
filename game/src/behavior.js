@@ -129,19 +129,26 @@ const killPlayer = (player, speedMultiplier) => {
     config,
   } = explode({
     degrees:     player.degrees,
-    scaleFactor: (speedMultiplier / player.speed) / 4,
-    radius:      player.width * 2,
-    x:           0,
-    y:           0,
+    scaleFactor: (speedMultiplier / player.speed),
+    radius:      player.width,
+    x:           l1.getGlobalPosition(player).x,
+    y:           l1.getGlobalPosition(player).y,
   })
+
+  const particleContainer = new PIXI.Container()
+  l1.add(
+    particleContainer,
+    {
+      parent: l1.get(Scene.GAME),
+      zIndex: Layer.FOREGROUND + 1,
+    },
+  )
   // eslint-disable-next-line no-new
   new PIXI.particles.Emitter(
-    player,
+    particleContainer,
     textures.map(l1.getTexture),
     config,
   )
-  // TODO: Particles should have this zIndex
-  // zIndex: Layer.FOREGROUND + 1,
 
   l1.sound({
     src:    './sounds/explosion.wav',
