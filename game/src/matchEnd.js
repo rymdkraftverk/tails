@@ -89,6 +89,7 @@ export const transitionToMatchEnd = () => {
 }
 
 const textMovement = text => ({
+  id:   'textMovement',
   data: {
     sine: createSine({
       start: 1,
@@ -143,6 +144,7 @@ const pause = () => ({
 
     l1.destroy(Scene.MATCH_END)
     l1.removeBehavior('createFireworks')
+    l1.removeBehavior('textMovement')
 
     transitionToLobby(gameState.gameCode, Object.values(gameState.players))
   },
