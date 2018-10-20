@@ -52,7 +52,13 @@ const prettyId = id => id.substring(0, 4)
 const defaultSerialize = JSON.stringify
 const defaultDeserialize = JSON.parse
 
-const protobufSchema = R.memoize((descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey])
+// eslint-disable-next-line fp/no-rest-parameters
+const multiArgsString = (...args) => R.toString(args)
+
+const protobufSchema = R.memoizeWith(
+  multiArgsString,
+  (descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey],
+)
 
 const protobufSerializer = ({ descriptor, schemaKey }) => data =>
   protobufSchema(descriptor, schemaKey)
