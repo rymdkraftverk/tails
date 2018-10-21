@@ -23,11 +23,12 @@ const INTERNAL_CHANNEL = {
   },
 }
 
-const innerJoinWith = R.curry((join, pred, t1, t2) => R.map(
-  (t1r) => {
-    const t2r = R.find(pred(t1r), t2) || {}
-    return join(t1r, t2r)
-  },
+
+const innerJoinWith = R.curry((join, pred, t1, t2) => R.chain(
+  x => R.pipe(
+    R.filter(pred(x)),
+    R.map(join(x)),
+  )(t2),
   t1,
 ))
 
@@ -120,7 +121,7 @@ const mappify = R.curry((key, list) => list
   .reduce(R.merge))
 
 const packageChannels = innerJoinWith(
-  (info, channel) => R.merge({ channel }, info),
+  R.curry((info, channel) => R.merge({ channel }, info)),
   R.curry((info, channel) => info.name === channel.label),
 )
 
