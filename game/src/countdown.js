@@ -13,6 +13,8 @@ const numbers = [
   'SURVIVE!',
 ]
 
+const isOver = i => (i >= numbers.length)
+
 export default () => new Promise((resolve) => {
   const countdown = new PIXI.Container()
   l1.add(countdown)
@@ -30,7 +32,7 @@ const countdownBehavior = (countdown, resolve) => ({
     if (data.text) {
       l1.destroy(data.text)
     }
-    if (data.index === numbers.length) {
+    if (isOver(data.index)) {
       l1.removeBehavior('countdown')
       l1.destroy(countdown)
       resolve()
