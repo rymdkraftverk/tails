@@ -13,6 +13,15 @@ const numbers = [
   'SURVIVE!',
 ]
 
+const isOver = i => (i >= numbers.length)
+const isLast = i => i === (numbers.length - 1)
+
+const sound = i => (
+  isLast(i)
+    ? 'countdown_end'
+    : 'countdown'
+)
+
 export default () => new Promise((resolve) => {
   const countdown = new PIXI.Container()
   l1.add(countdown)
@@ -30,7 +39,7 @@ const countdownBehavior = (countdown, resolve) => ({
     if (data.text) {
       l1.destroy(data.text)
     }
-    if (data.index === numbers.length) {
+    if (isOver(data.index)) {
       l1.removeBehavior('countdown')
       l1.destroy(countdown)
       resolve()
@@ -56,6 +65,11 @@ const countdownBehavior = (countdown, resolve) => ({
     text.anchor.set(0.5)
     l1.addBehavior(bounce(text, 0.04))
     data.text = text
+
+    l1.sound({
+      src:    `./sounds/${sound(data.index)}.wav`,
+      volume: 0.6,
+    })
 
     data.index += 1
   },
