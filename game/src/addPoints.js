@@ -1,5 +1,6 @@
 import R from 'ramda'
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import gameState from './gameState'
 import * as TextStyle from './util/textStyle'
 import Layer from './util/layer'
@@ -26,37 +27,46 @@ const addPoints = (color) => {
 }
 
 const displayGainedPoint = R.curry((color, player) => {
-  const scoreGainEntity = l1.text({
-    text:  '+1',
-    style: {
+  const scoreGainEntity = new PIXI.Text(
+    '+1',
+    {
       ...TextStyle.SMALL,
-      fill: color,
+      fill:     color,
     },
-    zIndex: Layer.FOREGROUND,
-  })
+  )
+  l1.add(
+    scoreGainEntity,
+    {
+      zIndex: Layer.FOREGROUND,
+    },
+  )
 
-  scoreGainEntity.asset.x = player.asset.x
-  scoreGainEntity.asset.y = player.asset.y
+  scoreGainEntity.x = player.x
+  scoreGainEntity.y = player.y
 
   const move = () => ({
-    onUpdate: ({ counter, entity }) => {
-      entity.asset.y -= 1
-      scoreGainEntity.asset.alpha = 1 - (counter / DURATION)
+    onUpdate: ({ counter }) => {
+      // TODO: This check should not be needed
+      if (scoreGainEntity.parent) {
+        scoreGainEntity.y -= 1
+        scoreGainEntity.alpha = 1 - (counter / DURATION)
+      }
     },
   })
 
   const suicide = () => ({
     duration:   DURATION,
-    onComplete: ({ entity }) => {
-      l1.destroy(entity)
+    onComplete: () => {
+      l1.removeBehavior(move)
+      l1.destroy(scoreGainEntity)
     },
   })
 
 
   R.forEach(
-    l1.addBehavior(scoreGainEntity),
+    l1.addBehavior,
     [
-      move(),
+      move(player),
       suicide(),
     ],
   )

@@ -1,4 +1,6 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
+import 'pixi-particles'
 import { Event, Channel, SteeringCommand } from 'common'
 import { prettyId } from 'signaling/common'
 import R from 'ramda'
@@ -33,7 +35,7 @@ const moveLeft = playerId => movePlayer(playerId, SteeringCommand.LEFT)
 const moveRight = playerId => movePlayer(playerId, SteeringCommand.RIGHT)
 const moveStraight = playerId => movePlayer(playerId, null)
 
-const registerPlayerFinished = ({ id }) => () => {
+const registerPlayerFinished = ({ l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
@@ -71,15 +73,15 @@ const roundStart = () => {
           'gameMusic',
         ]
         l1
-          .getAllEntities()
-          .filter(e => !entitiesToKeep.includes(e.id))
+          .getAll()
+          .filter(e => !entitiesToKeep.includes(e.l1.id))
           .forEach(l1.destroy)
 
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
 
         gameState.lastRoundResult.playerFinishOrder = []
         l1
-          .getByType('player')
+          .getByLabel('player')
           .forEach(player =>
             player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
       })
@@ -206,7 +208,7 @@ const onControllerLeave = (id) => {
 
   if (gameState.currentState === CurrentState.LOBBY) {
     l1
-      .getByType('lobby-square')
+      .getByLabel('lobby-square')
       .forEach(l1.destroy)
 
     Object
@@ -224,54 +226,65 @@ const onControllerLeave = (id) => {
   })
 }
 
+export const app = new PIXI.Application({
+  width:             GAME_WIDTH,
+  height:            GAME_HEIGHT,
+  antialias:         true,
+  clearBeforeRender: false,
+})
+
+document
+  .getElementById('game')
+  .appendChild(app.view)
+
+l1.init(app)
+
+app.loader.add('assets/spritesheet.json')
+
+app.loader.load(() => {
+  http.createGame()
+    .then(({ gameCode }) => {
+      createGame({ gameCode })
+      log(`[Game created] ${gameCode}`)
+
+      signaling.runReceiver({
+        wsAddress:        WS_ADDRESS,
+        receiverId:       gameCode,
+        onInitiatorJoin:  onControllerJoin,
+        onInitiatorLeave: onControllerLeave,
+      })
+    })
+
+  const background = new PIXI.Sprite(l1.getTexture('background'))
+
+  background.scale.set(10)
+
+  l1.add(background, {
+    id:     'background',
+    zIndex: Layer.ABSOLUTE_BACKGROUND,
+  })
+})
+
 const resizeGame = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
   l1.resize(screenWidth, screenHeight)
 }
+resizeGame()
 
 window.addEventListener('resize', resizeGame)
 
-l1
-  .init({
-    width:   GAME_WIDTH,
-    height:  GAME_HEIGHT,
-    debug:   false,
-    element: document.getElementById('game'),
-    pixi:    {
-      options:  { antialias: true, clearBeforeRender: false },
-      settings: { SCALE_MODE: l1.PIXI.SCALE_MODES.LINEAR },
-    },
-  })
-  .then(() => {
-    http.createGame()
-      .then(({ gameCode }) => {
-        createGame({ gameCode })
-        log(`[Game created] ${gameCode}`)
-
-        signaling.runReceiver({
-          wsAddress:        WS_ADDRESS,
-          receiverId:       gameCode,
-          onInitiatorJoin:  onControllerJoin,
-          onInitiatorLeave: onControllerLeave,
-        })
-      })
-
-    const background = l1.sprite({
-      id:      'background',
-      texture: 'background',
-      zIndex:  Layer.ABSOLUTE_BACKGROUND,
+const printBehaviors = () => {
+  console.log('BEHAVIORS:')
+  l1.getAllBehaviors()
+    .forEach((b) => {
+      console.log(b.id)
     })
-
-    background.asset.scale.set(10)
-
-    background.asset.filters = null
-    background.asset.cacheAsBitmap = true
-
-    resizeGame()
-  })
+  console.log('==============')
+}
 
 window.debug = {
   ...window.debug,
   roundStart,
+  printBehaviors,
 }

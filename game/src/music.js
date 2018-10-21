@@ -1,4 +1,4 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
 
 export const Track = {
   GAME:  './sounds/music/zapper_64kbps.mp3',
@@ -22,7 +22,7 @@ export const playTrack = (track, options = {}) => {
   }
 
   if (soundEntity) {
-    l1.destroy(soundEntity)
+    soundEntity.stop()
   }
 
   soundEntity = l1.sound(usedOptions)

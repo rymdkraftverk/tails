@@ -1,4 +1,5 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import { Event, Color, Channel } from 'common'
 
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
@@ -15,65 +16,80 @@ const TIME_UNTIL_LOBBY_TRANSITION = 500
 
 export const transitionToMatchEnd = () => {
   l1
-    .getAllEntities()
-    .filter(e => e.id !== 'background')
+    .getAll()
+    .filter(e => e.l1.id !== 'background')
     .forEach(l1.destroy)
 
-  const matchEnd = l1.container({
-    id: Scene.MATCH_END,
-  })
+  const matchEnd = new PIXI.Container()
+  l1.add(
+    matchEnd,
+    {
+      id: Scene.MATCH_END,
+    },
+  )
 
   const { players } = gameState
   const matchWinners = getPlayersWithHighestScore(players)
 
   if (matchWinners.length === 1) {
     const [{ color }] = matchWinners
-    const text = l1.text({
-      parent: matchEnd,
-      text:   `${color} is the champion!`,
-      zIndex: Layer.FOREGROUND,
-      style:  {
+
+    const text = new PIXI.Text(
+      `${color} is the champion!`,
+      {
         ...TextStyle.BIG,
         fontSize: 38,
         fill:     Color[color],
       },
-    })
-
-    text.asset.x = GAME_WIDTH / 2
-    text.asset.y = 200
-    text.asset.anchor.set(0.5)
-
-    l1.addBehavior(
+    )
+    l1.add(
       text,
-      textMovement(),
+      {
+        parent: matchEnd,
+        zIndex: Layer.FOREGROUND,
+      },
     )
 
-    const fireworkCreator = l1.container({ parent: matchEnd })
-    l1.addBehavior(
+    text.x = GAME_WIDTH / 2
+    text.y = 200
+    text.anchor.set(0.5)
+
+    l1.addBehavior(textMovement(text))
+
+    const fireworkCreator = new PIXI.Container()
+    l1.add(
       fireworkCreator,
-      createFireworks(matchWinners[0].color),
+      {
+        parent: matchEnd,
+        zIndex: Layer.BACKGROUND,
+      },
     )
+
+    l1.addBehavior(createFireworks(fireworkCreator, matchWinners[0].color))
   } else {
-    const text = l1.text({
-      parent: matchEnd,
-      text:   'It\'s a draw, better luck next time!',
-      zIndex: Layer.FOREGROUND,
-      style:  {
+    const text = new PIXI.Text(
+      'It\'s a draw, better luck next time!',
+      {
         ...TextStyle.BIG,
         fontSize: 38,
         fill:     'white',
       },
-    })
-    text.asset.anchor.set(0.5)
+    )
+    l1.add(
+      text,
+      {
+        parent: matchEnd,
+        zIndex: Layer.FOREGROUND,
+      },
+    )
+    text.anchor.set(0.5)
   }
 
-  l1.addBehavior(
-    matchEnd,
-    pause(),
-  )
+  l1.addBehavior(pause())
 }
 
-const textMovement = () => ({
+const textMovement = text => ({
+  id:   'textMovement',
   data: {
     sine: createSine({
       start: 1,
@@ -81,30 +97,37 @@ const textMovement = () => ({
       speed: 120,
     }),
   },
-  onInit: ({ data, entity }) => {
-    data.originalSize = entity.asset.style.fontSize
+  onInit: ({ data }) => {
+    data.originalSize = text.style.fontSize
   },
-  onUpdate: ({ entity, data, counter }) => {
+  onUpdate: ({ data, counter }) => {
     const scale = data.sine(counter)
-    l1.scaleText(entity, data.originalSize * scale)
+    l1.scaleText(text, data.originalSize * scale)
   },
 })
 
-const createFireworks = color => ({
+const createFireworks = (creator, color) => ({
+  id:         'createFireworks',
   duration:   l1.getRandomInRange(5, 10),
   loop:       true,
-  onComplete: ({ entity }) => {
+  onComplete: () => {
     const x = l1.getRandomInRange(100, GAME_WIDTH - 100)
     const y = l1.getRandomInRange(100, GAME_HEIGHT - 100)
-    l1.particles({
-      ...firework({
-        color,
-        x,
-        y,
-      }),
-      zIndex: Layer.BACKGROUND,
-      parent: entity,
+
+    const {
+      textures,
+      config,
+    } = firework({
+      color,
+      x,
+      y,
     })
+    // eslint-disable-next-line no-new
+    new PIXI.particles.Emitter(
+      creator,
+      textures.map(l1.getTexture),
+      config,
+    )
   },
 })
 
@@ -120,6 +143,8 @@ const pause = () => ({
     gameState.players = resetPlayersScore(gameState.players)
 
     l1.destroy(Scene.MATCH_END)
+    l1.removeBehavior('createFireworks')
+    l1.removeBehavior('textMovement')
 
     transitionToLobby(gameState.gameCode, Object.values(gameState.players))
   },

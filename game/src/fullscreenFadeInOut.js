@@ -1,4 +1,5 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import Layer from './util/layer'
 import { createParabola } from './magic'
@@ -6,19 +7,19 @@ import { createParabola } from './magic'
 const DURATION = 50
 
 export default () => new Promise((resolve) => {
-  const entity = l1.graphics({
-    id:     'fadeInOut',
-    width:  GAME_WIDTH,
-    height: GAME_HEIGHT,
-    zIndex: Layer.FOREGROUND,
-  })
-  l1.addBehavior(
-    entity,
-    fadeInOut(DURATION, resolve),
+  const fade = new PIXI.Graphics()
+  l1.add(
+    fade,
+    {
+      id:     'fadeInOut',
+      zIndex: Layer.FOREGROUND,
+    },
   )
+
+  l1.addBehavior(fadeInOut(fade, DURATION, resolve))
 })
 
-const fadeInOut = (duration, resolve) => ({
+const fadeInOut = (graphics, duration, resolve) => ({
   duration,
   data: {
     hasResolved: false,
@@ -29,11 +30,10 @@ const fadeInOut = (duration, resolve) => ({
       modifier: 100 / duration,
     }),
   },
-  onComplete: ({ entity }) => {
-    l1.destroy(entity)
+  onComplete: () => {
+    l1.destroy(graphics)
   },
-  onUpdate: ({ entity, data, counter }) => {
-    const { asset: graphics } = entity
+  onUpdate: ({ data, counter }) => {
     const alpha = (data.animation(counter) * -1) / 100
     graphics
       .clear()

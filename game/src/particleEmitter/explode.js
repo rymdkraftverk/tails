@@ -29,8 +29,8 @@ export default ({
       max: (degrees - 180) + 30,
     },
     scale: {
-      start:                  1 * (1 / scaleFactor),
-      end:                    0.3 * (1 / scaleFactor),
+      start:                  2 * (1 / scaleFactor),
+      end:                    0.6 * (1 / scaleFactor),
       minimumScaleMultiplier: 0.1,
     },
     pos: {
@@ -38,14 +38,16 @@ export default ({
       y,
     },
     lifetime: {
-      min: 0.2 * (1 / scaleFactor),
-      max: 0.8 * (1 / scaleFactor),
+      min: 0.4 * (1 / scaleFactor),
+      max: 1.6 * (1 / scaleFactor),
     },
     spawnCircle: {
       x: radius / 2,
       y: radius / 2,
       r: radius,
     },
+    emit:       true,
+    autoUpdate: true,
   }
 
   return {

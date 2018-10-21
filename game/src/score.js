@@ -1,6 +1,7 @@
 import _ from 'lodash/fp'
 import { Event, Color, Channel } from 'common'
-import l1 from 'l1'
+import * as l1 from 'l1'
+import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
@@ -19,30 +20,41 @@ const GOAL_Y = 70
 const ANIMATION_DURATION = 60
 
 export const transitionToScoreScene = () => {
-  const scoreScene = l1.container({
-    id: Scene.SCORE,
-  })
+  const scoreScene = new PIXI.Container()
+  l1.add(
+    scoreScene,
+    {
+      id: Scene.SCORE,
+    },
+  )
 
-  const goal = l1.sprite({
-    parent:  scoreScene,
-    texture: 'goal-flag',
-    zIndex:  Layer.BACKGROUND,
-  })
+  const goal = new PIXI.Sprite(l1.getTexture('goal-flag'))
+  l1.add(
+    goal,
+    {
+      parent: scoreScene,
+      zIndex: Layer.BACKGROUND,
+    },
+  )
 
-  goal.asset.x = GOAL_X
-  goal.asset.y = GOAL_Y
-  goal.asset.scale.set(1.5)
-  goal.asset.filters = null
-  goal.asset.cacheAsBitmap = true
+  goal.x = GOAL_X
+  goal.y = GOAL_Y
+  goal.scale.set(1.5)
 
-  l1.text({
-    parent: scoreScene,
-    text:   scoreToWin(gameState.players),
-    style:  {
+  const goalText = new PIXI.Text(
+    scoreToWin(gameState.players),
+    {
       ...TextStyle.BIG,
       fill: 'white',
     },
-  }).asset.position.set(
+  )
+  l1.add(
+    goalText,
+    {
+      parent: scoreScene,
+    },
+  )
+  goalText.position.set(
     GOAL_X + 10,
     GOAL_Y - 60,
   )
@@ -113,70 +125,82 @@ const createPlayer = (index) => {
   })
 
   if (player) {
-    l1.text({
-      parent: head,
-      text:   player.score,
-      style:  {
+    const playerScore = new PIXI.Text(
+      player.score,
+      {
         ...TextStyle.SMALL,
         fill: 'white',
       },
-      zIndex: 1,
-    }).asset.position.set(
+    )
+    l1.add(
+      playerScore,
+      {
+        parent: head,
+        zIndex: 1,
+      },
+    )
+    playerScore.position.set(
       0,
       6,
     )
   }
 
-  const tail = l1.graphics({
-    parent: l1.get(Scene.SCORE),
-    zIndex: -10,
-  })
+  const tail = new PIXI.Graphics()
+  l1.add(
+    tail,
+    {
+      parent: l1.get(Scene.SCORE),
+      zIndex: -10,
+    },
+  )
 
-  tail.asset.position.set(
+  tail.position.set(
     0,
     y,
   )
 
-  l1.addBehavior(
+  l1.addBehavior(animate({
     head,
-    animate({
-      tail,
-      fromX: head.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale(),
-      toX:   currentX,
-      color: (player && player.color) || 'none',
-    }),
-  )
+    tail,
+    fromX: head.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale(),
+    toX:   currentX,
+    color: (player && player.color) || 'none',
+  }))
 }
 
 const createHead = ({
   x, y, texture,
 }) => {
-  const head = l1.sprite({
-    parent: l1.get(Scene.SCORE),
-    texture,
-  })
-  head.asset.x = x
-  head.asset.y = y
+  const head = new PIXI.Sprite(l1.getTexture(texture))
+
+  l1.add(
+    head,
+    {
+      parent: l1.get(Scene.SCORE),
+    },
+  )
+
+  head.x = x
+  head.y = y
   return head
 }
 
 const animate = ({
-  tail, fromX, toX, color,
+  head, tail, fromX, toX, color,
 }) => ({
   duration: ANIMATION_DURATION,
-  onUpdate: ({ entity }) => {
+  onUpdate: () => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
-    entity.asset.x += diffX
-    const x = entity.asset.toGlobal(new l1.PIXI.Point(0, 0)).x / l1.getScreenScale()
-    const { asset: graphics } = tail
-    graphics.clear()
-    graphics
+    head.x += diffX
+    const x = head.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale()
+    tail.clear()
+    tail
       // Pixi.Graphics requires color code to start with 0x instead of #
       .beginFill(`0x${Color[color].substring(1, Color[color].length)}`, 1)
       .moveTo(0, 0)
-      .lineTo(x + (entity.asset.width / 2), 0)
-      .lineTo(x + (entity.asset.width / 2), 0 + entity.asset.height)
-      .lineTo(0, 0 + entity.asset.height)
+      .lineTo(x + (head.width / 2), 0)
+      .lineTo(x + (head.width / 2), 0 + head.height)
+      .lineTo(0, 0 + head.height)
       .lineTo(0, 0)
       .endFill()
   },

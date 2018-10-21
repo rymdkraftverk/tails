@@ -1,4 +1,6 @@
-import l1 from 'l1'
+import * as l1 from 'l1'
+import uuid from 'uuid/v4'
+import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
 import { createTrail, collisionCheckerTrail } from './behavior'
@@ -14,30 +16,42 @@ export const initPowerups = ({
   gameWidth,
   gameHeight,
 }) => {
-  const powerupGenerator = l1.container({
-    parent: l1.get(Scene.GAME),
-  })
+  const powerupGenerator = new PIXI.Container()
+  l1.add(
+    powerupGenerator,
+    {
+      parent: l1.get(Scene.GAME),
+    },
+  )
 
   const generatePowerups = () => ({
+    id:         'generatePowerups',
     duration:   l1.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
     loop:       true,
     onComplete: () => {
-      const powerup = l1.sprite({
-        parent:  powerupGenerator,
-        texture: 'powerup-ghost',
-      })
+      const powerup = new PIXI.Sprite(l1.getTexture('powerup-ghost'))
+      l1.add(
+        powerup,
+        {
+          parent: powerupGenerator,
+        },
+      )
 
-      powerup.asset.x = l1.getRandomInRange(100, gameWidth - 100)
-      powerup.asset.y = l1.getRandomInRange(100, gameHeight - 100)
-      powerup.asset.width = 64 * (snakeSpeed / speedMultiplier)
-      powerup.asset.height = 64 * (snakeSpeed / speedMultiplier)
+      powerup.x = l1.getRandomInRange(100, gameWidth - 100)
+      powerup.y = l1.getRandomInRange(100, gameHeight - 100)
+      powerup.width = 64 * (snakeSpeed / speedMultiplier)
+      powerup.height = 64 * (snakeSpeed / speedMultiplier)
+      powerup.scale.set((snakeSpeed / speedMultiplier))
 
-      powerup.asset.scale.set((snakeSpeed / speedMultiplier))
+      const collisionCheckerId = uuid()
+
       const collisionChecker = () => ({
+        id:       collisionCheckerId,
+        labels:   ['collisionCheckerPowerup'],
         onUpdate: () => {
           const collidingEntity = l1
-            .getByType('player')
-            .find(l1.isColliding(powerup))
+            .getByLabel('player')
+            .find(R.curry(l1.isColliding)(powerup))
           if (collidingEntity) {
             l1.sound({
               src:    './sounds/join1.wav',
@@ -46,33 +60,25 @@ export const initPowerups = ({
             l1.destroy(powerup)
 
             const behaviorsToRemove = [
-              'indicateExpiration',
-              'ghost',
+              collisionCheckerId,
+              `indicateExpiration-${collidingEntity.playerId}`,
+              `ghost-${collidingEntity.playerId}`,
             ]
 
             R.forEach(
-              l1.removeBehavior(collidingEntity),
+              l1.removeBehavior,
               behaviorsToRemove,
             )
 
-            l1.addBehavior(
-              collidingEntity,
-              ghost({ speedMultiplier }),
-            )
+            l1.addBehavior(ghost({ player: collidingEntity, speedMultiplier }))
           }
         },
       })
-      l1.addBehavior(
-        powerup,
-        collisionChecker(),
-      )
+      l1.addBehavior(collisionChecker())
     },
   })
 
-  l1.addBehavior(
-    powerupGenerator,
-    generatePowerups(),
-  )
+  l1.addBehavior(generatePowerups())
 }
 
 const ExpirationState = {
@@ -81,98 +87,79 @@ const ExpirationState = {
 }
 
 const ghost = ({
-  speedMultiplier,
+  player, speedMultiplier,
 }) => ({
-  id:   'ghost',
+  id:   `ghost-${player.playerId}`,
   data: {
     expirationState: null,
   },
   duration: GHOST_POWERUP_DURATION,
-  onInit:   ({ entity }) => {
-    entity.asset.scale.set(entity.speed / speedMultiplier)
-    entity.asset.alpha = 0.4
+  onInit:   () => {
+    player.scale.set(player.speed / speedMultiplier)
+    player.alpha = 0.4
 
     const behaviorsToRemove = [
-      'createTrail',
-      'collisionCheckerTrail',
+      `createTrail-${player.playerId}`,
+      `collisionCheckerTrail-${player.playerId}`,
     ]
     R.forEach(
-      l1.removeBehavior(entity),
+      l1.removeBehavior,
       behaviorsToRemove,
     )
   },
-  onUpdate: ({ counter, data, entity }) => {
+  onUpdate: ({ counter, data }) => {
     if (
       counter > (GHOST_POWERUP_DURATION * 0.6) &&
       !data.expirationState
     ) {
       data.expirationState = ExpirationState.SOON
-      l1.removeBehavior(
-        entity,
-        'indicateExpiration',
-      )
-      l1.addBehavior(
-        entity,
-        indicateExpiration(60, GHOST_POWERUP_DURATION * 0.4),
-      )
+      l1.removeBehavior(`indicateExpiration-${player.playerId}`)
+      l1.addBehavior(indicateExpiration(player, 60, GHOST_POWERUP_DURATION * 0.4))
     } else if (
       counter > (GHOST_POWERUP_DURATION * 0.8) &&
       data.expirationState === ExpirationState.SOON
     ) {
       data.expirationState = ExpirationState.IMMINENT
-      l1.removeBehavior(
-        entity,
-        'indicateExpiration',
-      )
-      l1.addBehavior(
-        entity,
-        indicateExpiration(20, GHOST_POWERUP_DURATION * 0.2),
-      )
+      l1.removeBehavior(`indicateExpiration-${player.playerId}`)
+      l1.addBehavior(indicateExpiration(player, 20, GHOST_POWERUP_DURATION * 0.2))
     }
   },
-  onComplete: ({ entity }) => {
-    if (!entity.killed) {
-      l1.removeBehavior(
-        entity,
-        'indicateExpiration',
-      )
+  onComplete: () => {
+    if (!player.killed) {
+      l1.removeBehavior(`indicateExpiration-${player.playerId}`)
 
       // Reset player
-      entity.asset.scale.set((entity.speed / speedMultiplier / 2))
-      entity.asset.alpha = 1
+      player.scale.set((player.speed / speedMultiplier / 2))
+      player.alpha = 1
 
       const behaviorsToAdd = [
-        collisionCheckerTrail(entity.id, speedMultiplier),
+        collisionCheckerTrail(player, speedMultiplier),
         createTrail({
-          playerId: entity.id,
-          speed:    entity.speed,
+          player,
+          speed: player.speed,
           speedMultiplier,
         }),
       ]
 
       R.forEach(
-        l1.addBehavior(entity),
+        l1.addBehavior,
         behaviorsToAdd,
       )
 
-      l1.resetBehavior(entity, 'createHoleMaker')
+      l1.resetBehavior(`createHoleMaker-${player.playerId}`)
 
       l1.sound({
         src:    './sounds/powerup-expired.wav',
         volume: 0.6,
-        parent: entity,
       })
 
-      l1.removeBehavior(
-        entity,
-        'ghost',
-      )
+      l1.removeBehavior(`ghost-${player.playerId}`)
     }
   },
 })
 
-const indicateExpiration = (speed, duration) => ({
-  id:   'indicateExpiration',
+const indicateExpiration = (player, speed, duration) => ({
+  id:   `indicateExpiration-${player.playerId}`,
   duration,
   data: {
     sine: createSine({
@@ -181,10 +168,10 @@ const indicateExpiration = (speed, duration) => ({
       speed,
     }),
   },
-  onRemove: ({ entity }) => {
-    entity.asset.alpha = 1
+  onRemove: () => {
+    player.alpha = 1
   },
-  onUpdate: ({ counter, data, entity }) => {
-    entity.asset.alpha = data.sine(counter)
+  onUpdate: ({ counter, data }) => {
+    player.alpha = data.sine(counter)
   },
 })

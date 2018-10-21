@@ -1,16 +1,16 @@
 import { createParabola } from './magic'
 
-export default modifier => ({
+export default (displayObject, modifier) => ({
   duration: 20,
-  onInit:   ({ data, entity }) => {
+  onInit:   ({ data }) => {
     data.animation = createParabola({
       start:  0,
       end:    20,
-      offset: -1 * entity.asset.scale.x,
+      offset: -1 * displayObject.scale.x,
       modifier,
     })
   },
-  onUpdate: ({ entity, data, counter }) => {
-    entity.asset.scale.set(-1 * data.animation(counter))
+  onUpdate: ({ data, counter }) => {
+    displayObject.scale.set(-1 * data.animation(counter))
   },
 })
