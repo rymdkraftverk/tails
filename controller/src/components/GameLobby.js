@@ -54,6 +54,8 @@ class GameLobby extends Component {
     return (
       <Container
         backgroundColor={playerColorToBackgroundColor(playerColor)}
+        // Prevent double tap to zoom on iOS
+        onClick={() => {}}
       >
         {
           playerCount > 1

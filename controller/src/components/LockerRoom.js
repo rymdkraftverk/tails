@@ -66,7 +66,8 @@ class LockerRoom extends Component {
     const placeholder = 'Code'
 
     return (
-      <Container>
+      // Prevent double tap to zoom on iOS
+      <Container onClick={() => {}}>
         <ContainerColumn>
           <GameCodeInput
             type="text"
