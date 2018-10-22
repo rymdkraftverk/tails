@@ -70,15 +70,14 @@ const killInitiator = (id) => {
   removeInitiator(id)
 }
 
-const getActiveInitiators = R.filter(R.pipe(
+const isOpen = R.pipe(
   R.view(R.lensPath(['internalChannel', 'readyState'])),
   R.equals(ReadyState.OPEN),
-))
+)
 
 const beatHeart = R.pipe(
-  getActiveInitiators,
   R.forEach((initiator) => {
-    if (initiator.alive) {
+    if (initiator.alive && isOpen(initiator)) {
       rtcSend(
         JSON.stringify,
         initiator.internalChannel,
