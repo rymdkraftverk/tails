@@ -92,8 +92,6 @@ export const transitionToGameScene = (maxPlayers) => {
           behaviorsToAdd,
         )
 
-        player.direction = null
-
         l1.destroy(`${player.playerId}:direction`)
       })
       initPowerups({
