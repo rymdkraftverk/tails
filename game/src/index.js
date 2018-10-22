@@ -2,7 +2,6 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import 'pixi-particles'
 import { Event, Channel } from 'common'
-import { prettyId } from 'signaling/common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene } from './game'
@@ -20,13 +19,7 @@ const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 export const MAX_PLAYERS_ALLOWED = 10
 
 const movePlayer = (pId, direction) => {
-  const playerEntity = l1.get(`${pId}controller`)
-  if (playerEntity) {
-    playerEntity.direction = direction
-  } else {
-    // TODO: stop sending useless movements event
-    warn(`Failed to move player ${prettyId(pId)} with direction ${direction}`)
-  }
+  l1.get(pId).direction = direction
 }
 
 export const playerCount = R.compose(R.length, R.values)
