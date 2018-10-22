@@ -97,12 +97,9 @@ const textMovement = text => ({
       speed: 120,
     }),
   },
-  onInit: ({ data }) => {
-    data.originalSize = text.style.fontSize
-  },
   onUpdate: ({ data, counter }) => {
     const scale = data.sine(counter)
-    l1.scaleText(text, data.originalSize * scale)
+    text.scale.set(scale)
   },
 })
 
