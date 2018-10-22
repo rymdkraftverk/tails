@@ -37,6 +37,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
+    this.alertIfNoRtc()
     navigator.vibrate(1)
     const gameCode = getLastGameCode()
     this.setState({ gameCode })
@@ -89,6 +90,17 @@ class App extends Component {
 
   displayError = (message) => {
     this.setState({ appState: APP_STATE.LOCKER_ROOM, error: message })
+  }
+
+  alertIfNoRtc = () => {
+    if (typeof RTCPeerConnection === 'undefined') {
+      const message =
+        'Unfortunately the game cannot be played in this browser.' +
+        'See list of supported browsers here: https://caniuse.com/#search=webrtc'
+
+      // eslint-disable-next-line no-alert
+      alert(message)
+    }
   }
 
   gameCodeChange = ({ target: { value } }) =>
