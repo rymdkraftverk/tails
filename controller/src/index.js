@@ -49,9 +49,18 @@ injectGlobal`
   }
 `
 
+// Prevent displaying "undo text" dialog on iOS when device is accidentally shaken
 window.addEventListener('devicemotion', (e) => {
   e.preventDefault()
 })
+
+// Prevent scrolling and two finger zoom on iOS
+document.addEventListener(
+  'touchmove',
+  (e) => {
+    e.preventDefault()
+  }, { passive: false },
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 registerServiceWorker()
