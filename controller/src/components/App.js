@@ -129,7 +129,7 @@ class App extends Component {
       wsAddress:  WS_ADDRESS,
     })
       .then((send) => {
-        this.sendUnreliable = send(Channel.UNRELIABLE)
+        this.sendSteering = send(Channel.RELIABLE_STEERING)
         this.sendReliable = send(Channel.RELIABLE)
       })
       .catch((error) => {
@@ -206,7 +206,7 @@ class App extends Component {
           appState === APP_STATE.GAME_PLAYING
             ?
               <GamePlaying
-                send={this.sendUnreliable}
+                send={this.sendSteering}
                 playerColor={Color[playerColor]}
               />
             : null
