@@ -1,0 +1,25 @@
+{
+  "nested": {
+    "Command": {
+      "values": {
+        "NONE": 0,
+        "LEFT": 1,
+        "RIGHT": 2
+      }
+    },
+    "Message": {
+      "fields": {
+        "event": {
+          "rule": "required",
+          "type": "string",
+          "id": 0
+        },
+        "payload": {
+          "rule": "required",
+          "type": "Command",
+          "id": 1
+        }
+      }
+    }
+  }
+}

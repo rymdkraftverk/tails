@@ -1,9 +1,8 @@
 import * as R from 'ramda'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Event } from 'common'
+import { Event, SteeringCommand } from 'common'
 import styled from 'styled-components'
-import createCommand from '../util/createCommand'
 
 const SteerButton = styled.div`
   flex: 1;
@@ -27,14 +26,6 @@ const Container = styled.div`
   overflow: hidden;
 `
 
-const COMMANDS = {
-  NONE:  'none',
-  LEFT:  'left',
-  RIGHT: 'right',
-}
-
-const SEND_INTERVAL = 250
-
 const noop = () => {}
 
 navigator.vibrate = (navigator.vibrate ||
@@ -43,29 +34,11 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.msVibrate || noop)
 
 class GamePlaying extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      ordering:    0,
-      lastCommand: COMMANDS.NONE,
-    }
-
-    this.state.intervalId = setInterval(() => {
-      this.sendCommand({ command: this.state.lastCommand })
-    }, SEND_INTERVAL)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId)
-  }
-
   sendCommand = command => () => {
     this.props.send({
-      event:   Event.Rtc.PLAYER_MOVEMENT,
-      payload: createCommand(this.state.ordering, command),
+      event:   Event.PLAYER_MOVEMENT,
+      payload: command,
     })
-
-    this.setState(state => ({ lastCommand: command, ordering: state.ordering + 1 }))
   }
 
   render() {
@@ -78,20 +51,20 @@ class GamePlaying extends Component {
         { /* The empty onClick above disables double tap zoom on iOS Safari */}
         <SteerButton
           playerColor={playerColor}
-          onMouseDown={this.sendCommand(COMMANDS.LEFT)}
-          onMouseUp={this.sendCommand(COMMANDS.NONE)}
-          onTouchStart={this.sendCommand(COMMANDS.LEFT)}
-          onTouchEnd={this.sendCommand(COMMANDS.NONE)}
+          onMouseDown={this.sendCommand(SteeringCommand.LEFT)}
+          onMouseUp={this.sendCommand(SteeringCommand.NONE)}
+          onTouchStart={this.sendCommand(SteeringCommand.LEFT)}
+          onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
         >
           <div>{'<'} </div>
         </SteerButton>
         <Separator />
         <SteerButton
           playerColor={playerColor}
-          onMouseDown={this.sendCommand(COMMANDS.RIGHT)}
-          onMouseUp={this.sendCommand(COMMANDS.NONE)}
-          onTouchStart={this.sendCommand(COMMANDS.RIGHT)}
-          onTouchEnd={this.sendCommand(COMMANDS.NONE)}
+          onMouseDown={this.sendCommand(SteeringCommand.RIGHT)}
+          onMouseUp={this.sendCommand(SteeringCommand.NONE)}
+          onTouchStart={this.sendCommand(SteeringCommand.RIGHT)}
+          onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
         >
           <div>{'>'} </div>
         </SteerButton>

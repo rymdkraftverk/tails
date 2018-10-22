@@ -216,7 +216,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
     controller
       .send(Channel.RELIABLE, {
-        event:   Event.Rtc.PLAYER_DIED,
+        event:   Event.PLAYER_DIED,
         payload: {},
       })
   })

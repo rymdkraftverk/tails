@@ -3,11 +3,12 @@ const Event = require('./event')
 const {
   INTERNAL_CHANNEL,
   WEB_RTC_CONFIG,
+  packageChannels,
+  hoistInternal,
   makeCloseConnections,
-  makeOnMessage,
+  makeOnRtcMessage,
   mappify,
   onWsMessage,
-  partitionInternal,
   prettyId,
   rtcMapSend,
   rtcSend,
@@ -30,32 +31,39 @@ const onInternalData = ({ event }) => {
   }
 
   rtcSend(
+    JSON.stringify,
     internalChannel,
     { event: Event.HEARTBEAT, payload: id },
   )
 }
 
-const onIceCandidate = ({
-  channelNames,
+const sendOffer = ({
+  channelInfos,
   receiverId,
   rtc,
   send,
-}) => ({ candidate }) => {
-  if (candidate) {
-    log('[Ice Candidate]')
-    return
-  }
-
-  log('[Sending offer] Last candidate retrieved')
+}) => () => {
   send(
     Event.OFFER,
     {
-      channelNames,
+      channelInfos,
       offer: rtc.localDescription,
       receiverId,
     },
   )
 }
+
+const onIceCandidate = allReceived => R.ifElse(
+  R.pipe(
+    R.prop('candidate'),
+    R.isNil,
+  ),
+  () => log('[Ice Candidate]'),
+  () => {
+    log('[Ice Candidate] Last retrieved')
+    allReceived()
+  },
+)
 
 const createOffer = rtc => () => rtc
   .createOffer()
@@ -87,7 +95,11 @@ const plumbChannelConfig = external => R.ifElse(
 )
 
 const setUpChannel = rtc => ({
-  name, config, onClose, onData,
+  name,
+  config,
+  protobuf,
+  onClose,
+  onData,
 }) => {
   const channel = rtc.createDataChannel(
     name,
@@ -104,7 +116,10 @@ const setUpChannel = rtc => ({
     onClose,
   )
 
-  channel.onmessage = makeOnMessage(onData)
+  channel.onmessage = makeOnRtcMessage({
+    protobuf,
+    onData,
+  })
 
   // Channel considered "set up" once it's opened
   return new Promise((resolve) => {
@@ -130,12 +145,19 @@ const init = ({
     externalChannelConfigs,
   )
 
-  rtc.onicecandidate = onIceCandidate({
-    channelNames: R.pluck('name', channelConfigs),
+  const channelInfos = R.map(
+    R.pick(['name', 'protobuf']),
+    channelConfigs,
+  )
+
+  const thunkedSendOffer = sendOffer({
+    channelInfos,
     receiverId,
     rtc,
-    send:         wsSend(ws),
+    send: wsSend(ws),
   })
+
+  rtc.onicecandidate = onIceCandidate(thunkedSendOffer)
 
   ws.onopen = createOffer(rtc)
   ws.onmessage = R.pipe(
@@ -160,12 +182,13 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      partitionInternal,
+      hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal
         return externals
       },
-      mappify('label'),
+      packageChannels(channelInfos),
+      mappify('name'),
       rtcMapSend,
       resolve,
     ))

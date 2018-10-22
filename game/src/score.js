@@ -87,7 +87,7 @@ export const transitionToScoreScene = () => {
         Object
           .values(controllers)
           .forEach((controller) => {
-            controller.send(Channel.RELIABLE, { event: Event.Rtc.ROUND_END, payload: {} })
+            controller.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
           })
       })
   }

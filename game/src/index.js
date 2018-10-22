@@ -1,7 +1,7 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import 'pixi-particles'
-import { Event, Channel, SteeringCommand } from 'common'
+import { Event, Channel } from 'common'
 import { prettyId } from 'signaling/common'
 import R from 'ramda'
 import signaling from 'signaling'
@@ -31,26 +31,9 @@ const movePlayer = (pId, direction) => {
 
 export const playerCount = R.compose(R.length, R.values)
 
-const moveLeft = playerId => movePlayer(playerId, SteeringCommand.LEFT)
-const moveRight = playerId => movePlayer(playerId, SteeringCommand.RIGHT)
-const moveStraight = playerId => movePlayer(playerId, null)
-
 const registerPlayerFinished = ({ l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
-}
-
-const playerMovement = (id, { command, ordering }) => {
-  if (gameState.controllers[id].lastOrder >= ordering) {
-    log(`dropping old move: ${ordering}`)
-    return
-  }
-
-  gameState.controllers[id].lastMoveOrder = ordering
-  const commandFn = commands[command]
-  if (commandFn) {
-    commandFn(id)
-  }
 }
 
 const roundStart = () => {
@@ -60,7 +43,7 @@ const roundStart = () => {
       .values(gameState.controllers)
       .forEach(({ id }) => {
         gameState.controllers[id].send(Channel.RELIABLE, {
-          event:   Event.Rtc.ROUND_STARTED,
+          event:   Event.ROUND_STARTED,
           payload: {},
         })
       })
@@ -90,33 +73,24 @@ const roundStart = () => {
 
 const { log, warn } = console
 
-const rtcEvents = {
-  [Event.Rtc.PLAYER_MOVEMENT]: playerMovement,
-  [Event.Rtc.ROUND_START]:     roundStart,
-}
-
-const commands = {
-  [SteeringCommand.LEFT]:  moveLeft,
-  [SteeringCommand.RIGHT]: moveRight,
-  [SteeringCommand.NONE]:  moveStraight,
-}
-
 const createGame = ({ gameCode }) => {
   gameState.gameCode = gameCode
   transitionToLobby(gameState.gameCode)
 }
 
-// TODO: extract event switch logic to common function
 const onControllerData = id => (message) => {
   const { event, payload } = message
 
-  const f = rtcEvents[event]
-  if (!f) {
-    warn(`Unhandled event for message: ${message.data}`)
-    return
+  switch (event) {
+    case Event.PLAYER_MOVEMENT:
+      movePlayer(id, payload)
+      break
+    case Event.ROUND_START:
+      roundStart()
+      break
+    default:
+      warn(`Unhandled event for message: ${message}`)
   }
-
-  f(id, payload)
 }
 
 const broadcast = (message) => {
@@ -153,12 +127,11 @@ export const onControllerJoin = ({
 
     gameState.controllers[id] = {
       id,
-      lastMoveOrder: -1,
       send,
     }
 
     send(Channel.RELIABLE, {
-      event:   Event.Rtc.CONTROLLER_COLOR,
+      event:   Event.CONTROLLER_COLOR,
       payload: {
         playerId: id,
         color:    player.color,
@@ -167,14 +140,14 @@ export const onControllerJoin = ({
     })
 
     broadcast({
-      event:   Event.Rtc.A_PLAYER_JOINED,
+      event:   Event.A_PLAYER_JOINED,
       payload: {
         playerCount: playerCount(gameState.players),
       },
     })
   } else {
     send(Channel.RELIABLE, {
-      event:   Event.Rtc.GAME_FULL,
+      event:   Event.GAME_FULL,
       payload: {},
     })
 
@@ -219,7 +192,7 @@ const onControllerLeave = (id) => {
   }
 
   broadcast({
-    event:   Event.Rtc.A_PLAYER_LEFT,
+    event:   Event.A_PLAYER_LEFT,
     payload: {
       playerCount: playerCount(gameState.players),
     },

@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   onData = ({ event, payload }) => {
-    if (event === Event.Rtc.CONTROLLER_COLOR) {
+    if (event === Event.CONTROLLER_COLOR) {
       if (!payload.started) {
         this.setState({
           appState:    APP_STATE.GAME_LOBBY,
@@ -54,25 +54,25 @@ class App extends Component {
           appState: APP_STATE.PLAYER_DEAD,
         })
       }
-    } else if (event === Event.Rtc.ROUND_START) {
+    } else if (event === Event.ROUND_START) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === Event.Rtc.GAME_FULL) {
+    } else if (event === Event.GAME_FULL) {
       this.displayError('Game is full')
-    } else if (event === Event.Rtc.ROUND_STARTED) {
+    } else if (event === Event.ROUND_STARTED) {
       this.setState({
         appState: APP_STATE.GAME_PLAYING,
       })
-    } else if (event === Event.Rtc.ROUND_END) {
+    } else if (event === Event.ROUND_END) {
       this.setState({
         appState: APP_STATE.GAME_LOBBY,
       })
-    } else if (event === Event.Rtc.A_PLAYER_JOINED) {
+    } else if (event === Event.A_PLAYER_JOINED) {
       this.setState(payload)
-    } else if (event === Event.Rtc.A_PLAYER_LEFT) {
+    } else if (event === Event.A_PLAYER_LEFT) {
       this.setState(payload)
-    } else if (event === Event.Rtc.PLAYER_DIED) {
+    } else if (event === Event.PLAYER_DIED) {
       this.setState({
         appState: APP_STATE.PLAYER_DEAD,
       })
@@ -138,7 +138,7 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.sendReliable({ event: Event.Rtc.ROUND_START })
+    this.sendReliable({ event: Event.ROUND_START })
     this.setState({ appState: APP_STATE.GAME_PLAYING })
   }
 

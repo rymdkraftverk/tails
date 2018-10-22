@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+enum Command {
+  NONE = 0;
+  LEFT = 1;
+  RIGHT = 2;
+}
+
+message Message {
+  required string event = 0;
+  required Command payload = 1;
+}

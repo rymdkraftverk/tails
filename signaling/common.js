@@ -1,4 +1,5 @@
 const R = require('ramda')
+const pb = require('protobufjs/light')
 
 const { warn } = console
 
@@ -22,6 +23,15 @@ const INTERNAL_CHANNEL = {
   },
 }
 
+
+const innerJoinWith = R.curry((join, pred, t1, t2) => R.chain(
+  x => R.pipe(
+    R.filter(pred(x)),
+    R.map(join(x)),
+  )(t2),
+  t1,
+))
+
 const capitalize = R.pipe(
   R.juxt([
     R.pipe(
@@ -40,33 +50,59 @@ const warnNotFound = targetName => R.pipe(
 
 const prettyId = id => id.substring(0, 4)
 
-const serialize = JSON.stringify
-const deserialize = JSON.parse
+const defaultSerialize = JSON.stringify
+const defaultDeserialize = JSON.parse
+
+// eslint-disable-next-line fp/no-rest-parameters
+const multiArgsString = (...args) => R.toString(args)
+
+const protobufSchema = R.memoizeWith(
+  multiArgsString,
+  (descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey],
+)
+
+const protobufSerializer = ({ descriptor, schemaKey }) => data =>
+  protobufSchema(descriptor, schemaKey)
+    .encode(data)
+    .finish()
+
+const protobufDeserializer = ({ descriptor, schemaKey }) => data =>
+  protobufSchema(descriptor, schemaKey)
+    .decode(new Uint8Array(data))
+
+const getSerializer = protobuf =>
+  (protobuf ? protobufSerializer(protobuf) : defaultSerialize)
+const getDeserializer = protobuf =>
+  (protobuf ? protobufDeserializer(protobuf) : defaultDeserialize)
 
 const wsSend = R.curry((ws, event, payload) => {
   R.pipe(
-    serialize,
+    defaultSerialize,
     R.bind(ws.send, ws),
   )({ event, payload })
 })
 
-const rtcSend = (channel, data) => {
+const rtcSend = (serialize, channel, data) => {
   channel.send(serialize(data))
 }
 
 const rtcMapSend = R.curry((channelMap, channelName, data) => {
-  const channel = channelMap[channelName]
+  const { channel, protobuf } = channelMap[channelName]
 
   if (channel.readyState !== ReadyState.OPEN) {
     warn(`Attempt to send ${data} to channel ${channel.label} in state ${channel.readyState}`)
     return
   }
 
-  rtcSend(channel, data)
+  rtcSend(
+    getSerializer(protobuf),
+    channel,
+    data,
+  )
 })
 
 const onWsMessage = eventMap => (message) => {
-  const { event, payload } = deserialize(message)
+  const { event, payload } = defaultDeserialize(message)
   const f = eventMap[event]
   if (!f) {
     warn(`Unhandled event for message: ${message}`)
@@ -75,7 +111,7 @@ const onWsMessage = eventMap => (message) => {
   f(payload)
 }
 
-const partitionInternal = R.pipe(
+const hoistInternal = R.pipe(
   R.partition(R.propEq('label', INTERNAL_CHANNEL.name)),
   ([internals, externals]) => [R.head(internals), externals],
 )
@@ -84,15 +120,20 @@ const mappify = R.curry((key, list) => list
   .map(x => ({ [x[key]]: x }))
   .reduce(R.merge))
 
+const packageChannels = innerJoinWith(
+  R.curry((info, channel) => R.merge({ channel }, info)),
+  R.curry((info, channel) => info.name === channel.label),
+)
+
 const makeCloseConnections = connections => () => {
   connections.forEach((c) => {
     c.close()
   })
 }
 
-const makeOnMessage = onData => R.pipe(
+const makeOnRtcMessage = ({ protobuf, onData }) => R.pipe(
   R.prop('data'),
-  deserialize,
+  getDeserializer(protobuf),
   onData,
 )
 
@@ -100,11 +141,12 @@ module.exports = {
   INTERNAL_CHANNEL,
   ReadyState,
   WEB_RTC_CONFIG,
+  hoistInternal,
   makeCloseConnections,
-  makeOnMessage,
+  makeOnRtcMessage,
   mappify,
   onWsMessage,
-  partitionInternal,
+  packageChannels,
   prettyId,
   rtcMapSend,
   rtcSend,

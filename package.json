@@ -15,7 +15,7 @@
     "jest": "^23.6.0"
   },
   "scripts": {
-    "test": "jest ./game/test",
+    "test": "jest ./game/test ./signaling/test",
     "lint": "./run_lint.sh"
   },
   "repository": {
