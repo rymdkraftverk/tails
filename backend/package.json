@@ -4,7 +4,6 @@
   "private": true,
   "main": "src/index.js",
   "scripts": {
-    "node": "node src/index.js",
     "nodemon": "nodemon src/index.js",
     "lint": "eslint src"
   },
