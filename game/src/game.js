@@ -92,16 +92,7 @@ export const transitionToGameScene = (maxPlayers) => {
           behaviorsToAdd,
         )
 
-        const controller = new PIXI.Container()
-        l1.add(
-          controller,
-          {
-            id:     `${player.playerId}controller`,
-            parent: player,
-          },
-        )
-
-        controller.direction = null
+        player.direction = null
 
         l1.destroy(`${player.playerId}:direction`)
       })
@@ -306,13 +297,13 @@ const move = player => ({
 const pivot = player => ({
   id:       `pivot-${player.playerId}`,
   onUpdate: () => {
-    if (l1.get(`${player.playerId}controller`).direction === SteeringCommand.RIGHT) {
+    if (player.direction === SteeringCommand.RIGHT) {
       if (player.degrees >= 360) {
         player.degrees = 0
         return
       }
       player.degrees += TURN_RADIUS
-    } else if (l1.get(`${player.playerId}controller`).direction === SteeringCommand.LEFT) {
+    } else if (player.direction === SteeringCommand.LEFT) {
       if (player.degrees < 0) {
         player.degrees = 360
         return
