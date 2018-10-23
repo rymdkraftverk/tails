@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
+import sparks from './particleEmitter/sparks'
 import { transitionToRoundEnd } from './roundEnd'
 import gameState, { CurrentState } from './gameState'
 import Layer from './util/layer'
@@ -32,6 +33,7 @@ export const createTrail = ({
     l1.add(data.parent, {
       parent: l1.get(Scene.GAME),
     })
+    player.trailContainer = data.parent
   },
   onComplete: ({ data }) => {
     if (player.preventTrail) {
@@ -124,6 +126,8 @@ export const collisionCheckerTrail = (player, speedMultiplier) => ({
   },
 })
 
+let neonDeathEmitters = []
+
 const killPlayer = (player, speedMultiplier) => {
   const {
     textures,
@@ -176,6 +180,50 @@ const killPlayer = (player, speedMultiplier) => {
 
   gameState.events.emit(GameEvent.PLAYER_COLLISION, player.color)
   player.event.emit(GameEvent.PLAYER_COLLISION)
+
+  const neonDeathParticleContainer = new PIXI.Container()
+  neonDeathParticleContainer.position = player.position
+  l1.add(neonDeathParticleContainer, {
+    parent: l1.get(Scene.GAME),
+  })
+  const {
+    textures: neonTextures,
+    config: neonConfig,
+  } = sparks(player.texture)
+
+  const neonDeathEmitter = new PIXI.particles.Emitter(
+    neonDeathParticleContainer,
+    neonTextures,
+    neonConfig,
+  )
+  neonDeathEmitters = neonDeathEmitters.concat(neonDeathEmitter)
+
+  const darkSpriteId = `circle-${player.color}-dark`
+  player.texture = l1.getTexture(darkSpriteId)
+
+  const neonDeath = l1.addBehavior({
+    duration: 1,
+    loop:     true,
+    data:     {
+      index: player.trailContainer.children.length - 1,
+    },
+    onComplete: ({ data }) => {
+      if (!player) {
+        l1.removeBehavior(neonDeath)
+        neonDeathEmitter.emit = false
+        return
+      }
+      const trail = player.trailContainer.children[data.index]
+      if (!trail) {
+        l1.removeBehavior(neonDeath)
+        neonDeathEmitter.emit = false
+        return
+      }
+      trail.texture = l1.getTexture(darkSpriteId)
+      neonDeathParticleContainer.position = trail.position
+      data.index -= 1
+    },
+  })
 }
 
 export const collisionCheckerWalls = ({
@@ -208,6 +256,6 @@ const checkPlayersAlive = () => {
     gameState.lastRoundResult.playerFinishOrder =
             gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].l1.id])
 
-    transitionToRoundEnd()
+    transitionToRoundEnd(neonDeathEmitters)
   }
 }
