@@ -9,6 +9,7 @@ import Layer from './util/layer'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './util/gameEvent'
 import { addEntityToTree, nearestNeighbour } from './kd-tree'
+import Sound from './util/sound'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -151,7 +152,7 @@ const killPlayer = (player, speedMultiplier) => {
   )
 
   l1.sound({
-    src:    './sounds/explosion.wav',
+    src:    Sound.EXPLOSION,
     volume: 0.6,
   })
 

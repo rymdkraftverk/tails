@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './util/textStyle'
 import bounce from './bounce'
+import Sound from './util/sound'
 
 const TIME_BETWEEN_NUMBERS = 36
 
@@ -18,8 +19,8 @@ const isLast = i => i === (numbers.length - 1)
 
 const sound = i => (
   isLast(i)
-    ? 'countdown_end'
-    : 'countdown'
+    ? Sound.COUNTDOWN_END
+    : Sound.COUNTDOWN
 )
 
 export default () => new Promise((resolve) => {
@@ -67,7 +68,7 @@ const countdownBehavior = (countdown, resolve) => ({
     data.text = text
 
     l1.sound({
-      src:    `./sounds/${sound(data.index)}.wav`,
+      src:    sound(data.index),
       volume: 0.6,
     })
 
