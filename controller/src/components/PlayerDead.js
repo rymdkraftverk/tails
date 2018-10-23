@@ -5,6 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  user-select: none;
 `
 
 const Text = styled.b`
@@ -25,7 +26,8 @@ navigator.vibrate = (navigator.vibrate ||
 const PlayerDead = () => {
   navigator.vibrate(100)
   return (
-    <Container>
+    // Prevent double tap to zoom on iOS
+    <Container onClick={() => {}}>
       <Text>{'You\'re dead'}</Text>
     </Container>
   )
