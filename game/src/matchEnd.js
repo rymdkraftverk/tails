@@ -14,6 +14,8 @@ import gameState from './gameState'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
+let fireworkEmitters = []
+
 export const transitionToMatchEnd = () => {
   l1
     .getAll()
@@ -120,12 +122,12 @@ const createFireworks = (creator, color) => ({
       x,
       y,
     })
-    new PIXI.particles.Emitter(
+    const fireworkEmitter = new PIXI.particles.Emitter(
       creator,
       textures.map(l1.getTexture),
       config,
     )
-      .playOnceAndDestroy()
+    fireworkEmitters = fireworkEmitters.concat(fireworkEmitter)
   },
 })
 
@@ -140,19 +142,18 @@ const pause = () => ({
 
     gameState.players = resetPlayersScore(gameState.players)
 
-    // This is needed due to pixi-particles crashing if you destroy
-    // the parent of an emitter while particles are still active
-    l1
-      .get(Scene.MATCH_END)
-      .children
-      .forEach((displayObject) => {
-        l1.destroy(displayObject, { children: false })
-      })
-
-    l1.destroy(Scene.MATCH_END)
-
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
+
+    // This is needed due to pixi-particles crashing if you destroy
+    // the parent of an emitter while particles are still active
+    fireworkEmitters.forEach((e) => {
+      e.cleanup()
+      e.destroy()
+    })
+    fireworkEmitters = []
+
+    l1.destroy(Scene.MATCH_END)
 
     transitionToLobby(gameState.gameCode, Object.values(gameState.players))
   },
