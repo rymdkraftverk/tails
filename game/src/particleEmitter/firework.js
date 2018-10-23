@@ -41,7 +41,6 @@ export default ({ x, y, color }) => {
     frequency:       0.003,
     emitterLifetime: 0.3,
     maxParticles:    3000,
-    emit:            true,
     autoUpdate:      true,
     addAtBack:       false,
     spawnType:       'point',

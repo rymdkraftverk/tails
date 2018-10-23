@@ -62,6 +62,7 @@ export const transitionToMatchEnd = () => {
       {
         parent: matchEnd,
         zIndex: Layer.BACKGROUND,
+        id:     'fireworks',
       },
     )
 
@@ -119,12 +120,12 @@ const createFireworks = (creator, color) => ({
       x,
       y,
     })
-    // eslint-disable-next-line no-new
     new PIXI.particles.Emitter(
       creator,
       textures.map(l1.getTexture),
       config,
     )
+      .playOnceAndDestroy()
   },
 })
 
@@ -139,7 +140,17 @@ const pause = () => ({
 
     gameState.players = resetPlayersScore(gameState.players)
 
+    // This is needed due to pixi-particles crashing if you destroy
+    // the parent of an emitter while particles are still active
+    l1
+      .get(Scene.MATCH_END)
+      .children
+      .forEach((displayObject) => {
+        l1.destroy(displayObject, { children: false })
+      })
+
     l1.destroy(Scene.MATCH_END)
+
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
 
