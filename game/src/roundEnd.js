@@ -54,6 +54,12 @@ export const transitionToRoundEnd = () => {
 const pauseAndTransitionToScoreScene = () => ({
   duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
+    // This is needed due to pixi-particles crashing if you destroy
+    // the parent of an emitter while particles are still active
+    l1
+      .getByLabel('explosionParticleContainer')
+      .forEach(displayObject => l1.destroy(displayObject, { children: false }))
+
     l1.destroy(Scene.GAME)
     l1.getAllBehaviors()
       .map(l1.removeBehavior)
