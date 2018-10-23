@@ -141,14 +141,15 @@ const killPlayer = (player, speedMultiplier) => {
     {
       parent: l1.get(Scene.GAME),
       zIndex: Layer.FOREGROUND + 1,
+      labels: ['explosionParticleContainer'],
     },
   )
-  // eslint-disable-next-line no-new
   new PIXI.particles.Emitter(
     particleContainer,
     textures.map(l1.getTexture),
     config,
   )
+    .playOnceAndDestroy()
 
   l1.sound({
     src:    './sounds/explosion.wav',
