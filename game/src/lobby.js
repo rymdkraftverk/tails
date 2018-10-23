@@ -11,6 +11,7 @@ import Layer from './util/layer'
 import bounce from './bounce'
 import Scene from './Scene'
 import { Track, playTrack } from './music'
+import Sound from './util/sound'
 
 const CONTROLLER_PORT = '4001'
 const TextAnchor = {
@@ -289,14 +290,14 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   if (newPlayer) {
     l1.addBehavior(bounce(square, 0.08))
     const joinSounds = [
-      'join1',
-      'join2',
-      'join3',
+      Sound.JOIN1,
+      Sound.JOIN2,
+      Sound.JOIN3,
     ]
     const joinSound = joinSounds[l1.getRandomInRange(0, 3)]
 
     l1.sound({
-      src:    `./sounds/${joinSound}.wav`,
+      src:    joinSound,
       volume: 0.6,
     })
   }

@@ -5,6 +5,7 @@ import R from 'ramda'
 import Scene from './Scene'
 import { createTrail, collisionCheckerTrail } from './behavior'
 import { createSine } from './magic'
+import Sound from './util/sound'
 
 const GHOST_POWERUP_DURATION = 380
 const MINIMUM_GHOST_APPEAR_TIME = 400
@@ -54,7 +55,7 @@ export const initPowerups = ({
             .find(R.curry(l1.isColliding)(powerup))
           if (collidingEntity) {
             l1.sound({
-              src:    './sounds/join1.wav',
+              src:    Sound.JOIN1,
               volume: 0.6,
             })
             l1.destroy(powerup)
@@ -149,7 +150,7 @@ const ghost = ({
       l1.resetBehavior(`createHoleMaker-${player.playerId}`)
 
       l1.sound({
-        src:    './sounds/powerup-expired.wav',
+        src:    Sound.POWERUP_EXPIRED,
         volume: 0.6,
       })
 
