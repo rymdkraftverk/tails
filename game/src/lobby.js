@@ -44,7 +44,7 @@ const getPlayerPosition = l1.grid({
   x:           1000,
   y:           100,
   marginX:     170,
-  marginY:     130,
+  marginY:     135,
   itemsPerRow: 2,
 })
 
@@ -264,7 +264,7 @@ const createOutline = (index) => {
   )
 
   outline.x = x
-  outline.y = y
+  outline.y = y - 5
   outline.scale.set(1.5)
   outline.anchor.set(0.5)
 }
@@ -272,7 +272,7 @@ const createOutline = (index) => {
 export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
-  const square = new PIXI.Sprite(l1.getTexture(`square-${color}`))
+  const square = new PIXI.Sprite(l1.getTexture(`reindeer/reindeer-${color}`))
   l1.add(
     square,
     {
@@ -284,7 +284,7 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
 
   square.x = x
   square.y = y
-  square.scale.set(3)
+  square.scale.set(2)
   square.anchor.set(0.5)
 
   if (newPlayer) {
