@@ -21,7 +21,7 @@ export const transitionToRoundEnd = () => {
   const { winner } = gameState.lastRoundResult
 
   const roundEndText = new PIXI.Text(
-    `Winner is ${winner}!`,
+    `${winner} wins!`,
     {
       ...TextStyle.BIG,
       fill: Color[winner],
