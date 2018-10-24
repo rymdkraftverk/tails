@@ -15,7 +15,7 @@ const {
   wsSend,
 } = require('./common')
 
-const HEARTBEAT_INTERVAL = 10000
+const HEARTBEAT_INTERVAL = 5000
 
 const { log, warn } = console
 
