@@ -67,6 +67,8 @@ The following functions are available:
 * `debug.transitionToMatchEnd()`
 * `debug.transitionToRoundEnd()`
 * `debug.printBehaviors()`
+* `debug.start()`
+* `debug.stop()`
 
 `transitionToLobby` is currently a bit problematic due to race conditions in rendering the lobby.
 If some other function tries to render the lobby again the game engine will crash.

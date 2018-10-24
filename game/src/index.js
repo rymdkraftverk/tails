@@ -249,8 +249,18 @@ const printBehaviors = () => {
   console.log('==============')
 }
 
+const start = () => {
+  app.ticker.start()
+}
+
+const stop = () => {
+  app.ticker.stop()
+}
+
 window.debug = {
   ...window.debug,
   roundStart,
   printBehaviors,
+  start,
+  stop,
 }
