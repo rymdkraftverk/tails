@@ -203,7 +203,9 @@ document
   .getElementById('game')
   .appendChild(app.view)
 
-l1.init(app)
+l1.init(app, {
+  debug: true,
+})
 
 app.loader.add('assets/spritesheet.json')
 
