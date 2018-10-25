@@ -1,6 +1,7 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import R from 'ramda'
+import _ from 'lodash/fp'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import sparks from './particleEmitter/sparks'
@@ -186,10 +187,15 @@ const killPlayer = (player, speedMultiplier) => {
   l1.add(neonDeathParticleContainer, {
     parent: l1.get(Scene.GAME),
   })
+
   const {
     textures: neonTextures,
     config: neonConfig,
-  } = sparks(player.texture)
+  } = sparks({
+    texture:     player.texture,
+    scaleFactor: (speedMultiplier / player.speed),
+    radius:      player.width,
+  })
 
   const neonDeathEmitter = new PIXI.particles.Emitter(
     neonDeathParticleContainer,
@@ -200,6 +206,8 @@ const killPlayer = (player, speedMultiplier) => {
 
   const darkSpriteId = `circle-${player.color}-dark`
   player.texture = l1.getTexture(darkSpriteId)
+
+  const NEON_DEATH_SPEED = 3
 
   const neonDeath = l1.addBehavior({
     duration: 1,
@@ -213,15 +221,22 @@ const killPlayer = (player, speedMultiplier) => {
         neonDeathEmitter.emit = false
         return
       }
-      const trail = player.trailContainer.children[data.index]
-      if (!trail) {
-        l1.removeBehavior(neonDeath)
-        neonDeathEmitter.emit = false
-        return
-      }
-      trail.texture = l1.getTexture(darkSpriteId)
-      neonDeathParticleContainer.position = trail.position
-      data.index -= 1
+
+      // eslint-disable-next-line lodash-fp/no-unused-result
+      _.times(
+        () => {
+          const trail = player.trailContainer.children[data.index]
+          if (!trail) {
+            l1.removeBehavior(neonDeath)
+            neonDeathEmitter.emit = false
+            return
+          }
+          trail.texture = l1.getTexture(darkSpriteId)
+          neonDeathParticleContainer.position = trail.position
+          data.index -= 1
+        },
+        NEON_DEATH_SPEED,
+      )
     },
   })
 }
