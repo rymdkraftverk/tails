@@ -204,7 +204,7 @@ document
   .appendChild(app.view)
 
 l1.init(app, {
-  debug: true,
+  debug: false,
 })
 
 app.loader.add('assets/spritesheet.json')
