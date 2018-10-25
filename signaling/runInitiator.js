@@ -1,14 +1,15 @@
 const R = require('ramda')
 const Event = require('./event')
 const {
+  HEARTBEAT_INTERVAL,
   INTERNAL_CHANNEL,
   WEB_RTC_CONFIG,
-  packageChannels,
   hoistInternal,
   makeCloseConnections,
   makeOnRtcMessage,
   mappify,
   onWsMessage,
+  packageChannels,
   prettyId,
   rtcMapSend,
   rtcSend,
@@ -16,19 +17,47 @@ const {
   wsSend,
 } = require('./common')
 
+const PATIENCE = HEARTBEAT_INTERVAL * 2
+const PULSE_TAKING_INTERVAL = HEARTBEAT_INTERVAL / 10
+
 const { error, log, warn } = console
 
 // state
 let closeConnections = null
 let internalChannel
 let id = null
+let lastSignOfLifeFromGame = null
+let pulseTaking = null
 // end state
+
+const isDead = R.pipe(
+  R.subtract,
+  R.lt(PATIENCE),
+)
+
+const registerSignOfLife = () => {
+  const now = Date.now()
+  lastSignOfLifeFromGame = now
+}
+
+const declareDead = () => {
+  clearInterval(pulseTaking)
+  closeConnections()
+}
+
+const takePulse = () => {
+  if (isDead(Date.now(), lastSignOfLifeFromGame)) {
+    declareDead()
+  }
+}
 
 const onInternalData = ({ event }) => {
   if (event !== Event.HEARTBEAT) {
     warn(`Unhandled internal event ${event}`)
     return
   }
+
+  registerSignOfLife()
 
   rtcSend(
     JSON.stringify,
@@ -182,6 +211,10 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
+      R.tap(() => {
+        registerSignOfLife()
+        pulseTaking = setInterval(takePulse, PULSE_TAKING_INTERVAL)
+      }),
       hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal

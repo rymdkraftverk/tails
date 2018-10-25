@@ -1,6 +1,7 @@
 const R = require('ramda')
 const Event = require('./event')
 const {
+  HEARTBEAT_INTERVAL,
   ReadyState,
   WEB_RTC_CONFIG,
   hoistInternal,
@@ -14,8 +15,6 @@ const {
   rtcSend,
   wsSend,
 } = require('./common')
-
-const HEARTBEAT_INTERVAL = 5000
 
 const { log, warn } = console
 

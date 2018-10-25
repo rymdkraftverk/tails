@@ -23,6 +23,7 @@ const INTERNAL_CHANNEL = {
   },
 }
 
+const HEARTBEAT_INTERVAL = 5000
 
 const innerJoinWith = R.curry((join, pred, t1, t2) => R.chain(
   x => R.pipe(
@@ -138,6 +139,7 @@ const makeOnRtcMessage = ({ protobuf, onData }) => R.pipe(
 )
 
 module.exports = {
+  HEARTBEAT_INTERVAL,
   INTERNAL_CHANNEL,
   ReadyState,
   WEB_RTC_CONFIG,
