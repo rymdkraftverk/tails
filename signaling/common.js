@@ -8,11 +8,7 @@ const ReadyState = {
 }
 
 const WEB_RTC_CONFIG = {
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302',
-    },
-  ],
+  iceServers: [],
 }
 
 // reliable
