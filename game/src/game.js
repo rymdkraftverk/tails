@@ -171,14 +171,14 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
-  const player = new PIXI.Sprite(l1.getTexture(`reindeer/reindeer-${color}`))
+  const player = new PIXI.Sprite(l1.getTexture(`circle-${color}`))
   l1.add(
     player,
     {
       id:     playerId,
       parent: l1.get(Scene.GAME),
       labels: ['player'],
-      zIndex: Layer.FOREGROUND + 1,
+      zIndex: Layer.FOREGROUND,
     },
   )
 
@@ -210,7 +210,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       })
   })
 
-  player.scale.set(player.speed / SPEED_MULTIPLIER)
+  player.scale.set(player.speed / SPEED_MULTIPLIER / 2)
 
   const playerSize = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
 
@@ -310,7 +310,6 @@ const pivot = player => ({
     } else {
       // Do nothing
     }
-    player.rotation = toRadians(player.degrees - 90)
   },
 })
 
