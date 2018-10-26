@@ -33,4 +33,4 @@ services:
             context: .
             dockerfile: ./controller/Dockerfile
         ports:
-            - '4001:4001'
+            - '80:4001'
