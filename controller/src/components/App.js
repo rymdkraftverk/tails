@@ -19,7 +19,7 @@ const TIMEOUT_SECONDS = 20
 
 log('REACT_APP_WS_ADDRESS', WS_ADDRESS)
 
-const APP_STATE = {
+const AppState = {
   LOCKER_ROOM:     'locker-room',
   GAME_CONNECTING: 'game-connecting',
   GAME_LOBBY:      'game-lobby',
@@ -29,15 +29,15 @@ const APP_STATE = {
 
 const colorState = ({ started, color }) => (
   started
-    ? { appState: APP_STATE.PLAYER_DEAD }
+    ? { appState: AppState.PLAYER_DEAD }
     : {
-      appState:    APP_STATE.GAME_LOBBY,
+      appState:    AppState.GAME_LOBBY,
       playerColor: color,
     }
 )
 
 const errorState = message => ({
-  appState: APP_STATE.LOCKER_ROOM,
+  appState: AppState.LOCKER_ROOM,
   error:    message,
 })
 
@@ -47,17 +47,17 @@ const eventState = ({ event, payload }) => {
     case Event.A_PLAYER_LEFT: return payload
     case Event.CONTROLLER_COLOR: return colorState(payload)
     case Event.GAME_FULL: return errorState('Game is full')
-    case Event.PLAYER_DIED: return { appState: APP_STATE.PLAYER_DEAD }
-    case Event.ROUND_END: return { appState: APP_STATE.GAME_LOBBY }
-    case Event.ROUND_START: return { appState: APP_STATE.GAME_PLAYING }
-    case Event.ROUND_STARTED: return { appState: APP_STATE.GAME_PLAYING }
+    case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
+    case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }
+    case Event.ROUND_START: return { appState: AppState.GAME_PLAYING }
+    case Event.ROUND_STARTED: return { appState: AppState.GAME_PLAYING }
     default: return null
   }
 }
 
 class App extends Component {
   state = {
-    appState:    APP_STATE.LOCKER_ROOM,
+    appState:    AppState.LOCKER_ROOM,
     fullscreen:  false,
     gameCode:    '',
     playerColor: null,
@@ -84,7 +84,7 @@ class App extends Component {
 
   onJoin = () => {
     const { gameCode } = this.state
-    this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
+    this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     this.connectToGame(gameCode)
@@ -113,7 +113,7 @@ class App extends Component {
     })
 
   checkConnectionTimeout = () => {
-    if (this.state.appState === APP_STATE.GAME_CONNECTING) {
+    if (this.state.appState === AppState.GAME_CONNECTING) {
       this.displayError('Failed to connect, try again!')
     }
   };
@@ -153,7 +153,7 @@ class App extends Component {
 
   startGame = () => {
     this.sendReliable({ event: Event.ROUND_START })
-    this.setState({ appState: APP_STATE.GAME_PLAYING })
+    this.setState({ appState: AppState.GAME_PLAYING })
   }
 
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
@@ -178,7 +178,7 @@ class App extends Component {
         onChange={fullscreen => this.setState({ fullscreen })}
       >
         {
-          appState === APP_STATE.LOCKER_ROOM
+          appState === AppState.LOCKER_ROOM
             ?
               <LockerRoom
                 clearError={this.clearError}
@@ -190,12 +190,12 @@ class App extends Component {
             : null
         }
         {
-          appState === APP_STATE.GAME_CONNECTING
+          appState === AppState.GAME_CONNECTING
             ? <LockerRoomLoader />
             : null
         }
         {
-          appState === APP_STATE.GAME_LOBBY
+          appState === AppState.GAME_LOBBY
             ?
               <GameLobby
                 startGame={this.startGame}
@@ -205,7 +205,7 @@ class App extends Component {
             : null
         }
         {
-          appState === APP_STATE.GAME_PLAYING
+          appState === AppState.GAME_PLAYING
             ?
               <GamePlaying
                 send={this.sendSteering}
@@ -214,7 +214,7 @@ class App extends Component {
             : null
         }
         {
-          appState === APP_STATE.PLAYER_DEAD
+          appState === AppState.PLAYER_DEAD
             ?
               <PlayerDead />
             : null
