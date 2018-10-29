@@ -17,8 +17,8 @@ const {
   wsSend,
 } = require('./common')
 
-const PATIENCE = 1000 // network delays and whatnot
-const HOPE = HEARTBEAT_INTERVAL + PATIENCE
+const HEARTBEAT_PADDING = HEARTBEAT_INTERVAL / 10 // network delays and whatnot
+const HEARTBEAT_PATIENCE = HEARTBEAT_INTERVAL + HEARTBEAT_PADDING
 
 const { error, log, warn } = console
 
@@ -34,7 +34,7 @@ const deferDeath = () => {
 
   killTimer = setTimeout(
     closeConnections,
-    HOPE,
+    HEARTBEAT_PATIENCE,
   )
 }
 
