@@ -210,12 +210,10 @@ const killPlayer = (player, speedMultiplier) => {
   const NEON_DEATH_SPEED = 3
 
   const neonDeath = l1.addBehavior({
-    duration: 1,
-    loop:     true,
-    data:     {
+    data: {
       index: player.trailContainer.children.length - 1,
     },
-    onComplete: ({ data }) => {
+    onUpdate: ({ data }) => {
       // eslint-disable-next-line lodash-fp/no-unused-result
       _.times(
         () => {
