@@ -58,11 +58,11 @@ const onIceCandidate = allReceived => R.ifElse(
     R.prop('candidate'),
     R.isNil,
   ),
-  () => log('[Ice Candidate]'),
   () => {
     log('[Ice Candidate] Last retrieved')
     allReceived()
   },
+  () => log('[Ice Candidate]'),
 )
 
 const createOffer = rtc => () => rtc
