@@ -62,7 +62,6 @@ const pauseAndTransitionToScoreScene = neonDeathEmitters => ({
 
     neonDeathEmitters.forEach((e) => {
       e.cleanup()
-      // e.destroy()
     })
     l1.destroy(Scene.GAME)
     l1.getAllBehaviors()
