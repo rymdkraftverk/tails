@@ -51,7 +51,7 @@ const createUniqueRandomCode = (set, exists, attempts) => {
     .then(doesExist => (
       doesExist
         ? createUniqueRandomCode(set, exists, attempts + 1)
-        : set(candidateCode, candidateCode)
+        : set(candidateCode, candidateCode, 'EX', 86400) // Expire key after 24h to prevent leakage
           .then(() => candidateCode)
           .catch(logRedisError)
     ))
