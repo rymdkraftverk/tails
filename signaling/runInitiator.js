@@ -17,8 +17,7 @@ const {
   wsSend,
 } = require('./common')
 
-const PATIENCE = HEARTBEAT_INTERVAL * 2
-const PULSE_TAKING_INTERVAL = HEARTBEAT_INTERVAL / 10
+const PATIENCE = HEARTBEAT_INTERVAL + 1000
 
 const { error, log, warn } = console
 
@@ -27,7 +26,6 @@ let closeConnections = null
 let internalChannel
 let id = null
 let lastSignOfLifeFromGame = null
-let pulseTaking = null
 // end state
 
 const isDead = R.pipe(
@@ -38,16 +36,16 @@ const isDead = R.pipe(
 const registerSignOfLife = () => {
   const now = Date.now()
   lastSignOfLifeFromGame = now
-}
 
-const declareDead = () => {
-  clearInterval(pulseTaking)
-  closeConnections()
+  setTimeout(
+    takePulse,
+    PATIENCE,
+  )
 }
 
 const takePulse = () => {
   if (isDead(Date.now(), lastSignOfLifeFromGame)) {
-    declareDead()
+    closeConnections()
   }
 }
 
@@ -211,10 +209,7 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      R.tap(() => {
-        registerSignOfLife()
-        pulseTaking = setInterval(takePulse, PULSE_TAKING_INTERVAL)
-      }),
+      R.tap(registerSignOfLife),
       hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal
