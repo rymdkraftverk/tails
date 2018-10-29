@@ -17,7 +17,8 @@ const {
   wsSend,
 } = require('./common')
 
-const PATIENCE = HEARTBEAT_INTERVAL + 1000
+const PATIENCE = 1000 // network delays and whatnot
+const HOPE = HEARTBEAT_INTERVAL + PATIENCE
 
 const { error, log, warn } = console
 
@@ -25,28 +26,16 @@ const { error, log, warn } = console
 let closeConnections = null
 let internalChannel
 let id = null
-let lastSignOfLifeFromGame = null
+let killTimer = null
 // end state
 
-const isDead = R.pipe(
-  R.subtract,
-  R.lt(PATIENCE),
-)
+const deferDeath = () => {
+  clearTimeout(killTimer)
 
-const registerSignOfLife = () => {
-  const now = Date.now()
-  lastSignOfLifeFromGame = now
-
-  setTimeout(
-    takePulse,
-    PATIENCE,
+  killTimer = setTimeout(
+    closeConnections,
+    HOPE,
   )
-}
-
-const takePulse = () => {
-  if (isDead(Date.now(), lastSignOfLifeFromGame)) {
-    closeConnections()
-  }
 }
 
 const onInternalData = ({ event }) => {
@@ -55,7 +44,7 @@ const onInternalData = ({ event }) => {
     return
   }
 
-  registerSignOfLife()
+  deferDeath()
 
   rtcSend(
     JSON.stringify,
@@ -209,7 +198,7 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      R.tap(registerSignOfLife),
+      R.tap(deferDeath),
       hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal
