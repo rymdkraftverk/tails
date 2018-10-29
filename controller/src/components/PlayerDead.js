@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
-const Container = styled.div`
+const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -26,8 +27,7 @@ navigator.vibrate = (navigator.vibrate ||
 const PlayerDead = () => {
   navigator.vibrate(100)
   return (
-    // Prevent double tap to zoom on iOS
-    <Container onClick={() => {}}>
+    <Container>
       <Text>{'You\'re dead'}</Text>
     </Container>
   )

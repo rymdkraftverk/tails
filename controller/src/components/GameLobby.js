@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
+import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
-const Container = styled.div`
+const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -54,8 +55,6 @@ class GameLobby extends Component {
     return (
       <Container
         backgroundColor={playerColorToBackgroundColor(playerColor)}
-        // Prevent double tap to zoom on iOS
-        onClick={() => {}}
       >
         {
           playerCount > 1

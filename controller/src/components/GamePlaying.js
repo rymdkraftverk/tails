@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Event, SteeringCommand } from 'common'
 import styled from 'styled-components'
+import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
 const SteerButton = styled.div`
   flex: 1;
@@ -20,7 +21,7 @@ const Separator = styled.div`
   background: black;
 `
 
-const Container = styled.div`
+const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   height: 100vh;
   overflow: hidden;
@@ -47,8 +48,7 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <Container onClick={() => {}}>
-        { /* The empty onClick above disables double tap zoom on iOS Safari */}
+      <Container>
         <SteerButton
           playerColor={playerColor}
           onMouseDown={this.sendCommand(SteeringCommand.LEFT)}
