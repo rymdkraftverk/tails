@@ -19,7 +19,11 @@ const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 export const MAX_PLAYERS_ALLOWED = 10
 
 const movePlayer = (pId, direction) => {
-  l1.get(pId).direction = direction
+  const player = l1.get(pId)
+  // This is needed since events might be sent during score screen when player does not exist
+  if (player) {
+    l1.get(pId).direction = direction
+  }
 }
 
 export const playerCount = R.compose(R.length, R.values)
