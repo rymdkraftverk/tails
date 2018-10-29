@@ -147,7 +147,7 @@ const killPlayer = (player, speedMultiplier) => {
     {
       parent: l1.get(Scene.GAME),
       zIndex: Layer.FOREGROUND + 1,
-      labels: ['explosionParticleContainer'],
+      labels: ['particleContainer'],
     },
   )
   new PIXI.particles.Emitter(
@@ -186,6 +186,7 @@ const killPlayer = (player, speedMultiplier) => {
   neonDeathParticleContainer.position = player.position
   l1.add(neonDeathParticleContainer, {
     parent: l1.get(Scene.GAME),
+    labels: ['particleContainer'],
   })
 
   const {

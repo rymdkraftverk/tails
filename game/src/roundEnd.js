@@ -57,7 +57,7 @@ const pauseAndTransitionToScoreScene = neonDeathEmitters => ({
     // This is needed due to pixi-particles crashing if you destroy
     // the parent of an emitter while particles are still active
     l1
-      .getByLabel('explosionParticleContainer')
+      .getByLabel('particleContainer')
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
 
     neonDeathEmitters.forEach((e) => {
