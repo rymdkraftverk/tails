@@ -8,6 +8,7 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
+import AwatingNextRound from './AwatingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
@@ -28,12 +29,12 @@ const AppState = {
 }
 
 const colorState = ({ started, color }) => (
-  started
-    ? { appState: AppState.PLAYER_DEAD }
-    : {
-      appState:    AppState.GAME_LOBBY,
-      playerColor: color,
-    }
+  {
+    appState: started
+      ? AppState.AWAITING_NEXT_ROUND
+      : AppState.GAME_LOBBY,
+    playerColor: color,
+  }
 )
 
 const errorState = message => ({
@@ -217,6 +218,14 @@ class App extends Component {
           appState === AppState.PLAYER_DEAD
             ?
               <PlayerDead />
+            : null
+        }
+        {
+          appState === AppState.AWAITING_NEXT_ROUND
+            ?
+              <AwatingNextRound
+                playerColor={Color[playerColor]}
+              />
             : null
         }
       </Fullscreen>
