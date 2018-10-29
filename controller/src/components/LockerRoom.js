@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 import styled from 'styled-components'
+import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
-const Container = styled.div`
+const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   height: 100vh;
 `
@@ -66,8 +67,7 @@ class LockerRoom extends Component {
     const placeholder = 'Code'
 
     return (
-      // Prevent double tap to zoom on iOS
-      <Container onClick={() => {}}>
+      <Container>
         <ContainerColumn>
           <GameCodeInput
             type="text"
