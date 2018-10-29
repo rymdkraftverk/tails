@@ -216,12 +216,6 @@ const killPlayer = (player, speedMultiplier) => {
       index: player.trailContainer.children.length - 1,
     },
     onComplete: ({ data }) => {
-      if (!player) {
-        l1.removeBehavior(neonDeath)
-        neonDeathEmitter.emit = false
-        return
-      }
-
       // eslint-disable-next-line lodash-fp/no-unused-result
       _.times(
         () => {
