@@ -38,7 +38,6 @@ class App extends Component {
 
   componentDidMount = () => {
     this.alertIfNoRtc()
-    navigator.vibrate(1)
     const gameCode = getLastGameCode()
     this.setState({ gameCode })
   }
@@ -81,6 +80,7 @@ class App extends Component {
   }
 
   onJoin = () => {
+    navigator.vibrate(1)
     const { gameCode } = this.state
     this.setState({ appState: APP_STATE.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
