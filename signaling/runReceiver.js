@@ -1,6 +1,7 @@
 const R = require('ramda')
 const Event = require('./event')
 const {
+  HEARTBEAT_INTERVAL,
   ReadyState,
   WEB_RTC_CONFIG,
   hoistInternal,
@@ -14,8 +15,6 @@ const {
   rtcSend,
   wsSend,
 } = require('./common')
-
-const HEARTBEAT_INTERVAL = 5000
 
 const { log, warn } = console
 
@@ -75,8 +74,9 @@ const isOpen = R.pipe(
   R.equals(ReadyState.OPEN),
 )
 
-const beatHeart = R.pipe(
-  R.forEach((initiator) => {
+const beatHeart = () => {
+  // Fetch fresh initiators
+  initiators.forEach((initiator) => {
     if (initiator.alive && isOpen(initiator)) {
       rtcSend(
         JSON.stringify,
@@ -88,13 +88,8 @@ const beatHeart = R.pipe(
     }
 
     killInitiator(initiator.id)
-  }),
-  R.tap(() => setTimeout(
-    // Insert fresh initiators into next heartbeat
-    () => { beatHeart(initiators) },
-    HEARTBEAT_INTERVAL,
-  )),
-)
+  })
+}
 
 const onInternalData = ({ event, payload: initiatorId }) => {
   if (event !== Event.HEARTBEAT) {
@@ -229,7 +224,7 @@ const init = ({
     }),
   )
 
-  beatHeart(initiators)
+  setInterval(beatHeart, HEARTBEAT_INTERVAL)
 }
 
 module.exports = init
