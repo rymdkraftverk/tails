@@ -1,4 +1,3 @@
-
 export default ({ texture, scaleFactor, radius }) => {
   const textures = [texture]
 
