@@ -158,13 +158,37 @@ export const applyPlayerScores = (players, scores) => {
     ), {})
 }
 
-const getStartingPosition = l1.grid({
-  x:           150,
-  y:           150,
-  marginX:     200,
-  marginY:     300,
-  itemsPerRow: 5,
-})
+const getStartingPosition = (index) => {
+  const maxYRadius = GAME_HEIGHT / 2 / (1 + Math.sqrt(3))
+  const maxXRadius = GAME_WIDTH / 8
+
+  const topRow = R
+    .range(1, 4)
+    .map(i => ({
+      x: i * 2 * maxXRadius,
+      y: maxYRadius,
+    }))
+
+  const middleRow = R
+    .range(0, 4)
+    .map(i => ({
+      x: maxXRadius * (1 + (2 * i)),
+      y: maxYRadius * (1 + Math.sqrt(3)),
+    }))
+
+  const bottomRow = R
+    .range(1, 4)
+    .map(i => ({
+      x: i * 2 * maxXRadius,
+      y: maxYRadius * (1 + (2 * Math.sqrt(3))),
+    }))
+
+  const positions = bottomRow
+    .concat(middleRow)
+    .concat(topRow)
+
+  return positions[index]
+}
 
 const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
   const { x, y } = getStartingPosition(index)
