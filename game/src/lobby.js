@@ -303,8 +303,8 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   }
 }
 
-const addMockPlayer = () => onControllerJoin({
-  id: `debugPlayer:${Math.random()
+const addMockPlayer = (idPrefix = 'debugPlayer:') => onControllerJoin({
+  id: `${idPrefix}${Math.random()
     .toString(36)
     .substring(7)}`,
   close: () => {},
@@ -314,4 +314,6 @@ window.debug = {
   ...window.debug,
   addMockPlayers: count => R.range(0, count)
     .map(() => addMockPlayer()),
+  addSpiralMockPlayers: count => R.range(0, count)
+    .map(() => addMockPlayer('debugSpiralPlayer:')),
 }

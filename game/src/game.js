@@ -85,11 +85,12 @@ export const transitionToGameScene = (maxPlayers) => {
             speedMultiplier: SPEED_MULTIPLIER,
             wallThickness:   WALL_THICKNESS,
           }),
+          player.playerId.startsWith('debugSpiralPlayer') ? performanceTestCurl(player) : null,
         ]
 
         R.forEach(
           l1.addBehavior,
-          behaviorsToAdd,
+          R.reject(R.isNil, behaviorsToAdd),
         )
 
         l1.destroy(`${player.playerId}:direction`)
@@ -313,6 +314,16 @@ const move = player => ({
     const radians = toRadians(player.degrees)
     player.x += Math.cos(radians) * player.speed
     player.y += Math.sin(radians) * player.speed
+  },
+})
+
+const performanceTestCurl = player => ({
+  onUpdate: ({ counter }) => {
+    // inverse relationship with square root is chosen with mathematical precision.
+    // factor 10 is chosen by trial and error.
+    // + 1 is to avoid divide by zero
+    const factor = 10 / Math.sqrt(counter + 1)
+    player.degrees += (TURN_RADIUS * factor)
   },
 })
 
