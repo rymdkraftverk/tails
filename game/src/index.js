@@ -18,6 +18,8 @@ const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
 export const MAX_PLAYERS_ALLOWED = 10
 
+const { log, warn } = console
+
 const movePlayer = (pId, direction) => {
   const player = l1.get(pId)
   // This is needed since events might be sent during score screen when player does not exist
@@ -67,8 +69,6 @@ const roundStart = () => {
       })
   }
 }
-
-const { log, warn } = console
 
 const createGame = ({ gameCode }) => {
   gameState.gameCode = gameCode
@@ -248,12 +248,12 @@ resizeGame()
 window.addEventListener('resize', resizeGame)
 
 const printBehaviors = () => {
-  console.log('BEHAVIORS:')
+  log('BEHAVIORS:')
   l1.getAllBehaviors()
     .forEach((b) => {
-      console.log(b.id)
+      log(b.id)
     })
-  console.log('==============')
+  log('==============')
 }
 
 const start = () => {

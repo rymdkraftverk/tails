@@ -13,14 +13,14 @@ const addPoints = (color) => {
     .map(l1.get)
     .filter(e => e && !e.killed)
 
-    // TODO refactor score gain
-    /*
-  livingPlayers
-    .map(e => gameState.players[e.id])
-    .forEach((p) => {
-      p.score += 1
-    })
-    */
+  // TODO refactor score gain
+  /*
+livingPlayers
+  .map(e => gameState.players[e.id])
+  .forEach((p) => {
+    p.score += 1
+  })
+  */
 
   livingPlayers
     .forEach(displayGainedPoint(color))

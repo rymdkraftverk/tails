@@ -62,19 +62,28 @@ const protobufSchema = R.memoizeWith(
   (descriptor, schemaKey) => pb.Root.fromJSON(descriptor)[schemaKey],
 )
 
-const protobufSerializer = ({ descriptor, schemaKey }) => data =>
+const protobufSerializer = ({ descriptor, schemaKey }) => data => (
   protobufSchema(descriptor, schemaKey)
     .encode(data)
     .finish()
+)
 
-const protobufDeserializer = ({ descriptor, schemaKey }) => data =>
+const protobufDeserializer = ({ descriptor, schemaKey }) => data => (
   protobufSchema(descriptor, schemaKey)
     .decode(new Uint8Array(data))
+)
 
-const getSerializer = protobuf =>
-  (protobuf ? protobufSerializer(protobuf) : defaultSerialize)
-const getDeserializer = protobuf =>
-  (protobuf ? protobufDeserializer(protobuf) : defaultDeserialize)
+const getSerializer = protobuf => (
+  protobuf
+    ? protobufSerializer(protobuf)
+    : defaultSerialize
+)
+
+const getDeserializer = protobuf => (
+  protobuf
+    ? protobufDeserializer(protobuf)
+    : defaultDeserialize
+)
 
 const wsSend = R.curry((ws, event, payload) => {
   R.pipe(
