@@ -7,7 +7,6 @@
     "start": "PORT=4001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint src",
     "stylelint": "stylelint './src/**/*.js'",
     "eject": "react-scripts eject"
   },

@@ -1,4 +1,4 @@
-for dir in backend controller game signaling common; do
+for dir in backend game signaling common; do
   cd $dir
   npm run lint
   cd -
