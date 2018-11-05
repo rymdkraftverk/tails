@@ -1,9 +1,9 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import * as TextStyle from './util/textStyle'
+import * as TextStyle from './constant/textStyle'
 import bounce from './bounce'
-import Sound from './util/sound'
+import Sound from './constant/sound'
 
 const TIME_BETWEEN_NUMBERS = 36
 

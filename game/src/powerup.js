@@ -5,7 +5,7 @@ import R from 'ramda'
 import Scene from './Scene'
 import { createTrail, collisionCheckerTrail } from './behavior'
 import { createSine } from './magic'
-import Sound from './util/sound'
+import Sound from './constant/sound'
 
 const GHOST_POWERUP_DURATION = 380
 const MINIMUM_GHOST_APPEAR_TIME = 400

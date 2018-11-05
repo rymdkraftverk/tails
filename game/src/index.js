@@ -8,11 +8,11 @@ import { transitionToGameScene } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
 import Scene from './Scene'
-import Layer from './util/layer'
+import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import GameEvent from './util/gameEvent'
+import GameEvent from './constant/gameEvent'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 

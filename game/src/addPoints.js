@@ -2,8 +2,8 @@ import R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import gameState from './gameState'
-import * as TextStyle from './util/textStyle'
-import Layer from './util/layer'
+import * as TextStyle from './constant/textStyle'
+import Layer from './constant/layer'
 
 const DURATION = 60 // ticks
 
@@ -31,7 +31,7 @@ const displayGainedPoint = R.curry((color, player) => {
     '+1',
     {
       ...TextStyle.SMALL,
-      fill:     color,
+      fill: color,
     },
   )
   l1.add(

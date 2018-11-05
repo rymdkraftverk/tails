@@ -7,9 +7,9 @@ import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
 import { scoreToWin } from './game'
 import delay from './delay'
-import * as TextStyle from './util/textStyle'
+import * as TextStyle from './constant/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
-import Layer from './util/layer'
+import Layer from './constant/layer'
 import gameState from './gameState'
 
 const WORM_START_Y = 80
