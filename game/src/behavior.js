@@ -7,11 +7,11 @@ import explode from './particleEmitter/explode'
 import sparks from './particleEmitter/sparks'
 import { transitionToRoundEnd } from './roundEnd'
 import gameState, { CurrentState } from './gameState'
-import Layer from './util/layer'
+import Layer from './constant/layer'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import GameEvent from './util/gameEvent'
+import GameEvent from './constant/gameEvent'
 import { addEntityToTree, nearestNeighbour } from './kd-tree'
-import Sound from './util/sound'
+import Sound from './constant/sound'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60

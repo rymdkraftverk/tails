@@ -1,7 +1,7 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import Layer from './util/layer'
+import Layer from './constant/layer'
 import { createParabola } from './magic'
 
 const DURATION = 50
