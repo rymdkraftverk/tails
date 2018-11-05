@@ -59,8 +59,8 @@ const nearestNeighbour = (options, tree, entity) => {
 const nearestNeighbourExport = R.curry(({ getCoord, earlyReturn, filter }, tree, entity) => {
   const options = {
     getCoord:    getCoord || ((e, d) => e[d]),
-    earlyReturn: earlyReturn || (() => false),
-    filter:      filter || (() => true),
+    earlyReturn: earlyReturn || (R.F),
+    filter:      filter || (R.T),
   }
 
   return nearestNeighbour(options, tree, entity)
