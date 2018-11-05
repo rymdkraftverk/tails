@@ -12,6 +12,7 @@ import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './constant/gameEvent'
 import { addEntityToTree, nearestNeighbour } from './kd-tree'
 import Sound from './constant/sound'
+import { HEADER_HEIGHT } from './header'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -246,8 +247,8 @@ export const collisionCheckerWalls = ({
     if (
       x < wallThickness ||
       x > GAME_WIDTH - wallThickness - player.hitArea.width ||
-      y < wallThickness ||
-      y > GAME_HEIGHT - wallThickness - player.hitArea.height) {
+      y < wallThickness + HEADER_HEIGHT ||
+      y > GAME_HEIGHT - HEADER_HEIGHT - wallThickness - player.hitArea.height) {
       killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }

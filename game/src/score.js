@@ -39,7 +39,7 @@ export const transitionToScoreScene = () => {
 
   goal.x = GOAL_X
   goal.y = GOAL_Y
-  goal.scale.set(1.5)
+  goal.scale.set(2)
 
   const goalText = new PIXI.Text(
     scoreToWin(gameState.players),
@@ -55,9 +55,10 @@ export const transitionToScoreScene = () => {
     },
   )
   goalText.position.set(
-    GOAL_X + 10,
+    GOAL_X + 60,
     GOAL_Y - 60,
   )
+  goalText.anchor.x = 0.5
 
   // eslint-disable-next-line lodash-fp/no-unused-result
   _

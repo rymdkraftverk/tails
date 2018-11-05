@@ -8,6 +8,8 @@ import { transitionToGameScene } from './game'
 import { transitionToLobby, createPlayerEntity } from './lobby'
 import http from './http'
 import Scene from './Scene'
+import createHeader from './header'
+import getControllerUrl from './getControllerUrl'
 import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { CurrentState } from './gameState'
@@ -48,6 +50,10 @@ const roundStart = () => {
     fullscreenFadeInOut()
       .then(() => {
         const entitiesToKeep = [
+          'header',
+          'header-background',
+          'urlText',
+          'codeText',
           'background',
           'fadeInOut',
           'gameMusic',
@@ -73,6 +79,10 @@ const { log, warn } = console
 const createGame = ({ gameCode }) => {
   gameState.gameCode = gameCode
   transitionToLobby(gameState.gameCode)
+  createHeader({
+    url:  getControllerUrl(),
+    code: gameCode,
+  })
 }
 
 const onControllerData = id => (message) => {
