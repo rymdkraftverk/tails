@@ -2,15 +2,15 @@ const Color = {
   // These keys are exempted from the always caps keys-rule
   // as the naming of these keys tightly coupled to other mechanisms (e.g. file names)
   turquoise: '#009B9D',
-  orange:    '#FF9201',
-  pink:      '#FF85FF',
+  orange:    '#FF7300',
+  pink:      '#FF6DCE',
   white:     '#EEEDEF',
-  green:     '#95A783',
-  yellow:    '#ECF257',
+  green:     '#63C600',
+  yellow:    '#FFE100',
   blue:      '#3E5AFF',
-  red:       '#CB725D',
-  purple:    '#A73D8D',
-  brown:     '#945200',
+  red:       '#F21818',
+  purple:    '#9300C9',
+  brown:     '#754701',
   none:      '#999999',
 }
 
