@@ -13,6 +13,7 @@ import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './constant/gameEvent'
+import { HeaderIds } from './header'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
@@ -48,10 +49,7 @@ const roundStart = () => {
     fullscreenFadeInOut()
       .then(() => {
         const entitiesToKeep = [
-          'header',
-          'header-background',
-          'urlText',
-          'codeText',
+          ...Object.values(HeaderIds),
           'background',
           'fadeInOut',
           'gameMusic',
