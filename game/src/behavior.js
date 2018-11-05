@@ -248,7 +248,7 @@ export const collisionCheckerWalls = ({
       x < wallThickness ||
       x > GAME_WIDTH - wallThickness - player.hitArea.width ||
       y < wallThickness + HEADER_HEIGHT ||
-      y > GAME_HEIGHT - HEADER_HEIGHT - wallThickness - player.hitArea.height) {
+      y > GAME_HEIGHT - wallThickness - player.hitArea.height) {
       killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }

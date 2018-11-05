@@ -366,8 +366,8 @@ const createWalls = () => {
     .lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
     .moveTo(halfWallThickness, y)
     .lineTo(GAME_WIDTH - halfWallThickness, y)
-    .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT - y)
-    .lineTo(halfWallThickness, GAME_HEIGHT - y)
+    .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT)
+    .lineTo(halfWallThickness, GAME_HEIGHT)
     .lineTo(halfWallThickness, y)
 
   walls.cacheAsBitmap = true
