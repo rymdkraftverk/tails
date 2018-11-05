@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js'
 import * as l1 from 'l1'
-import * as TextStyle from './util/textStyle'
+import * as TextStyle from './constant/textStyle'
 import { GameColor } from './game'
-import layer from './util/layer'
+import layer from './constant/layer'
 import { GAME_WIDTH } from './rendering'
 
 const URL_POSITION_X = 100
