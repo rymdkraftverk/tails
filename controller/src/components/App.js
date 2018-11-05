@@ -217,7 +217,9 @@ class App extends Component {
         {
           appState === AppState.PLAYER_DEAD
             ?
-              <PlayerDead />
+              <PlayerDead
+                playerColor={Color[playerColor]}
+              />
             : null
         }
         {

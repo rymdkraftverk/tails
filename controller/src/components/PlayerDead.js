@@ -1,5 +1,7 @@
 import React from 'react'
+import * as R from 'ramda'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
 const Container = styled(IOSDisableDoubleTap)`
@@ -7,6 +9,7 @@ const Container = styled(IOSDisableDoubleTap)`
   flex-direction: column;
   height: 100vh;
   user-select: none;
+  background: ${R.prop('color')};
 `
 
 const Text = styled.b`
@@ -24,13 +27,19 @@ navigator.vibrate = (navigator.vibrate ||
   navigator.mozVibrate ||
   navigator.msVibrate || noop)
 
-const PlayerDead = () => {
+const PlayerDead = ({ playerColor }) => {
   navigator.vibrate(100)
   return (
-    <Container>
+    <Container
+      color={playerColor}
+    >
       <Text>{'You\'re dead'}</Text>
     </Container>
   )
+}
+
+PlayerDead.propTypes = {
+  playerColor: PropTypes.string.isRequired,
 }
 
 export default PlayerDead
