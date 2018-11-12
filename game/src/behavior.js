@@ -20,6 +20,8 @@ const GENERATE_HOLE_MIN_TIME = 60
 const HOLE_LENGTH_MAX_TIME = 30
 const HOLE_LENGTH_MIN_TIME = 10
 
+const CREATE_TRAIL_FREQUENCY = 2
+
 const middle = (displayObject, dim, prop) =>
   (displayObject.toGlobal(new PIXI.Point(0, 0))[dim] / l1.getScale()) +
   (displayObject.hitArea[prop] / 2)
@@ -28,7 +30,7 @@ export const createTrail = ({
   player, speed, speedMultiplier,
 }) => ({
   id:       `createTrail-${player.playerId}`,
-  duration: 2,
+  duration: CREATE_TRAIL_FREQUENCY,
   loop:     true,
   onInit:   () => {
     if (!player.trailContainer) {
@@ -38,9 +40,11 @@ export const createTrail = ({
       l1.add(player.trailContainer, {
         parent: l1.get(Scene.GAME),
       })
+      player.trailContainer.counter = 0
     }
   },
   onComplete: () => {
+    player.trailContainer.counter += CREATE_TRAIL_FREQUENCY
     if (player.preventTrail) {
       return
     }
@@ -56,6 +60,7 @@ export const createTrail = ({
 
     trailE.active = false
     trailE.player = player.playerId
+    trailE.counter = player.trailContainer.counter
 
     trailE.scale.set(speed / speedMultiplier / 2)
 
@@ -131,8 +136,6 @@ export const collisionCheckerTrail = (player, speedMultiplier) => ({
   },
 })
 
-let neonDeathEmitters = []
-
 const killPlayer = (player, speedMultiplier) => {
   const {
     textures,
@@ -186,13 +189,6 @@ const killPlayer = (player, speedMultiplier) => {
   gameState.events.emit(GameEvent.PLAYER_COLLISION, player.color)
   player.event.emit(GameEvent.PLAYER_COLLISION)
 
-  const neonDeathParticleContainer = new PIXI.Container()
-  neonDeathParticleContainer.position = player.position
-  l1.add(neonDeathParticleContainer, {
-    parent: l1.get(Scene.GAME),
-    labels: ['particleContainer'],
-  })
-
   const {
     textures: neonTextures,
     config: neonConfig,
@@ -201,13 +197,6 @@ const killPlayer = (player, speedMultiplier) => {
     scaleFactor: (speedMultiplier / player.speed),
     radius:      player.width,
   })
-
-  const neonDeathEmitter = new PIXI.particles.Emitter(
-    neonDeathParticleContainer,
-    neonTextures,
-    neonConfig,
-  )
-  neonDeathEmitters = neonDeathEmitters.concat(neonDeathEmitter)
 
   const darkSpriteId = `circle-${player.color}-dark`
   player.texture = l1.getTexture(darkSpriteId)
@@ -218,22 +207,38 @@ const killPlayer = (player, speedMultiplier) => {
     data: {
       index: player.trailContainer.children.length - 1,
     },
-    onUpdate: ({ data }) => {
-      // eslint-disable-next-line lodash-fp/no-unused-result
-      _.times(
-        () => {
-          const trail = player.trailContainer.children[data.index]
-          if (!trail) {
-            l1.removeBehavior(neonDeath)
-            neonDeathEmitter.emit = false
-            return
-          }
-          trail.texture = l1.getTexture(darkSpriteId)
-          neonDeathParticleContainer.position = trail.position
-          data.index -= 1
-        },
-        NEON_DEATH_SPEED,
-      )
+    onInit: ({ data }) => {
+      data.initialCounter = player.trailContainer.children[data.index].counter
+    },
+    onUpdate: ({ data, counter }) => {
+      if (data.index < 0) {
+        l1.removeBehavior(neonDeath)
+        return
+      }
+      let trail = player.trailContainer.children[data.index]
+
+      // eslint-disable-next-line fp/no-loops
+      while (
+        data.index >= 0 &&
+        (data.initialCounter - (counter * CREATE_TRAIL_FREQUENCY * NEON_DEATH_SPEED))
+        <= trail.counter
+      ) {
+        const neonDeathParticleContainer = new PIXI.Container()
+        neonDeathParticleContainer.position = trail.position
+        l1.add(neonDeathParticleContainer, {
+          parent: l1.get(Scene.GAME),
+          labels: ['particleContainer'],
+        })
+        new PIXI.particles.Emitter(
+          neonDeathParticleContainer,
+          neonTextures,
+          neonConfig,
+        )
+          .playOnceAndDestroy()
+        trail.texture = l1.getTexture(darkSpriteId)
+        data.index -= 1
+        trail = player.trailContainer.children[data.index]
+      }
     },
   })
 }
@@ -268,6 +273,6 @@ const checkPlayersAlive = () => {
     gameState.lastRoundResult.playerFinishOrder =
             gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].l1.id])
 
-    transitionToRoundEnd(neonDeathEmitters)
+    transitionToRoundEnd()
   }
 }

@@ -13,7 +13,7 @@ import gameState, { CurrentState } from './gameState'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
-export const transitionToRoundEnd = (neonDeathEmitters) => {
+export const transitionToRoundEnd = () => {
   gameState.currentState = CurrentState.SCORE_OVERVIEW
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
@@ -42,7 +42,7 @@ export const transitionToRoundEnd = (neonDeathEmitters) => {
 
   const behaviorsToAdd = [
     roundWinnerTextAnimation(roundEndText),
-    pauseAndTransitionToScoreScene(neonDeathEmitters),
+    pauseAndTransitionToScoreScene(),
   ]
 
   R.forEach(
@@ -51,7 +51,7 @@ export const transitionToRoundEnd = (neonDeathEmitters) => {
   )
 }
 
-const pauseAndTransitionToScoreScene = neonDeathEmitters => ({
+const pauseAndTransitionToScoreScene = () => ({
   duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
     // This is needed due to pixi-particles crashing if you destroy
@@ -59,12 +59,6 @@ const pauseAndTransitionToScoreScene = neonDeathEmitters => ({
     l1
       .getByLabel('particleContainer')
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
-
-    neonDeathEmitters.forEach((e) => {
-      e.cleanup()
-      e.destroy()
-    })
-    neonDeathEmitters = []
 
     l1.destroy(Scene.GAME)
     l1.getAllBehaviors()
