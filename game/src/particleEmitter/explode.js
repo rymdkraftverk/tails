@@ -20,7 +20,7 @@ export default ({
     noRotation:      true,
     blendMode:       'normal',
     frequency:       0.01,
-    emitterLifetime: 0.2,
+    emitterLifetime: 0.1,
     maxParticles:    500,
     addAtBack:       false,
     spawnType:       'circle',

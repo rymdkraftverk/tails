@@ -26,11 +26,11 @@ export default ({ texture, scaleFactor, radius }) => {
       max: 0,
     },
     lifetime: {
-      min: 1 * (1 / scaleFactor),
-      max: 2 * (1 / scaleFactor),
+      min: 0.5 * (1 / scaleFactor),
+      max: 1 * (1 / scaleFactor),
     },
     blendMode:    'normal',
-    frequency:    0.004,
+    frequency:    0.02,
     maxParticles: 500,
     pos:          {
       x: 0,
@@ -43,8 +43,8 @@ export default ({ texture, scaleFactor, radius }) => {
       y: radius / 2,
       r: radius,
     },
-    emit:       true,
-    autoUpdate: true,
+    emitterLifetime: 0.2,
+    autoUpdate:      true,
   }
 
   return {
