@@ -10,10 +10,11 @@ import gameState, { CurrentState } from './gameState'
 import Layer from './constant/layer'
 import bounce from './bounce'
 import Scene from './Scene'
+import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
+import { HEADER_HEIGHT } from './header'
 
-const CONTROLLER_PORT = '4001'
 const TextAnchor = {
   INSTRUCTION_START_X: 64,
 }
@@ -21,23 +22,6 @@ const TextAnchor = {
 const TextColor = {
   TEXT:      'white',
   HIGHLIGHT: '#04A4EC',
-}
-
-const TITLE_BACKGROUND_HEIGHT = 40
-
-const deployedURLs = {
-  'game.rymdkraftverk.com': 'rymdkraftverk.com',
-}
-
-const getControllerUrl = () => {
-  const {
-    location: {
-      hostname,
-      port,
-    },
-  } = window
-
-  return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }
 
 const getPlayerPosition = l1.grid({
@@ -73,6 +57,9 @@ const addText = ({
 
 export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   gameState.currentState = CurrentState.LOBBY
+
+  const controllerUrl = getControllerUrl()
+
   const lobbyScene = new PIXI.Container()
 
   l1.add(
@@ -109,7 +96,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   addText({
     x:     TextAnchor.INSTRUCTION_START_X + 210,
     y:     292,
-    text:  getControllerUrl(),
+    text:  controllerUrl,
     style: {
       ...TextStyle.CODE,
       fontSize: 58,
@@ -156,27 +143,6 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
     parent: lobbyScene,
   })
 
-  const titleBackground = new PIXI.Graphics()
-  l1.add(
-    titleBackground,
-    {
-      id:     'titleBackground',
-      parent: lobbyScene,
-      zIndex: Layer.BACKGROUND + 10,
-    },
-  )
-
-  titleBackground
-    .beginFill(GameColor.BLUE)
-    .moveTo(0, 0)
-    .lineTo(GAME_WIDTH, 0)
-    .lineTo(GAME_WIDTH, TITLE_BACKGROUND_HEIGHT)
-    .lineTo(0, TITLE_BACKGROUND_HEIGHT)
-    .lineTo(0, 0)
-    .endFill()
-
-  titleBackground.cacheAsBitmap = true
-
   const playersDivider = new PIXI.Graphics()
   l1.add(
     playersDivider,
@@ -189,7 +155,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
 
   playersDivider
     .lineStyle(4, GameColor.WHITE, 1)
-    .moveTo(875, TITLE_BACKGROUND_HEIGHT + 15)
+    .moveTo(875, HEADER_HEIGHT + 15)
     .lineTo(875, 700)
 
   playersDivider.cacheAsBitmap = true

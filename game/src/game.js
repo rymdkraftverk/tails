@@ -17,6 +17,8 @@ import { Track, playTrack } from './music'
 import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 import GameEvent from './constant/gameEvent'
 import { initEmptyTree } from './kd-tree'
+import createHeader, { HEADER_HEIGHT } from './header'
+import getControllerUrl from './getControllerUrl'
 
 window.debug = {
   ...window.debug,
@@ -39,13 +41,19 @@ gameState
   .on(GameEvent.PLAYER_COLLISION, addPoints)
 
 export const GameColor = {
-  BLUE:  '0x04A4EC',
+  BLUE:  '0x0B4D6C',
   WHITE: '0xeeeeee',
 }
 
 export const transitionToGameScene = (maxPlayers) => {
   gameState.currentState = CurrentState.PLAYING_ROUND
   gameState.kdTree = initEmptyTree()
+
+  // The header is persistent across game and score
+  createHeader({
+    url:  getControllerUrl(),
+    code: gameState.gameCode,
+  })
 
   const gameScene = new PIXI.Container()
   l1.add(gameScene, {
@@ -99,7 +107,7 @@ export const transitionToGameScene = (maxPlayers) => {
         snakeSpeed:      l1.getByLabel('player')[0].speed,
         speedMultiplier: SPEED_MULTIPLIER,
         gameWidth:       GAME_WIDTH,
-        gameHeight:      GAME_HEIGHT,
+        gameHeight:      GAME_HEIGHT + HEADER_HEIGHT,
       })
     })
 
@@ -160,7 +168,7 @@ export const applyPlayerScores = (players, scores) => {
 }
 
 const getStartingPosition = (index) => {
-  const maxYRadius = GAME_HEIGHT / 2 / (1 + Math.sqrt(3))
+  const maxYRadius = (GAME_HEIGHT - HEADER_HEIGHT) / 2 / (1 + Math.sqrt(3))
   const maxXRadius = GAME_WIDTH / 8
 
   const topRow = R
@@ -359,13 +367,15 @@ const createWalls = () => {
   )
   const halfWallThickness = WALL_THICKNESS / 2
 
+  const y = HEADER_HEIGHT + halfWallThickness
+
   walls
     .lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
-    .moveTo(halfWallThickness, halfWallThickness)
-    .lineTo(GAME_WIDTH - halfWallThickness, halfWallThickness)
-    .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT - halfWallThickness)
-    .lineTo(halfWallThickness, GAME_HEIGHT - halfWallThickness)
-    .lineTo(halfWallThickness, halfWallThickness)
+    .moveTo(halfWallThickness, y)
+    .lineTo(GAME_WIDTH - halfWallThickness, y)
+    .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT)
+    .lineTo(halfWallThickness, GAME_HEIGHT)
+    .lineTo(halfWallThickness, y)
 
   walls.cacheAsBitmap = true
 }

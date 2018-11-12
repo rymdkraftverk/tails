@@ -4,6 +4,7 @@ import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './constant/textStyle'
 import bounce from './bounce'
 import Sound from './constant/sound'
+import { HEADER_HEIGHT } from './header'
 
 const TIME_BETWEEN_NUMBERS = 36
 
@@ -62,7 +63,7 @@ const countdownBehavior = (countdown, resolve) => ({
       },
     )
     text.x = GAME_WIDTH / 2
-    text.y = GAME_HEIGHT / 2
+    text.y = (GAME_HEIGHT - HEADER_HEIGHT) / 2
     text.anchor.set(0.5)
     l1.addBehavior(bounce(text, 0.04))
     data.text = text
