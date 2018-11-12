@@ -1,3 +1,4 @@
+import R from 'ramda'
 import { EventEmitter } from 'eventemitter3'
 import { Color } from 'common'
 
@@ -8,11 +9,9 @@ export const CurrentState = {
 }
 
 const gameState = {
-  currentState:                   CurrentState.LOBBY,
-  gameCode:                       '',
-  // TODO: change to array
-  players: {
-  },
+  currentState:    CurrentState.LOBBY,
+  gameCode:        '',
+  players:         [],
   lastRoundResult: {
     playerFinishOrder: [],
     winner:            null,
@@ -20,5 +19,7 @@ const gameState = {
   events:          new EventEmitter(),
   availableColors: Object.keys(Color),
 }
+
+export const getPlayer = id => R.find(R.propEq('playerId', id), gameState.players)
 
 export default gameState

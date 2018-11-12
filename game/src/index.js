@@ -10,7 +10,7 @@ import http from './http'
 import Scene from './Scene'
 import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
-import gameState, { CurrentState } from './gameState'
+import gameState, { getPlayer, CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import GameEvent from './constant/gameEvent'
 
@@ -28,8 +28,6 @@ const movePlayer = (pId, direction) => {
   }
 }
 
-export const playerCount = R.compose(R.length, R.values)
-
 const registerPlayerFinished = ({ l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
@@ -40,14 +38,14 @@ const roundStart = (options = { collectMetrics: false }) => {
 
   if (gameState.currentState === CurrentState.LOBBY
     || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
-    Object
-      .values(gameState.players)
+    gameState
+      .players
       .forEach(({ playerId }) => {
-        // console.log(gameState.players)
-        gameState.players[playerId].send(Channel.RELIABLE, {
-          event:   Event.ROUND_STARTED,
-          payload: {},
-        })
+        getPlayer(playerId)
+          .send(Channel.RELIABLE, {
+            event:   Event.ROUND_STARTED,
+            payload: {},
+          })
       })
 
     fullscreenFadeInOut()
@@ -95,7 +93,8 @@ const onPlayerData = id => (message) => {
 }
 
 const broadcast = (message) => {
-  Object.values(gameState.players)
+  gameState
+    .players
     .forEach((c) => {
       c.send(
         Channel.RELIABLE,
@@ -105,7 +104,7 @@ const broadcast = (message) => {
 }
 
 const morePlayersAllowed = () =>
-  playerCount(gameState.players) < MAX_PLAYERS_ALLOWED
+  gameState.players.length < MAX_PLAYERS_ALLOWED
 
 export const onPlayerJoin = ({
   id,
@@ -121,7 +120,7 @@ export const onPlayerJoin = ({
     })
 
     if (l1.get(Scene.LOBBY)) {
-      const numOfPlayers = playerCount(gameState.players)
+      const numOfPlayers = gameState.players.length
       createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
     }
 
@@ -142,7 +141,7 @@ export const onPlayerJoin = ({
     broadcast({
       event:   Event.A_PLAYER_JOINED,
       payload: {
-        playerCount: playerCount(gameState.players),
+        playerCount: gameState.players.length,
       },
     })
   } else {
@@ -168,24 +167,24 @@ const createNewPlayer = ({ playerId, send }) => {
     send,
   }
 
-  gameState.players[player.playerId] = player
+  gameState.players = gameState.players.concat(player)
   return player
 }
 
 const onPlayerLeave = (id) => {
   log(`[Player Leave] ${id}`)
 
-  const player = gameState.players[id]
+  const player = getPlayer(id)
   gameState.availableColors = [player.color].concat(gameState.availableColors)
-  gameState.players = R.pickBy((_val, key) => key !== id, gameState.players)
+  gameState.players = R.reject(R.propEq('playerId', id), gameState.players)
 
   if (gameState.currentState === CurrentState.LOBBY) {
     l1
       .getByLabel('lobby-square')
       .forEach(l1.destroy)
 
-    Object
-      .values(gameState.players)
+    gameState
+      .players
       .forEach((p, i) => {
         createPlayerEntity(p, i, { newPlayer: false })
       })
@@ -194,7 +193,7 @@ const onPlayerLeave = (id) => {
   broadcast({
     event:   Event.A_PLAYER_LEFT,
     payload: {
-      playerCount: playerCount(gameState.players),
+      playerCount: gameState.players.length,
     },
   })
 }

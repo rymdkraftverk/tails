@@ -55,7 +55,7 @@ const addText = ({
   )
 }
 
-export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
+export const transitionToLobby = (gameCode, players = []) => {
   gameState.currentState = CurrentState.LOBBY
 
   const controllerUrl = getControllerUrl()
@@ -185,7 +185,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   })
 
   _
-    .times(index => alreadyConnectedPlayers[index], MAX_PLAYERS_ALLOWED)
+    .times(index => players[index], MAX_PLAYERS_ALLOWED)
     .forEach((player, index) => {
       if (player) {
         createPlayerEntity(player, index, { newPlayer: false })
