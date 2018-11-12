@@ -112,46 +112,46 @@ export const onPlayerJoin = ({
   send,
   close,
 }) => {
-  // TODO: return early
-  if (morePlayersAllowed()) {
-    const player = createNewPlayer({
-      playerId: id,
-      send,
-    })
-
-    if (l1.get(Scene.LOBBY)) {
-      const numOfPlayers = gameState.players.length
-      createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
-    }
-
-    // If send is undefined we are trying to generate a mock player with window.debug
-    if (!send) {
-      return
-    }
-
-    send(Channel.RELIABLE, {
-      event:   Event.PLAYER_JOINED,
-      payload: {
-        playerId: id,
-        color:    player.color,
-        started:  gameState.currentState === CurrentState.PLAYING_ROUND,
-      },
-    })
-
-    broadcast({
-      event:   Event.A_PLAYER_JOINED,
-      payload: {
-        playerCount: gameState.players.length,
-      },
-    })
-  } else {
+  if (!morePlayersAllowed()) {
     send(Channel.RELIABLE, {
       event:   Event.GAME_FULL,
       payload: {},
     })
 
     close()
+    return
   }
+
+  const player = createNewPlayer({
+    playerId: id,
+    send,
+  })
+
+  if (l1.get(Scene.LOBBY)) {
+    const numOfPlayers = gameState.players.length
+    createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
+  }
+
+  // If send is undefined we are trying to generate a mock player with window.debug
+  if (!send) {
+    return
+  }
+
+  send(Channel.RELIABLE, {
+    event:   Event.PLAYER_JOINED,
+    payload: {
+      playerId: id,
+      color:    player.color,
+      started:  gameState.currentState === CurrentState.PLAYING_ROUND,
+    },
+  })
+
+  broadcast({
+    event:   Event.A_PLAYER_JOINED,
+    payload: {
+      playerCount: gameState.players.length,
+    },
+  })
 
   setOnData(onPlayerData(id))
 }
