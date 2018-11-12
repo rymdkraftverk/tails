@@ -35,7 +35,9 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
-const roundStart = ({ collectMetrics = false }) => {
+const roundStart = (options = { collectMetrics: false }) => {
+  const { collectMetrics } = options
+
   if (gameState.currentState === CurrentState.LOBBY
     || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
     Object
@@ -84,7 +86,7 @@ const onControllerData = id => (message) => {
       movePlayer(id, payload)
       break
     case Event.ROUND_START:
-      roundStart({})
+      roundStart()
       break
     default:
       warn(`Unhandled event for message: ${message}`)
@@ -271,7 +273,7 @@ const initMetricsBehavior = (appReference) => {
   l1.addBehavior({
     onUpdate: () => {
       metrics = metrics.concat({
-        pixiElapsedMS:  appReference._ticker.elapsedMS,
+        pixiElapsedMS:  appReference.ticker.elapsedMS,
         displayObjects: l1.getAll().length,
         l1LoopDuration: l1.getLoopDuration(),
       })
@@ -311,7 +313,7 @@ const initMetricsBehavior = (appReference) => {
 
 window.debug = {
   ...window.debug,
-  roundStart:        () => roundStart({ collectMetrics: false }),
+  roundStart,
   roundStartMetrics: () => roundStart({ collectMetrics: true }),
   printBehaviors,
   start,
