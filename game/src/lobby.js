@@ -13,7 +13,7 @@ import Scene from './Scene'
 import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
-import createHeader, { HEADER_HEIGHT } from './header'
+import { HEADER_HEIGHT } from './header'
 
 const TextAnchor = {
   INSTRUCTION_START_X: 64,
@@ -59,12 +59,6 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   gameState.currentState = CurrentState.LOBBY
 
   const controllerUrl = getControllerUrl()
-
-  // The header is persistent across lobby, game and score
-  createHeader({
-    url:  controllerUrl,
-    code: gameCode,
-  })
 
   const lobbyScene = new PIXI.Container()
 

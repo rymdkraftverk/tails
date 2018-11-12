@@ -17,7 +17,8 @@ import { Track, playTrack } from './music'
 import { createTrail, createHoleMaker, collisionCheckerWalls, collisionCheckerTrail } from './behavior'
 import GameEvent from './constant/gameEvent'
 import { initEmptyTree } from './kd-tree'
-import { HEADER_HEIGHT } from './header'
+import createHeader, { HEADER_HEIGHT } from './header'
+import getControllerUrl from './getControllerUrl'
 
 window.debug = {
   ...window.debug,
@@ -47,6 +48,12 @@ export const GameColor = {
 export const transitionToGameScene = (maxPlayers) => {
   gameState.currentState = CurrentState.PLAYING_ROUND
   gameState.kdTree = initEmptyTree()
+
+  // The header is persistent across game and score
+  createHeader({
+    url:  getControllerUrl(),
+    code: gameState.gameCode,
+  })
 
   const gameScene = new PIXI.Container()
   l1.add(gameScene, {
