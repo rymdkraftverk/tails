@@ -328,9 +328,9 @@ const move = player => ({
 const performanceTestCurl = player => ({
   onUpdate: ({ counter }) => {
     // inverse relationship with square root is chosen with mathematical precision.
-    // factor 10 is chosen by trial and error.
+    // factor 12.3 is chosen by trial and error.
     // + 1 is to avoid divide by zero
-    const factor = 10 / Math.sqrt(counter + 1)
+    const factor = 12.3 / Math.sqrt(counter + 1)
     player.degrees += (TURN_RADIUS * factor)
   },
 })

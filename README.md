@@ -62,7 +62,9 @@ They can be accessed from the console on the `debug` object.
 The following functions are available:
 
 * `debug.addMockPlayers(count)`
+* `debug.addSpiralMockPlayers(count)`
 * `debug.roundStart()`
+* `debug.roundStartMetrics()`
 * `debug.transitionToLobby(gameCode)`
 * `debug.transitionToMatchEnd()`
 * `debug.transitionToRoundEnd()`
