@@ -1,32 +1,41 @@
 import * as l1 from 'l1'
 import Sound from './constant/sound'
 import PowerUp from './constant/powerUp'
+import {
+  createTrail,
+} from './behavior'
 
 export default {
   powerUp: ({
-    player, speedMultiplier,
+    player,
+    speedMultiplier,
   }) => ({
-    id:   `speed-${player.playerId}`,
-    data: {
-      expirationState: null,
-    },
+    id:       `speed-${player.playerId}`,
+    data:     { },
     duration: PowerUp.DURATION,
     onInit:   () => {
-      player.scale.set(player.speed / speedMultiplier)
-      player.alpha = 0.4
+      l1.addBehavior(createTrail({
+        player,
+        speed:    player.speed,
+        speedMultiplier,
+        duration: 1,
+      }))
+      player.speed *= 1.5
     },
     onComplete: () => {
       if (!player.killed) {
-      // Reset player
-        player.scale.set((player.speed / speedMultiplier / 2))
-        player.alpha = 1
+        player.speed /= 1.5
+
+        l1.addBehavior(createTrail({
+          player,
+          speed: player.speed,
+          speedMultiplier,
+        }))
 
         l1.sound({
           src:    Sound.POWERUP_EXPIRED,
           volume: 0.6,
         })
-
-        l1.removeBehavior(`speed-${player.playerId}`)
       }
     },
   }),

@@ -27,10 +27,10 @@ const middle = (displayObject, dim, prop) =>
   (displayObject.hitArea[prop] / 2)
 
 export const createTrail = ({
-  player, speed, speedMultiplier,
+  player, speed, speedMultiplier, duration,
 }) => ({
   id:       `createTrail-${player.playerId}`,
-  duration: CREATE_TRAIL_FREQUENCY,
+  duration: duration || 2,
   loop:     true,
   onInit:   () => {
     if (!player.trailContainer) {
