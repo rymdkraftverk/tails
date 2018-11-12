@@ -132,11 +132,6 @@ export const onPlayerJoin = ({
     createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
   }
 
-  // If send is undefined we are trying to generate a mock player with window.debug
-  if (!send) {
-    return
-  }
-
   send(Channel.RELIABLE, {
     event:   Event.PLAYER_JOINED,
     payload: {

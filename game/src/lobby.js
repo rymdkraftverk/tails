@@ -274,6 +274,8 @@ const addMockPlayer = (idPrefix = 'debugPlayer:') => onPlayerJoin({
     .toString(36)
     .substring(7)}`,
   close: () => {},
+  send: () => {},
+  setOnData: () => {},
 })
 
 window.debug = {
