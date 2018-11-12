@@ -1,7 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import R from 'ramda'
-import _ from 'lodash/fp'
 import Scene from './Scene'
 import explode from './particleEmitter/explode'
 import sparks from './particleEmitter/sparks'
