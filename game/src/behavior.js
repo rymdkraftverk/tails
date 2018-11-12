@@ -12,6 +12,7 @@ import GameEvent from './constant/gameEvent'
 import { addEntityToTree, nearestNeighbour } from './kd-tree'
 import Sound from './constant/sound'
 import { HEADER_HEIGHT } from './header'
+import { createSine } from './magic'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -280,3 +281,21 @@ const checkPlayersAlive = () => {
     transitionToRoundEnd()
   }
 }
+
+export const indicateExpiration = (player, speed, duration) => ({
+  id:   `indicateExpiration-${player.playerId}`,
+  duration,
+  data: {
+    sine: createSine({
+      start: 0.2,
+      end:   0.8,
+      speed,
+    }),
+  },
+  onRemove: () => {
+    player.alpha = 1
+  },
+  onUpdate: ({ counter, data }) => {
+    player.alpha = data.sine(counter)
+  },
+})
