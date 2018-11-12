@@ -29,19 +29,17 @@ export const createTrail = ({
   id:       `createTrail-${player.playerId}`,
   duration: 2,
   loop:     true,
-  onInit:   ({ data }) => {
+  onInit:   () => {
     if (!player.trailContainer) {
       // This container is used to group all trails into one parent
-      data.parent = new PIXI.Container()
-      l1.add(data.parent, {
+      // It is used for the "lights out" death animation
+      player.trailContainer = new PIXI.Container()
+      l1.add(player.trailContainer, {
         parent: l1.get(Scene.GAME),
       })
-      player.trailContainer = data.parent
-    } else {
-      data.parent = player.trailContainer
     }
   },
-  onComplete: ({ data }) => {
+  onComplete: () => {
     if (player.preventTrail) {
       return
     }
@@ -50,7 +48,7 @@ export const createTrail = ({
     l1.add(
       trailE,
       {
-        parent: data.parent,
+        parent: player.trailContainer,
         labels: ['trail'],
       },
     )
