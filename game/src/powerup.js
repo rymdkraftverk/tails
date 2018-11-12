@@ -8,8 +8,8 @@ import { createSine } from './magic'
 import Sound from './constant/sound'
 
 const GHOST_POWERUP_DURATION = 380
-const MINIMUM_GHOST_APPEAR_TIME = 400
-const MAXIMUM_GHOST_APPEAR_TIME = 600
+const MINIMUM_GHOST_APPEAR_TIME = 720
+const MAXIMUM_GHOST_APPEAR_TIME = 900
 
 export const initPowerups = ({
   snakeSpeed,
