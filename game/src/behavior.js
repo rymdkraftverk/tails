@@ -30,11 +30,16 @@ export const createTrail = ({
   duration: 2,
   loop:     true,
   onInit:   ({ data }) => {
-    data.parent = new PIXI.Container()
-    l1.add(data.parent, {
-      parent: l1.get(Scene.GAME),
-    })
-    player.trailContainer = data.parent
+    if (!player.trailContainer) {
+      // This container is used to group all trails into one parent
+      data.parent = new PIXI.Container()
+      l1.add(data.parent, {
+        parent: l1.get(Scene.GAME),
+      })
+      player.trailContainer = data.parent
+    } else {
+      data.parent = player.trailContainer
+    }
   },
   onComplete: ({ data }) => {
     if (player.preventTrail) {
