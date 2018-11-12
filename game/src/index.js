@@ -283,23 +283,7 @@ const initMetricsBehavior = (appReference) => {
   gameState
     .events
     .on(GameEvent.ROUND_END, () => {
-      const csv = R.pipe(
-        R.groupBy(R.prop('displayObjects')),
-        R.values,
-        R.map((displayObjectMeasurements) => {
-          const count = displayObjectMeasurements.length
-
-          return R.pipe(
-            R.reduce(R.mergeWith(R.add), {}),
-            R.map(R.flip(R.divide)(count)),
-          )(displayObjectMeasurements)
-        }),
-        R.reduce(
-          (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) =>
-            `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
-          'DisplayObjects, PixiElapsedMS, L1LoopDuration',
-        ),
-      )(metrics)
+      const csv = formatMetricsCSV(metrics)
 
       const encodedUri = encodeURI(`data:text/csv;charset=utf-8,\n${csv}`)
       const link = document.createElement('a')
@@ -310,6 +294,25 @@ const initMetricsBehavior = (appReference) => {
       link.click()
     })
 }
+
+// [{ displayObjects, pixiElapsedMS, l1LoopDuration }] -> String
+const formatMetricsCSV = R.pipe(
+  R.groupBy(R.prop('displayObjects')),
+  R.values,
+  R.map((displayObjectMeasurements) => {
+    const count = displayObjectMeasurements.length
+
+    return R.pipe(
+      R.reduce(R.mergeWith(R.add), {}),
+      R.map(R.flip(R.divide)(count)),
+    )(displayObjectMeasurements)
+  }),
+  R.reduce(
+    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) =>
+      `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
+    'DisplayObjects, PixiElapsedMS, L1LoopDuration',
+  ),
+)
 
 window.debug = {
   ...window.debug,
