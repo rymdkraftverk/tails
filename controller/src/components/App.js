@@ -159,12 +159,7 @@ class App extends Component {
 
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
-  render() {
-    if (!WS_ADDRESS) {
-      // eslint-disable-next-line fp/no-throw
-      throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
-    }
-
+  appStateComponent = () => {
     const {
       error,
       gameCode,
@@ -173,63 +168,52 @@ class App extends Component {
       playerCount,
     } = this.state
 
+    switch (appState) {
+      case AppState.LOCKER_ROOM: 
+        return <LockerRoom
+         clearError={this.clearError}
+         error={error}
+         gameCodeChange={this.gameCodeChange}
+         gameCode={gameCode}
+         onJoin={this.onJoin}
+        />
+      case AppState.GAME_CONNECTING: 
+        return <LockerRoomLoader />
+      case AppState.GAME_LOBBY: 
+        return <GameLobby
+          startGame={this.startGame}
+          playerColor={playerColor}
+          playerCount={playerCount}
+        />
+      case AppState.GAME_PLAYING: 
+        return <GamePlaying
+          send={this.sendSteering}
+          playerColor={Color[playerColor]}
+        />
+      case AppState.PLAYER_DEAD: 
+        return <PlayerDead
+          playerColor={Color[playerColor]}
+        />
+      case AppState.AWAITING_NEXT_ROUND: 
+        return <AwatingNextRound
+          playerColor={Color[playerColor]}
+        />
+      default: return null
+    }
+  }
+
+  render() {
+    if (!WS_ADDRESS) {
+      // eslint-disable-next-line fp/no-throw
+      throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
+    }
+
     return (
       <Fullscreen
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
-        {
-          appState === AppState.LOCKER_ROOM
-            ?
-              <LockerRoom
-                clearError={this.clearError}
-                error={error}
-                gameCodeChange={this.gameCodeChange}
-                gameCode={gameCode}
-                onJoin={this.onJoin}
-              />
-            : null
-        }
-        {
-          appState === AppState.GAME_CONNECTING
-            ? <LockerRoomLoader />
-            : null
-        }
-        {
-          appState === AppState.GAME_LOBBY
-            ?
-              <GameLobby
-                startGame={this.startGame}
-                playerColor={playerColor}
-                playerCount={playerCount}
-              />
-            : null
-        }
-        {
-          appState === AppState.GAME_PLAYING
-            ?
-              <GamePlaying
-                send={this.sendSteering}
-                playerColor={Color[playerColor]}
-              />
-            : null
-        }
-        {
-          appState === AppState.PLAYER_DEAD
-            ?
-              <PlayerDead
-                playerColor={Color[playerColor]}
-              />
-            : null
-        }
-        {
-          appState === AppState.AWAITING_NEXT_ROUND
-            ?
-              <AwatingNextRound
-                playerColor={Color[playerColor]}
-              />
-            : null
-        }
+      { this.appStateComponent() }
       </Fullscreen>
     )
   }
