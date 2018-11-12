@@ -35,7 +35,9 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
-const roundStart = () => {
+const roundStart = (options = { collectMetrics: false }) => {
+  const { collectMetrics } = options
+
   if (gameState.currentState === CurrentState.LOBBY
     || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
     Object
@@ -67,6 +69,7 @@ const roundStart = () => {
           .forEach(player =>
             player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
       })
+      .then(() => (collectMetrics ? initMetricsBehavior(app) : Promise.resolve()))
   }
 }
 
@@ -264,9 +267,57 @@ const stop = () => {
   app.ticker.stop()
 }
 
+const initMetricsBehavior = (appReference) => {
+  let metrics = []
+
+  l1.addBehavior({
+    onUpdate: () => {
+      metrics = metrics.concat({
+        pixiElapsedMS:  appReference.ticker.elapsedMS,
+        displayObjects: l1.getAll().length,
+        l1LoopDuration: l1.getLoopDuration(),
+      })
+    },
+  })
+
+  gameState
+    .events
+    .on(GameEvent.ROUND_END, () => {
+      const csv = formatMetricsCSV(metrics)
+
+      const encodedUri = encodeURI(`data:text/csv;charset=utf-8,\n${csv}`)
+      const link = document.createElement('a')
+      link.setAttribute('href', encodedUri)
+      link.setAttribute('download', 'metrics.csv')
+      document.body.appendChild(link)
+
+      link.click()
+    })
+}
+
+// [{ displayObjects, pixiElapsedMS, l1LoopDuration }] -> String
+const formatMetricsCSV = R.pipe(
+  R.groupBy(R.prop('displayObjects')),
+  R.values,
+  R.map((displayObjectMeasurements) => {
+    const count = displayObjectMeasurements.length
+
+    return R.pipe(
+      R.reduce(R.mergeWith(R.add), {}),
+      R.map(R.flip(R.divide)(count)),
+    )(displayObjectMeasurements)
+  }),
+  R.reduce(
+    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) =>
+      `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
+    'DisplayObjects, PixiElapsedMS, L1LoopDuration',
+  ),
+)
+
 window.debug = {
   ...window.debug,
   roundStart,
+  roundStartMetrics: () => roundStart({ collectMetrics: true }),
   printBehaviors,
   start,
   stop,

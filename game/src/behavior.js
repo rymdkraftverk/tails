@@ -273,6 +273,10 @@ const checkPlayersAlive = () => {
     gameState.lastRoundResult.playerFinishOrder =
             gameState.lastRoundResult.playerFinishOrder.concat([playersAlive[0].l1.id])
 
+    gameState
+      .events
+      .emit(GameEvent.ROUND_END)
+
     transitionToRoundEnd()
   }
 }
