@@ -363,6 +363,7 @@ const createWalls = () => {
     {
       id:     'walls',
       parent: l1.get(Scene.GAME),
+      zIndex: Layer.FOREGROUND + 1,
     },
   )
   const halfWallThickness = WALL_THICKNESS / 2
