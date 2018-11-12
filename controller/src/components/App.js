@@ -121,7 +121,7 @@ class App extends Component {
 
   connectToGame(gameCode) {
     const onClose = () => {
-      this.displayError('Connection closed')
+      this.displayError('Connection failed')
     }
 
     signaling.runInitiator({
