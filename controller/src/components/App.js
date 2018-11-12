@@ -46,7 +46,7 @@ const eventState = ({ event, payload }) => {
   switch (event) {
     case Event.A_PLAYER_JOINED: return payload
     case Event.A_PLAYER_LEFT: return payload
-    case Event.CONTROLLER_COLOR: return colorState(payload)
+    case Event.PLAYER_JOINED: return colorState(payload)
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
     case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }

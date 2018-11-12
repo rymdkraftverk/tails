@@ -64,10 +64,7 @@ export const transitionToScoreScene = () => {
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
 
-  const {
-    players,
-    controllers,
-  } = gameState
+  const { players } = gameState
 
   const winLimit = scoreToWin(players)
   const matchWinnerCount = Object
@@ -86,9 +83,9 @@ export const transitionToScoreScene = () => {
     delay(ANIMATION_DURATION)
       .then(() => {
         Object
-          .values(controllers)
-          .forEach((controller) => {
-            controller.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
+          .values(players)
+          .forEach((player) => {
+            player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
           })
       })
   }

@@ -10,10 +10,7 @@ export const CurrentState = {
 const gameState = {
   currentState:                   CurrentState.LOBBY,
   gameCode:                       '',
-  hasReceivedControllerCandidate: false,
   // TODO: change to array
-  controllers:                    {
-  },
   players: {
   },
   lastRoundResult: {

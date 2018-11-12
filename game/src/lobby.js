@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
+import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './constant/textStyle'
 import { GameColor, toRadians } from './game'
@@ -269,7 +269,7 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   }
 }
 
-const addMockPlayer = (idPrefix = 'debugPlayer:') => onControllerJoin({
+const addMockPlayer = (idPrefix = 'debugPlayer:') => onPlayerJoin({
   id: `${idPrefix}${Math.random()
     .toString(36)
     .substring(7)}`,

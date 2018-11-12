@@ -228,19 +228,18 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.playerId = playerId
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
-    const controller = gameState
-      .controllers[playerId]
+    const p = gameState
+      .players[playerId]
 
-    if (!controller) {
-      warn(`controller with id: ${playerId} not found`)
+    if (!p) {
+      warn(`Player with id: ${playerId} not found`)
       return
     }
 
-    controller
-      .send(Channel.RELIABLE, {
-        event:   Event.PLAYER_DIED,
-        payload: {},
-      })
+    p.send(Channel.RELIABLE, {
+      event:   Event.PLAYER_DIED,
+      payload: {},
+    })
   })
 
   player.scale.set(player.speed / SPEED_MULTIPLIER / 2)

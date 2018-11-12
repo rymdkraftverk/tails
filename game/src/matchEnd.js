@@ -135,9 +135,9 @@ const pause = () => ({
   duration:   TIME_UNTIL_LOBBY_TRANSITION,
   onComplete: () => {
     Object
-      .values(gameState.controllers)
-      .forEach((controller) => {
-        controller.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
+      .values(gameState.players)
+      .forEach((player) => {
+        player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
       })
 
     gameState.players = resetPlayersScore(gameState.players)

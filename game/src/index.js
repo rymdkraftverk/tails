@@ -41,9 +41,10 @@ const roundStart = (options = { collectMetrics: false }) => {
   if (gameState.currentState === CurrentState.LOBBY
     || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
     Object
-      .values(gameState.controllers)
-      .forEach(({ id }) => {
-        gameState.controllers[id].send(Channel.RELIABLE, {
+      .values(gameState.players)
+      .forEach(({ playerId }) => {
+        // console.log(gameState.players)
+        gameState.players[playerId].send(Channel.RELIABLE, {
           event:   Event.ROUND_STARTED,
           payload: {},
         })
@@ -78,7 +79,7 @@ const createGame = ({ gameCode }) => {
   transitionToLobby(gameState.gameCode)
 }
 
-const onControllerData = id => (message) => {
+const onPlayerData = id => (message) => {
   const { event, payload } = message
 
   switch (event) {
@@ -94,7 +95,7 @@ const onControllerData = id => (message) => {
 }
 
 const broadcast = (message) => {
-  Object.values(gameState.controllers)
+  Object.values(gameState.players)
     .forEach((c) => {
       c.send(
         Channel.RELIABLE,
@@ -103,17 +104,21 @@ const broadcast = (message) => {
     })
 }
 
-const moreControllersAllowed = () =>
+const morePlayersAllowed = () =>
   playerCount(gameState.players) < MAX_PLAYERS_ALLOWED
 
-export const onControllerJoin = ({
+export const onPlayerJoin = ({
   id,
   setOnData,
   send,
   close,
 }) => {
-  if (moreControllersAllowed()) {
-    const player = createNewPlayer({ playerId: id })
+  // TODO: return early
+  if (morePlayersAllowed()) {
+    const player = createNewPlayer({
+      playerId: id,
+      send,
+    })
 
     if (l1.get(Scene.LOBBY)) {
       const numOfPlayers = playerCount(gameState.players)
@@ -125,13 +130,8 @@ export const onControllerJoin = ({
       return
     }
 
-    gameState.controllers[id] = {
-      id,
-      send,
-    }
-
     send(Channel.RELIABLE, {
-      event:   Event.CONTROLLER_COLOR,
+      event:   Event.PLAYER_JOINED,
       payload: {
         playerId: id,
         color:    player.color,
@@ -154,10 +154,10 @@ export const onControllerJoin = ({
     close()
   }
 
-  setOnData(onControllerData(id))
+  setOnData(onPlayerData(id))
 }
 
-const createNewPlayer = ({ playerId }) => {
+const createNewPlayer = ({ playerId, send }) => {
   const [color] = gameState.availableColors
   gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
@@ -165,15 +165,15 @@ const createNewPlayer = ({ playerId }) => {
     spriteId: `square-${color}`,
     score:    0,
     color,
+    send,
   }
 
   gameState.players[player.playerId] = player
   return player
 }
 
-const onControllerLeave = (id) => {
-  log(`[Controller Leave] ${id}`)
-  gameState.controllers = R.pickBy((_val, key) => key !== id, gameState.controllers)
+const onPlayerLeave = (id) => {
+  log(`[Player Leave] ${id}`)
 
   const player = gameState.players[id]
   gameState.availableColors = [player.color].concat(gameState.availableColors)
@@ -226,8 +226,8 @@ app.loader.load(() => {
       signaling.runReceiver({
         wsAddress:        WS_ADDRESS,
         receiverId:       gameCode,
-        onInitiatorJoin:  onControllerJoin,
-        onInitiatorLeave: onControllerLeave,
+        onInitiatorJoin:  onPlayerJoin,
+        onInitiatorLeave: onPlayerLeave,
       })
     })
 
