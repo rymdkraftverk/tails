@@ -7,9 +7,9 @@ import { createTrail, collisionCheckerTrail } from './behavior'
 import { createSine } from './magic'
 import Sound from './constant/sound'
 
-const GHOST_POWERUP_DURATION = 380
-const MINIMUM_GHOST_APPEAR_TIME = 720
-const MAXIMUM_GHOST_APPEAR_TIME = 900
+const POWERUP_DURATION = 380
+const MINIMUM_APPEAR_TIME = 100
+const MAXIMUM_APPEAR_TIME = 200
 
 export const initPowerups = ({
   snakeSpeed,
@@ -27,7 +27,7 @@ export const initPowerups = ({
 
   const generatePowerups = () => ({
     id:         'generatePowerups',
-    duration:   l1.getRandomInRange(MINIMUM_GHOST_APPEAR_TIME, MAXIMUM_GHOST_APPEAR_TIME),
+    duration:   l1.getRandomInRange(MINIMUM_APPEAR_TIME, MAXIMUM_APPEAR_TIME),
     loop:       true,
     onComplete: () => {
       const powerup = new PIXI.Sprite(l1.getTexture('powerup-ghost'))
@@ -94,7 +94,7 @@ const ghost = ({
   data: {
     expirationState: null,
   },
-  duration: GHOST_POWERUP_DURATION,
+  duration: POWERUP_DURATION,
   onInit:   () => {
     player.scale.set(player.speed / speedMultiplier)
     player.alpha = 0.4
@@ -110,19 +110,19 @@ const ghost = ({
   },
   onUpdate: ({ counter, data }) => {
     if (
-      counter > (GHOST_POWERUP_DURATION * 0.6) &&
+      counter > (POWERUP_DURATION * 0.6) &&
       !data.expirationState
     ) {
       data.expirationState = ExpirationState.SOON
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-      l1.addBehavior(indicateExpiration(player, 60, GHOST_POWERUP_DURATION * 0.4))
+      l1.addBehavior(indicateExpiration(player, 60, POWERUP_DURATION * 0.4))
     } else if (
-      counter > (GHOST_POWERUP_DURATION * 0.8) &&
+      counter > (POWERUP_DURATION * 0.8) &&
       data.expirationState === ExpirationState.SOON
     ) {
       data.expirationState = ExpirationState.IMMINENT
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-      l1.addBehavior(indicateExpiration(player, 20, GHOST_POWERUP_DURATION * 0.2))
+      l1.addBehavior(indicateExpiration(player, 20, POWERUP_DURATION * 0.2))
     }
   },
   onComplete: () => {
