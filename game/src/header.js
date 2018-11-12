@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import * as l1 from 'l1'
 import * as TextStyle from './constant/textStyle'
 import { GameColor } from './game'
-import layer from './constant/layer'
+import Layer from './constant/layer'
 import { GAME_WIDTH } from './rendering'
 
 const URL_POSITION_X = 100
@@ -29,7 +29,8 @@ export default ({
 }) => {
   const container = new PIXI.Container()
   l1.add(container, {
-    id: 'header',
+    id:     'header',
+    zIndex: Layer.FOREGROUND + 1,
   })
 
   const background = new PIXI.Graphics()
@@ -37,7 +38,8 @@ export default ({
     background,
     {
       id:     HeaderIds.HEADER_BACKGROUND,
-      zIndex: layer.BACKGROUND + 10,
+      zIndex: Layer.BACKGROUND + 10,
+      parent: container,
     },
   )
 
