@@ -79,11 +79,6 @@ export const initPowerups = ({
   l1.addBehavior(generatePowerups())
 }
 
-const ExpirationState = {
-  SOON:     'soon',
-  IMMINENT: 'imminent',
-}
-
 const ghost = ({
   player, speedMultiplier,
 }) => ({
@@ -110,14 +105,14 @@ const ghost = ({
       counter > (PowerUp.DURATION * 0.6) &&
       !data.expirationState
     ) {
-      data.expirationState = ExpirationState.SOON
+      data.expirationState = PowerUp.EXPIRATION_STATE_SOON
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
       l1.addBehavior(indicateExpiration(player, 60, PowerUp.DURATION * 0.4))
     } else if (
       counter > (PowerUp.DURATION * 0.8) &&
-      data.expirationState === ExpirationState.SOON
+      data.expirationState === PowerUp.EXPIRATION_STATE_SOON
     ) {
-      data.expirationState = ExpirationState.IMMINENT
+      data.expirationState = PowerUp.EXPIRATION_STATE_IMMINENT
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
       l1.addBehavior(indicateExpiration(player, 20, PowerUp.DURATION * 0.2))
     }
