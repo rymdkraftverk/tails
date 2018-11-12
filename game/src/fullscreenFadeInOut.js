@@ -12,7 +12,7 @@ export default () => new Promise((resolve) => {
     fade,
     {
       id:     'fadeInOut',
-      zIndex: Layer.FOREGROUND,
+      zIndex: Layer.FOREGROUND + 10,
     },
   )
 
