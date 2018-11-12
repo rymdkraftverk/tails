@@ -6,10 +6,7 @@ import Scene from './Scene'
 import { createTrail, collisionCheckerTrail } from './behavior'
 import { createSine } from './magic'
 import Sound from './constant/sound'
-
-const POWERUP_DURATION = 380
-const MINIMUM_APPEAR_TIME = 100
-const MAXIMUM_APPEAR_TIME = 200
+import PowerUp from './constant/powerUp'
 
 export const initPowerups = ({
   snakeSpeed,
@@ -27,7 +24,7 @@ export const initPowerups = ({
 
   const generatePowerups = () => ({
     id:         'generatePowerups',
-    duration:   l1.getRandomInRange(MINIMUM_APPEAR_TIME, MAXIMUM_APPEAR_TIME),
+    duration:   l1.getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM),
     loop:       true,
     onComplete: () => {
       const powerup = new PIXI.Sprite(l1.getTexture('powerup-ghost'))
@@ -94,7 +91,7 @@ const ghost = ({
   data: {
     expirationState: null,
   },
-  duration: POWERUP_DURATION,
+  duration: PowerUp.DURATION,
   onInit:   () => {
     player.scale.set(player.speed / speedMultiplier)
     player.alpha = 0.4
@@ -110,19 +107,19 @@ const ghost = ({
   },
   onUpdate: ({ counter, data }) => {
     if (
-      counter > (POWERUP_DURATION * 0.6) &&
+      counter > (PowerUp.DURATION * 0.6) &&
       !data.expirationState
     ) {
       data.expirationState = ExpirationState.SOON
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-      l1.addBehavior(indicateExpiration(player, 60, POWERUP_DURATION * 0.4))
+      l1.addBehavior(indicateExpiration(player, 60, PowerUp.DURATION * 0.4))
     } else if (
-      counter > (POWERUP_DURATION * 0.8) &&
+      counter > (PowerUp.DURATION * 0.8) &&
       data.expirationState === ExpirationState.SOON
     ) {
       data.expirationState = ExpirationState.IMMINENT
       l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-      l1.addBehavior(indicateExpiration(player, 20, POWERUP_DURATION * 0.2))
+      l1.addBehavior(indicateExpiration(player, 20, PowerUp.DURATION * 0.2))
     }
   },
   onComplete: () => {
