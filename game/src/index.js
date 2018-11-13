@@ -142,10 +142,8 @@ export const onPlayerJoin = ({
   })
 
   broadcast({
-    event:   Event.A_PLAYER_JOINED,
-    payload: {
-      playerCount: gameState.players.length,
-    },
+    event:   Event.PLAYER_COUNT,
+    payload: gameState.players.length,
   })
 
   setOnData(onPlayerData(id))
@@ -186,10 +184,8 @@ const onPlayerLeave = (id) => {
   }
 
   broadcast({
-    event:   Event.A_PLAYER_LEFT,
-    payload: {
-      playerCount: gameState.players.length,
-    },
+    event:   Event.PLAYER_COUNT,
+    payload: gameState.players.length,
   })
 }
 
