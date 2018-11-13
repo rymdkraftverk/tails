@@ -64,14 +64,10 @@ export const transitionToScoreScene = () => {
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
 
-  const {
-    players,
-    controllers,
-  } = gameState
+  const { players } = gameState
 
   const winLimit = scoreToWin(players)
-  const matchWinnerCount = Object
-    .values(players)
+  const matchWinnerCount = players
     .map(R.prop('score'))
     .filter(s => s >= winLimit)
     .length
@@ -85,10 +81,9 @@ export const transitionToScoreScene = () => {
   } else {
     delay(ANIMATION_DURATION)
       .then(() => {
-        Object
-          .values(controllers)
-          .forEach((controller) => {
-            controller.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
+        players
+          .forEach((player) => {
+            player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
           })
       })
   }
@@ -102,8 +97,8 @@ const getX = (score, goal) => {
 const createPlayer = (index) => {
   const currentColor = Object.keys(Color)[index]
 
-  const player = Object
-    .values(gameState.players)
+  const player = gameState
+    .players
     .find(({ color }) => color === currentColor)
 
   let texture

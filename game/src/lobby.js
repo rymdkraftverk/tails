@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
 import R from 'ramda'
-import { MAX_PLAYERS_ALLOWED, onControllerJoin } from '.'
+import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
 import * as TextStyle from './constant/textStyle'
 import { GameColor, toRadians } from './game'
@@ -55,7 +55,7 @@ const addText = ({
   )
 }
 
-export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
+export const transitionToLobby = (gameCode, players = []) => {
   gameState.currentState = CurrentState.LOBBY
 
   const controllerUrl = getControllerUrl()
@@ -185,7 +185,7 @@ export const transitionToLobby = (gameCode, alreadyConnectedPlayers = []) => {
   })
 
   _
-    .times(index => alreadyConnectedPlayers[index], MAX_PLAYERS_ALLOWED)
+    .times(index => players[index], MAX_PLAYERS_ALLOWED)
     .forEach((player, index) => {
       if (player) {
         createPlayerEntity(player, index, { newPlayer: false })
@@ -269,11 +269,13 @@ export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
   }
 }
 
-const addMockPlayer = (idPrefix = 'debugPlayer:') => onControllerJoin({
+const addMockPlayer = (idPrefix = 'debugPlayer:') => onPlayerJoin({
   id: `${idPrefix}${Math.random()
     .toString(36)
     .substring(7)}`,
   close: () => {},
+  send: () => {},
+  setOnData: () => {},
 })
 
 window.debug = {

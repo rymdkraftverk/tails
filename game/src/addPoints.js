@@ -1,26 +1,18 @@
 import R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
-import gameState from './gameState'
 import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 
 const DURATION = 60 // ticks
 
 const addPoints = (color) => {
-  const livingPlayers = Object
-    .keys(gameState.players)
-    .map(l1.get)
-    .filter(e => e && !e.killed)
+  const livingPlayers = l1
+    .getByLabel('player')
+    .filter(p => p && !p.killed)
 
-  // TODO refactor score gain
-  /*
-livingPlayers
-  .map(e => gameState.players[e.id])
-  .forEach((p) => {
-    p.score += 1
-  })
-  */
+  // TODO: replace score aggregation in roundEnd.transitionToRoundEnd
+  // with this (superior) logic
 
   livingPlayers
     .forEach(displayGainedPoint(color))

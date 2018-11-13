@@ -134,10 +134,10 @@ const createFireworks = (creator, color) => ({
 const pause = () => ({
   duration:   TIME_UNTIL_LOBBY_TRANSITION,
   onComplete: () => {
-    Object
-      .values(gameState.controllers)
-      .forEach((controller) => {
-        controller.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
+    gameState
+      .players
+      .forEach((player) => {
+        player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
       })
 
     gameState.players = resetPlayersScore(gameState.players)
@@ -155,7 +155,7 @@ const pause = () => ({
 
     l1.destroy(Scene.MATCH_END)
 
-    transitionToLobby(gameState.gameCode, Object.values(gameState.players))
+    transitionToLobby(gameState.gameCode, gameState.players)
   },
 })
 

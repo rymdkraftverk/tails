@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel, SteeringCommand } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
-import gameState, { CurrentState } from './gameState'
+import gameState, { CurrentState, getPlayer } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
 import Layer from './constant/layer'
 import countdown from './countdown'
@@ -63,13 +63,11 @@ export const transitionToGameScene = (maxPlayers) => {
   const playerCountFactor = R.compose(
     Math.sqrt,
     R.length,
-    R.values,
   )(gameState.players)
 
   const players = R.compose(
     R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
     _.shuffle,
-    Object.values,
   )(gameState.players)
 
   createWalls()
@@ -116,27 +114,17 @@ export const transitionToGameScene = (maxPlayers) => {
 
 export const getPlayersWithHighestScore = players =>
   R.compose(
-    score => Object
-      .values(players)
+    score => players
       .filter(p => p.score === score),
     R.reduce(R.max, 0),
     R.map(parseInt),
     Object.keys,
     R.groupBy(R.prop('score')),
-    Object.values,
   )(players)
 
 export const scoreToWin = players => (Object.keys(players).length - 1) * 4
 
-export const resetPlayerScore = (acc, player) => {
-  acc[player.playerId] = { ...player, score: 0 }
-  return acc
-}
-
-export const resetPlayersScore = players => R.compose(
-  R.reduce(resetPlayerScore, {}),
-  Object.values,
-)(players)
+export const resetPlayersScore = R.map(x => ({ ...x, score: 0 }))
 
 export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
   R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
@@ -146,25 +134,12 @@ export const applyPlayerScores = (players, scores) => {
     .map(([score, playerId]) => ({ [playerId]: score }))
     .reduce((dict, score) => ({ ...dict, ...score }), {})
 
-  return Object
-    .keys(players)
-    .map((playerId) => {
-      const player = players[playerId]
-
-      return {
-        ...player,
-        score:         player.score + (scoreDict[playerId] || 0),
-        previousScore: player.score,
-      }
-    })
-    .reduce((updatedPlayers, player) => (
-      {
-        ...updatedPlayers,
-        ...{
-          [player.playerId]: player,
-        },
-      }
-    ), {})
+  return players
+    .map(player => ({
+      ...player,
+      score:         player.score + (scoreDict[player.playerId] || 0),
+      previousScore: player.score,
+    }))
 }
 
 const getStartingPosition = (index) => {
@@ -228,19 +203,17 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.playerId = playerId
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
-    const controller = gameState
-      .controllers[playerId]
+    const p = getPlayer(playerId)
 
-    if (!controller) {
-      warn(`controller with id: ${playerId} not found`)
+    if (!p) {
+      warn(`Player with id: ${playerId} not found`)
       return
     }
 
-    controller
-      .send(Channel.RELIABLE, {
-        event:   Event.PLAYER_DIED,
-        payload: {},
-      })
+    p.send(Channel.RELIABLE, {
+      event:   Event.PLAYER_DIED,
+      payload: {},
+    })
   })
 
   player.scale.set(player.speed / SPEED_MULTIPLIER / 2)
