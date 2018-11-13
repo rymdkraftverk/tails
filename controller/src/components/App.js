@@ -28,7 +28,7 @@ const AppState = {
   PLAYER_DEAD:     'player-dead',
 }
 
-const colorState = ({ started, color }) => (
+const joinState = ({ started, color }) => (
   {
     appState: started
       ? AppState.AWAITING_NEXT_ROUND
@@ -45,7 +45,7 @@ const errorState = message => ({
 const eventState = ({ event, payload }) => {
   switch (event) {
     case Event.PLAYER_COUNT: return { playerCount: payload }
-    case Event.PLAYER_JOINED: return colorState(payload)
+    case Event.PLAYER_JOINED: return joinState(payload)
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
     case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }
