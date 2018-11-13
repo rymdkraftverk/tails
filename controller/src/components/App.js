@@ -30,17 +30,18 @@ const AppState = {
 
 const joinState = ({ started, color }) => (
   {
+    ...newRoundState,
+    playerColor: color,
     appState: started
       ? AppState.AWAITING_NEXT_ROUND
       : AppState.GAME_LOBBY,
-    playerColor: color,
-    ready: false,
   }
 )
 
 const newRoundState = {
   appState: AppState.GAME_LOBBY,
   ready: false,
+  startEnabled: false,
 }
 
 const errorState = message => ({
@@ -52,6 +53,7 @@ const eventState = ({ event, payload }) => {
   switch (event) {
     case Event.PLAYER_COUNT: return { playerCount: payload }
     case Event.PLAYER_JOINED: return joinState(payload)
+    case Event.START_ENABLED: return { startEnabled: true }
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
     case Event.ROUND_END: return newRoundState
@@ -157,6 +159,10 @@ class App extends Component {
     this.setState({ error: '' })
   }
 
+  startGame = () => {
+    this.sendReliable({ event: Event.ROUND_START })
+  }
+
   readyPlayer = () => {
     this.sendReliable({ event: Event.PLAYER_READY })
     this.setState({ ready: true })
@@ -172,6 +178,7 @@ class App extends Component {
       playerColor,
       playerCount,
       ready,
+      startEnabled,
     } = this.state
 
     switch (appState) {
@@ -187,10 +194,12 @@ class App extends Component {
         return <LockerRoomLoader />
       case AppState.GAME_LOBBY: 
         return <GameLobby
+          startGame={this.startGame}
           readyPlayer={this.readyPlayer}
           playerColor={playerColor}
           playerCount={playerCount}
           ready={ready}
+          startEnabled={startEnabled}
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying

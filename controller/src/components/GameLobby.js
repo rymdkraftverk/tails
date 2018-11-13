@@ -30,7 +30,7 @@ const label = css`
   font-family: inherit;
 `
 
-const StartGameButton = styled.button`
+const Button = styled.button`
   ${label};
   // TODO: fix styling
   border: 0.1em solid ${({ clicked }) => clicked ? 'green' : 'black'} 
@@ -52,6 +52,8 @@ class GameLobby extends Component {
       playerCount,
       readyPlayer,
       ready,
+      startEnabled,
+      startGame,
     } = this.props
 
     return (
@@ -74,12 +76,23 @@ class GameLobby extends Component {
                     `}
                   </div>
                 </Instructions>
-                <StartGameButton
-                  clicked={ready}
-                  onClick={readyPlayer}
-                >
-                  {'Ready!'}
-                </StartGameButton>
+                {
+                  // TODO: don't nest ternary
+                  ready && startEnabled
+                    ?
+                      <Button
+                        onClick={startGame}
+                      >
+                        {'Start Game!'}
+                      </Button>
+                    :
+                      <Button
+                        clicked={ready}
+                        onClick={readyPlayer}
+                      >
+                        {'Ready!'}
+                      </Button>
+                }
               </Fragment>
 
             :
@@ -93,10 +106,12 @@ class GameLobby extends Component {
 }
 
 GameLobby.propTypes = {
-  playerColor: PropTypes.string.isRequired,
-  playerCount: PropTypes.number,
-  readyPlayer: PropTypes.func.isRequired,
-  ready:       PropTypes.bool.isRequired,
+  playerColor:  PropTypes.string.isRequired,
+  playerCount:  PropTypes.number,
+  ready:        PropTypes.bool.isRequired,
+  startEnabled: PropTypes.bool.isRequired,
+  readyPlayer:  PropTypes.func.isRequired,
+  startGame:    PropTypes.func.isRequired,
 }
 
 GameLobby.defaultProps = {

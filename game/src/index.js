@@ -33,12 +33,32 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
-const allReady = () => R.all(R.propEq('ready', true), gameState.players)
+const gameInShapeForNewRound = () =>
+  [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW].includes(gameState.currentState)
+
+const isReady = R.propEq('ready', true)
+const getReadyCount = () => R.filter(isReady, gameState.players).length
+const allReady = () => R.all(isReady, gameState.players)
+
+const scheduleForceStartEnablement = () => {
+  setTimeout(
+    () => {
+      // bail if new round has already been started
+      if (!gameInShapeForNewRound()) {
+        return
+      }
+      broadcast({ event: Event.START_ENABLED })
+    },
+    10000,
+  )
+}
 
 const readyPlayer = (id) => {
   getPlayer(id).ready = true
 
-  if(allReady()) {
+  if (getReadyCount() === 1) {
+    scheduleForceStartEnablement()
+  } else if (allReady()) {
     roundStart()
   }
 }
@@ -46,8 +66,7 @@ const readyPlayer = (id) => {
 const roundStart = (options = { collectMetrics: false }) => {
   const { collectMetrics } = options
 
-  if (gameState.currentState === CurrentState.LOBBY
-    || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
+  if (gameInShapeForNewRound()) {
     gameState
       .players
       .forEach(({ playerId }) => {
@@ -96,6 +115,9 @@ const onPlayerData = id => (message) => {
       break
     case Event.PLAYER_READY:
       readyPlayer(id)
+      break
+    case Event.ROUND_START:
+      roundStart()
       break
     default:
       warn(`Unhandled event for message: ${message}`)

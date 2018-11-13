@@ -8,6 +8,7 @@ const Event = {
   PLAYER_MOVEMENT: 'player.movement',
   PLAYER_JOINED:   'player.joined',
   PLAYER_DIED:     'player.died',
+  START_ENABLED:   'start.enabled',
 }
 
 module.exports = Event
