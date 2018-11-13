@@ -34,8 +34,14 @@ const joinState = ({ started, color }) => (
       ? AppState.AWAITING_NEXT_ROUND
       : AppState.GAME_LOBBY,
     playerColor: color,
+    ready: false,
   }
 )
+
+const newRoundState = {
+  appState: AppState.GAME_LOBBY,
+  ready: false,
+}
 
 const errorState = message => ({
   appState: AppState.LOCKER_ROOM,
@@ -48,7 +54,7 @@ const eventState = ({ event, payload }) => {
     case Event.PLAYER_JOINED: return joinState(payload)
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
-    case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }
+    case Event.ROUND_END: return newRoundState
     case Event.ROUND_STARTED: return { appState: AppState.GAME_PLAYING }
     default: return null
   }
@@ -61,6 +67,7 @@ class App extends Component {
     gameCode:    '',
     playerColor: null,
     error:       '',
+    ready:       false,
   }
 
   componentDidMount = () => {
@@ -150,9 +157,9 @@ class App extends Component {
     this.setState({ error: '' })
   }
 
-  startGame = () => {
-    this.sendReliable({ event: Event.ROUND_START })
-    this.setState({ appState: AppState.GAME_PLAYING })
+  readyPlayer = () => {
+    this.sendReliable({ event: Event.PLAYER_READY })
+    this.setState({ ready: true })
   }
 
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
@@ -164,6 +171,7 @@ class App extends Component {
       appState,
       playerColor,
       playerCount,
+      ready,
     } = this.state
 
     switch (appState) {
@@ -179,9 +187,10 @@ class App extends Component {
         return <LockerRoomLoader />
       case AppState.GAME_LOBBY: 
         return <GameLobby
-          startGame={this.startGame}
+          readyPlayer={this.readyPlayer}
           playerColor={playerColor}
           playerCount={playerCount}
+          ready={ready}
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying

@@ -32,7 +32,8 @@ const label = css`
 
 const StartGameButton = styled.button`
   ${label};
-  border: 0.1em solid black;
+  // TODO: fix styling
+  border: 0.1em solid ${({ clicked }) => clicked ? 'green' : 'black'} 
 `
 
 const AwaitingPlayers = styled.div`
@@ -49,7 +50,8 @@ class GameLobby extends Component {
     const {
       playerColor,
       playerCount,
-      startGame,
+      readyPlayer,
+      ready,
     } = this.props
 
     return (
@@ -73,9 +75,10 @@ class GameLobby extends Component {
                   </div>
                 </Instructions>
                 <StartGameButton
-                  onClick={startGame}
+                  clicked={ready}
+                  onClick={readyPlayer}
                 >
-                  {'Start game!'}
+                  {'Ready!'}
                 </StartGameButton>
               </Fragment>
 
@@ -92,7 +95,8 @@ class GameLobby extends Component {
 GameLobby.propTypes = {
   playerColor: PropTypes.string.isRequired,
   playerCount: PropTypes.number,
-  startGame:   PropTypes.func.isRequired,
+  readyPlayer: PropTypes.func.isRequired,
+  ready:       PropTypes.bool.isRequired,
 }
 
 GameLobby.defaultProps = {

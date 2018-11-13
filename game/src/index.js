@@ -33,6 +33,16 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
+const allReady = () => R.all(R.propEq('ready', true), gameState.players)
+
+const readyPlayer = (id) => {
+  getPlayer(id).ready = true
+
+  if(allReady()) {
+    roundStart()
+  }
+}
+
 const roundStart = (options = { collectMetrics: false }) => {
   const { collectMetrics } = options
 
@@ -84,8 +94,8 @@ const onPlayerData = id => (message) => {
     case Event.PLAYER_MOVEMENT:
       movePlayer(id, payload)
       break
-    case Event.ROUND_START:
-      roundStart()
+    case Event.PLAYER_READY:
+      readyPlayer(id)
       break
     default:
       warn(`Unhandled event for message: ${message}`)
