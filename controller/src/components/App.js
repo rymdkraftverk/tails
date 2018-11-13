@@ -49,7 +49,6 @@ const eventState = ({ event, payload }) => {
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
     case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }
-    case Event.ROUND_START: return { appState: AppState.GAME_PLAYING }
     case Event.ROUND_STARTED: return { appState: AppState.GAME_PLAYING }
     default: return null
   }
