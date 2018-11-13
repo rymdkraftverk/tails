@@ -188,7 +188,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     .times(index => players[index], MAX_PLAYERS_ALLOWED)
     .forEach((player, index) => {
       if (player) {
-        createPlayerEntity(player, index, { newPlayer: false })
+        createLobbyPlayer(player, index, { newPlayer: false })
       }
       createOutline(index)
     })
@@ -235,7 +235,7 @@ const createOutline = (index) => {
   outline.anchor.set(0.5)
 }
 
-export const createPlayerEntity = ({ color }, playerIndex, { newPlayer }) => {
+export const createLobbyPlayer = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
   const square = new PIXI.Sprite(l1.getTexture(`square-${color}`))

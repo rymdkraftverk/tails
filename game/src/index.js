@@ -5,7 +5,7 @@ import { Event, Channel } from 'common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene } from './game'
-import { transitionToLobby, createPlayerEntity } from './lobby'
+import { transitionToLobby, createLobbyPlayer } from './lobby'
 import http from './http'
 import Scene from './Scene'
 import Layer from './constant/layer'
@@ -129,7 +129,7 @@ export const onPlayerJoin = ({
 
   if (l1.get(Scene.LOBBY)) {
     const numOfPlayers = gameState.players.length
-    createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
+    createLobbyPlayer(player, numOfPlayers - 1, { newPlayer: true })
   }
 
   send(Channel.RELIABLE, {
@@ -181,7 +181,7 @@ const onPlayerLeave = (id) => {
     gameState
       .players
       .forEach((p, i) => {
-        createPlayerEntity(p, i, { newPlayer: false })
+        createLobbyPlayer(p, i, { newPlayer: false })
       })
   }
 
