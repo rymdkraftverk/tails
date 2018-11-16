@@ -70,7 +70,7 @@ const countdownBehavior = (countdown, resolve) => ({
 
     l1.sound({
       src:    sound(data.index),
-      volume: 0.6,
+      volume: 0.1,
     })
 
     data.index += 1
