@@ -4,7 +4,6 @@ import Sound from './constant/sound'
 import PowerUp from './constant/powerUp'
 import {
   indicateExpiration,
-  createTrail,
   collisionCheckerTrail,
 } from './behavior'
 
@@ -23,7 +22,6 @@ export default {
       player.preventTrail += 1
 
       const behaviorsToRemove = [
-        // `createTrail-${player.playerId}`,
         `collisionCheckerTrail-${player.playerId}`,
       ]
       R.forEach(
@@ -58,21 +56,12 @@ export default {
 
         const behaviorsToAdd = [
           collisionCheckerTrail(player, speedMultiplier),
-          /*
-          createTrail({
-            player,
-            scale: player.scaleFactor,
-            speedMultiplier,
-          }),
-          */
         ]
 
         R.forEach(
           l1.addBehavior,
           behaviorsToAdd,
         )
-
-        // l1.resetBehavior(`createHoleMaker-${player.playerId}`)
 
         l1.sound({
           src:    Sound.POWERUP_EXPIRED,
