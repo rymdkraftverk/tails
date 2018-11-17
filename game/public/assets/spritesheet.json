@@ -2,7 +2,11 @@
 
 "arrow-blue.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":72,"y":368,"w":16,"h":32},
+=======
+	"frame": {"x":80,"y":0,"w":16,"h":32},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -34,7 +38,11 @@
 },
 "arrow-pink.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":152,"y":368,"w":16,"h":32},
+=======
+	"frame": {"x":112,"y":0,"w":16,"h":32},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -90,7 +98,11 @@
 },
 "circle-blue-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":140,"y":204,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":132,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -98,7 +110,11 @@
 },
 "circle-blue.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":148,"y":4,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":276,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -106,7 +122,11 @@
 },
 "circle-brown-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":148,"y":56,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":324,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -114,7 +134,11 @@
 },
 "circle-brown.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":200,"y":4,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":372,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -122,7 +146,11 @@
 },
 "circle-green-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":200,"y":56,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":324,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -130,7 +158,11 @@
 },
 "circle-green.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":172,"y":256,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":228,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -146,7 +178,11 @@
 },
 "circle-orange-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":208,"y":136,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":180,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -154,7 +190,11 @@
 },
 "circle-orange.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":252,"y":4,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":228,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -162,7 +202,11 @@
 },
 "circle-pink-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":252,"y":56,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":612,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -170,7 +214,11 @@
 },
 "circle-pink.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":172,"y":308,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":372,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -178,7 +226,11 @@
 },
 "circle-purple-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":172,"y":360,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":516,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -186,7 +238,11 @@
 },
 "circle-purple.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":172,"y":412,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":516,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -194,7 +250,11 @@
 },
 "circle-red-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":224,"y":256,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":564,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -202,7 +262,11 @@
 },
 "circle-red.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":244,"y":188,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":468,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -210,7 +274,11 @@
 },
 "circle-turquoise-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":260,"y":136,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":420,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -218,7 +286,11 @@
 },
 "circle-turquoise.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":304,"y":4,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":420,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -226,7 +298,11 @@
 },
 "circle-white-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":304,"y":56,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":564,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -234,7 +310,11 @@
 },
 "circle-white.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":224,"y":308,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":468,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -242,7 +322,11 @@
 },
 "circle-yellow-dark.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":224,"y":360,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":660,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -266,7 +350,11 @@
 },
 "goal-flag.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":4,"y":4,"w":64,"h":400},
+=======
+	"frame": {"x":64,"y":724,"w":64,"h":400},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":400},
@@ -282,7 +370,11 @@
 },
 "particle-smoke.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":200,"y":108,"w":24,"h":24},
+=======
+	"frame": {"x":48,"y":64,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -290,7 +382,11 @@
 },
 "particle.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":184,"y":464,"w":44,"h":44},
+=======
+	"frame": {"x":72,"y":88,"w":44,"h":44},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":44},
@@ -298,7 +394,11 @@
 },
 "powerup-ghost.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":104,"y":404,"w":64,"h":64},
+=======
+	"frame": {"x":48,"y":660,"w":64,"h":64},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -306,7 +406,11 @@
 },
 "powerup-lightning.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":140,"y":136,"w":64,"h":64},
+=======
+	"frame": {"x":0,"y":724,"w":64,"h":64},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -322,7 +426,11 @@
 },
 "square-blue-glow.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":148,"y":108,"w":48,"h":24},
+=======
+	"frame": {"x":48,"y":180,"w":48,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":24},
@@ -330,7 +438,11 @@
 },
 "square-blue.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":228,"y":108,"w":24,"h":24},
+=======
+	"frame": {"x":104,"y":32,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -338,7 +450,11 @@
 },
 "square-brown.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":256,"y":108,"w":24,"h":24},
+=======
+	"frame": {"x":80,"y":32,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -346,7 +462,11 @@
 },
 "square-green.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":284,"y":108,"w":24,"h":24},
+=======
+	"frame": {"x":56,"y":32,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -354,7 +474,11 @@
 },
 "square-orange.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":252,"y":464,"w":24,"h":24},
+=======
+	"frame": {"x":32,"y":32,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -362,7 +486,11 @@
 },
 "square-outline.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":356,"y":4,"w":48,"h":48},
+=======
+	"frame": {"x":48,"y":276,"w":48,"h":48},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -370,7 +498,11 @@
 },
 "square-pink.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":408,"y":4,"w":24,"h":24},
+=======
+	"frame": {"x":0,"y":64,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -378,7 +510,11 @@
 },
 "square-purple.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":436,"y":4,"w":24,"h":24},
+=======
+	"frame": {"x":72,"y":64,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -394,7 +530,11 @@
 },
 "square-turquoise.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":408,"y":32,"w":24,"h":24},
+=======
+	"frame": {"x":24,"y":88,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -402,7 +542,19 @@
 },
 "square-white.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":356,"y":56,"w":24,"h":24},
+=======
+	"frame": {"x":96,"y":64,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+},
+"square-yellow-1.png":
+{
+	"frame": {"x":24,"y":64,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -410,12 +562,18 @@
 },
 "square-yellow.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":436,"y":32,"w":24,"h":24},
+=======
+	"frame": {"x":48,"y":88,"w":24,"h":24},
+>>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
 	"sourceSize": {"w":24,"h":24}
 }},
+"animations": {
+},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
@@ -423,6 +581,10 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
+<<<<<<< HEAD
 	"smartupdate": "$TexturePacker:SmartUpdate:3fee748eed7a33b7491e622f9c187290:3ce40ef27f6bfaeeeb991e0f6d16f3c3:729adc6043343cfda41c447ce8f464d6$"
+=======
+	"smartupdate": "$TexturePacker:SmartUpdate:c2c9e5a2368eb3cd556482e6c47e0bb0:704848404b5da3bc24b9e55362a2e34a:729adc6043343cfda41c447ce8f464d6$"
+>>>>>>> Add square-yellow as a prototype
 }
 }
