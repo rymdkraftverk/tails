@@ -17,6 +17,7 @@ export const transitionToRoundEnd = () => {
   gameState.currentState = CurrentState.SCORE_OVERVIEW
   const scores = calculatePlayerScores(gameState)
   gameState.players = applyPlayerScores(gameState.players, scores)
+    .map(R.assoc('ready', false))
 
   const { winner } = gameState.lastRoundResult
 

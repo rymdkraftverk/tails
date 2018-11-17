@@ -30,9 +30,18 @@ const label = css`
   font-family: inherit;
 `
 
-const StartGameButton = styled.button`
+const Button = styled.button`
   ${label};
   border: 0.1em solid black;
+  ${({ clicked }) => clicked
+    ?
+    `box-shadow: 0 0;
+    top: 0.1em;
+    left: 0.1em;
+    color: #757575;
+    border-color: #757575`
+    : ''
+  }
 `
 
 const AwaitingPlayers = styled.div`
@@ -45,11 +54,34 @@ const playerColorToBackgroundColor = (player) => {
 }
 
 class GameLobby extends Component {
+  getButton = () => {
+    const {
+      readyPlayer,
+      ready,
+      startEnabled,
+      startGame,
+    } = this.props
+
+    return ready && startEnabled
+      ?
+        <Button
+          onClick={startGame}
+        >
+          {'Start Game!'}
+        </Button>
+      :
+        <Button
+          clicked={ready}
+          onClick={readyPlayer}
+        >
+          {'Ready!'}
+        </Button>
+  }
+
   render() {
     const {
       playerColor,
       playerCount,
-      startGame,
     } = this.props
 
     return (
@@ -72,11 +104,9 @@ class GameLobby extends Component {
                     `}
                   </div>
                 </Instructions>
-                <StartGameButton
-                  onClick={startGame}
-                >
-                  {'Start game!'}
-                </StartGameButton>
+                {
+                  this.getButton()
+                }
               </Fragment>
 
             :
@@ -90,9 +120,12 @@ class GameLobby extends Component {
 }
 
 GameLobby.propTypes = {
-  playerColor: PropTypes.string.isRequired,
-  playerCount: PropTypes.number,
-  startGame:   PropTypes.func.isRequired,
+  playerColor:  PropTypes.string.isRequired,
+  playerCount:  PropTypes.number,
+  ready:        PropTypes.bool.isRequired,
+  startEnabled: PropTypes.bool.isRequired,
+  readyPlayer:  PropTypes.func.isRequired,
+  startGame:    PropTypes.func.isRequired,
 }
 
 GameLobby.defaultProps = {

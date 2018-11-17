@@ -5,7 +5,7 @@ import { Event, Channel } from 'common'
 import R from 'ramda'
 import signaling from 'signaling'
 import { transitionToGameScene } from './game'
-import { transitionToLobby, createPlayerEntity } from './lobby'
+import { transitionToLobby, createLobbyPlayer } from './lobby'
 import http from './http'
 import Scene from './Scene'
 import Layer from './constant/layer'
@@ -16,6 +16,7 @@ import GameEvent from './constant/gameEvent'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
+const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
 
 const { log, warn } = console
@@ -33,11 +34,40 @@ const registerPlayerFinished = ({ l1: { id } }) => () => {
     gameState.lastRoundResult.playerFinishOrder.concat([id])
 }
 
+const gameInShapeForNewRound = () =>
+  [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW].includes(gameState.currentState)
+
+const isReady = R.propEq('ready', true)
+const getReadyCount = () => R.filter(isReady, gameState.players).length
+const allReady = () => R.all(isReady, gameState.players)
+
+const scheduleForceStartEnablement = () => {
+  setTimeout(
+    () => {
+      // bail if new round has already been started
+      if (!gameInShapeForNewRound()) {
+        return
+      }
+      broadcast({ event: Event.START_ENABLED })
+    },
+    FORCE_START_DELAY,
+  )
+}
+
+const readyPlayer = (id) => {
+  getPlayer(id).ready = true
+
+  if (getReadyCount() === 1) {
+    scheduleForceStartEnablement()
+  } else if (allReady()) {
+    roundStart()
+  }
+}
+
 const roundStart = (options = { collectMetrics: false }) => {
   const { collectMetrics } = options
 
-  if (gameState.currentState === CurrentState.LOBBY
-    || gameState.currentState === CurrentState.SCORE_OVERVIEW) {
+  if (gameInShapeForNewRound()) {
     gameState
       .players
       .forEach(({ playerId }) => {
@@ -84,6 +114,9 @@ const onPlayerData = id => (message) => {
     case Event.PLAYER_MOVEMENT:
       movePlayer(id, payload)
       break
+    case Event.PLAYER_READY:
+      readyPlayer(id)
+      break
     case Event.ROUND_START:
       roundStart()
       break
@@ -129,7 +162,7 @@ export const onPlayerJoin = ({
 
   if (l1.get(Scene.LOBBY)) {
     const numOfPlayers = gameState.players.length
-    createPlayerEntity(player, numOfPlayers - 1, { newPlayer: true })
+    createLobbyPlayer(player, numOfPlayers - 1, { newPlayer: true })
   }
 
   send(Channel.RELIABLE, {
@@ -142,10 +175,8 @@ export const onPlayerJoin = ({
   })
 
   broadcast({
-    event:   Event.A_PLAYER_JOINED,
-    payload: {
-      playerCount: gameState.players.length,
-    },
+    event:   Event.PLAYER_COUNT,
+    payload: gameState.players.length,
   })
 
   setOnData(onPlayerData(id))
@@ -181,15 +212,13 @@ const onPlayerLeave = (id) => {
     gameState
       .players
       .forEach((p, i) => {
-        createPlayerEntity(p, i, { newPlayer: false })
+        createLobbyPlayer(p, i, { newPlayer: false })
       })
   }
 
   broadcast({
-    event:   Event.A_PLAYER_LEFT,
-    payload: {
-      playerCount: gameState.players.length,
-    },
+    event:   Event.PLAYER_COUNT,
+    payload: gameState.players.length,
   })
 }
 

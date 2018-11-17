@@ -28,14 +28,21 @@ const AppState = {
   PLAYER_DEAD:     'player-dead',
 }
 
-const colorState = ({ started, color }) => (
+const joinState = ({ started, color }) => (
   {
+    ...newRoundState,
+    playerColor: color,
     appState: started
       ? AppState.AWAITING_NEXT_ROUND
       : AppState.GAME_LOBBY,
-    playerColor: color,
   }
 )
+
+const newRoundState = {
+  appState: AppState.GAME_LOBBY,
+  ready: false,
+  startEnabled: false,
+}
 
 const errorState = message => ({
   appState: AppState.LOCKER_ROOM,
@@ -44,13 +51,12 @@ const errorState = message => ({
 
 const eventState = ({ event, payload }) => {
   switch (event) {
-    case Event.A_PLAYER_JOINED: return payload
-    case Event.A_PLAYER_LEFT: return payload
-    case Event.PLAYER_JOINED: return colorState(payload)
+    case Event.PLAYER_COUNT: return { playerCount: payload }
+    case Event.PLAYER_JOINED: return joinState(payload)
+    case Event.START_ENABLED: return { startEnabled: true }
     case Event.GAME_FULL: return errorState('Game is full')
     case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
-    case Event.ROUND_END: return { appState: AppState.GAME_LOBBY }
-    case Event.ROUND_START: return { appState: AppState.GAME_PLAYING }
+    case Event.ROUND_END: return newRoundState
     case Event.ROUND_STARTED: return { appState: AppState.GAME_PLAYING }
     default: return null
   }
@@ -63,6 +69,7 @@ class App extends Component {
     gameCode:    '',
     playerColor: null,
     error:       '',
+    ready:       false,
   }
 
   componentDidMount = () => {
@@ -154,7 +161,11 @@ class App extends Component {
 
   startGame = () => {
     this.sendReliable({ event: Event.ROUND_START })
-    this.setState({ appState: AppState.GAME_PLAYING })
+  }
+
+  readyPlayer = () => {
+    this.sendReliable({ event: Event.PLAYER_READY })
+    this.setState({ ready: true })
   }
 
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
@@ -166,6 +177,8 @@ class App extends Component {
       appState,
       playerColor,
       playerCount,
+      ready,
+      startEnabled,
     } = this.state
 
     switch (appState) {
@@ -182,8 +195,11 @@ class App extends Component {
       case AppState.GAME_LOBBY: 
         return <GameLobby
           startGame={this.startGame}
+          readyPlayer={this.readyPlayer}
           playerColor={playerColor}
           playerCount={playerCount}
+          ready={ready}
+          startEnabled={startEnabled}
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying
