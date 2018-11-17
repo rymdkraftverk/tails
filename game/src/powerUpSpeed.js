@@ -9,36 +9,39 @@ export default {
   powerUp: ({
     player,
     speedMultiplier,
-  }) => ({
-    id:       `speed-${player.playerId}`,
-    data:     { },
-    duration: PowerUp.DURATION,
-    onInit:   () => {
-      l1.addBehavior(createTrail({
-        player,
-        speed:    player.speed,
-        speedMultiplier,
-        duration: 1,
-      }))
-      player.speed *= 1.5
-    },
-    onComplete: () => {
-      if (!player.killed) {
-        player.speed /= 1.5
+    snakeSpeed,
+  }) =>
 
+    ({
+      id:       `speed-${player.playerId}`,
+      data:     { },
+      duration: PowerUp.DURATION,
+      onInit:   () => {
         l1.addBehavior(createTrail({
           player,
-          speed: player.speed,
+          scale:    player.scaleFactor,
           speedMultiplier,
+          duration: 1,
         }))
+        player.speed = snakeSpeed * 1.5
+      },
+      onComplete: () => {
+        if (!player.killed) {
+          player.speed = snakeSpeed
 
-        l1.sound({
-          src:    Sound.POWERUP_EXPIRED,
-          volume: 0.6,
-        })
-      }
-    },
-  }),
+          l1.addBehavior(createTrail({
+            player,
+            scale: player.scaleFactor,
+            speedMultiplier,
+          }))
+
+          l1.sound({
+            src:    Sound.POWERUP_EXPIRED,
+            volume: 0.6,
+          })
+        }
+      },
+    }),
   texture:           () => l1.getTexture('powerup-lightning'),
   behaviorsToRemove: () => [],
 }
