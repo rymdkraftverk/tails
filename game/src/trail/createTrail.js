@@ -42,12 +42,15 @@ export const createTrail = ({
     trailE.player = player.playerId
     trailE.counter = player.trailContainer.counter
 
-    trailE.scale.set(scale / speedMultiplier / 2)
+    trailE.scale.set(scale / speedMultiplier)
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
-    trailE.x = middle(player, 'x', 'width') - (trailE.width / 2)
-    trailE.y = middle(player, 'y', 'height') - (trailE.height / 2)
+    trailE.x = middle(player, 'x', 'width')
+    trailE.y = middle(player, 'y', 'height')
+
+    trailE.rotation = l1.toRadians(player.degrees)
+    trailE.anchor.set(0.5)
 
     l1.addBehavior(activate(trailE))
 
