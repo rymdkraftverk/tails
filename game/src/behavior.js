@@ -12,6 +12,7 @@ import GameEvent from './constant/gameEvent'
 import { addEntityToTree, nearestNeighbour } from './kd-tree'
 import Sound from './constant/sound'
 import { HEADER_HEIGHT } from './header'
+import { createSine } from './magic'
 
 const GENERATE_HOLE_MAX_TIME = 300
 const GENERATE_HOLE_MIN_TIME = 60
@@ -26,10 +27,10 @@ const middle = (displayObject, dim, prop) =>
   (displayObject.hitArea[prop] / 2)
 
 export const createTrail = ({
-  player, speed, speedMultiplier,
+  player, scale, speedMultiplier, duration,
 }) => ({
   id:       `createTrail-${player.playerId}`,
-  duration: CREATE_TRAIL_FREQUENCY,
+  duration: duration || CREATE_TRAIL_FREQUENCY,
   loop:     true,
   onInit:   () => {
     if (!player.trailContainer) {
@@ -44,7 +45,7 @@ export const createTrail = ({
   },
   onComplete: () => {
     player.trailContainer.counter += CREATE_TRAIL_FREQUENCY
-    if (player.preventTrail) {
+    if (player.preventTrail > 0) {
       return
     }
 
@@ -61,7 +62,7 @@ export const createTrail = ({
     trailE.player = player.playerId
     trailE.counter = player.trailContainer.counter
 
-    trailE.scale.set(speed / speedMultiplier / 2)
+    trailE.scale.set(scale / speedMultiplier / 2)
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
@@ -94,10 +95,10 @@ const holeMaker = (player, speed, speedMultiplier) => ({
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),
   onInit: () => {
-    player.preventTrail = true
+    player.preventTrail += 1
   },
   onComplete: () => {
-    player.preventTrail = false
+    player.preventTrail -= 1
     l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })
@@ -142,7 +143,7 @@ const killPlayer = (player, speedMultiplier) => {
     config,
   } = explode({
     degrees:     player.degrees,
-    scaleFactor: (speedMultiplier / player.speed),
+    scaleFactor: (speedMultiplier / player.scaleFactor),
     radius:      player.width,
     x:           l1.getGlobalPosition(player).x,
     y:           l1.getGlobalPosition(player).y,
@@ -194,7 +195,7 @@ const killPlayer = (player, speedMultiplier) => {
     config: neonConfig,
   } = sparks({
     texture:     player.texture,
-    scaleFactor: (speedMultiplier / player.speed),
+    scaleFactor: (speedMultiplier / player.scaleFactor),
     radius:      player.width,
   })
 
@@ -280,3 +281,21 @@ const checkPlayersAlive = () => {
     transitionToRoundEnd()
   }
 }
+
+export const indicateExpiration = (player, speed, duration) => ({
+  id:   `indicateExpiration-${player.playerId}`,
+  duration,
+  data: {
+    sine: createSine({
+      start: 0.2,
+      end:   0.8,
+      speed,
+    }),
+  },
+  onRemove: () => {
+    player.alpha = 1
+  },
+  onUpdate: ({ counter, data }) => {
+    player.alpha = data.sine(counter)
+  },
+})

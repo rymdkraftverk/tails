@@ -78,10 +78,10 @@ export const transitionToGameScene = (maxPlayers) => {
       players.forEach((player) => {
         const behaviorsToAdd = [
           pivot(player),
-          createHoleMaker(player, player.speed, SPEED_MULTIPLIER),
+          createHoleMaker(player, player.scaleFactor, SPEED_MULTIPLIER),
           createTrail({
             player,
-            speed:           player.speed,
+            scale:           player.scaleFactor,
             speedMultiplier: SPEED_MULTIPLIER,
           }),
           move(player),
@@ -195,12 +195,14 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.visible = false
 
   player.speed = snakeSpeed
+  player.scaleFactor = snakeSpeed
   player.degrees = l1.getRandomInRange(0, 360)
   player.event = new EventEmitter()
   player.color = color
   player.isAlive = true
   player.spriteId = spriteId
   player.playerId = playerId
+  player.preventTrail = 0
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
     const p = getPlayer(playerId)
@@ -216,7 +218,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
     })
   })
 
-  player.scale.set(player.speed / SPEED_MULTIPLIER / 2)
+  player.scale.set(player.scaleFactor / SPEED_MULTIPLIER / 2)
 
   const playerSize = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
 
@@ -272,7 +274,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
         (directionDistanceScale * Math.cos(directionRadians)) + (player.width * 2)
       directionIndicator.y =
         (directionDistanceScale * Math.sin(directionRadians)) + (player.height * 2)
-      directionIndicator.scale.set((3 * player.speed) / SPEED_MULTIPLIER)
+      directionIndicator.scale.set((3 * player.scaleFactor) / SPEED_MULTIPLIER)
       directionIndicator.anchor.set(0.5)
       directionIndicator.rotation = toRadians(player.degrees)
 
