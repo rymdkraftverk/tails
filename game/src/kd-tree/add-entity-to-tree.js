@@ -1,5 +1,5 @@
 import R from 'ramda'
-import { GAME_WIDTH, GAME_HEIGHT } from '../rendering'
+import { GAME_WIDTH, GAME_HEIGHT } from '../constant/rendering'
 import { calculateMiddle, isNode } from './common'
 import DIMENSIONS from './dimensions'
 
