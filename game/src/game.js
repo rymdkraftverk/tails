@@ -150,21 +150,21 @@ const getStartingPosition = (index) => {
     .range(1, 4)
     .map(i => ({
       x: i * 2 * maxXRadius,
-      y: maxYRadius,
+      y: maxYRadius + HEADER_HEIGHT,
     }))
 
   const middleRow = R
     .range(0, 4)
     .map(i => ({
       x: maxXRadius * (1 + (2 * i)),
-      y: maxYRadius * (1 + Math.sqrt(3)),
+      y: (maxYRadius * (1 + Math.sqrt(3))) + HEADER_HEIGHT,
     }))
 
   const bottomRow = R
     .range(1, 4)
     .map(i => ({
       x: i * 2 * maxXRadius,
-      y: maxYRadius * (1 + (2 * Math.sqrt(3))),
+      y: (maxYRadius * (1 + (2 * Math.sqrt(3)))) + HEADER_HEIGHT,
     }))
 
   const positions = bottomRow
