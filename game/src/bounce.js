@@ -11,6 +11,8 @@ export default (displayObject, modifier) => ({
     })
   },
   onUpdate: ({ data, counter }) => {
-    displayObject.scale.set(-1 * data.animation(counter))
+    if (displayObject) {
+      displayObject.scale.set(-1 * data.animation(counter))
+    }
   },
 })
