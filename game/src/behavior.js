@@ -114,21 +114,22 @@ export const createHoleMaker = (player, speed, speedMultiplier) => ({
 })
 
 export const collisionCheckerTrail = (player, speedMultiplier) => ({
-  id:         `collisionCheckerTrail-${player.playerId}`,
-  duration:   2,
-  loop:       true,
-  onComplete: () => {
-    const isColliding = R.curry(l1.isColliding)(player)
-
+  id:       `collisionCheckerTrail-${player.playerId}`,
+  duration: 2,
+  loop:     true,
+  data:     {
+    isColliding: R.curry(l1.isColliding)(player),
+  },
+  onComplete: ({ data }) => {
     const options = {
-      earlyReturn: isColliding,
+      earlyReturn: data.isColliding,
       filter:      t => t.active || t.player !== player.playerId,
       getCoord:    (e, dimension) => e[dimension],
     }
 
     const closestOrFirstCollidingEntity = nearestNeighbour(options, gameState.kdTree, player)
 
-    if (closestOrFirstCollidingEntity && isColliding(closestOrFirstCollidingEntity)) {
+    if (closestOrFirstCollidingEntity && data.isColliding(closestOrFirstCollidingEntity)) {
       killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }
