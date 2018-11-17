@@ -8,6 +8,7 @@ import Sound from './constant/sound'
 import PowerUp from './constant/powerUp'
 import ghost from './powerUpGhost'
 import speed from './powerUpSpeed'
+import bounce from './bounce'
 
 const powerUps = [speed, ghost]
 
@@ -44,6 +45,8 @@ export const initPowerups = ({
       powerUpSprite.width = 64 * (snakeSpeed / speedMultiplier)
       powerUpSprite.height = 64 * (snakeSpeed / speedMultiplier)
       powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
+
+      l1.addBehavior(bounce(powerUpSprite, 0.005))
 
       const collisionCheckerId = uuid()
 
