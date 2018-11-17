@@ -46,14 +46,34 @@ const playerColorToBackgroundColor = (player) => {
 }
 
 class GameLobby extends Component {
-  render() {
+  getButton = () => {
     const {
-      playerColor,
-      playerCount,
       readyPlayer,
       ready,
       startEnabled,
       startGame,
+    } = this.props
+
+    return ready && startEnabled
+      ?
+        <Button
+          onClick={startGame}
+        >
+          {'Start Game!'}
+        </Button>
+      :
+        <Button
+          clicked={ready}
+          onClick={readyPlayer}
+        >
+          {'Ready!'}
+        </Button>
+  }
+
+  render() {
+    const {
+      playerColor,
+      playerCount,
     } = this.props
 
     return (
@@ -77,21 +97,7 @@ class GameLobby extends Component {
                   </div>
                 </Instructions>
                 {
-                  // TODO: don't nest ternary
-                  ready && startEnabled
-                    ?
-                      <Button
-                        onClick={startGame}
-                      >
-                        {'Start Game!'}
-                      </Button>
-                    :
-                      <Button
-                        clicked={ready}
-                        onClick={readyPlayer}
-                      >
-                        {'Ready!'}
-                      </Button>
+                  this.getButton()
                 }
               </Fragment>
 
