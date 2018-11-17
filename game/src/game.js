@@ -202,6 +202,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.isAlive = true
   player.spriteId = spriteId
   player.playerId = playerId
+  player.preventTrail = 0
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
     const p = getPlayer(playerId)

@@ -20,9 +20,10 @@ export default {
     onInit:   () => {
       player.scale.set(player.scaleFactor / speedMultiplier)
       player.alpha = 0.4
+      player.preventTrail += 1
 
       const behaviorsToRemove = [
-        `createTrail-${player.playerId}`,
+        // `createTrail-${player.playerId}`,
         `collisionCheckerTrail-${player.playerId}`,
       ]
       R.forEach(
@@ -57,11 +58,13 @@ export default {
 
         const behaviorsToAdd = [
           collisionCheckerTrail(player, speedMultiplier),
+          /*
           createTrail({
             player,
             scale: player.scaleFactor,
             speedMultiplier,
           }),
+          */
         ]
 
         R.forEach(
@@ -69,7 +72,7 @@ export default {
           behaviorsToAdd,
         )
 
-        l1.resetBehavior(`createHoleMaker-${player.playerId}`)
+        // l1.resetBehavior(`createHoleMaker-${player.playerId}`)
 
         l1.sound({
           src:    Sound.POWERUP_EXPIRED,
@@ -78,6 +81,9 @@ export default {
 
         l1.removeBehavior(`ghost-${player.playerId}`)
       }
+    },
+    onRemove: () => {
+      player.preventTrail -= 1
     },
   }),
   texture:           () => l1.getTexture('powerup-ghost'),

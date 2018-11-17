@@ -45,7 +45,7 @@ export const createTrail = ({
   },
   onComplete: () => {
     player.trailContainer.counter += CREATE_TRAIL_FREQUENCY
-    if (player.preventTrail) {
+    if (player.preventTrail > 0) {
       return
     }
 
@@ -95,10 +95,10 @@ const holeMaker = (player, speed, speedMultiplier) => ({
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),
   onInit: () => {
-    player.preventTrail = true
+    player.preventTrail += 1
   },
   onComplete: () => {
-    player.preventTrail = false
+    player.preventTrail -= 1
     l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })
