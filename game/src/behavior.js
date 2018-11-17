@@ -30,7 +30,7 @@ export const createTrail = ({
   player, scale, speedMultiplier, duration,
 }) => ({
   id:       `createTrail-${player.playerId}`,
-  duration: duration || 2,
+  duration: duration || CREATE_TRAIL_FREQUENCY,
   loop:     true,
   onInit:   () => {
     if (!player.trailContainer) {
