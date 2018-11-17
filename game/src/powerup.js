@@ -70,7 +70,7 @@ export const initPowerups = ({
               ],
             )
 
-            l1.addBehavior(powerUp({ player: collidingEntity, speedMultiplier }))
+            l1.addBehavior(powerUp({ player: collidingEntity, speedMultiplier, snakeSpeed }))
           }
         },
       })

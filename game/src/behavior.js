@@ -27,7 +27,7 @@ const middle = (displayObject, dim, prop) =>
   (displayObject.hitArea[prop] / 2)
 
 export const createTrail = ({
-  player, speed, speedMultiplier, duration,
+  player, scale, speedMultiplier, duration,
 }) => ({
   id:       `createTrail-${player.playerId}`,
   duration: duration || 2,
@@ -62,7 +62,7 @@ export const createTrail = ({
     trailE.player = player.playerId
     trailE.counter = player.trailContainer.counter
 
-    trailE.scale.set(speed / speedMultiplier / 2)
+    trailE.scale.set(scale / speedMultiplier / 2)
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
@@ -143,7 +143,7 @@ const killPlayer = (player, speedMultiplier) => {
     config,
   } = explode({
     degrees:     player.degrees,
-    scaleFactor: (speedMultiplier / player.speed),
+    scaleFactor: (speedMultiplier / player.scaleFactor),
     radius:      player.width,
     x:           l1.getGlobalPosition(player).x,
     y:           l1.getGlobalPosition(player).y,
@@ -195,7 +195,7 @@ const killPlayer = (player, speedMultiplier) => {
     config: neonConfig,
   } = sparks({
     texture:     player.texture,
-    scaleFactor: (speedMultiplier / player.speed),
+    scaleFactor: (speedMultiplier / player.scaleFactor),
     radius:      player.width,
   })
 

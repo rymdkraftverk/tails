@@ -18,7 +18,7 @@ export default {
     },
     duration: PowerUp.DURATION,
     onInit:   () => {
-      player.scale.set(player.speed / speedMultiplier)
+      player.scale.set(player.scaleFactor / speedMultiplier)
       player.alpha = 0.4
 
       const behaviorsToRemove = [
@@ -52,14 +52,14 @@ export default {
         l1.removeBehavior(`indicateExpiration-${player.playerId}`)
 
         // Reset player
-        player.scale.set((player.speed / speedMultiplier / 2))
+        player.scale.set((player.scaleFactor / speedMultiplier / 2))
         player.alpha = 1
 
         const behaviorsToAdd = [
           collisionCheckerTrail(player, speedMultiplier),
           createTrail({
             player,
-            speed: player.speed,
+            scale: player.scaleFactor,
             speedMultiplier,
           }),
         ]
