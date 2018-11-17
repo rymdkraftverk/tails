@@ -3,7 +3,7 @@ import * as l1 from 'l1'
 import * as TextStyle from './constant/textStyle'
 import { GameColor } from './game'
 import Layer from './constant/layer'
-import { GAME_WIDTH } from './rendering'
+import { GAME_WIDTH } from './constant/rendering'
 
 const URL_POSITION_X = 100
 const CODE_POSITION_X = 400

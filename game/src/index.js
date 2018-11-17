@@ -11,7 +11,7 @@ import Scene from './Scene'
 import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { getPlayer, CurrentState } from './gameState'
-import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
+import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'

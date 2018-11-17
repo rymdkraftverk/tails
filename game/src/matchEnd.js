@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import { Event, Color, Channel } from 'common'
 
-import { GAME_WIDTH, GAME_HEIGHT } from './rendering'
+import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import { createSine } from './magic'
 import { resetPlayersScore, getPlayersWithHighestScore } from './game'
 import firework from './particleEmitter/firework'
