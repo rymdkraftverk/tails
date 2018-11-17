@@ -1,11 +1,9 @@
 import * as l1 from 'l1'
 import R from 'ramda'
-import Sound from './constant/sound'
-import PowerUp from './constant/powerUp'
-import {
-  indicateExpiration,
-  collisionCheckerTrail,
-} from './behavior'
+import Sound from '../constant/sound'
+import PowerUp from '../constant/powerUp'
+import indicateExpiration from './indicateExpiration'
+import { collisionCheckerTrail } from '../collisionDetection'
 
 export default {
   powerUp: ({
