@@ -32,8 +32,16 @@ const label = css`
 
 const Button = styled.button`
   ${label};
-  // TODO: fix styling
-  border: 0.1em solid ${({ clicked }) => clicked ? 'green' : 'black'} 
+  border: 0.1em solid black;
+  ${({ clicked }) => clicked
+    ?
+    `box-shadow: 0 0;
+    top: 0.1em;
+    left: 0.1em;
+    color: #757575;
+    border-color: #757575`
+    : ''
+  }
 `
 
 const AwaitingPlayers = styled.div`
