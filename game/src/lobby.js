@@ -273,8 +273,8 @@ const addMockPlayer = (idPrefix = 'debugPlayer:') => onPlayerJoin({
   id: `${idPrefix}${Math.random()
     .toString(36)
     .substring(7)}`,
-  close: () => {},
-  send: () => {},
+  close:     () => {},
+  send:      () => {},
   setOnData: () => {},
 })
 
