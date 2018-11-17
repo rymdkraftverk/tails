@@ -31,19 +31,19 @@ export const initPowerups = ({
     loop:       true,
     onComplete: () => {
       const { texture, behaviorsToRemove, powerUp } = _.sample(powerUps)
-      const powerUpTexture = new PIXI.Sprite(texture())
+      const powerUpSprite = new PIXI.Sprite(texture())
       l1.add(
-        powerUpTexture,
+        powerUpSprite,
         {
           parent: powerupGenerator,
         },
       )
 
-      powerUpTexture.x = l1.getRandomInRange(100, gameWidth - 100)
-      powerUpTexture.y = l1.getRandomInRange(100, gameHeight - 100)
-      powerUpTexture.width = 64 * (snakeSpeed / speedMultiplier)
-      powerUpTexture.height = 64 * (snakeSpeed / speedMultiplier)
-      powerUpTexture.scale.set((snakeSpeed / speedMultiplier))
+      powerUpSprite.x = l1.getRandomInRange(100, gameWidth - 100)
+      powerUpSprite.y = l1.getRandomInRange(100, gameHeight - 100)
+      powerUpSprite.width = 64 * (snakeSpeed / speedMultiplier)
+      powerUpSprite.height = 64 * (snakeSpeed / speedMultiplier)
+      powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
 
       const collisionCheckerId = uuid()
 
@@ -53,13 +53,13 @@ export const initPowerups = ({
         onUpdate: () => {
           const collidingEntity = l1
             .getByLabel('player')
-            .find(R.curry(l1.isColliding)(powerUpTexture))
+            .find(R.curry(l1.isColliding)(powerUpSprite))
           if (collidingEntity) {
             l1.sound({
               src:    Sound.JOIN1,
               volume: 0.6,
             })
-            l1.destroy(powerUpTexture)
+            l1.destroy(powerUpSprite)
 
 
             R.forEach(
