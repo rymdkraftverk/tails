@@ -200,7 +200,7 @@ const killPlayer = (player, speedMultiplier) => {
   const darkSpriteId = `circle-${player.color}-dark`
   player.texture = l1.getTexture(darkSpriteId)
 
-  const NEON_DEATH_SPEED = 3
+  const NEON_DEATH_SPEED = 6
 
   const neonDeath = l1.addBehavior({
     data: {
