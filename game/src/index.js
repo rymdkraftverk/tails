@@ -16,6 +16,7 @@ import GameEvent from './constant/gameEvent'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 
+const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
 
 const { log, warn } = console
@@ -49,7 +50,7 @@ const scheduleForceStartEnablement = () => {
       }
       broadcast({ event: Event.START_ENABLED })
     },
-    10000,
+    FORCE_START_DELAY,
   )
 }
 
