@@ -8,7 +8,7 @@ import LockerRoom from './LockerRoom'
 import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
-import AwatingNextRound from './AwatingNextRound'
+import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
@@ -211,7 +211,7 @@ class App extends Component {
           playerColor={Color[playerColor]}
         />
       case AppState.AWAITING_NEXT_ROUND: 
-        return <AwatingNextRound
+        return <AwaitingNextRound
           playerColor={Color[playerColor]}
         />
       default: return null
