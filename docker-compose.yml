@@ -25,10 +25,12 @@ services:
         environment:
             - WS_ADDRESS=${WS_ADDRESS}
             - HTTP_ADDRESS=${HTTP_ADDRESS}
+            - ERROR_LOGGING=${ERROR_LOGGING}
 
     controller:
         environment:
             - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
+            - REACT_APP_ERROR_LOGGING=${REACT_APP_ERROR_LOGGING}
         build:
             context: .
             dockerfile: ./controller/Dockerfile

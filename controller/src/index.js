@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { injectGlobal } from 'styled-components'
+import Boundary from './components/Boundary'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 
@@ -62,5 +63,5 @@ document.addEventListener(
   }, { passive: false },
 )
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<Boundary><App /></Boundary>, document.getElementById('root'))
 registerServiceWorker()

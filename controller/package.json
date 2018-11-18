@@ -17,6 +17,7 @@
     "stylelint-processor-styled-components": "^1.3.2"
   },
   "dependencies": {
+    "@sentry/browser": "^4.3.2",
     "common": "file:../common",
     "prop-types": "^15.6.2",
     "ramda": "^0.25.0",

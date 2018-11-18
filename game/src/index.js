@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js'
 import 'pixi-particles'
 import { Event, Channel } from 'common'
 import R from 'ramda'
+import * as Sentry from '@sentry/browser'
 import signaling from 'signaling'
 import { transitionToGameScene } from './game'
 import { transitionToLobby, createLobbyPlayer } from './lobby'
@@ -14,7 +15,14 @@ import gameState, { getPlayer, CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
 
+const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
+
+Sentry.init({
+  dsn: ERROR_LOGGING
+    ? 'https://093af386f1624489a442e1737bf04113@sentry.io/1325311'
+    : '',
+})
 
 const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
