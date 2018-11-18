@@ -1566,7 +1566,11 @@
 =======
 	"size": {"w":512,"h":512},
 	"scale": "1",
+<<<<<<< HEAD
 	"smartupdate": "$TexturePacker:SmartUpdate:ba7f21dd1acf2cd59cd3b3f9ce40ffa0:7da0f37df64e5c57a847ddc34fd2cfe1:729adc6043343cfda41c447ce8f464d6$"
 >>>>>>> Make sprites beautiful
+=======
+	"smartupdate": "$TexturePacker:SmartUpdate:fcac6e6a21be8f7126da2daad8fd83fc:195197753807b90b77b8667b237fb59d:729adc6043343cfda41c447ce8f464d6$"
+>>>>>>> Update colors
 }
 }
