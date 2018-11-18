@@ -13,10 +13,12 @@ import Scene from './Scene'
 import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
-import { HEADER_HEIGHT } from './header'
 
 const TextAnchor = {
-  INSTRUCTION_START_X: 64,
+  INSTRUCTION_START_X: 70,
+  INSTRUCTION_START_Y: 220,
+  X_OFFSET:            80,
+  Y_OFFSET:            150,
 }
 
 const TextColor = {
@@ -69,9 +71,30 @@ export const transitionToLobby = (gameCode, players = []) => {
     },
   )
 
+  const logo = new PIXI.Sprite(l1.getTexture('logo'))
+  logo.y = 32
+  l1.add(
+    logo,
+    {
+      parent: lobbyScene,
+    },
+  )
+
+  addText({
+    x:     92,
+    y:     64,
+    text:  'spark.io',
+    style: {
+      ...TextStyle.MEDIUM,
+      fontSize: 32,
+      fill:     TextColor.TEXT,
+    },
+    parent: lobbyScene,
+  })
+
   addText({
     x:     TextAnchor.INSTRUCTION_START_X,
-    y:     100,
+    y:     TextAnchor.INSTRUCTION_START_Y,
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
@@ -82,8 +105,8 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
 
   addText({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     300,
+    x:     TextAnchor.INSTRUCTION_START_X + TextAnchor.X_OFFSET,
+    y:     TextAnchor.INSTRUCTION_START_Y + TextAnchor.Y_OFFSET,
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
@@ -94,8 +117,8 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
 
   addText({
-    x:     TextAnchor.INSTRUCTION_START_X + 210,
-    y:     292,
+    x:     TextAnchor.INSTRUCTION_START_X + TextAnchor.X_OFFSET + 210,
+    y:     TextAnchor.INSTRUCTION_START_Y + (TextAnchor.Y_OFFSET - 8),
     text:  controllerUrl,
     style: {
       ...TextStyle.CODE,
@@ -107,8 +130,8 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
 
   addText({
-    x:     TextAnchor.INSTRUCTION_START_X,
-    y:     520,
+    x:     TextAnchor.INSTRUCTION_START_X + (TextAnchor.X_OFFSET * 2),
+    y:     TextAnchor.INSTRUCTION_START_Y + (TextAnchor.Y_OFFSET * 2),
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
@@ -119,8 +142,8 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
 
   addText({
-    x:     TextAnchor.INSTRUCTION_START_X + 400,
-    y:     514,
+    x:     TextAnchor.INSTRUCTION_START_X + ((TextAnchor.X_OFFSET * 2) + 400),
+    y:     TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET * 2) - 8),
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -156,32 +179,25 @@ export const transitionToLobby = (gameCode, players = []) => {
 
   playersDivider
     .lineStyle(4, GameColor.WHITE, 1)
-    .moveTo(875, HEADER_HEIGHT + 15)
-    .lineTo(875, 700)
+    .moveTo(875, 0)
+    .lineTo(875, GAME_HEIGHT)
 
   playersDivider.cacheAsBitmap = true
 
   drawInstructionArrow({
-    x:            400,
-    y:            170,
+    x:            TextAnchor.INSTRUCTION_START_X + 320,
+    y:            TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET / 2) - 24),
     angle:        90,
     id:           '1',
     parentEntity: lobbyScene,
   })
 
   drawInstructionArrow({
-    x:            400,
-    y:            400,
+    x: TextAnchor.INSTRUCTION_START_X + 420,
+    y: TextAnchor.INSTRUCTION_START_Y +
+      TextAnchor.Y_OFFSET + ((TextAnchor.Y_OFFSET / 2) - 24),
     angle:        90,
     id:           '2',
-    parentEntity: lobbyScene,
-  })
-
-  drawInstructionArrow({
-    x:            700,
-    y:            500,
-    angle:        0,
-    id:           '3',
     parentEntity: lobbyScene,
   })
 
@@ -209,6 +225,7 @@ const drawInstructionArrow = ({
     },
   )
 
+  instructionArrowOne.alpha = 0.2
   instructionArrowOne.x = x
   instructionArrowOne.y = y
   instructionArrowOne.scale.set(1)
@@ -265,7 +282,7 @@ export const createLobbyPlayer = ({ color }, playerIndex, { newPlayer }) => {
 
     l1.sound({
       src:    joinSound,
-      volume: 0.6,
+      volume: 0.4,
     })
   }
 }
