@@ -117,3 +117,4 @@ const killPlayer = (player, speedMultiplier) => {
 }
 
 export default killPlayer
+

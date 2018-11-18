@@ -71,3 +71,4 @@ const activate = trail => ({
     trail.active = true
   },
 })
+

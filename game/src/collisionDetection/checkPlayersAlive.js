@@ -22,3 +22,4 @@ const checkPlayersAlive = () => {
 }
 
 export default checkPlayersAlive
+
