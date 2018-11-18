@@ -25,6 +25,7 @@ services:
             - WS_ADDRESS=${WS_ADDRESS}
             - HTTP_ADDRESS=${HTTP_ADDRESS}
             - ERROR_LOGGING=${ERROR_LOGGING}
+            - CONTROLLER_URL=${CONTROLLER_URL}
 
     controller:
         environment:
