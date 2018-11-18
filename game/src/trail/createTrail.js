@@ -46,11 +46,24 @@ export const createTrail = ({
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
-    trailE.x = middle(player, 'x', 'width')
-    trailE.y = middle(player, 'y', 'height')
+    // trailE.x = middle(player, 'x', 'width')
+    // trailE.y = middle(player, 'y', 'height')
 
+    // trailE.anchor.set(0.5)
     trailE.rotation = l1.toRadians(player.degrees)
-    trailE.anchor.set(0.5)
+
+    trailE.x = middle(player, 'x', 'width') - (trailE.width / 2)
+    trailE.y = middle(player, 'y', 'height') - (trailE.height / 2)
+    // trailE.pivot.set(trailE.width / 2)
+
+    // trailE.hitArea = new PIXI.Rectangle(
+    //   0,
+    //   0,
+    //   player.width / 2,
+    //   player.height / 2,
+    // )
+
+    // l1.addBehavior(l1.displayHitBoxes(trailE, new PIXI.Graphics()))
 
     l1.addBehavior(activate(trailE))
 
