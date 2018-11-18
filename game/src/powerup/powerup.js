@@ -3,12 +3,12 @@ import _ from 'lodash/fp'
 import uuid from 'uuid/v4'
 import * as PIXI from 'pixi.js'
 import R from 'ramda'
-import Scene from './Scene'
-import Sound from './constant/sound'
-import PowerUp from './constant/powerUp'
+import Scene from '../Scene'
+import Sound from '../constant/sound'
+import PowerUp from '../constant/powerUp'
 import ghost from './powerUpGhost'
 import speed from './powerUpSpeed'
-import bounce from './bounce'
+import bounce from '../bounce'
 
 const powerUps = [speed, ghost]
 
