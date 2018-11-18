@@ -45,6 +45,7 @@ export const initPowerups = ({
       powerUpSprite.width = 64 * (snakeSpeed / speedMultiplier)
       powerUpSprite.height = 64 * (snakeSpeed / speedMultiplier)
       powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
+      powerUpSprite.anchor.set(0.5)
 
       l1.addBehavior(bounce(powerUpSprite, 0.005))
 
