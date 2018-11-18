@@ -12,5 +12,10 @@ export default () => {
     },
   } = window
 
+  const controllerUrl = process.env.CONTROLLER_URL
+  if (controllerUrl) {
+    return controllerUrl
+  }
+
   return port ? `${hostname}:${CONTROLLER_PORT}` : deployedURLs[hostname]
 }

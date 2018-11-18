@@ -5,7 +5,8 @@
       "include": [
         "WS_ADDRESS",
         "HTTP_ADDRESS",
-        "ERROR_LOGGING"
+        "ERROR_LOGGING",
+        "CONTROLLER_URL"
       ]
     }]
   ]
