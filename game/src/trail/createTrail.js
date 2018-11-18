@@ -29,32 +29,44 @@ export const createTrail = ({
       return
     }
 
-    const trailE = new PIXI.Sprite(l1.getTexture(`square-game/square-game-${player.color}`))
-    l1.add(
-      trailE,
-      {
-        parent: player.trailContainer,
-        labels: ['trail'],
-      },
-    )
-
-    trailE.active = false
-    trailE.player = player.playerId
-    trailE.counter = player.trailContainer.counter
-
-    trailE.scale.set(scale / speedMultiplier)
+    const trailE = new PIXI.Container()
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
-    // trailE.x = middle(player, 'x', 'width')
-    // trailE.y = middle(player, 'y', 'height')
+    const x = middle(player, 'x', 'width')
+    const y = middle(player, 'y', 'height')
 
-    // trailE.anchor.set(0.5)
-    trailE.rotation = l1.toRadians(player.degrees)
+    trailE.x = x - (player.width / 2)
+    trailE.y = y - (player.height / 2)
+    trailE.active = false
+    trailE.player = player.playerId
 
-    trailE.x = middle(player, 'x', 'width') - (trailE.width / 2)
-    trailE.y = middle(player, 'y', 'height') - (trailE.height / 2)
-    // trailE.pivot.set(trailE.width / 2)
+    l1.add(trailE, {
+      parent: l1.get(Scene.GAME),
+    })
+
+    const sprite = new PIXI.Sprite(l1.getTexture(`square-game/square-game-${player.color}`))
+    sprite.scale.set(scale / speedMultiplier)
+    sprite.x = x
+    sprite.y = y
+    const rotation = l1.toRadians(player.degrees)
+    sprite.anchor.set(0.5)
+    sprite.rotation = rotation
+    sprite.counter = player.trailContainer.counter
+    trailE.hitArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
+
+    l1.add(
+      sprite,
+      {
+        parent: player.trailContainer,
+      },
+    )
+
+    // trailE.x = (((-1 * x) - (trailE.width / 2)) * Math.cos(rotation)) + ((y + (trailE.height / 2)) * Math.sin(rotation)) + (2 * x) + (trailE.width / 2)
+    // trailE.y = (((-1 * y) - (trailE.height / 2)) * Math.cos(rotation)) + (((-1 * x) - ((trailE.width / 2))) * Math.sin(rotation)) + (2 * y) + (trailE.height / 2)
+
+    // console.log('trailE.x', trailE.x)
+    // console.log('trailE.y', trailE.y)
 
     // trailE.hitArea = new PIXI.Rectangle(
     //   0,
