@@ -19,7 +19,7 @@ const Text = styled.b`
   align-items: center;
   justify-content: center;
 `
-const AwatingNextRound = ({ playerColor }) => (
+const AwaitingNextRound = ({ playerColor }) => (
   <Container
     color={playerColor}
   >
@@ -27,8 +27,8 @@ const AwatingNextRound = ({ playerColor }) => (
   </Container>
 )
 
-AwatingNextRound.propTypes = {
+AwaitingNextRound.propTypes = {
   playerColor: PropTypes.string.isRequired,
 }
 
-export default AwatingNextRound
+export default AwaitingNextRound
