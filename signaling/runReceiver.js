@@ -18,6 +18,11 @@ const {
 
 const { log, warn } = console
 
+const InitatorState = {
+  NEW:   'new',
+  READY: 'ready',
+}
+
 // state
 let send = null
 
@@ -34,6 +39,7 @@ const instantiateInitiator = (initiatorId, offer) => ({
   id:    initiatorId,
   offer,
   rtc:   new RTCPeerConnection(WEB_RTC_CONFIG),
+  state: InitatorState.NEW,
 })
 
 const appendInitiatorMethods = initiator => R.merge(
@@ -76,19 +82,22 @@ const isOpen = R.pipe(
 
 const beatHeart = () => {
   // Fetch fresh initiators
-  initiators.forEach((initiator) => {
-    if (initiator.alive && isOpen(initiator)) {
-      rtcSend(
-        JSON.stringify,
-        initiator.internalChannel,
-        { event: Event.HEARTBEAT },
-      )
-      initiator.alive = false
-      return
-    }
+  initiators
+    .filter(R.propEq('state', InitatorState.READY))
+    .forEach((initiator) => {
+      log(initiator)
+      if (initiator.alive && isOpen(initiator)) {
+        rtcSend(
+          JSON.stringify,
+          initiator.internalChannel,
+          { event: Event.HEARTBEAT },
+        )
+        initiator.alive = false
+        return
+      }
 
-    killInitiator(initiator.id)
-  })
+      killInitiator(initiator.id)
+    })
 }
 
 const onInternalData = ({ event, payload: initiatorId }) => {
@@ -186,6 +195,8 @@ const onOffer = ({ initiatorId, channelInfos, offer }) => {
   const channelNames = R.pluck('name', channelInfos)
   setUpChannels(rtc, channelNames, initiator)
     .then((channels) => {
+      initiator.state = InitatorState.READY
+
       const [internal, externals] = hoistInternal(channels)
 
       plumbInternalChannel({
