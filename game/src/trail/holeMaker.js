@@ -31,4 +31,3 @@ const holeMaker = (player, speed, speedMultiplier) => ({
     l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })
-

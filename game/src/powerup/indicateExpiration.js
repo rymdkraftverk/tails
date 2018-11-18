@@ -19,4 +19,3 @@ const indicateExpiration = (player, speed, duration) => ({
 })
 
 export default indicateExpiration
-
