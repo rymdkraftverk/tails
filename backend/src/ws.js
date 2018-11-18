@@ -143,9 +143,8 @@ const onClose = (client, onReceiverDelete) => () => {
   }
 }
 
-const init = (port, onReceiverDelete) => {
-  const server = new WebSocket.Server({ port })
-  log(`[WS] Listening on port ${port}`)
+const init = (httpServer, onReceiverDelete) => {
+  const server = new WebSocket.Server({ server: httpServer })
 
   server.on('connection', (socket) => {
     const client = createClient(socket)

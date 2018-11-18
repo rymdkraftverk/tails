@@ -1,3 +1,4 @@
+const http = require('http')
 const express = require('express')
 const cors = require('cors')
 
@@ -18,8 +19,9 @@ const init = (port) => {
       .catch(error)
   })
 
-  app.listen(port)
-  log(`[HTTP] Listening on port ${port}`)
+  const httpServer = http.createServer(app)
+  httpServer.listen(port)
+  return httpServer
 }
 
 module.exports = {
