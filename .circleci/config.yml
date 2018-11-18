@@ -1,0 +1,14 @@
+version: 2.1
+jobs:
+  deploy_controller:
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - run: echo 'TBD'
+workflows:
+  default:
+    jobs:
+      - deploy_controller:
+          filters:
+            branches:
+              only: master
