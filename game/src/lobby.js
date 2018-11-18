@@ -133,12 +133,13 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
 
   addText({
-    x:     GAME_WIDTH - 300,
-    y:     GAME_HEIGHT - 40,
+    x:     GAME_WIDTH - 175,
+    y:     GAME_HEIGHT - 30,
     text:  '© Rymdkraftverk 2018',
     style: {
-      ...TextStyle.CODE,
-      fontSize: 18,
+      fontSize:   16,
+      fontfamily: 'helvetica',
+      fill:       'white',
     },
     parent: lobbyScene,
   })
