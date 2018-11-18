@@ -37,6 +37,14 @@ const movePlayer = (pId, direction) => {
   }
 }
 
+const turnPlayer = (pId, angle) => {
+  const player = l1.get(pId)
+  // This is needed since events might be sent during score screen when player does not exist
+  if (player) {
+    player.degrees = (player.degrees + angle) % 360
+  }
+}
+
 const registerPlayerFinished = ({ l1: { id } }) => () => {
   gameState.lastRoundResult.playerFinishOrder =
     gameState.lastRoundResult.playerFinishOrder.concat([id])
@@ -116,10 +124,15 @@ const createGame = ({ gameCode }) => {
 }
 
 const onPlayerData = id => (message) => {
-  const { event, payload } = message
+  const { event, payload, angle } = message
 
   switch (event) {
     case Event.PLAYER_MOVEMENT:
+      if (angle) {
+        turnPlayer(id, angle)
+        break
+      }
+
       movePlayer(id, payload)
       break
     case Event.PLAYER_READY:

@@ -58,19 +58,12 @@ class GamePlaying extends Component {
     })
   }
 
-  handleOrientation = (orientation) => {
-    const command = getGyroCommand(
-      this.state.lastOrientation,
-      orientation,
-    )
-
-    if (command != null) { // 0 (NONE) is a valid command
-      this.props.send({
-        event:   Event.PLAYER_MOVEMENT,
-        payload: command,
-      })
-      this.setState({ lastOrientation: orientation })
-    }
+  handleOrientation = ({ beta }) => {
+    // this.setState({ lastOrientation: beta })
+    this.props.send({
+      event:   Event.PLAYER_MOVEMENT,
+      angle: beta / 10,
+    })
   }
 
   componentDidMount = () => {

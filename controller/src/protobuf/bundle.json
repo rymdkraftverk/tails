@@ -15,9 +15,12 @@
           "id": 0
         },
         "payload": {
-          "rule": "required",
           "type": "Command",
           "id": 1
+        },
+        "angle": {
+          "type": "float",
+          "id": 2
         }
       }
     }

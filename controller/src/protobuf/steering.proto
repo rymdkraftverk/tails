@@ -8,5 +8,6 @@ enum Command {
 
 message Message {
   required string event = 0;
-  required Command payload = 1;
+  optional Command payload = 1;
+  optional float angle = 2;
 }
