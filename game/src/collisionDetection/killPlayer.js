@@ -73,8 +73,7 @@ const killPlayer = (player, speedMultiplier) => {
     radius:      player.width,
   })
 
-  const darkSpriteId = `circle-dark/circle-${player.color}-dark`
-  player.texture = l1.getTexture(darkSpriteId)
+  player.texture = l1.getTexture(`circle-dark/circle-${player.color}-dark`)
 
   const neonDeath = l1.addBehavior({
     data: {
@@ -108,7 +107,7 @@ const killPlayer = (player, speedMultiplier) => {
           neonConfig,
         )
           .playOnceAndDestroy()
-        trail.texture = l1.getTexture(darkSpriteId)
+        trail.texture = l1.getTexture(`square-dark/square-${player.color}-dark`)
         data.index -= 1
         trail = player.trailContainer.children[data.index]
       }
