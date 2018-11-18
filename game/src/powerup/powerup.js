@@ -42,10 +42,19 @@ export const initPowerups = ({
 
       powerUpSprite.x = l1.getRandomInRange(100, gameWidth - 100)
       powerUpSprite.y = l1.getRandomInRange(100, gameHeight - 100)
-      powerUpSprite.width = 64 * (snakeSpeed / speedMultiplier)
-      powerUpSprite.height = 64 * (snakeSpeed / speedMultiplier)
       powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
+      powerUpSprite.anchor.set(0.5)
 
+      const hitBox = new PIXI.Container()
+      hitBox.x = powerUpSprite.x - (powerUpSprite.width / 2)
+      hitBox.y = powerUpSprite.y - (powerUpSprite.height / 2)
+      hitBox.hitArea = new PIXI.Rectangle(0, 0, powerUpSprite.width, powerUpSprite.height)
+      l1.add(
+        hitBox,
+        {
+          parent: powerupGenerator,
+        },
+      )
       l1.addBehavior(bounce(powerUpSprite, 0.005))
 
       const collisionCheckerId = uuid()
@@ -56,13 +65,14 @@ export const initPowerups = ({
         onUpdate: () => {
           const collidingEntity = l1
             .getByLabel('player')
-            .find(R.curry(l1.isColliding)(powerUpSprite))
+            .find(R.curry(l1.isColliding)(hitBox))
           if (collidingEntity) {
             l1.sound({
               src:    Sound.JOIN1,
               volume: 0.6,
             })
             l1.destroy(powerUpSprite)
+            l1.destroy(hitBox)
 
 
             R.forEach(
