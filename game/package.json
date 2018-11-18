@@ -4,9 +4,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
+    "build": "browserify -p [ tinyify --no-flat ] src/index.js -o public/bundle.js -t [ babelify ]",
     "start": "http-server -p 8081",
-    "compile": "google-closure-compiler --js=package.json --js=node_modules/* --js=**.js --js_output_file=public/out.js --language_in=ECMASCRIPT_NEXT --module_resolution NODE",
     "lint": "eslint src",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
@@ -21,8 +20,8 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.12.0",
-    "google-closure-compiler": "^20181008.0.0",
     "http-server": "^0.11.1",
+    "tinyify": "^2.5.0",
     "watchify": "^3.11.0"
   },
   "dependencies": {
