@@ -256,7 +256,7 @@ const createOutline = (index) => {
 export const createLobbyPlayer = ({ color }, playerIndex, { newPlayer }) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
-  const square = new PIXI.Sprite(l1.getTexture(`square-${color}`))
+  const square = new PIXI.Sprite(l1.getTexture(`square/square-${color}`))
   l1.add(
     square,
     {

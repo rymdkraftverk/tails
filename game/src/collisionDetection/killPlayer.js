@@ -73,7 +73,7 @@ const killPlayer = (player, speedMultiplier) => {
     radius:      player.width,
   })
 
-  const darkSpriteId = `circle-${player.color}-dark`
+  const darkSpriteId = `circle-dark/circle-${player.color}-dark`
   player.texture = l1.getTexture(darkSpriteId)
 
   const neonDeath = l1.addBehavior({

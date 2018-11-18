@@ -1,131 +1,165 @@
 {"frames": {
 
-"arrow-blue.png":
+"arrow/arrow-blue.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":72,"y":368,"w":16,"h":32},
 =======
 	"frame": {"x":80,"y":0,"w":16,"h":32},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-brown.png":
+"arrow/arrow-brown.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":92,"y":368,"w":16,"h":32},
+=======
+	"frame": {"x":16,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-green.png":
+"arrow/arrow-green.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":112,"y":368,"w":16,"h":32},
+=======
+	"frame": {"x":32,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-orange.png":
+"arrow/arrow-orange.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":132,"y":368,"w":16,"h":32},
+=======
+	"frame": {"x":48,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-pink.png":
+"arrow/arrow-pink.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":152,"y":368,"w":16,"h":32},
 =======
 	"frame": {"x":112,"y":0,"w":16,"h":32},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":64,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-purple.png":
+"arrow/arrow-purple.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":104,"y":472,"w":16,"h":32},
+=======
+	"frame": {"x":80,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-red.png":
+"arrow/arrow-red.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":124,"y":472,"w":16,"h":32},
+=======
+	"frame": {"x":96,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-turquoise.png":
+"arrow/arrow-turquoise.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":144,"y":472,"w":16,"h":32},
 =======
 	"frame": {"x":48,"y":0,"w":16,"h":32},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":112,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-white.png":
+"arrow/arrow-white.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":164,"y":472,"w":16,"h":32},
 =======
 	"frame": {"x":32,"y":0,"w":16,"h":32},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":128,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
-"arrow-yellow.png":
+"arrow/arrow-yellow.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":232,"y":464,"w":16,"h":32},
 =======
 	"frame": {"x":64,"y":0,"w":16,"h":32},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":144,"y":0,"w":16,"h":32},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":16,"h":32}
 },
 "background.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":72,"y":4,"w":128,"h":72},
 	"rotated": true,
 =======
 	"frame": {"x":0,"y":1364,"w":128,"h":72},
+=======
+	"frame": {"x":160,"y":0,"w":128,"h":72},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 >>>>>>> Add glow to all sprites
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":72},
-	"sourceSize": {"w":128,"h":72},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":128,"h":72}
 },
-"circle-blue-dark.png":
+"circle-dark/circle-blue-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":140,"y":204,"w":48,"h":48},
@@ -135,14 +169,17 @@
 =======
 	"frame": {"x":48,"y":324,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":288,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-blue.png":
+"circle-dark/circle-brown-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":4,"w":48,"h":48},
@@ -152,14 +189,17 @@
 =======
 	"frame": {"x":48,"y":372,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":336,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-brown-dark.png":
+"circle-dark/circle-green-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":56,"w":48,"h":48},
@@ -169,14 +209,17 @@
 =======
 	"frame": {"x":0,"y":468,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":384,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-brown.png":
+"circle-dark/circle-orange-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":200,"y":4,"w":48,"h":48},
@@ -186,14 +229,17 @@
 =======
 	"frame": {"x":0,"y":420,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":432,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-green-dark.png":
+"circle-dark/circle-pink-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":200,"y":56,"w":48,"h":48},
@@ -203,14 +249,17 @@
 =======
 	"frame": {"x":0,"y":372,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":480,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-green.png":
+"circle-dark/circle-purple-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":256,"w":48,"h":48},
@@ -220,27 +269,33 @@
 =======
 	"frame": {"x":0,"y":324,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":528,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-none.png":
+"circle-dark/circle-red-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":192,"y":204,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":180,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":576,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-orange-dark.png":
+"circle-dark/circle-turquoise-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":208,"y":136,"w":48,"h":48},
@@ -250,14 +305,17 @@
 =======
 	"frame": {"x":0,"y":228,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":624,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-orange.png":
+"circle-dark/circle-white-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":4,"w":48,"h":48},
@@ -267,14 +325,17 @@
 =======
 	"frame": {"x":48,"y":276,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":672,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-pink-dark.png":
+"circle-dark/circle-yellow-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":56,"w":48,"h":48},
@@ -284,14 +345,17 @@
 =======
 	"frame": {"x":48,"y":228,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":720,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-pink.png":
+"circle-none.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":308,"w":48,"h":48},
@@ -301,14 +365,17 @@
 =======
 	"frame": {"x":0,"y":276,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":768,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-purple-dark.png":
+"circle/circle-blue.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":360,"w":48,"h":48},
@@ -318,14 +385,17 @@
 =======
 	"frame": {"x":48,"y":468,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":816,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-purple.png":
+"circle/circle-brown.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":412,"w":48,"h":48},
@@ -335,14 +405,17 @@
 =======
 	"frame": {"x":0,"y":612,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":864,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-red-dark.png":
+"circle/circle-green.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":256,"w":48,"h":48},
@@ -352,14 +425,17 @@
 =======
 	"frame": {"x":48,"y":612,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":912,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-red.png":
+"circle/circle-orange.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":244,"y":188,"w":48,"h":48},
@@ -369,14 +445,17 @@
 =======
 	"frame": {"x":0,"y":660,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":960,"y":0,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-turquoise-dark.png":
+"circle/circle-pink.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":260,"y":136,"w":48,"h":48},
@@ -386,14 +465,17 @@
 =======
 	"frame": {"x":0,"y":708,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":0,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-turquoise.png":
+"circle/circle-purple.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":304,"y":4,"w":48,"h":48},
@@ -403,14 +485,17 @@
 =======
 	"frame": {"x":48,"y":660,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":48,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-white-dark.png":
+"circle/circle-red.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":304,"y":56,"w":48,"h":48},
@@ -420,14 +505,17 @@
 =======
 	"frame": {"x":0,"y":516,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":96,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-white.png":
+"circle/circle-turquoise.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":308,"w":48,"h":48},
@@ -437,14 +525,17 @@
 =======
 	"frame": {"x":48,"y":564,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":144,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-yellow-dark.png":
+"circle/circle-white.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":360,"w":48,"h":48},
@@ -454,40 +545,49 @@
 =======
 	"frame": {"x":48,"y":180,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":192,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
-"circle-yellow.png":
+"circle/circle-yellow.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":412,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":564,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":240,"y":72,"w":48,"h":48},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":48}
 },
 "expand-arrow-one.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":4,"y":408,"w":96,"h":96},
 =======
 	"frame": {"x":0,"y":1268,"w":96,"h":96},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":288,"y":72,"w":96,"h":96},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
-	"sourceSize": {"w":96,"h":96},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":96,"h":96}
 },
 "goal-flag.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":4,"y":4,"w":64,"h":400},
@@ -497,11 +597,13 @@
 =======
 	"frame": {"x":48,"y":708,"w":64,"h":400},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":384,"y":72,"w":64,"h":400},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":400},
-	"sourceSize": {"w":64,"h":400},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":64,"h":400}
 },
 "logo.png":
 {
@@ -513,6 +615,7 @@
 },
 "particle-smoke.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":200,"y":108,"w":24,"h":24},
@@ -544,9 +647,17 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":44},
 	"sourceSize": {"w":44,"h":44},
 	"anchor": {"x":0.5,"y":0.5}
+=======
+	"frame": {"x":448,"y":72,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+>>>>>>> Put all images into subfolders
 },
-"powerup-ghost.png":
+"powerup/powerup-ghost.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":104,"y":404,"w":64,"h":64},
@@ -556,14 +667,17 @@
 =======
 	"frame": {"x":64,"y":1108,"w":64,"h":64},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":472,"y":72,"w":64,"h":64},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":64,"h":64}
 },
-"powerup-lightning.png":
+"powerup/powerup-lightning.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":140,"y":136,"w":64,"h":64},
@@ -573,27 +687,33 @@
 =======
 	"frame": {"x":0,"y":1108,"w":64,"h":64},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":536,"y":72,"w":64,"h":64},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":64,"h":64}
 },
 "ren.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":72,"y":268,"w":96,"h":96},
 =======
 	"frame": {"x":0,"y":1172,"w":96,"h":96},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":600,"y":72,"w":96,"h":96},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
-	"sourceSize": {"w":96,"h":96},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":96,"h":96}
 },
 "square-blue-glow.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":108,"w":48,"h":24},
@@ -603,14 +723,17 @@
 =======
 	"frame": {"x":48,"y":516,"w":48,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":696,"y":72,"w":48,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":24},
-	"sourceSize": {"w":48,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":48,"h":24}
 },
-"square-blue.png":
+"square-game/square-game-blue.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":228,"y":108,"w":24,"h":24},
@@ -620,120 +743,120 @@
 =======
 	"frame": {"x":48,"y":64,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":744,"y":72,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-brown.png":
+"square-game/square-game-brown.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":256,"y":108,"w":24,"h":24},
 =======
 =======
 	"frame": {"x":96,"y":64,"w":24,"h":24},
+=======
+	"frame": {"x":768,"y":72,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-blue.png":
+"square-game/square-game-green.png":
 {
-	"frame": {"x":72,"y":64,"w":24,"h":24},
+	"frame": {"x":792,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-brown.png":
+"square-game/square-game-orange.png":
 {
-	"frame": {"x":24,"y":64,"w":24,"h":24},
+	"frame": {"x":816,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-green.png":
+"square-game/square-game-pink.png":
 {
-	"frame": {"x":0,"y":64,"w":24,"h":24},
+	"frame": {"x":840,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-orange.png":
+"square-game/square-game-purple.png":
 {
-	"frame": {"x":32,"y":32,"w":24,"h":24},
+	"frame": {"x":864,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-pink.png":
+"square-game/square-game-red.png":
 {
-	"frame": {"x":56,"y":32,"w":24,"h":24},
+	"frame": {"x":888,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-purple.png":
+"square-game/square-game-turquoise.png":
 {
+<<<<<<< HEAD
 >>>>>>> Add glow to all sprites
 	"frame": {"x":80,"y":32,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":912,"y":72,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-red.png":
+"square-game/square-game-white.png":
 {
-	"frame": {"x":104,"y":32,"w":24,"h":24},
+	"frame": {"x":936,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-turquoise.png":
+"square-game/square-game-yellow.png":
 {
-	"frame": {"x":24,"y":88,"w":24,"h":24},
+	"frame": {"x":960,"y":72,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-white.png":
+"square-outline.png":
 {
-	"frame": {"x":24,"y":112,"w":24,"h":24},
+	"frame": {"x":0,"y":472,"w":48,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
+	"sourceSize": {"w":48,"h":48}
+},
+"square/square-blue.png":
+{
+	"frame": {"x":48,"y":472,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-game-yellow.png":
+"square/square-brown.png":
 {
-	"frame": {"x":72,"y":112,"w":24,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
-},
-"square-green.png":
-{
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":284,"y":108,"w":24,"h":24},
@@ -743,14 +866,17 @@
 =======
 	"frame": {"x":0,"y":136,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":72,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-orange.png":
+"square/square-green.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":464,"w":24,"h":24},
@@ -760,14 +886,17 @@
 =======
 	"frame": {"x":0,"y":88,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":96,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-outline.png":
+"square/square-orange.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":356,"y":4,"w":48,"h":48},
@@ -777,14 +906,17 @@
 =======
 	"frame": {"x":48,"y":420,"w":48,"h":48},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":120,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48},
-	"anchor": {"x":0.5,"y":0.5}
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
 },
-"square-pink.png":
+"square/square-pink.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":408,"y":4,"w":24,"h":24},
@@ -794,14 +926,17 @@
 =======
 	"frame": {"x":48,"y":112,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":144,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-purple.png":
+"square/square-purple.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":436,"y":4,"w":24,"h":24},
@@ -811,27 +946,33 @@
 =======
 	"frame": {"x":0,"y":112,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":168,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-red.png":
+"square/square-red.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":464,"y":4,"w":24,"h":24},
 =======
 	"frame": {"x":48,"y":88,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":192,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-turquoise.png":
+"square/square-turquoise.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":408,"y":32,"w":24,"h":24},
@@ -841,14 +982,17 @@
 =======
 	"frame": {"x":96,"y":88,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":216,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-white.png":
+"square/square-white.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":356,"y":56,"w":24,"h":24},
@@ -877,27 +1021,33 @@
 >>>>>>> Add square-yellow as a prototype
 =======
 	"frame": {"x":72,"y":88,"w":24,"h":24},
+=======
+	"frame": {"x":240,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 },
-"square-yellow.png":
+"square/square-yellow.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":24,"y":136,"w":24,"h":24},
 >>>>>>> Add glow to all sprites
+=======
+	"frame": {"x":264,"y":472,"w":24,"h":24},
+>>>>>>> Put all images into subfolders
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":24,"h":24}
 }},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "spritesheet.png",
 	"format": "RGBA8888",
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"size": {"w":512,"h":512},
 	"scale": "1",
@@ -911,5 +1061,10 @@
 	"scale": "1",
 	"smartupdate": "$TexturePacker:SmartUpdate:3c0744d06facd56a0b8dd0d3f00a7ba7:98acc220b91cdef3a8ffa77cdcc7d38d:729adc6043343cfda41c447ce8f464d6$"
 >>>>>>> Add glow to all sprites
+=======
+	"size": {"w":1024,"h":1024},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c76a66a17ec90ca774e2e3af8b2154f0:10a54e1e7e63c98f935fcb5a21b69146:729adc6043343cfda41c447ce8f464d6$"
+>>>>>>> Put all images into subfolders
 }
 }

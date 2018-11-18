@@ -40,6 +40,6 @@ export default {
         }
       },
     }),
-  texture:           () => l1.getTexture('powerup-lightning'),
+  texture:           () => l1.getTexture('powerup/powerup-lightning'),
   behaviorsToRemove: () => [],
 }
