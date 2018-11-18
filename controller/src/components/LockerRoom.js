@@ -45,6 +45,11 @@ class LockerRoom extends Component {
     if (error) {
       notify.show(error, 'error')
     }
+
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (connection.type === 'cellular') {
+      notify.show('Connect to WiFi for best experience', 'warning')
+    }
   }
 
   onKeyPress = (e) => {
