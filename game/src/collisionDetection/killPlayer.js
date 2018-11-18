@@ -76,8 +76,6 @@ const killPlayer = (player, speedMultiplier) => {
   const darkSpriteId = `circle-${player.color}-dark`
   player.texture = l1.getTexture(darkSpriteId)
 
-  const NEON_DEATH_SPEED = 6
-
   const neonDeath = l1.addBehavior({
     data: {
       index: player.trailContainer.children.length - 1,
@@ -95,7 +93,7 @@ const killPlayer = (player, speedMultiplier) => {
       // eslint-disable-next-line fp/no-loops
       while (
         data.index >= 0 &&
-        (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * NEON_DEATH_SPEED))
+        (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * Trail.NEON_DEATH_SPEED))
         <= trail.counter
       ) {
         const neonDeathParticleContainer = new PIXI.Container()
