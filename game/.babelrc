@@ -4,7 +4,8 @@
     ["transform-inline-environment-variables", {
       "include": [
         "WS_ADDRESS",
-        "HTTP_ADDRESS"
+        "HTTP_ADDRESS",
+        "ERROR_LOGGING"
       ]
     }]
   ]
