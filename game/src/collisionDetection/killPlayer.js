@@ -107,7 +107,7 @@ const killPlayer = (player, speedMultiplier) => {
           neonConfig,
         )
           .playOnceAndDestroy()
-        trail.texture = l1.getTexture(`square-dark/square-${player.color}-dark`)
+        trail.sprite.texture = l1.getTexture(`square-dark/square-${player.color}-dark`)
         data.index -= 1
         trail = player.trailContainer.children[data.index]
       }

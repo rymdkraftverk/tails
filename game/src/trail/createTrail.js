@@ -42,7 +42,7 @@ export const createTrail = ({
     trailE.player = player.playerId
 
     l1.add(trailE, {
-      parent: l1.get(Scene.GAME),
+      parent: player.trailContainer,
     })
 
     const sprite = new PIXI.Sprite(l1.getTexture(`square-game/square-game-${player.color}`))
@@ -52,30 +52,17 @@ export const createTrail = ({
     const rotation = l1.toRadians(player.degrees)
     sprite.anchor.set(0.5)
     sprite.rotation = rotation
-    sprite.counter = player.trailContainer.counter
+
+    trailE.counter = player.trailContainer.counter
+    trailE.sprite = sprite
     trailE.hitArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
 
     l1.add(
       sprite,
       {
-        parent: player.trailContainer,
+        parent: l1.get(Scene.GAME),
       },
     )
-
-    // trailE.x = (((-1 * x) - (trailE.width / 2)) * Math.cos(rotation)) + ((y + (trailE.height / 2)) * Math.sin(rotation)) + (2 * x) + (trailE.width / 2)
-    // trailE.y = (((-1 * y) - (trailE.height / 2)) * Math.cos(rotation)) + (((-1 * x) - ((trailE.width / 2))) * Math.sin(rotation)) + (2 * y) + (trailE.height / 2)
-
-    // console.log('trailE.x', trailE.x)
-    // console.log('trailE.y', trailE.y)
-
-    // trailE.hitArea = new PIXI.Rectangle(
-    //   0,
-    //   0,
-    //   player.width / 2,
-    //   player.height / 2,
-    // )
-
-    // l1.addBehavior(l1.displayHitBoxes(trailE, new PIXI.Graphics()))
 
     l1.addBehavior(activate(trailE))
 
