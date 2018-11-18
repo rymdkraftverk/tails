@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "browserify src/index.js -o public/bundle.js -t [ babelify ]",
+    "build": "browserify -p [ tinyify --no-flat ] src/index.js -o public/bundle.js -t [ babelify ]",
     "start": "http-server -p 8081",
     "lint": "eslint src",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
@@ -21,6 +21,7 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.12.0",
     "http-server": "^0.11.1",
+    "tinyify": "^2.5.0",
     "watchify": "^3.11.0"
   },
   "dependencies": {
