@@ -10,7 +10,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-brown.png":
 {
@@ -18,7 +19,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-green.png":
 {
@@ -26,7 +28,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-orange.png":
 {
@@ -34,7 +37,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-pink.png":
 {
@@ -46,7 +50,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-purple.png":
 {
@@ -54,7 +59,8 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-red.png":
 {
@@ -62,303 +68,440 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-turquoise.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":144,"y":472,"w":16,"h":32},
+=======
+	"frame": {"x":48,"y":0,"w":16,"h":32},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-white.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":164,"y":472,"w":16,"h":32},
+=======
+	"frame": {"x":32,"y":0,"w":16,"h":32},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "arrow-yellow.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":232,"y":464,"w":16,"h":32},
+=======
+	"frame": {"x":64,"y":0,"w":16,"h":32},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
-	"sourceSize": {"w":16,"h":32}
+	"sourceSize": {"w":16,"h":32},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "background.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":72,"y":4,"w":128,"h":72},
 	"rotated": true,
+=======
+	"frame": {"x":0,"y":1364,"w":128,"h":72},
+	"rotated": false,
+>>>>>>> Add glow to all sprites
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":72},
-	"sourceSize": {"w":128,"h":72}
+	"sourceSize": {"w":128,"h":72},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-blue-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":140,"y":204,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":132,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":324,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-blue.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":4,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":276,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":372,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-brown-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":56,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":324,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":468,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-brown.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":200,"y":4,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":372,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":420,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-green-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":200,"y":56,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":324,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":372,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-green.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":256,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":228,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":324,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-none.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":192,"y":204,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":180,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-orange-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":208,"y":136,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":180,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":228,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-orange.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":4,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":228,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":276,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-pink-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":56,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":612,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":228,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-pink.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":308,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":372,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":276,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-purple-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":360,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":516,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":468,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-purple.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":172,"y":412,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":516,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":612,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-red-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":256,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":564,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":612,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-red.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":244,"y":188,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":468,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":660,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-turquoise-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":260,"y":136,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":420,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":708,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-turquoise.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":304,"y":4,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":420,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":660,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-white-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":304,"y":56,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":564,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":516,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-white.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":308,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":468,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":564,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-yellow-dark.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":224,"y":360,"w":48,"h":48},
 =======
 	"frame": {"x":0,"y":660,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":180,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "circle-yellow.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":224,"y":412,"w":48,"h":48},
+=======
+	"frame": {"x":0,"y":564,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "expand-arrow-one.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":4,"y":408,"w":96,"h":96},
+=======
+	"frame": {"x":0,"y":1268,"w":96,"h":96},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
-	"sourceSize": {"w":96,"h":96}
+	"sourceSize": {"w":96,"h":96},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "goal-flag.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":4,"y":4,"w":64,"h":400},
 =======
 	"frame": {"x":64,"y":724,"w":64,"h":400},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":708,"w":64,"h":400},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":400},
-	"sourceSize": {"w":64,"h":400}
+	"sourceSize": {"w":64,"h":400},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "logo.png":
 {
@@ -371,177 +514,342 @@
 "particle-smoke.png":
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"frame": {"x":200,"y":108,"w":24,"h":24},
 =======
 	"frame": {"x":48,"y":64,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":96,"y":112,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "particle.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":184,"y":464,"w":44,"h":44},
 =======
 	"frame": {"x":72,"y":88,"w":44,"h":44},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":136,"w":44,"h":44},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":44},
-	"sourceSize": {"w":44,"h":44}
+	"sourceSize": {"w":44,"h":44},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "powerup-ghost.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":104,"y":404,"w":64,"h":64},
 =======
 	"frame": {"x":48,"y":660,"w":64,"h":64},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":64,"y":1108,"w":64,"h":64},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64}
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "powerup-lightning.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":140,"y":136,"w":64,"h":64},
 =======
 	"frame": {"x":0,"y":724,"w":64,"h":64},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":1108,"w":64,"h":64},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64}
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "ren.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":72,"y":268,"w":96,"h":96},
+=======
+	"frame": {"x":0,"y":1172,"w":96,"h":96},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
-	"sourceSize": {"w":96,"h":96}
+	"sourceSize": {"w":96,"h":96},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-blue-glow.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":148,"y":108,"w":48,"h":24},
 =======
 	"frame": {"x":48,"y":180,"w":48,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":516,"w":48,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":24},
-	"sourceSize": {"w":48,"h":24}
+	"sourceSize": {"w":48,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-blue.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":228,"y":108,"w":24,"h":24},
 =======
 	"frame": {"x":104,"y":32,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":64,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-brown.png":
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"frame": {"x":256,"y":108,"w":24,"h":24},
 =======
+=======
+	"frame": {"x":96,"y":64,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-blue.png":
+{
+	"frame": {"x":72,"y":64,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-brown.png":
+{
+	"frame": {"x":24,"y":64,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-green.png":
+{
+	"frame": {"x":0,"y":64,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-orange.png":
+{
+	"frame": {"x":32,"y":32,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-pink.png":
+{
+	"frame": {"x":56,"y":32,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-purple.png":
+{
+>>>>>>> Add glow to all sprites
 	"frame": {"x":80,"y":32,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-red.png":
+{
+	"frame": {"x":104,"y":32,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-turquoise.png":
+{
+	"frame": {"x":24,"y":88,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-white.png":
+{
+	"frame": {"x":24,"y":112,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"square-game-yellow.png":
+{
+	"frame": {"x":72,"y":112,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-green.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":284,"y":108,"w":24,"h":24},
 =======
 	"frame": {"x":56,"y":32,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":136,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-orange.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":252,"y":464,"w":24,"h":24},
 =======
 	"frame": {"x":32,"y":32,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":88,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-outline.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":356,"y":4,"w":48,"h":48},
 =======
 	"frame": {"x":48,"y":276,"w":48,"h":48},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":420,"w":48,"h":48},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
-	"sourceSize": {"w":48,"h":48}
+	"sourceSize": {"w":48,"h":48},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-pink.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":408,"y":4,"w":24,"h":24},
 =======
 	"frame": {"x":0,"y":64,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":48,"y":112,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-purple.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":436,"y":4,"w":24,"h":24},
 =======
 	"frame": {"x":72,"y":64,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":0,"y":112,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-red.png":
 {
+<<<<<<< HEAD
 	"frame": {"x":464,"y":4,"w":24,"h":24},
+=======
+	"frame": {"x":48,"y":88,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-turquoise.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":408,"y":32,"w":24,"h":24},
 =======
 	"frame": {"x":24,"y":88,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":96,"y":88,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
 "square-white.png":
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	"frame": {"x":356,"y":56,"w":24,"h":24},
 =======
@@ -567,18 +875,30 @@
 =======
 	"frame": {"x":48,"y":88,"w":24,"h":24},
 >>>>>>> Add square-yellow as a prototype
+=======
+	"frame": {"x":72,"y":88,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
-}},
-"animations": {
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
 },
+"square-yellow.png":
+{
+	"frame": {"x":24,"y":136,"w":24,"h":24},
+>>>>>>> Add glow to all sprites
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24},
+	"anchor": {"x":0.5,"y":0.5}
+}},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "spritesheet.png",
 	"format": "RGBA8888",
+<<<<<<< HEAD
 	"size": {"w":512,"h":512},
 	"scale": "1",
 <<<<<<< HEAD
@@ -586,5 +906,10 @@
 =======
 	"smartupdate": "$TexturePacker:SmartUpdate:c2c9e5a2368eb3cd556482e6c47e0bb0:704848404b5da3bc24b9e55362a2e34a:729adc6043343cfda41c447ce8f464d6$"
 >>>>>>> Add square-yellow as a prototype
+=======
+	"size": {"w":128,"h":1436},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3c0744d06facd56a0b8dd0d3f00a7ba7:98acc220b91cdef3a8ffa77cdcc7d38d:729adc6043343cfda41c447ce8f464d6$"
+>>>>>>> Add glow to all sprites
 }
 }

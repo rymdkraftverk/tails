@@ -29,7 +29,7 @@ export const createTrail = ({
       return
     }
 
-    const trailE = new PIXI.Sprite(l1.getTexture(`circle-${player.color}`))
+    const trailE = new PIXI.Sprite(l1.getTexture(`square-game-${player.color}`))
     l1.add(
       trailE,
       {
