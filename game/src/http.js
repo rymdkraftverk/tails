@@ -1,4 +1,4 @@
-const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3001'
+const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3000'
 
 const createGame = () =>
   fetch(
