@@ -24,10 +24,10 @@ const holeMaker = (player, speed, speedMultiplier) => ({
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),
   onInit: () => {
-    player.preventTrail = true
+    player.preventTrail += 1
   },
   onComplete: () => {
-    player.preventTrail = false
+    player.preventTrail -= 1
     l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })

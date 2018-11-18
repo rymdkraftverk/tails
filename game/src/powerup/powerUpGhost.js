@@ -65,8 +65,6 @@ export default {
           src:    Sound.POWERUP_EXPIRED,
           volume: 0.6,
         })
-
-        l1.removeBehavior(`ghost-${player.playerId}`)
       }
     },
     onRemove: () => {
