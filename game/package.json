@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "ERROR_LOGGING=true WS_ADDRESS=wss://rkv-backend.herokuapp.com HTTP_ADDRESS=https://rkv-backend.herokuapp.com CONTROLLER_URL=tiny.cc/rkv browserify -p [ tinyify --no-flat ] src/index.js -o public/bundle.js -t [ babelify ]",
+    "build": "bash -c \". .default.env; browserify -p [ tinyify --no-flat ] src/index.js -o public/bundle.js -t [ babelify ] \"",
     "start": "http-server -p 8081",
     "lint": "eslint src",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
