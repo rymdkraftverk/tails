@@ -85,7 +85,6 @@ const beatHeart = () => {
   initiators
     .filter(R.propEq('state', InitatorState.READY))
     .forEach((initiator) => {
-      log(initiator)
       if (initiator.alive && isOpen(initiator)) {
         rtcSend(
           JSON.stringify,
