@@ -83,7 +83,7 @@ export const transitionToLobby = (gameCode, players = []) => {
   addText({
     x:     92,
     y:     64,
-    text:  'spark.io',
+    text:  'tails',
     style: {
       ...TextStyle.MEDIUM,
       fontSize: 32,
