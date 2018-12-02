@@ -247,6 +247,7 @@ l1.init(app, {
 })
 
 app.loader.add('assets/spritesheet.json')
+app.loader.add('assets/patchy-robots.ttf')
 
 app.loader.load(() => {
   http.createGame()
