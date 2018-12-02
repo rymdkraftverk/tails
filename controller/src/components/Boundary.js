@@ -31,7 +31,7 @@ class Boundary extends Component {
   render() {
     if (this.state.error) {
       return (
-        <a onClick={() => Sentry.showReportDialog()}>Report feedback</a>
+        <div onClick={() => Sentry.showReportDialog()}>Report feedback</div>
       );
     } else {
       return this.props.children;
