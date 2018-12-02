@@ -11,6 +11,8 @@ import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
 import gameState from './gameState'
+import { playTrack } from './music'
+import Sound from './constant/sound'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
@@ -110,6 +112,17 @@ const createFireworks = (creator, color) => ({
   id:         'createFireworks',
   duration:   l1.getRandomInRange(5, 10),
   loop:       true,
+  onInit: ({ data }) => {
+    playTrack(null)
+    data.fireWorksSound = l1.sound({
+      src:    Sound.FIREWORK,
+      volume: 1,
+      loop:   true,
+    })
+  },
+  onRemove: ({ data: { fireWorksSound } }) => {
+    fireWorksSound.stop()
+  },
   onComplete: () => {
     const x = l1.getRandomInRange(100, GAME_WIDTH - 100)
     const y = l1.getRandomInRange(100, GAME_HEIGHT - 100)
