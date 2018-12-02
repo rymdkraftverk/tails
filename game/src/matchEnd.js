@@ -11,6 +11,7 @@ import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
 import gameState from './gameState'
+import { playTrack } from './music'
 import Sound from './constant/sound'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
@@ -112,6 +113,7 @@ const createFireworks = (creator, color) => ({
   duration:   l1.getRandomInRange(5, 10),
   loop:       true,
   onInit: ({ data }) => {
+    playTrack(null)
     data.fireWorksSound = l1.sound({
       src:    Sound.FIREWORK,
       volume: 1,
