@@ -13,6 +13,10 @@ import Scene from './Scene'
 import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
+import delay from './delay'
+import { createSine } from './magic'
+
+const TEXT_BOUNCE_INTERVAL = 600
 
 const TextAnchor = {
   INSTRUCTION_START_X: 70,
@@ -55,6 +59,7 @@ const addText = ({
       parent,
     },
   )
+  return textObject
 }
 
 export const transitionToLobby = (gameCode, players = []) => {
@@ -92,6 +97,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
 
+
   addText({
     x:     TextAnchor.INSTRUCTION_START_X,
     y:     TextAnchor.INSTRUCTION_START_Y,
@@ -116,9 +122,9 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
 
-  addText({
-    x:     TextAnchor.INSTRUCTION_START_X + TextAnchor.X_OFFSET + 210,
-    y:     TextAnchor.INSTRUCTION_START_Y + (TextAnchor.Y_OFFSET - 8),
+  const url = addText({
+    x:     TextAnchor.INSTRUCTION_START_X + TextAnchor.X_OFFSET + 420,
+    y:     TextAnchor.INSTRUCTION_START_Y + (TextAnchor.Y_OFFSET + 22),
     text:  controllerUrl,
     style: {
       ...TextStyle.CODE,
@@ -128,6 +134,8 @@ export const transitionToLobby = (gameCode, players = []) => {
     },
     parent: lobbyScene,
   })
+  url.anchor.set(0.5)
+  l1.addBehavior(textBounce(url))
 
   addText({
     x:     TextAnchor.INSTRUCTION_START_X + (TextAnchor.X_OFFSET * 2),
@@ -141,9 +149,9 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
 
-  addText({
-    x:     TextAnchor.INSTRUCTION_START_X + ((TextAnchor.X_OFFSET * 2) + 400),
-    y:     TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET * 2) - 8),
+  const code = addText({
+    x:     TextAnchor.INSTRUCTION_START_X + ((TextAnchor.X_OFFSET * 2) + 480),
+    y:     TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET * 2) + 22),
     text:  gameCode,
     style: {
       ...TextStyle.CODE,
@@ -154,6 +162,11 @@ export const transitionToLobby = (gameCode, players = []) => {
     },
     parent: lobbyScene,
   })
+  code.anchor.set(0.5)
+  delay(TEXT_BOUNCE_INTERVAL / 2)
+    .then(() => {
+      l1.addBehavior(textBounce(code))
+    })
 
   addText({
     x:     GAME_WIDTH - 175,
@@ -303,3 +316,15 @@ window.debug = {
   addSpiralMockPlayers: count => R.range(0, count)
     .map(() => addMockPlayer('debugSpiralPlayer:')),
 }
+
+const textBounce = text => ({
+  duration:   TEXT_BOUNCE_INTERVAL,
+  loop:       true,
+  onComplete: () => {
+    l1.addBehavior(bounce(text, 0.003))
+    delay(20)
+      .then(() => {
+        l1.addBehavior(bounce(text, 0.003))
+      })
+  },
+})
