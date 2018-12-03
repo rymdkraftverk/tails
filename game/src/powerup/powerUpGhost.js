@@ -71,7 +71,7 @@ export default {
       player.preventTrail -= 1
     },
   }),
-  texture:           () => l1.getTexture('powerup-ghost'),
+  texture:           () => l1.getTexture('powerup/powerup-ghost'),
   behaviorsToRemove: player => [
     `indicateExpiration-${player.playerId}`,
     `ghost-${player.playerId}`,

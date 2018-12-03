@@ -29,25 +29,40 @@ export const createTrail = ({
       return
     }
 
-    const trailE = new PIXI.Sprite(l1.getTexture(`circle-${player.color}`))
-    l1.add(
-      trailE,
-      {
-        parent: player.trailContainer,
-        labels: ['trail'],
-      },
-    )
-
-    trailE.active = false
-    trailE.player = player.playerId
-    trailE.counter = player.trailContainer.counter
-
-    trailE.scale.set(scale / speedMultiplier / 2)
+    const trailE = new PIXI.Container()
 
     // Find the middle of the player so that
     // we can put the trails' middle point in the same spot
-    trailE.x = middle(player, 'x', 'width') - (trailE.width / 2)
-    trailE.y = middle(player, 'y', 'height') - (trailE.height / 2)
+    const x = middle(player, 'x', 'width')
+    const y = middle(player, 'y', 'height')
+
+    trailE.x = x - (player.width / 2)
+    trailE.y = y - (player.height / 2)
+    trailE.active = false
+    trailE.player = player.playerId
+
+    l1.add(trailE, {
+      parent: player.trailContainer,
+    })
+
+    const sprite = new PIXI.Sprite(l1.getTexture(`square-game/square-game-${player.color}`))
+    sprite.scale.set(scale / speedMultiplier)
+    sprite.x = x
+    sprite.y = y
+    const rotation = l1.toRadians(player.degrees)
+    sprite.anchor.set(0.5)
+    sprite.rotation = rotation
+
+    trailE.counter = player.trailContainer.counter
+    trailE.sprite = sprite
+    trailE.hitArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
+
+    l1.add(
+      sprite,
+      {
+        parent: l1.get(Scene.GAME),
+      },
+    )
 
     l1.addBehavior(activate(trailE))
 

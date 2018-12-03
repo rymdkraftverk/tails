@@ -106,7 +106,7 @@ const createPlayer = (index) => {
   if (!player) {
     texture = 'circle-none'
   } else {
-    texture = `circle-${player.color}`
+    texture = `circle/circle-${player.color}`
   }
 
   const y = WORM_START_Y + (index * PLAYER_SPACING)

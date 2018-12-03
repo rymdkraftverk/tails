@@ -180,7 +180,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
-  const player = new PIXI.Sprite(l1.getTexture(`circle-${color}`))
+  const player = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
   l1.add(
     player,
     {
@@ -259,7 +259,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       const directionRadians = toRadians(player.degrees)
       const directionDistanceScale = 200 / playerCountFactor
 
-      const directionIndicator = new PIXI.Sprite(l1.getTexture(`arrow-${player.color}`))
+      const directionIndicator = new PIXI.Sprite(l1.getTexture(`arrow/arrow-${player.color}`))
       l1.add(
         directionIndicator,
         {
@@ -304,7 +304,7 @@ const move = player => ({
 const performanceTestCurl = player => ({
   onUpdate: ({ counter }) => {
     // inverse relationship with square root is chosen with mathematical precision.
-    // factor 12.3 is chosen by trial and error.
+    // factor is chosen by trial and error.
     // + 1 is to avoid divide by zero
     const factor = 12.3 / Math.sqrt(counter + 1)
     player.degrees += (TURN_RADIUS * factor)
