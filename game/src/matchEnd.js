@@ -87,6 +87,8 @@ export const transitionToMatchEnd = () => {
         zIndex: Layer.FOREGROUND,
       },
     )
+    text.x = GAME_WIDTH / 2
+    text.y = 200
     text.anchor.set(0.5)
   }
 
