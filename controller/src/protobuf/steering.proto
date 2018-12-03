@@ -1,13 +1,6 @@
 syntax = "proto3";
 
-enum Command {
-  NONE = 0;
-  LEFT = 1;
-  RIGHT = 2;
-}
-
 message Message {
   required string event = 0;
-  optional Command payload = 1;
-  optional float angle = 2;
+  required float payload = 1;
 }

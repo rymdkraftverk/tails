@@ -48,8 +48,8 @@ class GamePlaying extends Component {
 
   handleOrientation = ({ beta }) => {
     this.props.send({
-      event: Event.PLAYER_MOVEMENT,
-      angle: beta / 10,
+      event:   Event.PLAYER_MOVEMENT,
+      payload: beta / 10,
     })
   }
 

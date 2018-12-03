@@ -1,12 +1,5 @@
 {
   "nested": {
-    "Command": {
-      "values": {
-        "NONE": 0,
-        "LEFT": 1,
-        "RIGHT": 2
-      }
-    },
     "Message": {
       "fields": {
         "event": {
@@ -15,12 +8,9 @@
           "id": 0
         },
         "payload": {
-          "type": "Command",
-          "id": 1
-        },
-        "angle": {
+          "rule": "required",
           "type": "float",
-          "id": 2
+          "id": 1
         }
       }
     }

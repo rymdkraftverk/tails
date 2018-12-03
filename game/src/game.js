@@ -198,6 +198,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.speed = snakeSpeed
   player.scaleFactor = snakeSpeed
   player.degrees = l1.getRandomInRange(0, 360)
+  player.turnRate = 0
   player.event = new EventEmitter()
   player.color = color
   player.isAlive = true
@@ -314,21 +315,13 @@ const performanceTestCurl = player => ({
 const pivot = player => ({
   id:       `pivot-${player.playerId}`,
   onUpdate: () => {
-    if (player.direction === SteeringCommand.RIGHT) {
-      if (player.degrees >= 360) {
-        player.degrees = 0
-        return
-      }
-      player.degrees += TURN_RADIUS
-    } else if (player.direction === SteeringCommand.LEFT) {
-      if (player.degrees < 0) {
-        player.degrees = 360
-        return
-      }
-      player.degrees -= TURN_RADIUS
-    } else {
-      // Do nothing
-    }
+    const throttledTurnRate = R
+      .pipe(
+        R.max(-TURN_RADIUS),
+        R.min(TURN_RADIUS),
+      )(player.turnRate)
+
+    player.degrees = (player.degrees + throttledTurnRate) % 360
   },
 })
 
