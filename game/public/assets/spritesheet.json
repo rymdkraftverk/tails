@@ -2,23 +2,7 @@
 
 "arrow/arrow-blue.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":72,"y":368,"w":16,"h":32},
-=======
-	"frame": {"x":80,"y":0,"w":16,"h":32},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":72,"y":144,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":236,"y":444,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -26,19 +10,7 @@
 },
 "arrow/arrow-brown.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":92,"y":368,"w":16,"h":32},
-=======
-	"frame": {"x":16,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":88,"y":144,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":256,"y":444,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -46,19 +18,7 @@
 },
 "arrow/arrow-green.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":112,"y":368,"w":16,"h":32},
-=======
-	"frame": {"x":32,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":228,"y":280,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -66,19 +26,7 @@
 },
 "arrow/arrow-orange.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":132,"y":368,"w":16,"h":32},
-=======
-	"frame": {"x":48,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":80,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":244,"y":228,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -86,23 +34,7 @@
 },
 "arrow/arrow-pink.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":152,"y":368,"w":16,"h":32},
-=======
-	"frame": {"x":112,"y":0,"w":16,"h":32},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":64,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":64,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":228,"y":316,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -110,19 +42,7 @@
 },
 "arrow/arrow-purple.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":104,"y":472,"w":16,"h":32},
-=======
-	"frame": {"x":80,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":96,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":228,"y":352,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -130,19 +50,7 @@
 },
 "arrow/arrow-red.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":124,"y":472,"w":16,"h":32},
-=======
-	"frame": {"x":96,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":248,"y":264,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -150,23 +58,7 @@
 },
 "arrow/arrow-turquoise.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":144,"y":472,"w":16,"h":32},
-=======
-	"frame": {"x":48,"y":0,"w":16,"h":32},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":112,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":104,"y":144,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":264,"y":228,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -174,23 +66,7 @@
 },
 "arrow/arrow-white.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":164,"y":472,"w":16,"h":32},
-=======
-	"frame": {"x":32,"y":0,"w":16,"h":32},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":128,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":32,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":248,"y":300,"w":16,"h":32},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -198,23 +74,7 @@
 },
 "arrow/arrow-yellow.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":232,"y":464,"w":16,"h":32},
-=======
-	"frame": {"x":64,"y":0,"w":16,"h":32},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":144,"y":0,"w":16,"h":32},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":16,"y":176,"w":16,"h":32},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":248,"y":336,"w":16,"h":32},
->>>>>>> Make sprites beautiful
+	"frame": {"x":184,"y":464,"w":16,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -222,53 +82,15 @@
 },
 "background.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":72,"y":4,"w":128,"h":72},
 	"rotated": true,
-=======
-	"frame": {"x":0,"y":1364,"w":128,"h":72},
-=======
-	"frame": {"x":160,"y":0,"w":128,"h":72},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":800,"w":128,"h":72},
->>>>>>> Make neon death animation look good with square trails
-	"rotated": false,
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":72,"y":4,"w":128,"h":72},
-	"rotated": true,
->>>>>>> Make sprites beautiful
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":72},
 	"sourceSize": {"w":128,"h":72}
 },
 "circle-dark/circle-blue-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":140,"y":204,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":132,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":324,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":288,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":352,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":148,"y":72,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -276,27 +98,7 @@
 },
 "circle-dark/circle-brown-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":148,"y":4,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":276,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":372,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":336,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":352,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":72,"y":304,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -304,27 +106,7 @@
 },
 "circle-dark/circle-green-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":148,"y":56,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":324,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":468,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":384,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":304,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":72,"y":356,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -332,27 +114,7 @@
 },
 "circle-dark/circle-orange-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":200,"y":4,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":372,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":420,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":432,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":208,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":104,"y":408,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -360,27 +122,7 @@
 },
 "circle-dark/circle-pink-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":200,"y":56,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":324,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":372,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":480,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":208,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":104,"y":460,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -388,27 +130,7 @@
 },
 "circle-dark/circle-purple-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":172,"y":256,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":228,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":324,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":528,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":256,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":124,"y":304,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -416,23 +138,7 @@
 },
 "circle-dark/circle-red-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":192,"y":204,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":180,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":576,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":304,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":124,"y":356,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -440,27 +146,7 @@
 },
 "circle-dark/circle-turquoise-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":208,"y":136,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":180,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":228,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":624,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":400,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":140,"y":236,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -468,27 +154,7 @@
 },
 "circle-dark/circle-white-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":252,"y":4,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":228,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":276,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":672,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":400,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":156,"y":408,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -496,27 +162,7 @@
 },
 "circle-dark/circle-yellow-dark.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":252,"y":56,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":612,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":228,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":720,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":592,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":156,"y":460,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -524,27 +170,7 @@
 },
 "circle-none.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":172,"y":308,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":372,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":276,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":768,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":640,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":172,"y":124,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -552,27 +178,7 @@
 },
 "circle/circle-blue.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":172,"y":360,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":516,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":468,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":816,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":592,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":200,"y":72,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -580,27 +186,7 @@
 },
 "circle/circle-brown.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":172,"y":412,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":516,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":612,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":864,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":688,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":172,"y":176,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -608,27 +194,7 @@
 },
 "circle/circle-green.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":224,"y":256,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":564,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":612,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":912,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":688,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":216,"y":4,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -636,27 +202,7 @@
 },
 "circle/circle-orange.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":244,"y":188,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":468,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":660,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":960,"y":0,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":640,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":176,"y":288,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -664,27 +210,7 @@
 },
 "circle/circle-pink.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":260,"y":136,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":420,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":708,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":0,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":448,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":192,"y":228,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -692,27 +218,7 @@
 },
 "circle/circle-purple.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":304,"y":4,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":420,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":660,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":48,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":544,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":176,"y":340,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -720,27 +226,7 @@
 },
 "circle/circle-red.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":304,"y":56,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":564,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":516,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":96,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":448,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":224,"y":124,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -748,27 +234,7 @@
 },
 "circle/circle-turquoise.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":224,"y":308,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":468,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":564,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":144,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":544,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":224,"y":176,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -776,27 +242,7 @@
 },
 "circle/circle-white.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":224,"y":360,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":660,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":180,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":192,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":496,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":252,"y":56,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -804,23 +250,7 @@
 },
 "circle/circle-yellow.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":224,"y":412,"w":48,"h":48},
-=======
-	"frame": {"x":0,"y":564,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":240,"y":72,"w":48,"h":48},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":496,"w":48,"h":48},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":268,"y":4,"w":48,"h":48},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -828,23 +258,7 @@
 },
 "expand-arrow-one.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":4,"y":408,"w":96,"h":96},
-=======
-	"frame": {"x":0,"y":1268,"w":96,"h":96},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":288,"y":72,"w":96,"h":96},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":872,"w":96,"h":96},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":4,"y":408,"w":96,"h":96},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
@@ -852,27 +266,7 @@
 },
 "goal-flag.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":4,"y":4,"w":64,"h":400},
-=======
-	"frame": {"x":64,"y":724,"w":64,"h":400},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":708,"w":64,"h":400},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":384,"y":72,"w":64,"h":400},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":1064,"w":64,"h":400},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":4,"y":4,"w":64,"h":400},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":400},
@@ -888,77 +282,15 @@
 },
 "particle-smoke.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":200,"y":108,"w":24,"h":24},
-=======
-	"frame": {"x":48,"y":64,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":96,"y":112,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24},
-	"anchor": {"x":0.5,"y":0.5}
-},
-"particle.png":
-{
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":184,"y":464,"w":44,"h":44},
-=======
-	"frame": {"x":72,"y":88,"w":44,"h":44},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":136,"w":44,"h":44},
->>>>>>> Add glow to all sprites
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":44},
-	"sourceSize": {"w":44,"h":44},
-	"anchor": {"x":0.5,"y":0.5}
-=======
-	"frame": {"x":448,"y":72,"w":24,"h":24},
-=======
-	"frame": {"x":48,"y":0,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":236,"y":480,"w":24,"h":24},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
 	"sourceSize": {"w":24,"h":24}
->>>>>>> Put all images into subfolders
 },
 "powerup/powerup-ghost.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":104,"y":404,"w":64,"h":64},
-=======
-	"frame": {"x":48,"y":660,"w":64,"h":64},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":64,"y":1108,"w":64,"h":64},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":472,"y":72,"w":64,"h":64},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":64,"y":736,"w":64,"h":64},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":148,"y":4,"w":64,"h":64},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -966,27 +298,7 @@
 },
 "powerup/powerup-lightning.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":140,"y":136,"w":64,"h":64},
-=======
-	"frame": {"x":0,"y":724,"w":64,"h":64},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":1108,"w":64,"h":64},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":536,"y":72,"w":64,"h":64},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":736,"w":64,"h":64},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":72,"y":236,"w":64,"h":64},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -994,23 +306,7 @@
 },
 "ren.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":72,"y":268,"w":96,"h":96},
-=======
-	"frame": {"x":0,"y":1172,"w":96,"h":96},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":600,"y":72,"w":96,"h":96},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":968,"w":96,"h":96},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":72,"y":136,"w":96,"h":96},
->>>>>>> Make sprites beautiful
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
@@ -1018,36 +314,15 @@
 },
 "square-blue-glow.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"frame": {"x":148,"y":108,"w":48,"h":24},
-=======
-	"frame": {"x":48,"y":180,"w":48,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":516,"w":48,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":696,"y":72,"w":48,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":72,"y":24,"w":48,"h":24},
->>>>>>> Make neon death animation look good with square trails
 	"rotated": false,
-=======
-	"frame": {"x":208,"y":444,"w":48,"h":24},
-	"rotated": true,
->>>>>>> Make sprites beautiful
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":24},
 	"sourceSize": {"w":48,"h":24}
 },
 "square-dark/square-blue-dark.png":
 {
-	"frame": {"x":264,"y":480,"w":24,"h":24},
+	"frame": {"x":228,"y":108,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1055,7 +330,7 @@
 },
 "square-dark/square-brown-dark.png":
 {
-	"frame": {"x":260,"y":372,"w":24,"h":24},
+	"frame": {"x":256,"y":108,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1063,7 +338,7 @@
 },
 "square-dark/square-green-dark.png":
 {
-	"frame": {"x":260,"y":400,"w":24,"h":24},
+	"frame": {"x":204,"y":464,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1071,7 +346,7 @@
 },
 "square-dark/square-orange-dark.png":
 {
-	"frame": {"x":276,"y":428,"w":24,"h":24},
+	"frame": {"x":284,"y":108,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1079,7 +354,7 @@
 },
 "square-dark/square-pink-dark.png":
 {
-	"frame": {"x":292,"y":456,"w":24,"h":24},
+	"frame": {"x":232,"y":464,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1087,7 +362,7 @@
 },
 "square-dark/square-purple-dark.png":
 {
-	"frame": {"x":292,"y":484,"w":24,"h":24},
+	"frame": {"x":260,"y":464,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1095,7 +370,7 @@
 },
 "square-dark/square-red-dark.png":
 {
-	"frame": {"x":268,"y":264,"w":24,"h":24},
+	"frame": {"x":408,"y":4,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1103,7 +378,7 @@
 },
 "square-dark/square-turquoise-dark.png":
 {
-	"frame": {"x":268,"y":292,"w":24,"h":24},
+	"frame": {"x":436,"y":4,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1111,7 +386,7 @@
 },
 "square-dark/square-white-dark.png":
 {
-	"frame": {"x":268,"y":320,"w":24,"h":24},
+	"frame": {"x":464,"y":4,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1119,7 +394,7 @@
 },
 "square-dark/square-yellow-dark.png":
 {
-	"frame": {"x":288,"y":348,"w":24,"h":24},
+	"frame": {"x":408,"y":32,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1127,27 +402,7 @@
 },
 "square-game/square-game-blue.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":228,"y":108,"w":24,"h":24},
-=======
-	"frame": {"x":104,"y":32,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":64,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":744,"y":72,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":24,"y":24,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":288,"y":376,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":356,"y":56,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1155,24 +410,7 @@
 },
 "square-game/square-game-brown.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":256,"y":108,"w":24,"h":24},
-=======
-=======
-	"frame": {"x":96,"y":64,"w":24,"h":24},
-=======
-	"frame": {"x":768,"y":72,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":96,"y":0,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":304,"y":404,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":436,"y":32,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1180,7 +418,7 @@
 },
 "square-game/square-game-green.png":
 {
-	"frame": {"x":320,"y":432,"w":24,"h":24},
+	"frame": {"x":464,"y":32,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1188,7 +426,7 @@
 },
 "square-game/square-game-orange.png":
 {
-	"frame": {"x":320,"y":460,"w":24,"h":24},
+	"frame": {"x":384,"y":60,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1196,7 +434,7 @@
 },
 "square-game/square-game-pink.png":
 {
-	"frame": {"x":276,"y":108,"w":24,"h":24},
+	"frame": {"x":356,"y":84,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1204,7 +442,7 @@
 },
 "square-game/square-game-purple.png":
 {
-	"frame": {"x":276,"y":136,"w":24,"h":24},
+	"frame": {"x":312,"y":108,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1212,7 +450,7 @@
 },
 "square-game/square-game-red.png":
 {
-	"frame": {"x":276,"y":164,"w":24,"h":24},
+	"frame": {"x":412,"y":60,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1220,21 +458,7 @@
 },
 "square-game/square-game-turquoise.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Add glow to all sprites
-	"frame": {"x":80,"y":32,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":912,"y":72,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":72,"y":120,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":276,"y":192,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":440,"y":60,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1242,7 +466,7 @@
 },
 "square-game/square-game-white.png":
 {
-	"frame": {"x":284,"y":220,"w":24,"h":24},
+	"frame": {"x":468,"y":60,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1250,7 +474,7 @@
 },
 "square-game/square-game-yellow.png":
 {
-	"frame": {"x":296,"y":248,"w":24,"h":24},
+	"frame": {"x":384,"y":88,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1258,7 +482,7 @@
 },
 "square-outline.png":
 {
-	"frame": {"x":208,"y":392,"w":48,"h":48},
+	"frame": {"x":356,"y":4,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -1266,7 +490,7 @@
 },
 "square/square-blue.png":
 {
-	"frame": {"x":296,"y":276,"w":24,"h":24},
+	"frame": {"x":340,"y":112,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1274,27 +498,7 @@
 },
 "square/square-brown.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":284,"y":108,"w":24,"h":24},
-=======
-	"frame": {"x":56,"y":32,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":136,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":72,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":144,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":296,"y":304,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":312,"y":136,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1302,27 +506,7 @@
 },
 "square/square-green.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":252,"y":464,"w":24,"h":24},
-=======
-	"frame": {"x":32,"y":32,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":88,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":96,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":120,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":316,"y":332,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":412,"y":88,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1330,27 +514,7 @@
 },
 "square/square-orange.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":356,"y":4,"w":48,"h":48},
-=======
-	"frame": {"x":48,"y":276,"w":48,"h":48},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":420,"w":48,"h":48},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":120,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":96,"y":96,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":316,"y":360,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":440,"y":88,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1358,27 +522,7 @@
 },
 "square/square-pink.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":408,"y":4,"w":24,"h":24},
-=======
-	"frame": {"x":0,"y":64,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":48,"y":112,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":144,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":72,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":332,"y":388,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":468,"y":88,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1386,27 +530,7 @@
 },
 "square/square-purple.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":436,"y":4,"w":24,"h":24},
-=======
-	"frame": {"x":72,"y":64,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":0,"y":112,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":168,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":72,"y":72,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":348,"y":416,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":368,"y":116,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1414,23 +538,7 @@
 },
 "square/square-red.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":464,"y":4,"w":24,"h":24},
-=======
-	"frame": {"x":48,"y":88,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":192,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":0,"y":96,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":348,"y":444,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":340,"y":140,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1438,27 +546,7 @@
 },
 "square/square-turquoise.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":408,"y":32,"w":24,"h":24},
-=======
-	"frame": {"x":24,"y":88,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":96,"y":88,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":216,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":72,"y":96,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":348,"y":472,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":312,"y":164,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1466,46 +554,7 @@
 },
 "square/square-white.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":356,"y":56,"w":24,"h":24},
-=======
-	"frame": {"x":96,"y":64,"w":24,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
-},
-"square-yellow-1.png":
-{
-	"frame": {"x":24,"y":64,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
-	"sourceSize": {"w":24,"h":24}
-},
-"square-yellow.png":
-{
-<<<<<<< HEAD
-	"frame": {"x":436,"y":32,"w":24,"h":24},
-=======
-	"frame": {"x":48,"y":88,"w":24,"h":24},
->>>>>>> Add square-yellow as a prototype
-=======
-	"frame": {"x":72,"y":88,"w":24,"h":24},
-=======
-	"frame": {"x":240,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":24,"y":96,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":376,"y":4,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":396,"y":116,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1513,20 +562,7 @@
 },
 "square/square-yellow.png":
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"frame": {"x":24,"y":136,"w":24,"h":24},
->>>>>>> Add glow to all sprites
-=======
-	"frame": {"x":264,"y":472,"w":24,"h":24},
->>>>>>> Put all images into subfolders
-=======
-	"frame": {"x":48,"y":96,"w":24,"h":24},
->>>>>>> Make neon death animation look good with square trails
-=======
-	"frame": {"x":344,"y":4,"w":24,"h":24},
->>>>>>> Make sprites beautiful
+	"frame": {"x":424,"y":116,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
@@ -1537,40 +573,8 @@
 	"version": "1.0",
 	"image": "spritesheet.png",
 	"format": "RGBA8888",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"size": {"w":512,"h":512},
 	"scale": "1",
-<<<<<<< HEAD
-	"smartupdate": "$TexturePacker:SmartUpdate:3fee748eed7a33b7491e622f9c187290:3ce40ef27f6bfaeeeb991e0f6d16f3c3:729adc6043343cfda41c447ce8f464d6$"
-=======
-	"smartupdate": "$TexturePacker:SmartUpdate:c2c9e5a2368eb3cd556482e6c47e0bb0:704848404b5da3bc24b9e55362a2e34a:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Add square-yellow as a prototype
-=======
-	"size": {"w":128,"h":1436},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:3c0744d06facd56a0b8dd0d3f00a7ba7:98acc220b91cdef3a8ffa77cdcc7d38d:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Add glow to all sprites
-=======
-	"size": {"w":1024,"h":1024},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:c76a66a17ec90ca774e2e3af8b2154f0:10a54e1e7e63c98f935fcb5a21b69146:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Put all images into subfolders
-=======
-	"size": {"w":128,"h":1464},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d7b750ef321a7d73b00d0304446d8bb9:7da0f37df64e5c57a847ddc34fd2cfe1:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Make neon death animation look good with square trails
-=======
-	"size": {"w":512,"h":512},
-	"scale": "1",
-<<<<<<< HEAD
-	"smartupdate": "$TexturePacker:SmartUpdate:ba7f21dd1acf2cd59cd3b3f9ce40ffa0:7da0f37df64e5c57a847ddc34fd2cfe1:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Make sprites beautiful
-=======
-	"smartupdate": "$TexturePacker:SmartUpdate:fcac6e6a21be8f7126da2daad8fd83fc:195197753807b90b77b8667b237fb59d:729adc6043343cfda41c447ce8f464d6$"
->>>>>>> Update colors
+	"smartupdate": "$TexturePacker:SmartUpdate:b2b331891bc0571903d17207697d0382:cba46aad163c5a2fbf4603289f23b08b:729adc6043343cfda41c447ce8f464d6$"
 }
 }
