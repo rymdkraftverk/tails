@@ -55,7 +55,7 @@ export const initPowerups = ({
           parent: powerupGenerator,
         },
       )
-      l1.addBehavior(bounce(powerUpSprite, 0.005))
+      l1.addBehavior(bounce(powerUpSprite, 0.01))
 
       const collisionCheckerId = uuid()
 
