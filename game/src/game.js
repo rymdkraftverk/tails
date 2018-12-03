@@ -252,7 +252,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       const player = players[data.index]
       player.visible = true
 
-      l1.addBehavior(bounce(player, 0.05))
+      l1.addBehavior(bounce(player, 0.03))
 
       data.index += 1
 
