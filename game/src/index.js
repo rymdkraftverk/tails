@@ -29,19 +29,19 @@ export const MAX_PLAYERS_ALLOWED = 10
 
 const { log, warn } = console
 
-const movePlayer = (pId, direction) => {
+const turnPlayer = ({pId, angle, direction}) => {
   const player = l1.get(pId)
   // This is needed since events might be sent during score screen when player does not exist
-  if (player) {
-    l1.get(pId).direction = direction
+  if (!player) {
+    return
   }
-}
 
-const turnPlayer = (pId, angle) => {
-  const player = l1.get(pId)
-  // This is needed since events might be sent during score screen when player does not exist
-  if (player) {
+  if (angle) {
     player.degrees = (player.degrees + angle) % 360
+  }
+
+  if (direction !== undefined) {
+    player.direction = direction
   }
 }
 
@@ -128,12 +128,7 @@ const onPlayerData = id => (message) => {
 
   switch (event) {
     case Event.PLAYER_MOVEMENT:
-      if (angle) {
-        turnPlayer(id, angle)
-        break
-      }
-
-      movePlayer(id, payload)
+      turnPlayer({pId: id, angle, direction: payload})
       break
     case Event.PLAYER_READY:
       readyPlayer(id)

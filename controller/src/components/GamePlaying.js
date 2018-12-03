@@ -29,18 +29,6 @@ const Container = styled(IOSDisableDoubleTap)`
 
 const noop = () => {}
 
-const getBetaCommand = (beta) => {
-  if (beta < -15) return SteeringCommand.LEFT
-  if (beta > 15) return SteeringCommand.RIGHT
-  return SteeringCommand.NONE
-}
-
-const getGyroCommand = ({ beta: lastBeta }, { beta }) => {
-  const lastCommand = getBetaCommand(lastBeta)
-  const command = getBetaCommand(beta)
-  return lastCommand !== command ? command : null
-}
-
 navigator.vibrate = (navigator.vibrate ||
   navigator.webkitVibrate ||
   navigator.mozVibrate ||
@@ -59,9 +47,8 @@ class GamePlaying extends Component {
   }
 
   handleOrientation = ({ beta }) => {
-    // this.setState({ lastOrientation: beta })
     this.props.send({
-      event:   Event.PLAYER_MOVEMENT,
+      event: Event.PLAYER_MOVEMENT,
       angle: beta / 10,
     })
   }
