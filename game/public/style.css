@@ -10,6 +10,15 @@ body {
   align-items: center;
 }
 
+#loading {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  font-size: 48px;
+}
+
 @font-face {
   font-family: 'patchy-robots';
   src: url('assets/patchy-robots.ttf');
