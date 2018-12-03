@@ -1,5 +1,5 @@
 export default ({ x, y, color }) => {
-  const textures = [`square-${color}`]
+  const textures = [`square/square-${color}`]
   const config = {
     alpha: {
       start: 1,
