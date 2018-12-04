@@ -111,10 +111,10 @@ const textMovement = text => ({
 })
 
 const createFireworks = (creator, color) => ({
-  id:         'createFireworks',
-  duration:   l1.getRandomInRange(5, 10),
-  loop:       true,
-  onInit: ({ data }) => {
+  id:       'createFireworks',
+  duration: l1.getRandomInRange(5, 10),
+  loop:     true,
+  onInit:   ({ data }) => {
     playTrack(null)
     data.fireWorksSound = l1.sound({
       src:    Sound.FIREWORK,
