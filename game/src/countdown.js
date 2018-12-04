@@ -65,7 +65,7 @@ const countdownBehavior = (countdown, resolve) => ({
     text.x = GAME_WIDTH / 2
     text.y = (GAME_HEIGHT - HEADER_HEIGHT) / 2
     text.anchor.set(0.5)
-    l1.addBehavior(bounce(text, 0.04))
+    l1.addBehavior(bounce(text, 0.02))
     data.text = text
 
     l1.sound({
