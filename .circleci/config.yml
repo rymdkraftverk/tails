@@ -2,7 +2,6 @@ version: 2.1
 jobs:
   build_controller:
     docker:
-      # should probably lock tag before going prod
       - image: circleci/node:latest
     steps:
       - checkout
