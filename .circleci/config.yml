@@ -1,14 +1,46 @@
 version: 2.1
 jobs:
+  build_controller:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{ checksum "controller/package.json" }}
+      - run:
+          command: npm install
+          working_directory: controller
+      - save_cache:
+          key: v1-npm-{{ checksum "controller/package.json" }}
+          paths:
+          - controller/node_modules
+      - run:
+          command: npm run build
+          working_directory: controller
+      - persist_to_workspace:
+          paths:
+            - controller/build
+          root: .
   deploy_controller:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/python:2.7-jessie
     steps:
-      - run: echo 'TBD'
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install AWS CLI
+          command: sudo pip install awscli
+      - run:
+          name: Upload to AWS S3
+          command: aws s3 sync build/ s3://rkv-controller/ --acl public-read
+          working_directory: controller
 workflows:
   default:
     jobs:
-      - deploy_controller:
+      - build_controller:
           filters:
             branches:
               only: master
+      - deploy_controller:
+          requires:
+          - build_controller
