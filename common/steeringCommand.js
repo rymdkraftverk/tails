@@ -1,8 +1,7 @@
-// Needs to be synced with enum in controller/src/protobuf/steering.proto
 const Command = {
-  NONE:  0,
-  LEFT:  1,
-  RIGHT: 2,
+  NONE:  0.0,
+  LEFT:  -3.0,
+  RIGHT: 3.0,
 }
 
 module.exports = Command
