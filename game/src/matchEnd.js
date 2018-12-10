@@ -19,6 +19,14 @@ const TIME_UNTIL_LOBBY_TRANSITION = 500
 let fireworkEmitters = []
 
 export const transitionToMatchEnd = () => {
+  // this cleans up things to prevent this from crashing when calling from
+  // console window. This is already done on round end, this clean up is not
+  // necessary during standard game flow
+  // TODO consider using event based solution to separate concerns
+  l1.destroy(Scene.GAME)
+  l1.getAllBehaviors()
+    .map(l1.removeBehavior)
+
   l1
     .getAll()
     .filter(e => e.l1.id !== 'background')
