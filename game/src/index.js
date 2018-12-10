@@ -247,31 +247,36 @@ l1.init(app, {
 })
 
 app.loader.add('assets/spritesheet.json')
-app.loader.add('assets/patchy-robots.ttf')
 
-app.loader.load(() => {
-  http.createGame()
-    .then(({ gameCode }) => {
-      createGame({ gameCode })
-      log(`[Game created] ${gameCode}`)
+document.fonts.load('10pt "patchy-robots"')
+  .then(() => {
+    app.loader.load(() => {
+      http.createGame()
+        .then(({ gameCode }) => {
+          createGame({ gameCode })
+          log(`[Game created] ${gameCode}`)
 
-      signaling.runReceiver({
-        wsAddress:        WS_ADDRESS,
-        receiverId:       gameCode,
-        onInitiatorJoin:  onPlayerJoin,
-        onInitiatorLeave: onPlayerLeave,
+          signaling.runReceiver({
+            wsAddress:        WS_ADDRESS,
+            receiverId:       gameCode,
+            onInitiatorJoin:  onPlayerJoin,
+            onInitiatorLeave: onPlayerLeave,
+          })
+        })
+
+      const background = new PIXI.Sprite(l1.getTexture('background'))
+
+      background.scale.set(10)
+
+      l1.add(background, {
+        id:     'background',
+        zIndex: Layer.ABSOLUTE_BACKGROUND,
       })
     })
-
-  const background = new PIXI.Sprite(l1.getTexture('background'))
-
-  background.scale.set(10)
-
-  l1.add(background, {
-    id:     'background',
-    zIndex: Layer.ABSOLUTE_BACKGROUND,
   })
-})
+  .catch(() => {
+    console.error('Unable to load font')
+  })
 
 const resizeGame = () => {
   const screenWidth = window.innerWidth
