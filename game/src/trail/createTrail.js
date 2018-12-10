@@ -22,6 +22,15 @@ export const createTrail = ({
       })
       player.trailContainer.counter = 0
     }
+    if (!player.trailSpriteContainer) {
+      // This container is used to group all trail sprites into one parent
+      // So that zIndex will only be set once (in this case implicit 0),
+      // since it's an expensive sort operation
+      player.trailSpriteContainer = new PIXI.Container()
+      l1.add(player.trailSpriteContainer, {
+        parent: l1.get(Scene.GAME),
+      })
+    }
   },
   onComplete: () => {
     player.trailContainer.counter += Trail.CREATE_TRAIL_FREQUENCY
@@ -60,7 +69,7 @@ export const createTrail = ({
     l1.add(
       sprite,
       {
-        parent: l1.get(Scene.GAME),
+        parent: player.trailSpriteContainer,
       },
     )
 
