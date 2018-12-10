@@ -25,7 +25,7 @@ export const transitionToMatchEnd = () => {
   // TODO consider using event based solution to separate concerns
   l1.destroy(Scene.GAME)
   l1.getAllBehaviors()
-    .map(l1.removeBehavior)
+    .forEach(l1.removeBehavior)
 
   l1
     .getAll()
