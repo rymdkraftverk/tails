@@ -113,22 +113,21 @@ export const transitionToGameScene = (maxPlayers) => {
   playTrack(Track.GAME, { loop: true, id: 'gameMusic' })
 }
 
-export const getPlayersWithHighestScore = players =>
-  R.compose(
-    score => players
-      .filter(p => p.score === score),
-    R.reduce(R.max, 0),
-    R.map(parseInt),
-    Object.keys,
-    R.groupBy(R.prop('score')),
-  )(players)
+export const getPlayersWithHighestScore = players => R.compose(
+  score => players
+    .filter(p => p.score === score),
+  R.reduce(R.max, 0),
+  R.map(parseInt),
+  Object.keys,
+  R.groupBy(R.prop('score')),
+)(players)
 
 export const scoreToWin = players => (Object.keys(players).length - 1) * 4
 
 export const resetPlayersScore = R.map(x => ({ ...x, score: 0 }))
 
-export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) =>
-  R.zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
+export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) => R
+  .zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
 
 export const applyPlayerScores = (players, scores) => {
   const scoreDict = scores
@@ -272,10 +271,10 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       directionIndicator.spriteId = player.spriteId
       directionIndicator.color = player.color
 
-      directionIndicator.x =
-        (directionDistanceScale * Math.cos(directionRadians)) + (player.width * 2)
-      directionIndicator.y =
-        (directionDistanceScale * Math.sin(directionRadians)) + (player.height * 2)
+      directionIndicator.x = (directionDistanceScale * Math.cos(directionRadians))
+        + (player.width * 2)
+      directionIndicator.y = (directionDistanceScale * Math.sin(directionRadians))
+        + (player.height * 2)
       directionIndicator.scale.set((3 * player.scaleFactor) / SPEED_MULTIPLIER)
       directionIndicator.anchor.set(0.5)
       directionIndicator.rotation = toRadians(player.degrees)

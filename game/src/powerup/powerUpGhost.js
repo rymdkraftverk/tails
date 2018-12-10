@@ -29,15 +29,15 @@ export default {
     },
     onUpdate: ({ counter, data }) => {
       if (
-        counter > (PowerUp.DURATION * 0.6) &&
-      !data.expirationState
+        counter > (PowerUp.DURATION * 0.6)
+      && !data.expirationState
       ) {
         data.expirationState = PowerUp.EXPIRATION_STATE_SOON
         l1.removeBehavior(`indicateExpiration-${player.playerId}`)
         l1.addBehavior(indicateExpiration(player, 60, PowerUp.DURATION * 0.4))
       } else if (
-        counter > (PowerUp.DURATION * 0.8) &&
-      data.expirationState === PowerUp.EXPIRATION_STATE_SOON
+        counter > (PowerUp.DURATION * 0.8)
+      && data.expirationState === PowerUp.EXPIRATION_STATE_SOON
       ) {
         data.expirationState = PowerUp.EXPIRATION_STATE_IMMINENT
         l1.removeBehavior(`indicateExpiration-${player.playerId}`)

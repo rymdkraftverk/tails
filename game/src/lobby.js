@@ -14,7 +14,6 @@ import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
 import delay from './delay'
-import { createSine } from './magic'
 
 const TEXT_BOUNCE_INTERVAL = 600
 
@@ -207,8 +206,8 @@ export const transitionToLobby = (gameCode, players = []) => {
 
   drawInstructionArrow({
     x: TextAnchor.INSTRUCTION_START_X + 420,
-    y: TextAnchor.INSTRUCTION_START_Y +
-      TextAnchor.Y_OFFSET + ((TextAnchor.Y_OFFSET / 2) - 24),
+    y: TextAnchor.INSTRUCTION_START_Y
+      + TextAnchor.Y_OFFSET + ((TextAnchor.Y_OFFSET / 2) - 24),
     angle:        90,
     id:           '2',
     parentEntity: lobbyScene,

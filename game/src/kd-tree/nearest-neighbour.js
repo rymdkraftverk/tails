@@ -2,10 +2,9 @@ import R from 'ramda'
 import { calculateMiddle } from './common'
 import DIMENSIONS from './dimensions'
 
-const calculateDistance = (getCoord, e1, e2) =>
-  Math.sqrt(DIMENSIONS
-    .map(dim => (getCoord(e1, dim) - getCoord(e2, dim)) ** 2)
-    .reduce((a, b) => a + b, 0))
+const calculateDistance = (getCoord, e1, e2) => Math.sqrt(DIMENSIONS
+  .map(dim => (getCoord(e1, dim) - getCoord(e2, dim)) ** 2)
+  .reduce((a, b) => a + b, 0))
 
 const nearestNeighbour = (options, tree, entity) => {
   // leaf
