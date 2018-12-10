@@ -3,7 +3,7 @@ import R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
-import { Event, Channel, SteeringCommand } from 'common'
+import { Event, Channel } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import gameState, { CurrentState, getPlayer } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
@@ -315,11 +315,7 @@ const performanceTestCurl = player => ({
 const pivot = player => ({
   id:       `pivot-${player.playerId}`,
   onUpdate: () => {
-    const throttledTurnRate = R
-      .pipe(
-        R.max(-TURN_RADIUS),
-        R.min(TURN_RADIUS),
-      )(player.turnRate)
+    const throttledTurnRate = R.clamp(-TURN_RADIUS, TURN_RADIUS, player.turnRate)
 
     player.degrees = (player.degrees + throttledTurnRate) % 360
   },
