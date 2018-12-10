@@ -73,9 +73,12 @@ export const createTrail = ({
   },
 })
 
-const middle = (displayObject, dim, prop) =>
-  (displayObject.toGlobal(new PIXI.Point(0, 0))[dim] / l1.getScale()) +
-  (displayObject.hitArea[prop] / 2)
+const middle = (
+  displayObject,
+  dim,
+  prop,
+) => (displayObject.toGlobal(new PIXI.Point(0, 0))[dim] / l1.getScale())
+  + (displayObject.hitArea[prop] / 2)
 
 /*
  * This behavior is needed so that the player wont immediately collide with its own tail.

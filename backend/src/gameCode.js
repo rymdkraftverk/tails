@@ -25,11 +25,10 @@ const randomizeCode = () => R
   .map(() => _.sample(validChars))
   .reduce(R.concat, '')
 
-const promisify = R.curry((client, method) =>
-  R.bind(
-    util.promisify(client[method]),
-    client,
-  ))
+const promisify = R.curry((client, method) => R.bind(
+  util.promisify(client[method]),
+  client,
+))
 
 const logRedisError = R.pipe(
   R.concat('[Redis error] '),

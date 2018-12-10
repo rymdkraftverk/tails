@@ -36,8 +36,11 @@ const easeOut = (endX, x, minSpeed) => Math.max(Math.abs((endX - x)) * 0.1, minS
  * @param {*} modifier
  * @param {*} maxSpeed
  */
-export const createEaseIn =
-  (endX, modifier = 1, maxSpeed = 10) => x => easeIn(endX, x, maxSpeed, modifier)
+export const createEaseIn = (
+  endX,
+  modifier = 1,
+  maxSpeed = 10,
+) => x => easeIn(endX, x, maxSpeed, modifier)
 
 const easeIn = (endX, x, maxSpeed, modifier) => Math.min(modifier / Math.abs((endX - x)), maxSpeed)
 

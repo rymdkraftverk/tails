@@ -91,8 +91,8 @@ const killPlayer = (player, speedMultiplier) => {
 
       // eslint-disable-next-line fp/no-loops
       while (
-        data.index >= 0 &&
-        (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * Trail.NEON_DEATH_SPEED))
+        data.index >= 0
+        && (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * Trail.NEON_DEATH_SPEED))
         <= trail.counter
       ) {
         const neonDeathParticleContainer = new PIXI.Container()

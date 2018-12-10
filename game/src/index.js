@@ -38,12 +38,12 @@ const movePlayer = (pId, direction) => {
 }
 
 const registerPlayerFinished = ({ l1: { id } }) => () => {
-  gameState.lastRoundResult.playerFinishOrder =
-    gameState.lastRoundResult.playerFinishOrder.concat([id])
+  gameState.lastRoundResult.playerFinishOrder = gameState
+    .lastRoundResult.playerFinishOrder.concat([id])
 }
 
-const gameInShapeForNewRound = () =>
-  [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW].includes(gameState.currentState)
+const gameInShapeForNewRound = () => [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW]
+  .includes(gameState.currentState)
 
 const isReady = R.propEq('ready', true)
 const getReadyCount = () => R.filter(isReady, gameState.players).length
@@ -103,8 +103,9 @@ const roundStart = (options = { collectMetrics: false }) => {
         gameState.lastRoundResult.playerFinishOrder = []
         l1
           .getByLabel('player')
-          .forEach(player =>
-            player.event.on(GameEvent.PLAYER_COLLISION, registerPlayerFinished(player)))
+          .forEach(player => player
+            .event.on(GameEvent.PLAYER_COLLISION,
+              registerPlayerFinished(player)))
       })
       .then(() => (collectMetrics ? initMetricsBehavior(app) : Promise.resolve()))
   }
@@ -144,8 +145,7 @@ const broadcast = (message) => {
     })
 }
 
-const morePlayersAllowed = () =>
-  gameState.players.length < MAX_PLAYERS_ALLOWED
+const morePlayersAllowed = () => gameState.players.length < MAX_PLAYERS_ALLOWED
 
 export const onPlayerJoin = ({
   id,
@@ -340,8 +340,7 @@ const formatMetricsCSV = R.pipe(
     )(displayObjectMeasurements)
   }),
   R.reduce(
-    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) =>
-      `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
+    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) => `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
     'DisplayObjects, PixiElapsedMS, L1LoopDuration',
   ),
 )

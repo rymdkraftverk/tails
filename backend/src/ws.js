@@ -43,10 +43,8 @@ const removeClient = (id) => {
 }
 
 const getClient = id => clients.find(x => x.id === id)
-const getReceiverClient = receiverId =>
-  clients.find(x =>
-    x.type === Type.RECEIVER &&
-    x.receiverId === receiverId.toUpperCase())
+const getReceiverClient = receiverId => clients.find(x => x.type === Type.RECEIVER
+    && x.receiverId === receiverId.toUpperCase())
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 

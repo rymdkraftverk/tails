@@ -16,10 +16,10 @@ export const collisionCheckerWalls = ({
     const x = player.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale()
     const y = player.toGlobal(new PIXI.Point(0, 0)).y / l1.getScale()
     if (
-      x < wallThickness ||
-      x > GAME_WIDTH - wallThickness - player.hitArea.width ||
-      y < wallThickness + HEADER_HEIGHT ||
-      y > GAME_HEIGHT - wallThickness - player.hitArea.height) {
+      x < wallThickness
+      || x > GAME_WIDTH - wallThickness - player.hitArea.width
+      || y < wallThickness + HEADER_HEIGHT
+      || y > GAME_HEIGHT - wallThickness - player.hitArea.height) {
       killPlayer(player, speedMultiplier)
       checkPlayersAlive()
     }
