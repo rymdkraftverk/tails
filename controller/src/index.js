@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { injectGlobal } from 'styled-components'
 import Boundary from './components/Boundary'
 import App from './components/App'
-import registerServiceWorker from './registerServiceWorker'
 
 /* eslint-disable-next-line no-unused-expressions */
 injectGlobal`
@@ -64,4 +63,3 @@ document.addEventListener(
 )
 
 ReactDOM.render(<Boundary><App /></Boundary>, document.getElementById('root'))
-registerServiceWorker()
