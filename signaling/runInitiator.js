@@ -198,7 +198,10 @@ const init = ({
     R.bind(Promise.all, Promise),
   )(channelConfigs)
     .then(R.pipe(
-      R.tap(deferDeath),
+      R.tap(() => {
+        ws.close() // No longer needed after signaling
+        deferDeath()
+      }),
       hoistInternal,
       ([internal, externals]) => {
         internalChannel = internal
