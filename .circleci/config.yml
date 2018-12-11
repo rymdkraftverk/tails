@@ -34,6 +34,43 @@ jobs:
           name: Upload to AWS S3
           command: aws s3 sync build/ s3://rkv-controller/ --acl public-read
           working_directory: controller
+  build_game:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{ checksum "game/package.json" }}
+      - run:
+          command: npm install
+          working_directory: game
+      - save_cache:
+          key: v1-npm-{{ checksum "game/package.json" }}
+          paths:
+          - game/node_modules
+      - run:
+          command: npm run build
+          working_directory: game
+      - persist_to_workspace:
+          paths:
+            - game/public
+          root: .
+  deploy_game:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install butler CLI
+          command: |
+            curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+            unzip butler.zip
+            chmod +x butler
+            ./butler -V
+      - run:
+          name: Upload to itch.io
+          command: ./butler push game/public rymdkraftverk/tails:web
 workflows:
   default:
     jobs:
@@ -44,3 +81,10 @@ workflows:
       - deploy_controller:
           requires:
           - build_controller
+      - build_game:
+          filters:
+            branches:
+              only: master
+      - deploy_game:
+          requires:
+          - build_game
