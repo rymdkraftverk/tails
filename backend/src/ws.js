@@ -48,6 +48,8 @@ const getReceiverClient = receiverId => clients.find(x => x.type === Type.RECEIV
 
 const prettyClient = client => `${client.type}(${prettyId(client.id)})`
 
+const pingMessage = client => `[Ping] ${prettyId(client.id)}`
+
 const fetchAndMerge = (idKey, fetcher, destKey) => R.ap(
   R.merge,
   R.pipe(
@@ -133,8 +135,9 @@ const onAnswer = client => R.pipe(
   ),
 )
 
-const onClose = (client, onReceiverDelete) => () => {
+const onClose = (client, onReceiverDelete, keepAliveId) => () => {
   log(`[Client close] ${prettyClient(client)}`)
+  clearInterval(keepAliveId)
   removeClient(client.id)
   if (client.type === Type.RECEIVER) {
     onReceiverDelete(client.receiverId)
@@ -153,12 +156,22 @@ const init = (httpServer, onReceiverDelete) => {
       client.id,
     )
 
+    // Heroku times out all HTTP requests after 55 sec of inactivity
+    // https://devcenter.heroku.com/articles/http-routing#timeouts
+    const keepAliveId = setInterval(
+      () => { socket.ping(pingMessage(client)) },
+      30000, // 30 sec
+    )
+
+    // Uncomment to debug ping/pong
+    // socket.on('pong', R.pipe(R.invoker(0, 'toString'), log))
+
     socket.on('message', onWsMessage({
       [Event.RECEIVER_UPGRADE]: onReceiverUpgrade(client),
       [Event.ANSWER]:           onAnswer(client),
       [Event.OFFER]:            onOffer(client),
     }))
-    socket.on('close', onClose(client, onReceiverDelete))
+    socket.on('close', onClose(client, onReceiverDelete, keepAliveId))
   })
 }
 
