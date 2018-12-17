@@ -40,7 +40,7 @@ const killPlayer = (player, speedMultiplier) => {
     .playOnceAndDestroy()
 
   l1.sound({
-    src:    Sound.EXPLOSION,
+    src:    Sound.DEATH,
     volume: 0.6,
   })
 

@@ -3,7 +3,7 @@ const soundPath = fileName => `./sounds/${fileName}.wav`
 export default {
   COUNTDOWN:       soundPath('countdown'),
   COUNTDOWN_END:   soundPath('countdown_end'),
-  EXPLOSION:       soundPath('explosion'),
+  DEATH:           soundPath('death'),
   FIREWORK:        soundPath('firework'),
   JOIN1:           soundPath('join1'),
   JOIN2:           soundPath('join2'),
