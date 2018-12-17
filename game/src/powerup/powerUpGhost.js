@@ -16,6 +16,7 @@ export default {
     duration: PowerUp.DURATION,
     onInit:   () => {
       player.scale.set(player.scaleFactor / speedMultiplier)
+      player.alpha = 0.4
       player.preventTrail += 1
 
       const behaviorsToRemove = [
@@ -32,6 +33,7 @@ export default {
       if (!player.killed) {
         // Reset player
         player.scale.set((player.scaleFactor / speedMultiplier / 2))
+        player.alpha = 1
 
         const behaviorsToAdd = [
           collisionCheckerTrail(player, speedMultiplier),
