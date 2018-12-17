@@ -10,14 +10,12 @@ const Container = styled(IOSDisableDoubleTap)`
   height: 100vh;
   user-select: none;
   background: ${R.prop('color')};
-`
-
-const Text = styled.b`
-  height: 30vh;
-  font-family: inherit;
-  display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const Text = styled.div`
+  font-weight: bold;
 `
 const AwaitingNextRound = ({ playerColor }) => (
   <Container

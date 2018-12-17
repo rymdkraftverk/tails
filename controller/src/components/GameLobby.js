@@ -21,12 +21,14 @@ const Instructions = styled.div`
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  height: 25vh;
+  margin-top: auto;
+  margin-bottom: 16px;
+  height: 30vh;
 `
 
 const label = css`
   user-select: none;
-  padding: 16px 8px;
+  padding: 8px;
   font-family: inherit;
 `
 
@@ -43,6 +45,14 @@ const Button = styled.button`
     : ''
   }
 `
+
+const ButtonContainer = styled.div`
+  margin-bottom: auto;
+`;
+
+const InstructionsLine = styled.div`
+  margin-bottom: 16px;
+`;
 
 const AwaitingPlayers = styled.div`
   ${label};
@@ -93,20 +103,22 @@ class GameLobby extends Component {
             ?
               <Fragment>
                 <Instructions>
-                  <div>
+                  <InstructionsLine>
                     {`
-                      Your phone is the controller
+                      Phone = controller
                     `}
-                  </div>
-                  <div>
+                  </InstructionsLine>
+                  <InstructionsLine>
                     {` 
-                      The game is played on the other screen
+                      Play on the other screen
                     `}
-                  </div>
+                  </InstructionsLine>
                 </Instructions>
+                <ButtonContainer>
                 {
                   this.getButton()
                 }
+                </ButtonContainer>
               </Fragment>
 
             :

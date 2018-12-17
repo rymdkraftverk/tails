@@ -7,17 +7,15 @@ import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   height: 100vh;
   user-select: none;
   background: ${R.prop('color')};
+  align-items: center;
 `
 
-const Text = styled.b`
-  height: 30vh;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const Text = styled.div`
+  font-weight: bold;
 `
 
 const noop = () => {}
