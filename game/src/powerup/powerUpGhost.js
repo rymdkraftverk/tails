@@ -16,7 +16,6 @@ export default {
     duration: PowerUp.DURATION,
     onInit:   () => {
       player.scale.set(player.scaleFactor / speedMultiplier)
-      player.alpha = 0.4
       player.preventTrail += 1
 
       const behaviorsToRemove = [
@@ -26,31 +25,13 @@ export default {
         l1.removeBehavior,
         behaviorsToRemove,
       )
-    },
-    onUpdate: ({ counter, data }) => {
-      if (
-        counter > (PowerUp.DURATION * 0.6)
-      && !data.expirationState
-      ) {
-        data.expirationState = PowerUp.EXPIRATION_STATE_SOON
-        l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-        l1.addBehavior(indicateExpiration(player, 60, PowerUp.DURATION * 0.4))
-      } else if (
-        counter > (PowerUp.DURATION * 0.8)
-      && data.expirationState === PowerUp.EXPIRATION_STATE_SOON
-      ) {
-        data.expirationState = PowerUp.EXPIRATION_STATE_IMMINENT
-        l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-        l1.addBehavior(indicateExpiration(player, 20, PowerUp.DURATION * 0.2))
-      }
+
+      l1.addBehavior(indicateExpiration(PowerUp.DURATION, player))
     },
     onComplete: () => {
       if (!player.killed) {
-        l1.removeBehavior(`indicateExpiration-${player.playerId}`)
-
         // Reset player
         player.scale.set((player.scaleFactor / speedMultiplier / 2))
-        player.alpha = 1
 
         const behaviorsToAdd = [
           collisionCheckerTrail(player, speedMultiplier),
@@ -73,7 +54,6 @@ export default {
   }),
   texture:           () => l1.getTexture('powerup/powerup-ghost'),
   behaviorsToRemove: player => [
-    `indicateExpiration-${player.playerId}`,
     `ghost-${player.playerId}`,
   ],
 }
