@@ -11,7 +11,7 @@ import Layer from './constant/layer'
 import countdown from './countdown'
 import bounce from './bounce'
 import Scene from './Scene'
-import addPoints from './addPoints'
+import { animateScoreGainOnLivingPlayers, giveLivingPlayersOnePoint } from './scoreGain'
 import { initPowerups } from './powerup'
 import { Track, playTrack } from './music'
 import { collisionCheckerWalls, collisionCheckerTrail } from './collisionDetection'
@@ -39,7 +39,11 @@ const TOTAL_BOUNCE_DURATION = 50
 
 gameState
   .events
-  .on(GameEvent.PLAYER_COLLISION, addPoints)
+  .on(GameEvent.PLAYER_COLLISION, animateScoreGainOnLivingPlayers)
+
+gameState
+  .events
+  .on(GameEvent.PLAYER_COLLISION, giveLivingPlayersOnePoint)
 
 export const GameColor = {
   BLUE:  '0x0B4D6C',
@@ -125,22 +129,6 @@ export const getPlayersWithHighestScore = players => R.compose(
 export const scoreToWin = players => (Object.keys(players).length - 1) * 4
 
 export const resetPlayersScore = R.map(x => ({ ...x, score: 0 }))
-
-export const calculatePlayerScores = ({ lastRoundResult: { playerFinishOrder } }) => R
-  .zip(R.range(0, playerFinishOrder.length), playerFinishOrder)
-
-export const applyPlayerScores = (players, scores) => {
-  const scoreDict = scores
-    .map(([score, playerId]) => ({ [playerId]: score }))
-    .reduce((dict, score) => ({ ...dict, ...score }), {})
-
-  return players
-    .map(player => ({
-      ...player,
-      score:         player.score + (scoreDict[player.playerId] || 0),
-      previousScore: player.score,
-    }))
-}
 
 const getStartingPosition = (index) => {
   const maxYRadius = (GAME_HEIGHT - HEADER_HEIGHT) / 2 / (1 + Math.sqrt(3))

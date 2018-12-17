@@ -39,11 +39,6 @@ const turnPlayer = (pId, angle) => {
   player.turnRate = angle
 }
 
-const registerPlayerFinished = ({ l1: { id } }) => () => {
-  gameState.lastRoundResult.playerFinishOrder = gameState
-    .lastRoundResult.playerFinishOrder.concat([id])
-}
-
 const gameInShapeForNewRound = () => [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW]
   .includes(gameState.currentState)
 
@@ -101,13 +96,6 @@ const roundStart = (options = { collectMetrics: false }) => {
           .forEach(l1.destroy)
 
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
-
-        gameState.lastRoundResult.playerFinishOrder = []
-        l1
-          .getByLabel('player')
-          .forEach(player => player
-            .event.on(GameEvent.PLAYER_COLLISION,
-              registerPlayerFinished(player)))
       })
       .then(() => (collectMetrics ? initMetricsBehavior(app) : Promise.resolve()))
   }

@@ -13,8 +13,7 @@ const gameState = {
   gameCode:        '',
   players:         [],
   lastRoundResult: {
-    playerFinishOrder: [],
-    winner:            null,
+    winner: null,
   },
   events:          new EventEmitter(),
   availableColors: Object.keys(Color),
