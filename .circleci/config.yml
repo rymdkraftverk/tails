@@ -71,6 +71,25 @@ jobs:
       - run:
           name: Upload to itch.io
           command: ./butler push game/public rymdkraftverk/tails:web
+  deploy_backend:
+    docker:
+      - image: docker:latest
+    working_directory: ~/tails
+    steps:
+      - checkout
+      - run: apk add --no-cache py-pip
+      - run: pip install docker-compose
+      - setup_remote_docker
+      - run: docker-compose -f docker-compose.yml build backend
+      - run: docker tag tails_backend:latest registry.heroku.com/rkv-backend/web
+      - run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+      - run: docker push registry.heroku.com/rkv-backend/web
+  release_backend:
+    docker:
+      - image: tutum/curl:latest
+    steps:
+      - run: curl https://cli-assets.heroku.com/install.sh | sh
+      - run: heroku container:release web -a rkv-backend
 workflows:
   default:
     jobs:
@@ -88,3 +107,10 @@ workflows:
       - deploy_game:
           requires:
           - build_game
+      - deploy_backend:
+          filters:
+            branches:
+              only: master
+      - release_backend:
+          requires:
+          - deploy_backend
