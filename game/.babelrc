@@ -3,10 +3,10 @@
   "plugins": [
     ["transform-inline-environment-variables", {
       "include": [
-        "WS_ADDRESS",
-        "HTTP_ADDRESS",
+        "CONTROLLER_URL",
         "ERROR_LOGGING",
-        "CONTROLLER_URL"
+        "HTTP_ADDRESS",
+        "WS_ADDRESS"
       ]
     }]
   ]
