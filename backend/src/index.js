@@ -4,12 +4,12 @@ const gameCode = require('./gameCode')
 
 const { error, log } = console
 
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
-const httpServer = http.init(port)
+const httpServer = http.init(PORT)
 ws.init(httpServer, gameCode.delete)
 
-log(`[HTTP/WS] Listening on port ${port}`)
+log(`[HTTP/WS] Listening on port ${PORT}`)
 
 process.on('uncaughtException', (err) => {
   error('UNCAUGHT EXCEPTION')
