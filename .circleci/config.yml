@@ -57,7 +57,7 @@ jobs:
           root: .
   deploy_game:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:latest # interchangeable for any image with curl and unzip
     steps:
       - attach_workspace:
           at: .
