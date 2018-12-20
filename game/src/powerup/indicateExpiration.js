@@ -5,7 +5,7 @@ import { createSine } from '../magic'
 const EXPIRATION_STATE_SOON = 'EXPIRATION_STATE_SOON'
 const EXPIRATION_STATE_IMMINENT = 'EXPIRATION_STATE_IMMINENT'
 
-const SOON_TIME_LIMIT = 150 // 2.5 * 60 ticks = 2.5s
+const SOON_TIME_LIMIT = 4 * 60 // 4s
 const IMMINENT_TIME_LIMIT = SOON_TIME_LIMIT / 2
 
 const fluctuateOpacityBehavior = (entity, speed, duration) => ({
