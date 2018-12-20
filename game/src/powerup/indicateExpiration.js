@@ -1,7 +1,12 @@
 import * as l1 from 'l1'
 import R from 'ramda'
 import { createSine } from '../magic'
-import PowerUp from '../constant/powerUp'
+
+const EXPIRATION_STATE_SOON = 'EXPIRATION_STATE_SOON'
+const EXPIRATION_STATE_IMMINENT = 'EXPIRATION_STATE_IMMINENT'
+
+const SOON_TIME_LIMIT = 150 // 2.5 * 60 ticks = 2.5s
+const IMMINENT_TIME_LIMIT = SOON_TIME_LIMIT / 2
 
 const fluctuateOpacityBehavior = (entity, speed, duration) => ({
   id:   `fluctuateOpacity-${entity.l1.id}`,
@@ -24,19 +29,22 @@ const fluctuateOpacityBehavior = (entity, speed, duration) => ({
 const indicateExpirationBehavior = R.curry((duration, entity) => ({
   onUpdate: ({ counter, data }) => {
     if (
-      counter > (PowerUp.DURATION * 0.6)
+      (duration - counter) < SOON_TIME_LIMIT
     && !data.expirationState
     ) {
-      data.expirationState = PowerUp.EXPIRATION_STATE_SOON
+      data.expirationState = EXPIRATION_STATE_SOON
       l1.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
-      l1.addBehavior(fluctuateOpacityBehavior(entity, 60, duration * 0.4))
+
+      // the duration of "soon" until it's cut off by "imminent"
+      const soonDuration = SOON_TIME_LIMIT - IMMINENT_TIME_LIMIT
+      l1.addBehavior(fluctuateOpacityBehavior(entity, 60, soonDuration))
     } else if (
-      counter > (PowerUp.DURATION * 0.8)
-    && data.expirationState === PowerUp.EXPIRATION_STATE_SOON
+      (duration - counter) < IMMINENT_TIME_LIMIT
+    && data.expirationState === EXPIRATION_STATE_SOON
     ) {
-      data.expirationState = PowerUp.EXPIRATION_STATE_IMMINENT
+      data.expirationState = EXPIRATION_STATE_IMMINENT
       l1.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
-      l1.addBehavior(fluctuateOpacityBehavior(entity, 20, duration * 0.2))
+      l1.addBehavior(fluctuateOpacityBehavior(entity, 20, IMMINENT_TIME_LIMIT))
     }
   },
   onComplete: () => {
