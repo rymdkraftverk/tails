@@ -1,22 +1,15 @@
 import R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
-import * as TextStyle from './constant/textStyle'
-import Layer from './constant/layer'
+import * as TextStyle from '../constant/textStyle'
+import Layer from '../constant/layer'
 
 const DURATION = 60 // ticks
 
-const addPoints = (color) => {
-  const livingPlayers = l1
-    .getByLabel('player')
-    .filter(p => p && !p.killed)
-
-  // TODO: replace score aggregation in roundEnd.transitionToRoundEnd
-  // with this (superior) logic
-
-  livingPlayers
-    .forEach(displayGainedPoint(color))
-}
+export const animateScoreGainOnLivingPlayers = color => l1
+  .getByLabel('player')
+  .filter(p => p && !p.killed)
+  .forEach(displayGainedPoint(color))
 
 const displayGainedPoint = R.curry((color, player) => {
   const scoreGainEntity = new PIXI.Text(
@@ -63,5 +56,3 @@ const displayGainedPoint = R.curry((color, player) => {
     ],
   )
 })
-
-export default addPoints

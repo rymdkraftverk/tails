@@ -3,7 +3,6 @@ import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
-import { calculatePlayerScores, applyPlayerScores } from './game'
 import { GAME_WIDTH } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
@@ -15,9 +14,7 @@ const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
   gameState.currentState = CurrentState.SCORE_OVERVIEW
-  const scores = calculatePlayerScores(gameState)
-  gameState.players = applyPlayerScores(gameState.players, scores)
-    .map(R.assoc('ready', false))
+  gameState.players = gameState.players.map(R.assoc('ready', false))
 
   const { winner } = gameState.lastRoundResult
 
