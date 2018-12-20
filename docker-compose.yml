@@ -7,6 +7,7 @@ services:
         environment:
             - GAME_CODE=${GAME_CODE}
             - REDIS_PATH=rs://redis:6379
+            - VERSION=${VERSION}
         build:
             context: .
             dockerfile: ./backend/Dockerfile
@@ -25,11 +26,13 @@ services:
             - CONTROLLER_URL=${CONTROLLER_URL}
             - ERROR_LOGGING=${ERROR_LOGGING}
             - HTTP_ADDRESS=${HTTP_ADDRESS}
+            - VERSION=${VERSION}
             - WS_ADDRESS=${WS_ADDRESS}
 
     controller:
         environment:
             - REACT_APP_ERROR_LOGGING=${REACT_APP_ERROR_LOGGING}
+            - REACT_APP_VERSION=${REACT_APP_VERSION}
             - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
         build:
             context: .

@@ -6,6 +6,7 @@
         "CONTROLLER_URL",
         "ERROR_LOGGING",
         "HTTP_ADDRESS",
+        "VERSION",
         "WS_ADDRESS"
       ]
     }]

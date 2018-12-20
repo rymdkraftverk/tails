@@ -4,6 +4,11 @@ import { injectGlobal } from 'styled-components'
 import Boundary from './components/Boundary'
 import App from './components/App'
 
+const VERSION = process.env.REACT_APP_VERSION || 'N/A'
+const { log } = console
+
+log(`Version: ${VERSION}`)
+
 /* eslint-disable-next-line no-unused-expressions */
 injectGlobal`
   @font-face {

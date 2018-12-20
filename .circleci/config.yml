@@ -1,10 +1,28 @@
 version: 2.1
 jobs:
+  setup:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/tails
+    steps:
+      - checkout
+      - run:
+          name: Combine timestamp and sha of last commit to create version
+          command: git show -s --format="%ct-%h" > version
+      - persist_to_workspace:
+          paths: .
+          root: .
   build_controller:
     docker:
       - image: circleci/node:latest
+    working_directory: ~/tails
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load version into env
+          command: |
+            echo 'export REACT_APP_VERSION=`cat ~/tails/version`' >> $BASH_ENV
       - restore_cache:
           key: v1-npm-{{ checksum "controller/package.json" }}
       - run:
@@ -24,6 +42,7 @@ jobs:
   deploy_controller:
     docker:
       - image: circleci/python:2.7-jessie
+    working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
@@ -37,8 +56,14 @@ jobs:
   build_game:
     docker:
       - image: circleci/node:latest
+    working_directory: ~/tails
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load version into env
+          command: |
+            echo 'export VERSION=`cat ~/tails/version`' >> $BASH_ENV
       - restore_cache:
           key: v1-npm-{{ checksum "game/package.json" }}
       - run:
@@ -58,6 +83,7 @@ jobs:
   deploy_game:
     docker:
       - image: circleci/node:latest # interchangeable for any image with curl and unzip
+    working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
@@ -76,7 +102,8 @@ jobs:
       - image: docker:latest
     working_directory: ~/tails
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
       - run: apk add --no-cache py-pip
       - run: pip install docker-compose
       - setup_remote_docker
@@ -87,30 +114,39 @@ jobs:
   release_backend:
     docker:
       - image: tutum/curl:latest
+    working_directory: ~/tails
     steps:
+      - attach_workspace:
+          at: .
       - run: curl https://cli-assets.heroku.com/install.sh | sh
       - run: heroku container:release web -a rkv-backend
+      - run:
+          name: Set version in env
+          command: |
+            VERSION=`cat ~/tails/version`
+            heroku config:set VERSION=$VERSION -a rkv-backend
 workflows:
   default:
     jobs:
-      - build_controller:
+      - setup:
           filters:
             branches:
               only: master
+      - build_controller:
+          requires:
+            - setup
       - deploy_controller:
           requires:
-          - build_controller
+            - build_controller
       - build_game:
-          filters:
-            branches:
-              only: master
+          requires:
+            - setup
       - deploy_game:
           requires:
-          - build_game
+            - build_game
       - deploy_backend:
-          filters:
-            branches:
-              only: master
+          requires:
+            - setup
       - release_backend:
           requires:
-          - deploy_backend
+            - deploy_backend

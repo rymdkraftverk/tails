@@ -17,6 +17,7 @@ import GameEvent from './constant/gameEvent'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
+const VERSION = process.env.VERSION || 'N/A'
 
 Sentry.init({
   dsn: ERROR_LOGGING
@@ -28,6 +29,8 @@ const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
 
 const { log, warn } = console
+
+log(`Version: ${VERSION}`)
 
 const turnPlayer = (pId, angle) => {
   const player = l1.get(pId)
