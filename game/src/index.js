@@ -343,6 +343,8 @@ const formatMetricsCSV = R.pipe(
   ),
 )
 
+const state = () => gameState
+
 window.debug = {
   ...window.debug,
   roundStart,
@@ -350,4 +352,5 @@ window.debug = {
   printBehaviors,
   start,
   stop,
+  state,
 }
