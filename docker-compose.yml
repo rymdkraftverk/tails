@@ -6,7 +6,7 @@ services:
     backend:
         environment:
             - GAME_CODE=${GAME_CODE}
-            - REDIS_PATH=rs://redis:6379
+            - REDIS_URL=rs://redis:6379
             - VERSION=${VERSION}
         build:
             context: .

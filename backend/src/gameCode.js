@@ -57,9 +57,9 @@ const createUniqueRandomCode = (set, exists, attempts) => {
 }
 
 const createRedisInterface = () => {
-  const { port, hostname } = new URL(process.env.REDIS_PATH)
-
-  const client = redis.createClient(port, hostname)
+  const client = redis.createClient({
+    url: process.env.REDIS_URL,
+  })
   client.on('error', logRedisError)
 
   const p = promisify(client)
@@ -100,7 +100,7 @@ const createEnvInterface = () => {
 
 const getInterface = () => {
   if (process.env.GAME_CODE) return createEnvInterface()
-  if (process.env.REDIS_PATH) return createRedisInterface()
+  if (process.env.REDIS_URL) return createRedisInterface()
   return createInMemoryInterface()
 }
 
