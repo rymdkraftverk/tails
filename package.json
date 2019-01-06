@@ -1,5 +1,5 @@
 {
-  "name": "novelty",
+  "name": "tails",
   "version": "1.0.0",
   "private": true,
   "dependencies": {},
@@ -20,10 +20,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rbarlin/novelty.git"
+    "url": "git+https://github.com/rbarlin/tails.git"
   },
   "bugs": {
-    "url": "https://github.com/rbarlin/novelty/issues"
+    "url": "https://github.com/rbarlin/tails/issues"
   },
-  "homepage": "https://github.com/rbarlin/novelty#readme"
+  "homepage": "https://github.com/rbarlin/tails#readme"
 }

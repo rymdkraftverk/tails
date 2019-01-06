@@ -1,9 +1,9 @@
 FROM node:carbon
 
-WORKDIR /novelty/controller
-COPY ./controller /novelty/controller
-COPY ./common /novelty/common
-COPY ./signaling /novelty/signaling
+WORKDIR /tails/controller
+COPY ./controller /tails/controller
+COPY ./common /tails/common
+COPY ./signaling /tails/signaling
 
 RUN npm install
 RUN npm run build

@@ -1,4 +1,4 @@
-# novelty
+# tails
 
 ## Index
 * [z-index](#z-index)

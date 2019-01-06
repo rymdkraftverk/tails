@@ -1,8 +1,8 @@
 FROM node:carbon
-WORKDIR /novelty/game
-COPY ./game /novelty/game
-COPY ./common/ /novelty/common
-COPY ./signaling/ /novelty/signaling
+WORKDIR /tails/game
+COPY ./game /tails/game
+COPY ./common/ /tails/common
+COPY ./signaling/ /tails/signaling
 
 RUN npm install
 RUN npm run build
