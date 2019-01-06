@@ -17,13 +17,5 @@
   "scripts": {
     "test": "jest ./game/test ./signaling/test",
     "lint": "./run_lint.sh"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rbarlin/tails.git"
-  },
-  "bugs": {
-    "url": "https://github.com/rbarlin/tails/issues"
-  },
-  "homepage": "https://github.com/rbarlin/tails#readme"
+  }
 }
