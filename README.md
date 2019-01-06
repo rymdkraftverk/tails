@@ -71,6 +71,7 @@ The following functions are available:
 * `debug.printBehaviors()`
 * `debug.start()`
 * `debug.stop()`
+* `debug.state()`
 
 `transitionToLobby` is currently a bit problematic due to race conditions in rendering the lobby.
 If some other function tries to render the lobby again the game engine will crash.
