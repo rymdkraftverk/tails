@@ -5,8 +5,9 @@ services:
 
     backend:
         environment:
-            - REDIS_PATH=rs://redis:6379
             - GAME_CODE=${GAME_CODE}
+            - REDIS_PATH=rs://redis:6379
+            - VERSION=${VERSION}
         build:
             context: .
             dockerfile: ./backend/Dockerfile
@@ -22,15 +23,17 @@ services:
         ports:
             - '8081:8081'
         environment:
-            - WS_ADDRESS=${WS_ADDRESS}
-            - HTTP_ADDRESS=${HTTP_ADDRESS}
-            - ERROR_LOGGING=${ERROR_LOGGING}
             - CONTROLLER_URL=${CONTROLLER_URL}
+            - ERROR_LOGGING=${ERROR_LOGGING}
+            - HTTP_ADDRESS=${HTTP_ADDRESS}
+            - VERSION=${VERSION}
+            - WS_ADDRESS=${WS_ADDRESS}
 
     controller:
         environment:
-            - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
             - REACT_APP_ERROR_LOGGING=${REACT_APP_ERROR_LOGGING}
+            - REACT_APP_VERSION=${REACT_APP_VERSION}
+            - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
         build:
             context: .
             dockerfile: ./controller/Dockerfile
