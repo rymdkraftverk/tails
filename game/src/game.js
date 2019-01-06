@@ -128,7 +128,7 @@ export const getPlayersWithHighestScore = players => R.compose(
 
 export const scoreToWin = players => (Object.keys(players).length - 1) * 4
 
-export const resetPlayersScore = R.map(x => ({ ...x, score: 0 }))
+export const resetPlayersScore = R.map(x => ({ ...x, score: 0, previousScore: 0 }))
 
 const getStartingPosition = (index) => {
   const maxYRadius = (GAME_HEIGHT - HEADER_HEIGHT) / 2 / (1 + Math.sqrt(3))
