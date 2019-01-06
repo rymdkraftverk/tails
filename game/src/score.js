@@ -114,6 +114,9 @@ const createPlayer = (index) => {
   const goalScore = scoreToWin(gameState.players)
 
   const previousX = getX((player && player.previousScore) || 0, goalScore)
+  if (player) {
+    player.previousScore = player.score || 0
+  }
   const currentX = getX((player && player.score) || 0, goalScore)
 
   const head = createHead({
