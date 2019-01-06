@@ -1,8 +1,8 @@
 FROM node:carbon
-WORKDIR /novelty/backend
-COPY ./backend /novelty/backend
-COPY ./common /novelty/common
-COPY ./signaling /novelty/signaling
+WORKDIR /tails/backend
+COPY ./backend /tails/backend
+COPY ./common /tails/common
+COPY ./signaling /tails/signaling
 
 RUN npm install
 EXPOSE 3000

@@ -2,27 +2,27 @@ version: '3'
 services:
     backend:
         image: 'node:carbon'
-        working_dir: /novelty/backend
+        working_dir: /tails/backend
         command: ["sh", "./run-dev.sh"]
         volumes:
-            - ./backend:/novelty/backend
-            - ./common:/novelty/common
-            - ./signaling:/novelty/signaling
+            - ./backend:/tails/backend
+            - ./common:/tails/common
+            - ./signaling:/tails/signaling
 
     game:
         image: 'node:carbon'
-        working_dir: /novelty/game
+        working_dir: /tails/game
         command: ["sh", "./run-dev.sh"]
         volumes:
-            - ./game:/novelty/game
-            - ./common:/novelty/common
-            - ./signaling:/novelty/signaling
+            - ./game:/tails/game
+            - ./common:/tails/common
+            - ./signaling:/tails/signaling
 
     controller:
         image: 'node:carbon'
-        working_dir: /novelty/controller
+        working_dir: /tails/controller
         command: ["sh", "./run-dev.sh"]
         volumes:
-            - ./controller:/novelty/controller
-            - ./common:/novelty/common
-            - ./signaling:/novelty/signaling
+            - ./controller:/tails/controller
+            - ./common:/tails/common
+            - ./signaling:/tails/signaling

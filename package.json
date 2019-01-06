@@ -1,5 +1,5 @@
 {
-  "name": "novelty",
+  "name": "tails",
   "version": "1.0.0",
   "private": true,
   "dependencies": {},
@@ -17,13 +17,5 @@
   "scripts": {
     "test": "jest ./game/test ./signaling/test",
     "lint": "./run_lint.sh"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rbarlin/novelty.git"
-  },
-  "bugs": {
-    "url": "https://github.com/rbarlin/novelty/issues"
-  },
-  "homepage": "https://github.com/rbarlin/novelty#readme"
+  }
 }
