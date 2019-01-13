@@ -96,14 +96,20 @@ export const initPowerups = ({
         .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
 
       l1.addBehavior(indicateExpiration(powerupDuration, powerUpSprite))
-      l1.addBehavior(powerUpSuicideBehavior(powerupDuration, powerUpSprite))
+      l1.addBehavior(powerUpSuicideBehavior(
+        powerupDuration, powerUpSprite, hitBox, collisionCheckerId,
+      ))
     },
   })
 
   l1.addBehavior(generatePowerups())
 }
 
-const powerUpSuicideBehavior = (duration, powerup) => ({
+const powerUpSuicideBehavior = (duration, powerupSprite, powerupHitbox, collisionCheckerId) => ({
   duration,
-  onComplete: () => l1.destroy(powerup),
+  onComplete: () => {
+    l1.destroy(powerupSprite)
+    l1.destroy(powerupHitbox)
+    l1.removeBehavior(collisionCheckerId)
+  },
 })
