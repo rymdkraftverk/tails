@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const cors = require('cors')
 
+const config = require('./config')
 const gameCode = require('./gameCode')
 
 const { error, log } = console
@@ -19,7 +20,9 @@ const addGameEndpoint = (app) => {
 
 const init = (port) => {
   const app = express()
-  app.use(cors())
+  app.use(cors({
+    origin: config.corsWhitelist,
+  }))
 
   addGameEndpoint(app)
 
