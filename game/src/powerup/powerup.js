@@ -9,6 +9,7 @@ import PowerUp from '../constant/powerUp'
 import ghost from './powerUpGhost'
 import speed from './powerUpSpeed'
 import bounce from '../bounce'
+import indicateExpiration from './indicateExpiration'
 
 const powerUps = [speed, ghost]
 
@@ -33,6 +34,7 @@ export const initPowerups = ({
     onComplete: () => {
       const { texture, behaviorsToRemove, powerUp } = _.sample(powerUps)
       const powerUpSprite = new PIXI.Sprite(texture())
+
       l1.add(
         powerUpSprite,
         {
@@ -87,9 +89,21 @@ export const initPowerups = ({
           }
         },
       })
+
       l1.addBehavior(collisionChecker())
+
+      const powerupDuration = 3 * l1
+        .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
+
+      l1.addBehavior(indicateExpiration(powerupDuration, powerUpSprite))
+      l1.addBehavior(powerUpSuicideBehavior(powerupDuration, powerUpSprite))
     },
   })
 
   l1.addBehavior(generatePowerups())
 }
+
+const powerUpSuicideBehavior = (duration, powerup) => ({
+  duration,
+  onComplete: () => l1.destroy(powerup),
+})
