@@ -3,10 +3,15 @@ import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 import styled from 'styled-components'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+import Logo from './Logo';
 
-const Container = styled(IOSDisableDoubleTap)`
+const PageContainer = styled(IOSDisableDoubleTap)`
+  
+`
+
+const Container = styled.div`
   display: flex;
-  height: 100vh;
+  height: 60vh;
 `
 
 const ContainerColumn = styled.div`
@@ -72,36 +77,39 @@ class LockerRoom extends Component {
     const placeholder = 'Code'
 
     return (
-      <Container>
-        <ContainerColumn>
-          <GameCodeInput
-            type="text"
-            value={gameCode}
-            onChange={gameCodeChange}
-            placeholder={placeholder}
-            onFocus={(e) => { e.target.placeholder = '' }}
-            onBlur={(e) => { e.target.placeholder = placeholder }}
-            onKeyPress={this.onKeyPress}
-            className="game-join-input"
-            spellCheck="false"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-        </ContainerColumn>
-        <ContainerColumn>
-          {
+      <PageContainer>
+        <Logo />
+        <Container>
+          <ContainerColumn>
+            <GameCodeInput
+              type="text"
+              value={gameCode}
+              onChange={gameCodeChange}
+              placeholder={placeholder}
+              onFocus={(e) => { e.target.placeholder = '' }}
+              onBlur={(e) => { e.target.placeholder = placeholder }}
+              onKeyPress={this.onKeyPress}
+              className="game-join-input"
+              spellCheck="false"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+            />
+          </ContainerColumn>
+          <ContainerColumn>
+            {
 
-            <GameJoinButton
-              disabled={!this.gameCodeFilled()}
-              onClick={onJoin}
-            >
-              Join
-            </GameJoinButton>
-          }
-        </ContainerColumn>
-        <Notifications />
-      </Container>
+              <GameJoinButton
+                disabled={!this.gameCodeFilled()}
+                onClick={onJoin}
+              >
+                Join
+              </GameJoinButton>
+            }
+          </ContainerColumn>
+          <Notifications />
+        </Container>
+      </PageContainer>
     )
   }
 }
