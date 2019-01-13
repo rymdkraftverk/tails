@@ -94,7 +94,7 @@ const beatHeart = () => {
         initiator.alive = false
         return
       }
-
+      log(`[Beat heart leave] ${prettyId(initiator.id)}`)
       killInitiator(initiator.id)
     })
 }
@@ -146,6 +146,7 @@ const setUpChannels = (rtc, channelNames, initiator) => {
       }
 
       channel.onclose = () => {
+        log(`[Channel closed] ${prettyId(initiator.id)}`)
         killInitiator(initiator.id)
       }
     }
