@@ -6,10 +6,7 @@ const gameCode = require('./gameCode')
 
 const { error, log } = console
 
-const init = (port) => {
-  const app = express()
-  app.use(cors())
-
+const addGameEndpoint = (app) => {
   app.post('/game', (req, res) => {
     gameCode.create()
       .then((code) => {
@@ -18,6 +15,13 @@ const init = (port) => {
       })
       .catch(error)
   })
+}
+
+const init = (port) => {
+  const app = express()
+  app.use(cors())
+
+  addGameEndpoint(app)
 
   const httpServer = http.createServer(app)
   httpServer.listen(port)
