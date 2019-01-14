@@ -58,10 +58,7 @@ const AwaitingPlayers = styled.div`
   ${label};
 `
 
-const playerColorToBackgroundColor = (player) => {
-  const background = Color[player]
-  return background || 'white'
-}
+const getColorCode = color => Color[color]
 
 class GameLobby extends Component {
   getButton = () => {
@@ -96,7 +93,7 @@ class GameLobby extends Component {
 
     return (
       <Container
-        backgroundColor={playerColorToBackgroundColor(playerColor)}
+        backgroundColor={getColorCode(playerColor)}
       >
         {
           playerCount > 1
