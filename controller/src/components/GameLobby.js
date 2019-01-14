@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
@@ -10,7 +11,7 @@ const Container = styled(IOSDisableDoubleTap)`
   justify-content: space-around;
   align-items: center;
   height: 100vh;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-color: ${R.prop('backgroundColor')};
   font-size: 4vw;
 `
 
