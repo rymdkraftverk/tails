@@ -21,7 +21,7 @@ const Separator = styled.div`
   background: black;
 `
 
-const Container = styled(IOSDisableDoubleTap)`
+const SteeringContainer = styled(IOSDisableDoubleTap)`
   display: flex;
   height: 100vh;
   overflow: hidden;
@@ -69,7 +69,7 @@ class GamePlaying extends Component {
     } = this.props
 
     return (
-      <Container>
+      <SteeringContainer>
         <SteerButton
           playerColor={playerColor}
           onMouseDown={this.sendCommand(SteeringCommand.LEFT)}
@@ -89,7 +89,7 @@ class GamePlaying extends Component {
         >
           <div>{'>'} </div>
         </SteerButton>
-      </Container>
+      </SteeringContainer>
     )
   }
 }
