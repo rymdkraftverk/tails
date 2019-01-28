@@ -65,10 +65,11 @@ const eventState = ({ event, payload }) => {
 class App extends Component {
   state = {
     appState:    AppState.LOCKER_ROOM,
+    error:       '',
     fullscreen:  false,
     gameCode:    '',
+    gyro:        false,
     playerColor: null,
-    error:       '',
     ready:       false,
   }
 
@@ -168,13 +169,18 @@ class App extends Component {
     this.setState({ ready: true })
   }
 
+  setGyro = (gyro) => {
+    this.setState({ gyro })
+  }
+
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
   appStateComponent = () => {
     const {
+      appState,
       error,
       gameCode,
-      appState,
+      gyro,
       playerColor,
       playerCount,
       ready,
@@ -203,8 +209,10 @@ class App extends Component {
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying
-          send={this.sendSteering}
+          gyro={gyro}
           playerColor={Color[playerColor]}
+          send={this.sendSteering}
+          setGyro={this.setGyro}
         />
       case AppState.PLAYER_DEAD: 
         return <PlayerDead
