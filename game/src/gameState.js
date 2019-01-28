@@ -21,7 +21,7 @@ const gameState = {
 
 export const getPlayer = id => R.find(R.propEq('playerId', id), gameState.players)
 
-export const hasCrown = id => getPlayersWithHighestScore(gameState.players)
+export const isFirstPlace = id => getPlayersWithHighestScore(gameState.players)
   .filter(p => p.score !== 0)
   .some(({ playerId }) => playerId === id)
 

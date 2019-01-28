@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
-import gameState, { CurrentState, getPlayer, hasCrown } from './gameState'
+import gameState, { CurrentState, getPlayer, isFirstPlace } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
 import Layer from './constant/layer'
 import countdown from './countdown'
@@ -164,7 +164,7 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       zIndex: Layer.FOREGROUND,
     },
   )
-  if (hasCrown(playerId)) {
+  if (isFirstPlace(playerId)) {
     const crown = new PIXI.Sprite(l1.getTexture('crown'))
     l1.add(crown, {
       parent: player,
