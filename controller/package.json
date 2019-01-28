@@ -26,6 +26,7 @@
     "react-full-screen": "^0.2.2",
     "react-notify-toast": "^0.4.0",
     "react-scripts": "2.0.5",
+    "react-switch": "^3.0.4",
     "rxjs": "^5.5.10",
     "signaling": "file:../signaling",
     "socket.io": "^2.1.0",

@@ -68,6 +68,7 @@ class App extends Component {
     error:       '',
     fullscreen:  false,
     gameCode:    '',
+    gyro:        false,
     playerColor: null,
     ready:       false,
   }
@@ -168,6 +169,10 @@ class App extends Component {
     this.setState({ ready: true })
   }
 
+  setGyro = (gyro) => {
+    this.setState({ gyro })
+  }
+
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
   appStateComponent = () => {
@@ -175,6 +180,7 @@ class App extends Component {
       appState,
       error,
       gameCode,
+      gyro,
       playerColor,
       playerCount,
       ready,
@@ -203,8 +209,10 @@ class App extends Component {
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying
+          gyro={gyro}
           playerColor={Color[playerColor]}
           send={this.sendSteering}
+          setGyro={this.setGyro}
         />
       case AppState.PLAYER_DEAD: 
         return <PlayerDead
