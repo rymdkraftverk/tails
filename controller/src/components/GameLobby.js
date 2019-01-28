@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
@@ -10,7 +11,7 @@ const Container = styled(IOSDisableDoubleTap)`
   justify-content: space-around;
   align-items: center;
   height: 100vh;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-color: ${R.prop('backgroundColor')};
   font-size: 4vw;
 `
 
@@ -35,18 +36,9 @@ const label = css`
 const Button = styled.button`
   ${label};
   border: 0.1em solid black;
-  ${({ clicked }) => clicked
-    ?
-    `box-shadow: 0 0;
-    top: 0.1em;
-    left: 0.1em;
-    color: #757575;
-    border-color: #757575`
-    : ''
-  }
 `
 
-const ButtonContainer = styled.div`
+const ActionContainer = styled.div`
   margin-bottom: auto;
 `;
 
@@ -58,34 +50,46 @@ const AwaitingPlayers = styled.div`
   ${label};
 `
 
-const playerColorToBackgroundColor = (player) => {
-  const background = Color[player]
-  return background || 'white'
-}
+const AwaitingReadyPlayers = styled.div`
+  color: ${R.prop('color')};
+  background: black;
+  padding: 7px;
+`
+
+const getColorCode = color => Color[color]
 
 class GameLobby extends Component {
-  getButton = () => {
+  getAction = () => {
     const {
-      readyPlayer,
+      playerColor,
       ready,
+      readyPlayer,
       startEnabled,
       startGame,
     } = this.props
 
-    return ready && startEnabled
-      ?
-        <Button
-          onClick={startGame}
+    if (!ready) {
+      return <Button
+        onClick={readyPlayer}
         >
-          {'Start Game!'}
-        </Button>
-      :
-        <Button
-          clicked={ready}
-          onClick={readyPlayer}
+        {'Ready!'}
+      </Button>
+    }
+
+    if (startEnabled) {
+      return <Button
+        onClick={startGame}
         >
-          {'Ready!'}
-        </Button>
+        {'Start Game!'}
+      </Button>
+    }
+
+    return <AwaitingReadyPlayers
+      color={getColorCode(playerColor)}
+      >
+
+      All players not ready
+    </AwaitingReadyPlayers>
   }
 
   render() {
@@ -96,7 +100,7 @@ class GameLobby extends Component {
 
     return (
       <Container
-        backgroundColor={playerColorToBackgroundColor(playerColor)}
+        backgroundColor={getColorCode(playerColor)}
       >
         {
           playerCount > 1
@@ -114,11 +118,11 @@ class GameLobby extends Component {
                     `}
                   </InstructionsLine>
                 </Instructions>
-                <ButtonContainer>
+                <ActionContainer>
                 {
-                  this.getButton()
+                  this.getAction()
                 }
-                </ButtonContainer>
+                </ActionContainer>
               </Fragment>
 
             :
