@@ -39,8 +39,7 @@ export const transitionToMatchEnd = () => {
     },
   )
 
-  const { players } = gameState
-  const matchWinners = getPlayersWithHighestScore(players)
+  const matchWinners = getPlayersWithHighestScore()
 
   if (matchWinners.length === 1) {
     const [{ color }] = matchWinners
@@ -162,7 +161,7 @@ const pause = () => ({
         player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
       })
 
-    gameState.players = resetPlayersScore(gameState.players)
+    resetPlayersScore()
 
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
