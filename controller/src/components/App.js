@@ -65,10 +65,10 @@ const eventState = ({ event, payload }) => {
 class App extends Component {
   state = {
     appState:    AppState.LOCKER_ROOM,
+    error:       '',
     fullscreen:  false,
     gameCode:    '',
     playerColor: null,
-    error:       '',
     ready:       false,
   }
 
@@ -172,9 +172,9 @@ class App extends Component {
 
   appStateComponent = () => {
     const {
+      appState,
       error,
       gameCode,
-      appState,
       playerColor,
       playerCount,
       ready,
@@ -203,8 +203,8 @@ class App extends Component {
         />
       case AppState.GAME_PLAYING: 
         return <GamePlaying
-          send={this.sendSteering}
           playerColor={Color[playerColor]}
+          send={this.sendSteering}
         />
       case AppState.PLAYER_DEAD: 
         return <PlayerDead
