@@ -4,13 +4,12 @@ import { Event, Color, Channel } from 'common'
 
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import { createSine } from './magic'
-import { resetPlayersScore, getPlayersWithHighestScore } from './game'
 import firework from './particleEmitter/firework'
 import { transitionToLobby } from './lobby'
 import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
-import gameState from './gameState'
+import gameState, { resetPlayersScore, getPlayersWithHighestScore } from './gameState'
 import { playTrack } from './music'
 import Sound from './constant/sound'
 
@@ -40,8 +39,7 @@ export const transitionToMatchEnd = () => {
     },
   )
 
-  const { players } = gameState
-  const matchWinners = getPlayersWithHighestScore(players)
+  const matchWinners = getPlayersWithHighestScore()
 
   if (matchWinners.length === 1) {
     const [{ color }] = matchWinners
@@ -163,7 +161,7 @@ const pause = () => ({
         player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
       })
 
-    gameState.players = resetPlayersScore(gameState.players)
+    resetPlayersScore()
 
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
