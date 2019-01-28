@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
-import gameState, { CurrentState, getPlayer } from './gameState'
+import gameState, { CurrentState, getPlayer, hasCrown } from './gameState'
 import { transitionToRoundEnd } from './roundEnd'
 import Layer from './constant/layer'
 import countdown from './countdown'
@@ -117,19 +117,6 @@ export const transitionToGameScene = (maxPlayers) => {
   playTrack(Track.GAME, { loop: true, id: 'gameMusic' })
 }
 
-export const getPlayersWithHighestScore = players => R.compose(
-  score => players
-    .filter(p => p.score === score),
-  R.reduce(R.max, 0),
-  R.map(parseInt),
-  Object.keys,
-  R.groupBy(R.prop('score')),
-)(players)
-
-export const scoreToWin = players => (Object.keys(players).length - 1) * 4
-
-export const resetPlayersScore = R.map(x => ({ ...x, score: 0, previousScore: 0 }))
-
 const getStartingPosition = (index) => {
   const maxYRadius = (GAME_HEIGHT - HEADER_HEIGHT) / 2 / (1 + Math.sqrt(3))
   const maxXRadius = GAME_WIDTH / 8
@@ -177,6 +164,15 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
       zIndex: Layer.FOREGROUND,
     },
   )
+  if (hasCrown(playerId)) {
+    const crown = new PIXI.Sprite(l1.getTexture('crown'))
+    l1.add(crown, {
+      parent: player,
+    })
+    crown.scale.set(2)
+    crown.x -= crown.width / 4
+    crown.y -= crown.height
+  }
 
   player.x = x
   player.y = y

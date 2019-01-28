@@ -5,6 +5,7 @@ import Scene from '../Scene'
 import gameState from '../gameState'
 import { addEntityToTree } from '../kd-tree'
 import Trail from '../constant/trail'
+import Layer from '../constant/layer'
 
 export const createTrail = ({
   player, scale, speedMultiplier, duration,
@@ -24,11 +25,11 @@ export const createTrail = ({
     }
     if (!player.trailSpriteContainer) {
       // This container is used to group all trail sprites into one parent
-      // So that zIndex will only be set once (in this case implicit 0),
-      // since it's an expensive sort operation
+      // So that zIndex will only be set once, since it's an expensive sort operation
       player.trailSpriteContainer = new PIXI.Container()
       l1.add(player.trailSpriteContainer, {
         parent: l1.get(Scene.GAME),
+        zIndex: Layer.CENTER,
       })
     }
   },

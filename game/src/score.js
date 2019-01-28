@@ -5,12 +5,11 @@ import * as PIXI from 'pixi.js'
 import R from 'ramda'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
-import { scoreToWin } from './game'
 import delay from './delay'
 import * as TextStyle from './constant/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
 import Layer from './constant/layer'
-import gameState from './gameState'
+import gameState, { scoreToWin } from './gameState'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
