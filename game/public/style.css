@@ -9,6 +9,10 @@ body {
   justify-content: center;
 }
 
+#game {
+  position: relative;
+}
+
 #loading {
   color: white;
   display: flex;
@@ -16,6 +20,14 @@ body {
   align-items: center;
   height: 500px;
   font-size: 48px;
+}
+
+#qr-code {
+  width: 15% !important;
+  height: auto !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 @font-face {

@@ -14,6 +14,7 @@ import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { getPlayer, CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
+import * as qrCode from './qrCode'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -73,6 +74,8 @@ const readyPlayer = (id) => {
 }
 
 const roundStart = (options = { collectMetrics: false }) => {
+  qrCode.hide()
+
   const { collectMetrics } = options
 
   if (gameInShapeForNewRound()) {

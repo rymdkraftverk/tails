@@ -14,6 +14,7 @@ import getControllerUrl from './getControllerUrl'
 import { Track, playTrack } from './music'
 import Sound from './constant/sound'
 import delay from './delay'
+import * as qrCode from './qrCode'
 
 const TEXT_BOUNCE_INTERVAL = 600
 
@@ -65,6 +66,8 @@ export const transitionToLobby = (gameCode, players = []) => {
   gameState.currentState = CurrentState.LOBBY
 
   const controllerUrl = getControllerUrl()
+
+  qrCode.display(controllerUrl, gameCode)
 
   const lobbyScene = new PIXI.Container()
 

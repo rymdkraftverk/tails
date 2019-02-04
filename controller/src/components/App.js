@@ -83,11 +83,10 @@ class App extends Component {
     this.alertIfNoRtc()
     const codeFromUrl = getGameCodeFromUrl()
     const gameCode = codeFromUrl || getLastGameCode()
-    this.setState({ gameCode }, () => {
-      if (codeFromUrl) {
-        this.join(gameCode)
-      }
-    })
+    this.setState({ gameCode })
+    if (codeFromUrl) {
+      this.join(gameCode)
+    }
   }
 
   onData = (message) => {
