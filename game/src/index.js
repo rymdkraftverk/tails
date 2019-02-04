@@ -28,7 +28,7 @@ Sentry.init({
 const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
 
-const { log, warn } = console
+const { error, log, warn } = console
 
 log(`Version: ${VERSION}`)
 
@@ -268,7 +268,7 @@ document.fonts.load('10pt "patchy-robots"')
     })
   })
   .catch(() => {
-    console.error('Unable to load font')
+    error('Unable to load font')
   })
 
 const resizeGame = () => {

@@ -141,7 +141,7 @@ class App extends Component {
     if (this.state.appState === AppState.GAME_CONNECTING) {
       this.displayError('Failed to connect, try again!')
     }
-  };
+  }
 
   connectToGame(gameCode) {
     const onClose = () => {
