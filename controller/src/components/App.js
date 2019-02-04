@@ -107,7 +107,7 @@ class App extends Component {
   }
 
   join = (gameCode) => {
-    this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
+    this.setState({ appState: AppState.GAME_CONNECTING, error: '' })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     writeGameCodeToUrl(gameCode)
@@ -248,6 +248,8 @@ class App extends Component {
     }
 
     return (
+      // Fullscreen currently not used.
+      // Error is raised if there is no user input before toggle
       <Fullscreen
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
