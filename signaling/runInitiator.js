@@ -17,7 +17,7 @@ const {
   wsSend,
 } = require('./common')
 
-const HEARTBEAT_PADDING = HEARTBEAT_INTERVAL / 10 // network delays and whatnot
+const HEARTBEAT_PADDING = HEARTBEAT_INTERVAL / 2 // network delays and whatnot
 const HEARTBEAT_PATIENCE = HEARTBEAT_INTERVAL + HEARTBEAT_PADDING
 
 const { error, log, warn } = console
