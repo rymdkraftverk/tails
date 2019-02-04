@@ -30,7 +30,7 @@ window.debug = {
 const { warn } = console
 
 const TURN_RADIUS = 3
-const SPEED_MULTIPLIER = 3.6
+export const SPEED_MULTIPLIER = 3.6
 
 const WALL_THICKNESS = 3
 

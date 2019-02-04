@@ -18,6 +18,12 @@ const Text = styled.div`
   font-weight: bold;
 `
 
+const Button = styled.button`
+  padding: 8px;
+  border: 0.1em solid black;
+  margin-top: 16px;
+`
+
 const noop = () => {}
 
 navigator.vibrate =
@@ -27,17 +33,21 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-const PlayerDead = ({ playerColor }) => {
+const PlayerDead = ({ playerColor, onClick }) => {
   navigator.vibrate(100)
   return (
-    <Container color={playerColor}>
-      <Text>{"You're dead"}</Text>
+    <Container
+      color={playerColor}
+    >
+      <Text>{'You\'re dead'}</Text>
+      <Button onClick={onClick}>{'Sparkle!'}</Button>
     </Container>
   )
 }
 
 PlayerDead.propTypes = {
   playerColor: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 }
 
 export default PlayerDead

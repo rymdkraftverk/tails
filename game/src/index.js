@@ -1,11 +1,12 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import 'pixi-particles'
+import _ from 'lodash/fp'
 import { Event, Channel } from 'common'
 import R from 'ramda'
 import * as Sentry from '@sentry/browser'
 import signaling from 'signaling'
-import { transitionToGameScene } from './game'
+import { transitionToGameScene, SPEED_MULTIPLIER } from './game'
 import { transitionToLobby, createLobbyPlayer } from './lobby'
 import http from './http'
 import Scene from './Scene'
@@ -16,6 +17,8 @@ import playerRepository from './repository/player'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
 import * as qrCode from './qrCode'
+import sparks from './particleEmitter/sparks'
+import { HEADER_HEIGHT } from './header'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -109,6 +112,35 @@ const createGame = ({ gameCode }) => {
   transitionToLobby(state.gameCode)
 }
 
+const playerDeadTap = (id) => {
+  const player = l1.get(id)
+  if (player) {
+    const {
+      textures: neonTextures,
+      config: neonConfig,
+    } = sparks({
+      texture:     player.texture,
+      scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
+      radius:      player.width * 2,
+    })
+    const neonDeathParticleContainer = new PIXI.Container()
+    neonDeathParticleContainer.position = {
+      x: l1.getRandomInRange(0, GAME_WIDTH),
+      y: l1.getRandomInRange(HEADER_HEIGHT, GAME_HEIGHT),
+    }
+    l1.add(neonDeathParticleContainer, {
+      parent: l1.get(Scene.GAME),
+      zIndex: Layer.BACKGROUND,
+    })
+    new PIXI.particles.Emitter(
+      neonDeathParticleContainer,
+      neonTextures,
+      neonConfig,
+    )
+      .playOnceAndDestroy()
+  }
+}
+
 const onPlayerData = id => (message) => {
   const { event, payload } = message
 
@@ -121,6 +153,12 @@ const onPlayerData = id => (message) => {
       break
     case Event.ROUND_START:
       roundStart()
+      break
+    case Event.PLAYER_DEAD_TAP:
+      // eslint-disable-next-line lodash-fp/no-unused-result
+      _.debounce(100, () => {
+        playerDeadTap(id)
+      })()
       break
     default:
       warn(`Unhandled event for message: ${message}`)
