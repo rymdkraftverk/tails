@@ -12,6 +12,7 @@ import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
+import getUrlParams from '../util/getUrlParams'
 
 const { error: logError, log } = console
 
@@ -49,6 +50,8 @@ const errorState = message => ({
   error:    message,
 })
 
+const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
+
 const eventState = ({ event, payload }) => {
   switch (event) {
     case Event.PLAYER_COUNT: return { playerCount: payload }
@@ -75,8 +78,13 @@ class App extends Component {
 
   componentDidMount = () => {
     this.alertIfNoRtc()
-    const gameCode = getLastGameCode()
-    this.setState({ gameCode })
+    const codeFromUrl = getGameCodeFromUrl()
+    const gameCode = codeFromUrl || getLastGameCode()
+    this.setState({ gameCode }, () => {
+      if (codeFromUrl) {
+        this.onJoin()
+      }
+    })
   }
 
   onData = (message) => {
