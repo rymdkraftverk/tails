@@ -51,6 +51,9 @@ const errorState = message => ({
 })
 
 const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
+const writeGameCodeToUrl = (gameCode) => {
+  window.history.pushState({ gameCode }, '', `?code=${gameCode}`)
+}
 
 const eventState = ({ event, payload }) => {
   switch (event) {
@@ -104,6 +107,7 @@ class App extends Component {
     this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
+    writeGameCodeToUrl(gameCode)
     this.connectToGame(gameCode)
   };
 
