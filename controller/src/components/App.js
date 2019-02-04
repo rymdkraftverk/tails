@@ -12,6 +12,7 @@ import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
+import getUrlParams from '../util/getUrlParams'
 
 const { error: logError, log } = console
 
@@ -49,6 +50,11 @@ const errorState = message => ({
   error:    message,
 })
 
+const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
+const writeGameCodeToUrl = (gameCode) => {
+  window.history.pushState({ gameCode }, '', `?code=${gameCode}`)
+}
+
 const eventState = ({ event, payload }) => {
   switch (event) {
     case Event.PLAYER_COUNT: return { playerCount: payload }
@@ -75,8 +81,13 @@ class App extends Component {
 
   componentDidMount = () => {
     this.alertIfNoRtc()
-    const gameCode = getLastGameCode()
-    this.setState({ gameCode })
+    const codeFromUrl = getGameCodeFromUrl()
+    const gameCode = codeFromUrl || getLastGameCode()
+    this.setState({ gameCode }, () => {
+      if (codeFromUrl) {
+        this.onJoin()
+      }
+    })
   }
 
   onData = (message) => {
@@ -91,11 +102,12 @@ class App extends Component {
   }
 
   onJoin = () => {
-    navigator.vibrate(1)
+    navigator.vibrate(1) // To trigger accept dialog in firefox
     const { gameCode } = this.state
     this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
+    writeGameCodeToUrl(gameCode)
     this.connectToGame(gameCode)
   };
 
