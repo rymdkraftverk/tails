@@ -85,7 +85,7 @@ class App extends Component {
     const gameCode = codeFromUrl || getLastGameCode()
     this.setState({ gameCode }, () => {
       if (codeFromUrl) {
-        this.onJoin()
+        this.join(gameCode)
       }
     })
   }
@@ -101,15 +101,19 @@ class App extends Component {
     this.setState(state)
   }
 
-  onJoin = () => {
+  onJoinClick = () => {
     navigator.vibrate(1) // To trigger accept dialog in firefox
     const { gameCode } = this.state
+    this.join(gameCode)
+  }
+
+  join = (gameCode) => {
     this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     writeGameCodeToUrl(gameCode)
     this.connectToGame(gameCode)
-  };
+  }
 
   displayError = (message) => {
     this.setState(errorState(message))
@@ -206,7 +210,7 @@ class App extends Component {
          error={error}
          gameCodeChange={this.gameCodeChange}
          gameCode={gameCode}
-         onJoin={this.onJoin}
+         onJoinClick={this.onJoinClick}
         />
       case AppState.GAME_CONNECTING: 
         return <LockerRoomLoader />

@@ -58,7 +58,7 @@ class LockerRoom extends Component {
   }
 
   onKeyPress = (e) => {
-    if (this.isSubmit(e.key)) this.props.onJoin()
+    if (this.isSubmit(e.key)) this.props.onJoinClick()
   }
 
   isSubmit = pressed =>
@@ -70,7 +70,7 @@ class LockerRoom extends Component {
   render() {
     const {
       gameCode,
-      onJoin,
+      onJoinClick,
       gameCodeChange,
     } = this.props
 
@@ -101,7 +101,7 @@ class LockerRoom extends Component {
 
               <GameJoinButton
                 disabled={!this.gameCodeFilled()}
-                onClick={onJoin}
+                onClick={onJoinClick}
               >
                 Join
               </GameJoinButton>
@@ -117,7 +117,7 @@ class LockerRoom extends Component {
 LockerRoom.propTypes = {
   error:          PropTypes.string,
   gameCode:       PropTypes.string.isRequired,
-  onJoin:         PropTypes.func.isRequired,
+  onJoinClick:    PropTypes.func.isRequired,
   gameCodeChange: PropTypes.func.isRequired,
 }
 
