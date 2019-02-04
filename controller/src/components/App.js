@@ -99,7 +99,7 @@ class App extends Component {
   }
 
   onJoin = () => {
-    navigator.vibrate(1)
+    navigator.vibrate(1) // To trigger accept dialog in firefox
     const { gameCode } = this.state
     this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
     setLastGameCode(gameCode)
