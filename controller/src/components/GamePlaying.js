@@ -34,6 +34,7 @@ const TogglePane = styled.div`
   display: flex;
   height: 40px;
   justify-content: center;
+  user-select: none;
 `
 
 const Container = styled(IOSDisableDoubleTap)`
