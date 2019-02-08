@@ -7,15 +7,13 @@ services:
         environment:
             - CORS_WHITELIST=http://localhost:8081
             - GAME_CODE=${GAME_CODE}
-            - REDIS_URL=rs://redis:6379
+            - REDIS_URL=${REDIS_URL}
             - VERSION=${VERSION}
         build:
             context: .
             dockerfile: ./backend/Dockerfile
         ports:
             - '3000:3000'
-        depends_on:
-            - redis
 
     game:
         build:
