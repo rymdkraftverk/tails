@@ -9,11 +9,19 @@ export const hide = () => {
 
 export const display = (controllerUrl, gameCode) => {
   const url = `http://${controllerUrl}/?code=${gameCode}`
-  QRCode.toCanvas(url, (_error, qrElement) => {
-    qrElement.setAttribute('id', ELEMENT_ID)
+  QRCode.toCanvas(
+    url,
+    {
+      color: {
+        dark: '#282828', // Same as background
+      },
+    },
+    (_error, qrElement) => {
+      qrElement.setAttribute('id', ELEMENT_ID)
 
-    document
-      .getElementById('game')
-      .appendChild(qrElement)
-  })
+      document
+        .getElementById('game')
+        .appendChild(qrElement)
+    },
+  )
 }
