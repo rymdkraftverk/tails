@@ -83,11 +83,10 @@ class App extends Component {
     this.alertIfNoRtc()
     const codeFromUrl = getGameCodeFromUrl()
     const gameCode = codeFromUrl || getLastGameCode()
-    this.setState({ gameCode }, () => {
-      if (codeFromUrl) {
-        this.onJoin()
-      }
-    })
+    this.setState({ gameCode })
+    if (codeFromUrl) {
+      this.join(gameCode)
+    }
   }
 
   onData = (message) => {
@@ -101,15 +100,19 @@ class App extends Component {
     this.setState(state)
   }
 
-  onJoin = () => {
+  onJoinClick = () => {
     navigator.vibrate(1) // To trigger accept dialog in firefox
     const { gameCode } = this.state
-    this.setState({ appState: AppState.GAME_CONNECTING, error: '', fullscreen: true })
+    this.join(gameCode)
+  }
+
+  join = (gameCode) => {
+    this.setState({ appState: AppState.GAME_CONNECTING, error: '' })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     writeGameCodeToUrl(gameCode)
     this.connectToGame(gameCode)
-  };
+  }
 
   displayError = (message) => {
     this.setState(errorState(message))
@@ -137,7 +140,7 @@ class App extends Component {
     if (this.state.appState === AppState.GAME_CONNECTING) {
       this.displayError('Failed to connect, try again!')
     }
-  };
+  }
 
   connectToGame(gameCode) {
     const onClose = () => {
@@ -206,7 +209,7 @@ class App extends Component {
          error={error}
          gameCodeChange={this.gameCodeChange}
          gameCode={gameCode}
-         onJoin={this.onJoin}
+         onJoinClick={this.onJoinClick}
         />
       case AppState.GAME_CONNECTING: 
         return <LockerRoomLoader />
@@ -245,6 +248,8 @@ class App extends Component {
     }
 
     return (
+      // Fullscreen currently not used.
+      // Error is raised if there is no user input before toggle
       <Fullscreen
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}

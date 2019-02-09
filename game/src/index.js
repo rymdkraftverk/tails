@@ -14,6 +14,7 @@ import fullscreenFadeInOut from './fullscreenFadeInOut'
 import gameState, { getPlayer, CurrentState } from './gameState'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
+import * as qrCode from './qrCode'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -28,7 +29,7 @@ Sentry.init({
 const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10
 
-const { log, warn } = console
+const { error, log, warn } = console
 
 log(`Version: ${VERSION}`)
 
@@ -73,6 +74,8 @@ const readyPlayer = (id) => {
 }
 
 const roundStart = (options = { collectMetrics: false }) => {
+  qrCode.hide()
+
   const { collectMetrics } = options
 
   if (gameInShapeForNewRound()) {
@@ -268,7 +271,7 @@ document.fonts.load('10pt "patchy-robots"')
     })
   })
   .catch(() => {
-    console.error('Unable to load font')
+    error('Unable to load font')
   })
 
 const resizeGame = () => {
