@@ -15,6 +15,7 @@ export const display = (controllerUrl, gameCode) => {
       color: {
         dark: '#282828', // Same as background
       },
+      margin: 1,
     },
     (_error, qrElement) => {
       qrElement.setAttribute('id', ELEMENT_ID)
