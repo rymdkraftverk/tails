@@ -135,7 +135,7 @@ class App extends Component {
 
   checkConnectionTimeout = () => {
     if (this.state.appState === AppState.GAME_CONNECTING) {
-      this.displayError('Connection failed, joining Wi-Fi can help')
+      this.displayError('Connection failed, joining Wi-Fi may help')
     }
   };
 
