@@ -34,7 +34,7 @@ export const getPlayersWithHighestScore = () => R.compose(
   R.groupBy(R.prop('score')),
 )(gameState.players)
 
-export const scoreToWin = () => (Object.keys(gameState.players).length - 1) * 4
+export const scoreToWin = () => (Object.keys(gameState.players).length - 1) * 3
 
 export const resetPlayersScore = () => {
   gameState.players = R.map(x => ({ ...x, score: 0, previousScore: 0 }))(gameState.players)
