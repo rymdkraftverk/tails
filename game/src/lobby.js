@@ -19,8 +19,8 @@ import * as qrCode from './qrCode'
 const TEXT_BOUNCE_INTERVAL = 600
 
 const TextAnchor = {
-  INSTRUCTION_START_X: 70,
-  INSTRUCTION_START_Y: 220,
+  INSTRUCTION_START_X: 92,
+  INSTRUCTION_START_Y: 180,
   X_OFFSET:            80,
   Y_OFFSET:            150,
 }
