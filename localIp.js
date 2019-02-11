@@ -6,7 +6,7 @@ const getLocalIp = R.pipe(
   R.toPairs,
   R.chain(R.last),
   R.find(
-    R.and(
+    R.both(
       R.propEq('family', 'IPv4'),
       R.propEq('internal', false)
     )
