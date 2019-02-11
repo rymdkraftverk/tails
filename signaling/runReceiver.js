@@ -94,7 +94,10 @@ const beatHeart = () => {
         initiator.alive = false
         return
       }
-      log(`[Beat heart leave] ${prettyId(initiator.id)}`)
+      log(`[Beat heart leave] ${prettyId(initiator.id)}`, {
+        readyState: initiator.internalChannel.readyState,
+        alive:      initiator.alive,
+      })
       killInitiator(initiator.id)
     })
 }
