@@ -5,7 +5,7 @@ services:
 
     backend:
         environment:
-            - CORS_WHITELIST=http://localhost:8081
+            - CORS_WHITELIST=${CORS_WHITELIST}
             - GAME_CODE=${GAME_CODE}
             - REDIS_URL=${REDIS_URL}
             - VERSION=${VERSION}
