@@ -19,8 +19,6 @@ const { error: logError, log } = console
 const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
 
-log('REACT_APP_WS_ADDRESS', WS_ADDRESS)
-
 const AppState = {
   LOCKER_ROOM:     'locker-room',
   GAME_CONNECTING: 'game-connecting',
