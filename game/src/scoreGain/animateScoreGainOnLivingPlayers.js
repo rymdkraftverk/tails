@@ -8,7 +8,7 @@ const DURATION = 60 // ticks
 
 export const animateScoreGainOnLivingPlayers = color => l1
   .getByLabel('player')
-  .filter(p => p && !p.killed)
+  .filter(p => p && p.alive)
   .forEach(displayGainedPoint(color))
 
 const displayGainedPoint = R.curry((color, player) => {

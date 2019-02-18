@@ -30,7 +30,7 @@ export default {
       l1.addBehavior(indicateExpiration(PowerUp.DURATION, player))
     },
     onComplete: () => {
-      if (!player.killed) {
+      if (player.alive) {
         // Reset player
         player.scale.set((player.scaleFactor / speedMultiplier / 2))
         player.alpha = 1

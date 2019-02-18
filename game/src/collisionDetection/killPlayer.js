@@ -44,7 +44,7 @@ const killPlayer = (player, speedMultiplier) => {
     volume: 0.6,
   })
 
-  player.killed = true
+  player.alive = false
 
   const behaviorsToRemove = [
     `collisionCheckerTrail-${player.playerId}`,

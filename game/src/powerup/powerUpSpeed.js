@@ -22,7 +22,7 @@ export default {
       player.speed = snakeSpeed * 1.5
     },
     onComplete: () => {
-      if (!player.killed) {
+      if (player.alive) {
         player.speed = snakeSpeed
 
         l1.addBehavior(createTrail({
