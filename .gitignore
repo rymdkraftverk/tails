@@ -2,5 +2,5 @@
 **/.vscode/settings.json
 node_modules
 bundle.js
-.tmp
+tmp
 .env
