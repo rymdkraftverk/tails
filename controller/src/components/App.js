@@ -14,7 +14,7 @@ import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 import getUrlParams from '../util/getUrlParams'
 
-const { error: logError, log } = console
+const { error: logError } = console
 
 const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
