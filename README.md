@@ -1,5 +1,8 @@
 # tails
 
+## CI status
+[![CircleCI](https://circleci.com/gh/sajmoni/tails.svg?style=svg&circle-token=730c3b9ac413e0d54208d17994f02b2cec5d7a72)](https://circleci.com/gh/sajmoni/tails)
+
 ## Index
 * [z-index](#z-index)
 * [eslint](#eslint)
