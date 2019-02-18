@@ -4,7 +4,7 @@ import gameState from '../gameState'
 export const giveLivingPlayersOnePoint = () => {
   const livingPlayers = l1
     .getByLabel('player')
-    .filter(p => p && !p.killed)
+    .filter(p => p && p.alive)
 
   const livingIDs = new Set(livingPlayers.map(p => p.playerId))
 

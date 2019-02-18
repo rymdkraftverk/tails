@@ -69,9 +69,12 @@ export const initPowerups = ({
         id:       collisionCheckerId,
         labels:   ['collisionCheckerPowerup'],
         onUpdate: () => {
-          const collidingEntity = players
-            .filter(R.propEq('killed', false))
-            .find(R.curry(l1.isColliding)(hitBox))
+          const isCollidingWithLiving = R.both(
+            R.propEq('alive', true),
+            R.curry(l1.isColliding)(hitBox),
+          )
+
+          const collidingEntity = R.find(isCollidingWithLiving, players)
           if (collidingEntity) {
             l1.sound({
               src:    Sound.JOIN1,
