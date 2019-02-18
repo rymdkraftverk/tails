@@ -27,6 +27,10 @@ export const initPowerups = ({
     },
   )
 
+  // We already know which the players are so storing them here
+  // as an optimization, to avoid filtering on every tick
+  const players = l1.getByLabel('player')
+
   const generatePowerups = () => ({
     id:         'generatePowerups',
     duration:   l1.getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM),
@@ -65,8 +69,8 @@ export const initPowerups = ({
         id:       collisionCheckerId,
         labels:   ['collisionCheckerPowerup'],
         onUpdate: () => {
-          const collidingEntity = l1
-            .getByLabel('player')
+          const collidingEntity = players
+            .filter(R.propEq('killed', false))
             .find(R.curry(l1.isColliding)(hitBox))
           if (collidingEntity) {
             l1.sound({
