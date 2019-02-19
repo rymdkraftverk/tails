@@ -191,7 +191,6 @@ const createNewPlayer = ({ playerId, send }) => {
   gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
     playerId,
-    spriteId: `square-${color}`,
     score:    0,
     color,
     send,

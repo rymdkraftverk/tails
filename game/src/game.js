@@ -149,7 +149,7 @@ const getStartingPosition = (index) => {
   return positions[index]
 }
 
-const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, color }) => {
+const createPlayer = R.curry((playerCountFactor, index, { playerId, color }) => {
   const { x, y } = getStartingPosition(index)
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
@@ -185,7 +185,6 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, spriteId, co
   player.event = new EventEmitter()
   player.color = color
   player.alive = true
-  player.spriteId = spriteId
   player.playerId = playerId
   player.preventTrail = 0
 
@@ -252,7 +251,6 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
         },
       )
 
-      directionIndicator.spriteId = player.spriteId
       directionIndicator.color = player.color
 
       directionIndicator.x = (directionDistanceScale * Math.cos(directionRadians))
