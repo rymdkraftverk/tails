@@ -134,6 +134,12 @@ const setUpChannels = (rtc, channelNames, initiator) => {
 
   return new Promise((resolve) => {
     rtc.ondatachannel = ({ channel }) => {
+      // To have consistent binaryType between platforms.
+      // Standard says "blob" should be the standard,
+      // but Chrome uses "arraybuffer" despite this:
+      // https://stackoverflow.com/a/53328431/1859989
+      channel.binaryType = 'arraybuffer'
+
       channel.onopen = () => {
         log(`[Data channel] ${prettyId(initiator.id)} ${channel.label}`)
         openChannels = openChannels.concat([channel])
