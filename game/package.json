@@ -29,7 +29,7 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "common": "file:../common",
     "eventemitter3": "^3.1.0",
-    "l1": "^0.5.20",
+    "l1": "^0.5.22",
     "lodash": "^4.17.10",
     "pixi-particles": "^3.1.0",
     "pixi.js": "^4.8.2",
