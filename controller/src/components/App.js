@@ -191,11 +191,6 @@ class App extends Component {
     this.setState({ gyro })
   }
 
-  onPlayerDeadClick = () => {
-    const { playerColor } = this.state
-    this.sendReliable({ event: Event.PLAYER_DEAD_TAP })
-  }
-
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
   appStateComponent = () => {
@@ -241,7 +236,7 @@ class App extends Component {
         />
       case AppState.PLAYER_DEAD: 
         return <PlayerDead
-          onClick={this.onPlayerDeadClick}
+          sendReliable={this.sendReliable}
           playerColor={Color[playerColor]}
         />
       case AppState.AWAITING_NEXT_ROUND: 

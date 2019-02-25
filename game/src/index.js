@@ -112,56 +112,68 @@ const createGame = ({ gameCode }) => {
   transitionToLobby(state.gameCode)
 }
 
-const playerDeadTap = (id) => {
-  const player = l1.get(id)
-  if (player) {
-    const {
-      textures: neonTextures,
-      config: neonConfig,
-    } = sparks({
-      texture:     player.texture,
-      scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
-      radius:      player.width * 2,
-    })
-    const neonDeathParticleContainer = new PIXI.Container()
-    neonDeathParticleContainer.position = {
-      x: l1.getRandomInRange(0, GAME_WIDTH),
-      y: l1.getRandomInRange(HEADER_HEIGHT, GAME_HEIGHT),
+const makePlayerDeadTap = (id) => {
+  const neonDeathParticleContainer = new PIXI.Container()
+  return ({ x, y }) => {
+    let player
+    if (!player) {
+      player = l1.get(id)
+      // Delay adding the particle container since Scene.GAME does
+      // not exist when makePlayerDeadTap is called
+      l1.add(neonDeathParticleContainer, {
+        parent: l1.get(Scene.GAME),
+        zIndex: Layer.FOREGROUND + 10,
+      })
     }
-    l1.add(neonDeathParticleContainer, {
-      parent: l1.get(Scene.GAME),
-      zIndex: Layer.BACKGROUND,
-    })
-    new PIXI.particles.Emitter(
-      neonDeathParticleContainer,
-      neonTextures,
-      neonConfig,
-    )
-      .playOnceAndDestroy()
+
+    if (player) {
+      const {
+        textures: neonTextures,
+        config: neonConfig,
+      } = sparks({
+        texture:     player.texture,
+        scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
+        radius:      player.width * 2,
+        pos:         {
+          x: x * GAME_WIDTH,
+          y: HEADER_HEIGHT + (y * (GAME_HEIGHT - HEADER_HEIGHT)),
+        },
+      })
+
+      new PIXI.particles.Emitter(
+        neonDeathParticleContainer,
+        neonTextures,
+        neonConfig,
+      )
+        .playOnceAndDestroy()
+    }
   }
 }
 
-const onPlayerData = id => (message) => {
-  const { event, payload } = message
+const onPlayerData = (id) => {
+  const playerDeadTap = makePlayerDeadTap(id)
+  return (message) => {
+    const { event, payload } = message
 
-  switch (event) {
-    case Event.PLAYER_MOVEMENT:
-      turnPlayer(id, payload)
-      break
-    case Event.PLAYER_READY:
-      readyPlayer(id)
-      break
-    case Event.ROUND_START:
-      roundStart()
-      break
-    case Event.PLAYER_DEAD_TAP:
-      // eslint-disable-next-line lodash-fp/no-unused-result
-      _.debounce(100, () => {
-        playerDeadTap(id)
-      })()
-      break
-    default:
-      warn(`Unhandled event for message: ${message}`)
+    switch (event) {
+      case Event.PLAYER_MOVEMENT:
+        turnPlayer(id, payload)
+        break
+      case Event.PLAYER_READY:
+        readyPlayer(id)
+        break
+      case Event.ROUND_START:
+        roundStart()
+        break
+      case Event.PLAYER_DEAD_TAP:
+        // eslint-disable-next-line lodash-fp/no-unused-result
+        _.debounce(100, () => {
+          playerDeadTap(payload)
+        })()
+        break
+      default:
+        warn(`Unhandled event for message: ${message}`)
+    }
   }
 }
 
