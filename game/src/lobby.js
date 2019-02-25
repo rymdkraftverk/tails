@@ -275,8 +275,8 @@ export const createLobbyPlayer = ({ color }, playerIndex, { newPlayer }) => {
   l1.add(
     square,
     {
-      id:     `square-${color}`,
-      labels: ['lobby-square'],
+      id:     `lobby-player-${color}`,
+      labels: ['lobby-player'],
       parent: l1.get(Scene.LOBBY),
     },
   )

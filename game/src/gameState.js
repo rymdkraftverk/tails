@@ -40,4 +40,18 @@ export const resetPlayersScore = () => {
   gameState.players = R.map(x => ({ ...x, score: 0, previousScore: 0 }))(gameState.players)
 }
 
+const _scoreBoard = R.reduce(
+  (a, b) => ({ ...a, [b.color]: b.score }),
+  {}
+)
+
+const _identifiableScoreBoard = code => R.pipe(
+  _scoreBoard,
+  R.objOf('scoreBoard'),
+  R.merge({ code })
+)
+
+export const identifiableScoreBoard = () =>
+  _identifiableScoreBoard(gameState.gameCode)(gameState.players)
+
 export default gameState

@@ -191,7 +191,6 @@ const createNewPlayer = ({ playerId, send }) => {
   gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
     playerId,
-    spriteId: `square-${color}`,
     score:    0,
     color,
     send,
@@ -210,7 +209,7 @@ const onPlayerLeave = (id) => {
 
   if (gameState.currentState === CurrentState.LOBBY) {
     l1
-      .getByLabel('lobby-square')
+      .getByLabel('lobby-player')
       .forEach(l1.destroy)
 
     gameState

@@ -8,4 +8,16 @@ const createGame = () => fetch(
 )
   .then(res => res.json())
 
-export default { createGame }
+const postScoreBoard = (scoreBoard) => fetch(
+  `${HTTP_ADDRESS}/scoreBoard`,
+  {
+    method: 'POST',
+    body:    JSON.stringify(scoreBoard),
+    headers: { 'Content-Type': 'application/json' },
+  },
+)
+
+export default {
+  createGame,
+  postScoreBoard,
+}
