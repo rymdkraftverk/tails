@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import Boundary from './components/Boundary'
 import App from './components/App'
 
@@ -10,7 +10,7 @@ const { log } = console
 log(`Version: ${VERSION}`)
 
 /* eslint-disable-next-line no-unused-expressions */
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'patchy-robots';
     src: url('patchy-robots.ttf');
@@ -68,9 +68,7 @@ document.addEventListener(
   { passive: false },
 )
 
-ReactDOM.render(
-  <Boundary>
-    <App />
-  </Boundary>,
-  document.getElementById('root'),
-)
+ReactDOM.render(<Boundary>
+  <GlobalStyle/>
+  <App />
+</Boundary>, document.getElementById('root'))
