@@ -209,7 +209,7 @@ const onPlayerLeave = (id) => {
 
   if (gameState.currentState === CurrentState.LOBBY) {
     l1
-      .getByLabel('lobby-square')
+      .getByLabel('lobby-player')
       .forEach(l1.destroy)
 
     gameState
