@@ -1,7 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import 'pixi-particles'
-import _ from 'lodash/fp'
 import { Event, Channel } from 'common'
 import R from 'ramda'
 import * as Sentry from '@sentry/browser'
@@ -166,10 +165,7 @@ const onPlayerData = (id) => {
         roundStart()
         break
       case Event.PLAYER_DEAD_TAP:
-        // eslint-disable-next-line lodash-fp/no-unused-result
-        _.debounce(100, () => {
-          playerDeadTap(payload)
-        })()
+        playerDeadTap(payload)
         break
       default:
         warn(`Unhandled event for message: ${message}`)

@@ -1,9 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+
+const SEND_PLAYER_DEAD_TAP_INTERVAL = 60;
 
 const Container = styled(IOSDisableDoubleTap)`
   display: flex;
@@ -41,6 +43,9 @@ navigator.vibrate =
 const PlayerDead = ({ playerColor, sendReliable }) => {
   navigator.vibrate(100)
   const touchAreaElement = useRef(null)
+  const [position, setPosition] = useState(null)
+  const [sendData, setSendData] = useState(false)
+
   const onPlayerDeadClick = ({ touches }) => {
     if (touches && touchAreaElement.current) {
       const [{ clientX, clientY }] = touches
@@ -49,16 +54,41 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
       const x = clientX / rect.width
       const y = (clientY - rect.top) / rect.height
       
-      sendReliable({ event: Event.PLAYER_DEAD_TAP, payload: { x, y } })
+      setPosition({ x, y })
     }
   }
+
+  const onTouchEnd = () => {
+    setPosition(null)
+  }
+
+  useEffect(() => {
+    const timeoutId = setInterval(() => {
+      setSendData(true)
+    }, SEND_PLAYER_DEAD_TAP_INTERVAL);
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (sendData && position) {
+      sendReliable({ event: Event.PLAYER_DEAD_TAP, payload: position })
+      setSendData(false)
+    }
+  },[sendData, position])
 
   return (
     <Container
       color={playerColor}
     >
       <Text>{'You\'re dead'}</Text>
-      <TouchArea ref={touchAreaElement} onTouchMove={onPlayerDeadClick}>{'Tap to Sparkle!'}</TouchArea>
+      <TouchArea 
+        onTouchEnd={onTouchEnd}
+        ref={touchAreaElement} 
+        onTouchStart={onPlayerDeadClick} 
+        onTouchMove={onPlayerDeadClick}
+      >{'Tap to Sparkle!'}</TouchArea>
     </Container>
   )
 }
