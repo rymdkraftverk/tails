@@ -41,7 +41,7 @@ export const resetPlayersScore = () => {
 }
 
 const _scoreBoard = R.reduce(
-  (a, b) => R.merge(a, { [b.color]: b.score }),
+  (a, b) => ({ ...a, [b.color]: b.score }),
   {}
 )
 
