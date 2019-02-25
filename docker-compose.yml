@@ -8,6 +8,7 @@ services:
             - CORS_WHITELIST=${CORS_WHITELIST}
             - GAME_CODE=${GAME_CODE}
             - REDIS_URL=${REDIS_URL}
+            - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
             - VERSION=${VERSION}
         build:
             context: .

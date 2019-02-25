@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const config = require('./config')
 const gameCode = require('./gameCode')
+const slack = require('./slack')
 
 const { error, log } = console
 
@@ -18,13 +19,25 @@ const addGameEndpoint = (app) => {
   })
 }
 
+const addScoreBoardEndpoint = (app) => {
+  app.post('/scoreBoard', (req, res) => {
+    slack.postScoreBoard(req.body)
+      .then((responseMsg) => {
+        res.sendStatus(200)
+      })
+      .catch(error)
+  })
+}
+
 const init = (port) => {
   const app = express()
+  app.use(express.json())
   app.use(cors({
     origin: config.corsWhitelist,
   }))
 
   addGameEndpoint(app)
+  addScoreBoardEndpoint(app)
 
   const httpServer = http.createServer(app)
   httpServer.listen(port)
