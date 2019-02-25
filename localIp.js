@@ -1,5 +1,4 @@
 const os = require('os')
-const ifaces = os.networkInterfaces()
 const R = require('ramda')
 
 const getLocalIp = R.pipe(
@@ -14,6 +13,10 @@ const getLocalIp = R.pipe(
   R.prop('address')
 )
 
-console.log(
-  getLocalIp(ifaces)
+const logLocalIp = R.pipe(
+  R.invoker(0, 'networkInterfaces'),
+  getLocalIp,
+  console.log
 )
+
+logLocalIp(os)
