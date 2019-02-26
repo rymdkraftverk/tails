@@ -122,6 +122,8 @@ const setUpChannel = rtc => ({
     config,
   )
 
+  channel.binaryType = 'arraybuffer'
+
   channel.onerror = R.pipe(
     R.tap(error),
     closeConnections,
