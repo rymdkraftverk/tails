@@ -47,13 +47,13 @@ const killPlayer = (player, speedMultiplier) => {
   player.alive = false
 
   const behaviorsToRemove = [
-    `collisionCheckerTrail-${player.playerId}`,
-    `collisionCheckerWalls-${player.playerId}`,
-    `createHoleMaker-${player.playerId}`,
-    `holeMaker-${player.playerId}`,
-    `createTrail-${player.playerId}`,
-    `move-${player.playerId}`,
-    `pivot-${player.playerId}`,
+    `collisionCheckerTrail-${player.id}`,
+    `collisionCheckerWalls-${player.id}`,
+    `createHoleMaker-${player.id}`,
+    `holeMaker-${player.id}`,
+    `createTrail-${player.id}`,
+    `move-${player.id}`,
+    `pivot-${player.id}`,
   ]
 
   R.forEach(

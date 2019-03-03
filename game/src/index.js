@@ -81,8 +81,8 @@ const roundStart = (options = { collectMetrics: false }) => {
   if (gameInShapeForNewRound()) {
     gameState
       .players
-      .forEach(({ playerId }) => {
-        getPlayer(playerId)
+      .forEach(({ id }) => {
+        getPlayer(id)
           .send(Channel.RELIABLE, {
             event:   Event.ROUND_STARTED,
             payload: {},
@@ -160,7 +160,7 @@ export const onPlayerJoin = ({
   }
 
   const player = createNewPlayer({
-    playerId: id,
+    id,
     send,
   })
 
@@ -172,9 +172,9 @@ export const onPlayerJoin = ({
   send(Channel.RELIABLE, {
     event:   Event.PLAYER_JOINED,
     payload: {
-      playerId: id,
-      color:    player.color,
-      started:  gameState.currentState === CurrentState.PLAYING_ROUND,
+      id,
+      color:   player.color,
+      started: gameState.currentState === CurrentState.PLAYING_ROUND,
     },
   })
 
@@ -186,12 +186,12 @@ export const onPlayerJoin = ({
   setOnData(onPlayerData(id))
 }
 
-const createNewPlayer = ({ playerId, send }) => {
+const createNewPlayer = ({ id, send }) => {
   const [color] = gameState.availableColors
   gameState.availableColors = gameState.availableColors.filter(c => c !== color)
   const player = {
-    playerId,
-    score:    0,
+    id,
+    score: 0,
     color,
     send,
   }
@@ -205,7 +205,7 @@ const onPlayerLeave = (id) => {
 
   const player = getPlayer(id)
   gameState.availableColors = [player.color].concat(gameState.availableColors)
-  gameState.players = R.reject(R.propEq('playerId', id), gameState.players)
+  gameState.players = R.reject(R.propEq('id', id), gameState.players)
 
   if (gameState.currentState === CurrentState.LOBBY) {
     l1

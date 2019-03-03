@@ -6,11 +6,11 @@ export const giveLivingPlayersOnePoint = () => {
     .getByLabel('player')
     .filter(p => p && p.alive)
 
-  const livingIDs = new Set(livingPlayers.map(p => p.playerId))
+  const livingIDs = new Set(livingPlayers.map(p => p.id))
 
   gameState.players = gameState
     .players
-    .map(player => (livingIDs.has(player.playerId)
+    .map(player => (livingIDs.has(player.id)
       ? ({
         ...player,
         score: player.score + 1,

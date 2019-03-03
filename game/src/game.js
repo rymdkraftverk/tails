@@ -96,7 +96,7 @@ export const transitionToGameScene = (maxPlayers) => {
             speedMultiplier: SPEED_MULTIPLIER,
             wallThickness:   WALL_THICKNESS,
           }),
-          player.playerId.startsWith('debugSpiralPlayer') ? performanceTestCurl(player) : null,
+          player.id.startsWith('debugSpiralPlayer') ? performanceTestCurl(player) : null,
         ]
 
         R.forEach(
@@ -104,7 +104,7 @@ export const transitionToGameScene = (maxPlayers) => {
           R.reject(R.isNil, behaviorsToAdd),
         )
 
-        l1.destroy(`${player.playerId}:direction`)
+        l1.destroy(`${player.id}:direction`)
       })
       initPowerups({
         snakeSpeed:      l1.getByLabel('player')[0].speed,
@@ -149,7 +149,7 @@ const getStartingPosition = (index) => {
   return positions[index]
 }
 
-const createPlayer = R.curry((playerCountFactor, index, { playerId, color }) => {
+const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
   const { x, y } = getStartingPosition(index)
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
@@ -158,13 +158,13 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, color }) => 
   l1.add(
     player,
     {
-      id:     playerId,
+      id,
       parent: l1.get(Scene.GAME),
       labels: ['player'],
       zIndex: Layer.FOREGROUND,
     },
   )
-  if (isFirstPlace(playerId)) {
+  if (isFirstPlace(id)) {
     const crown = new PIXI.Sprite(l1.getTexture('crown'))
     l1.add(crown, {
       parent: player,
@@ -185,14 +185,14 @@ const createPlayer = R.curry((playerCountFactor, index, { playerId, color }) => 
   player.event = new EventEmitter()
   player.color = color
   player.alive = true
-  player.playerId = playerId
+  player.id = id
   player.preventTrail = 0
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
-    const p = getPlayer(playerId)
+    const p = getPlayer(id)
 
     if (!p) {
-      warn(`Player with id: ${playerId} not found`)
+      warn(`Player with id: ${id} not found`)
       return
     }
 
@@ -246,7 +246,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
       l1.add(
         directionIndicator,
         {
-          id:     `${player.playerId}:direction`,
+          id:     `${player.id}:direction`,
           parent: player,
         },
       )
@@ -275,7 +275,7 @@ const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
 export const toRadians = angle => angle * (Math.PI / 180)
 
 const move = player => ({
-  id:       `move-${player.playerId}`,
+  id:       `move-${player.id}`,
   onUpdate: () => {
     const radians = toRadians(player.degrees)
     player.x += Math.cos(radians) * player.speed
@@ -294,7 +294,7 @@ const performanceTestCurl = player => ({
 })
 
 const pivot = player => ({
-  id:       `pivot-${player.playerId}`,
+  id:       `pivot-${player.id}`,
   onUpdate: () => {
     const throttledTurnRate = R.clamp(-TURN_RADIUS, TURN_RADIUS, player.turnRate)
 

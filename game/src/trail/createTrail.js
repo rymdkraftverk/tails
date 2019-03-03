@@ -10,7 +10,7 @@ import Layer from '../constant/layer'
 export const createTrail = ({
   player, scale, speedMultiplier, duration,
 }) => ({
-  id:       `createTrail-${player.playerId}`,
+  id:       `createTrail-${player.id}`,
   duration: duration || Trail.CREATE_TRAIL_FREQUENCY,
   loop:     true,
   onInit:   () => {
@@ -49,7 +49,7 @@ export const createTrail = ({
     trailE.x = x - (player.width / 2)
     trailE.y = y - (player.height / 2)
     trailE.active = false
-    trailE.player = player.playerId
+    trailE.player = player.id
 
     l1.add(trailE, {
       parent: player.trailContainer,

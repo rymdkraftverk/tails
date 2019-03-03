@@ -9,7 +9,7 @@ import checkPlayersAlive from './checkPlayersAlive'
 export const collisionCheckerWalls = ({
   player, speedMultiplier, wallThickness,
 }) => ({
-  id:         `collisionCheckerWalls-${player.playerId}`,
+  id:         `collisionCheckerWalls-${player.id}`,
   duration:   2,
   loop:       true,
   onComplete: () => {

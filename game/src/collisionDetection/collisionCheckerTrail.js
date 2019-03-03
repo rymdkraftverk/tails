@@ -7,7 +7,7 @@ import checkPlayersAlive from './checkPlayersAlive'
 import killPlayer from './killPlayer'
 
 export const collisionCheckerTrail = (player, speedMultiplier) => ({
-  id:         `collisionCheckerTrail-${player.playerId}`,
+  id:         `collisionCheckerTrail-${player.id}`,
   duration:   2,
   loop:       true,
   onComplete: () => {
@@ -15,7 +15,7 @@ export const collisionCheckerTrail = (player, speedMultiplier) => ({
 
     const options = {
       earlyReturn: isColliding,
-      filter:      t => t.active || t.player !== player.playerId,
+      filter:      t => t.active || t.player !== player.id,
       getCoord:    (e, dimension) => e[dimension],
     }
 

@@ -9,7 +9,7 @@ export default {
     speedMultiplier,
     snakeSpeed,
   }) => ({
-    id:       `speed-${player.playerId}`,
+    id:       `speed-${player.id}`,
     data:     { },
     duration: PowerUp.DURATION,
     onInit:   () => {

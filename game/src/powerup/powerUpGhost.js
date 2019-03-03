@@ -9,7 +9,7 @@ export default {
   powerUp: ({
     player, speedMultiplier,
   }) => ({
-    id:   `ghost-${player.playerId}`,
+    id:   `ghost-${player.id}`,
     data: {
       expirationState: null,
     },
@@ -20,7 +20,7 @@ export default {
       player.preventTrail += 1
 
       const behaviorsToRemove = [
-        `collisionCheckerTrail-${player.playerId}`,
+        `collisionCheckerTrail-${player.id}`,
       ]
       R.forEach(
         l1.removeBehavior,
@@ -56,6 +56,6 @@ export default {
   }),
   texture:           () => l1.getTexture('powerup/powerup-ghost'),
   behaviorsToRemove: player => [
-    `ghost-${player.playerId}`,
+    `ghost-${player.id}`,
   ],
 }
