@@ -68,10 +68,11 @@ export const transitionToGameScene = (maxPlayers) => {
 
   const playerCountFactor = playerRepository.countFactor()
 
-  const players = R.compose(
-    R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
-    _.shuffle,
-  )(state.players)
+  const players = R.zipWith(
+    createPlayer(playerCountFactor),
+    _.shuffle(R.range(0, maxPlayers)),
+    state.players,
+  )
 
   createWalls()
 
