@@ -18,8 +18,10 @@ const write = (x) => {
 // --- Public ---
 // --- Read ---
 
+const count = R.length
+
 const countFactor = R.pipe(
-  R.length,
+  count,
   Math.sqrt,
 )
 
@@ -53,6 +55,7 @@ const resetScores = R.pipe(
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
+  count,
   countFactor,
   find,
   getWithHighestScores,

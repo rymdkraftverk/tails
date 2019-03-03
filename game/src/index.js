@@ -142,7 +142,7 @@ const broadcast = (message) => {
     })
 }
 
-const morePlayersAllowed = () => state.players.length < MAX_PLAYERS_ALLOWED
+const morePlayersAllowed = () => playerRepository.count() < MAX_PLAYERS_ALLOWED
 
 export const onPlayerJoin = ({
   id,
@@ -166,7 +166,7 @@ export const onPlayerJoin = ({
   })
 
   if (l1.get(Scene.LOBBY)) {
-    const numOfPlayers = state.players.length
+    const numOfPlayers = playerRepository.count()
     createLobbyPlayer(player, numOfPlayers - 1, { newPlayer: true })
   }
 
@@ -181,7 +181,7 @@ export const onPlayerJoin = ({
 
   broadcast({
     event:   Event.PLAYER_COUNT,
-    payload: state.players.length,
+    payload: playerRepository.count(),
   })
 
   setOnData(onPlayerData(id))
@@ -222,7 +222,7 @@ const onPlayerLeave = (id) => {
 
   broadcast({
     event:   Event.PLAYER_COUNT,
-    payload: state.players.length,
+    payload: playerRepository.count(),
   })
 }
 
