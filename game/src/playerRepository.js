@@ -18,6 +18,11 @@ const write = (x) => {
 // --- Public ---
 // --- Read ---
 
+const countFactor = R.pipe(
+  R.length,
+  Math.sqrt,
+)
+
 const find = R.curry((players, id) => R.find(R.propEq('id', id), players))
 
 const getWithHighestScores = players => R.pipe(
@@ -48,6 +53,7 @@ const resetScores = R.pipe(
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
+  countFactor,
   find,
   getWithHighestScores,
   isFirstPlace,

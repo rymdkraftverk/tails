@@ -66,10 +66,7 @@ export const transitionToGameScene = (maxPlayers) => {
     id: Scene.GAME,
   })
 
-  const playerCountFactor = R.compose(
-    Math.sqrt,
-    R.length,
-  )(state.players)
+  const playerCountFactor = playerRepository.countFactor()
 
   const players = R.compose(
     R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
