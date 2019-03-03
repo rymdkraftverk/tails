@@ -9,7 +9,8 @@ import delay from './delay'
 import * as TextStyle from './constant/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
 import Layer from './constant/layer'
-import gameState, { scoreToWin } from './gameState'
+import { state } from './state'
+import playerRepository from './playerRepository'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64
@@ -41,7 +42,7 @@ export const transitionToScoreScene = () => {
   goal.scale.set(2)
 
   const goalText = new PIXI.Text(
-    scoreToWin(gameState.players),
+    playerRepository.scoreToWin(),
     {
       ...TextStyle.BIG,
       fill: 'white',
@@ -63,9 +64,9 @@ export const transitionToScoreScene = () => {
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
 
-  const { players } = gameState
+  const { players } = state
 
-  const winLimit = scoreToWin(players)
+  const winLimit = playerRepository.scoreToWin()
   const matchWinnerCount = players
     .map(R.prop('score'))
     .filter(s => s >= winLimit)
@@ -96,7 +97,7 @@ const getX = (score, goal) => {
 const createPlayer = (index) => {
   const currentColor = Object.keys(Color)[index]
 
-  const player = gameState
+  const player = state
     .players
     .find(({ color }) => color === currentColor)
 
@@ -110,7 +111,7 @@ const createPlayer = (index) => {
 
   const y = WORM_START_Y + (index * PLAYER_SPACING)
 
-  const goalScore = scoreToWin(gameState.players)
+  const goalScore = playerRepository.scoreToWin()
 
   const previousX = getX((player && player.previousScore) || 0, goalScore)
   if (player) {

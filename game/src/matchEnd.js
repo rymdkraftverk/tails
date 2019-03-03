@@ -9,7 +9,8 @@ import { transitionToLobby } from './lobby'
 import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
-import gameState, { resetPlayersScore, getPlayersWithHighestScore } from './gameState'
+import { state } from './state'
+import playerRepository from './playerRepository'
 import { playTrack } from './music'
 import Sound from './constant/sound'
 
@@ -39,7 +40,7 @@ export const transitionToMatchEnd = () => {
     },
   )
 
-  const matchWinners = getPlayersWithHighestScore()
+  const matchWinners = playerRepository.getWithHighestScores()
 
   if (matchWinners.length === 1) {
     const [{ color }] = matchWinners
@@ -155,13 +156,13 @@ const createFireworks = (creator, color) => ({
 const pause = () => ({
   duration:   TIME_UNTIL_LOBBY_TRANSITION,
   onComplete: () => {
-    gameState
+    state
       .players
       .forEach((player) => {
         player.send(Channel.RELIABLE, { event: Event.ROUND_END, payload: {} })
       })
 
-    resetPlayersScore()
+    playerRepository.resetScores()
 
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
@@ -176,7 +177,7 @@ const pause = () => ({
 
     l1.destroy(Scene.MATCH_END)
 
-    transitionToLobby(gameState.gameCode, gameState.players)
+    transitionToLobby(state.gameCode, state.players)
   },
 })
 

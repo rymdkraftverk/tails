@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 
 import Scene from '../Scene'
-import gameState from '../gameState'
+import { state } from '../state'
 import { addEntityToTree } from '../kd-tree'
 import Trail from '../constant/trail'
 import Layer from '../constant/layer'
@@ -79,7 +79,7 @@ export const createTrail = ({
     const options = {
       getCoord: (e, dim) => e[dim],
     }
-    gameState.kdTree = addEntityToTree(options, gameState.kdTree, trailE)
+    state.kdTree = addEntityToTree(options, state.kdTree, trailE)
   },
 })
 

@@ -1,5 +1,5 @@
 import * as l1 from 'l1'
-import gameState, { CurrentState } from '../gameState'
+import { State, state } from '../state'
 import { transitionToRoundEnd } from '../roundEnd'
 import GameEvent from '../constant/gameEvent'
 
@@ -8,11 +8,11 @@ const checkPlayersAlive = () => {
     .getByLabel('player')
     .filter(p => p.alive)
 
-  if (playersAlive.length === 1 && gameState.currentState === CurrentState.PLAYING_ROUND) {
-    gameState.lastRoundResult.winner = playersAlive[0].color
+  if (playersAlive.length === 1 && state.state === State.PLAYING_ROUND) {
+    state.lastRoundResult.winner = playersAlive[0].color
 
-    gameState
-      .events
+    state
+      .eventEmitter
       .emit(GameEvent.ROUND_END)
 
     transitionToRoundEnd()

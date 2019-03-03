@@ -1,5 +1,5 @@
 import * as l1 from 'l1'
-import gameState from '../gameState'
+import { state } from '../state'
 
 export const giveLivingPlayersOnePoint = () => {
   const livingPlayers = l1
@@ -8,7 +8,7 @@ export const giveLivingPlayersOnePoint = () => {
 
   const livingIDs = new Set(livingPlayers.map(p => p.id))
 
-  gameState.players = gameState
+  state.players = state
     .players
     .map(player => (livingIDs.has(player.id)
       ? ({

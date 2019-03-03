@@ -5,7 +5,8 @@ import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
-import gameState, { CurrentState, getPlayer, isFirstPlace } from './gameState'
+import { State, state } from './state'
+import playerRepository from './playerRepository'
 import { transitionToRoundEnd } from './roundEnd'
 import Layer from './constant/layer'
 import countdown from './countdown'
@@ -37,12 +38,12 @@ const PLAYER_HITBOX_SIZE = 14
 
 const TOTAL_BOUNCE_DURATION = 50
 
-gameState
-  .events
+state
+  .eventEmitter
   .on(GameEvent.PLAYER_COLLISION, animateScoreGainOnLivingPlayers)
 
-gameState
-  .events
+state
+  .eventEmitter
   .on(GameEvent.PLAYER_COLLISION, giveLivingPlayersOnePoint)
 
 export const GameColor = {
@@ -51,13 +52,13 @@ export const GameColor = {
 }
 
 export const transitionToGameScene = (maxPlayers) => {
-  gameState.currentState = CurrentState.PLAYING_ROUND
-  gameState.kdTree = initEmptyTree()
+  state.state = State.PLAYING_ROUND
+  state.kdTree = initEmptyTree()
 
   // The header is persistent across game and score
   createHeader({
     url:  getControllerUrl(),
-    code: gameState.gameCode,
+    code: state.gameCode,
   })
 
   const gameScene = new PIXI.Container()
@@ -68,12 +69,12 @@ export const transitionToGameScene = (maxPlayers) => {
   const playerCountFactor = R.compose(
     Math.sqrt,
     R.length,
-  )(gameState.players)
+  )(state.players)
 
   const players = R.compose(
     R.zipWith(createPlayer(playerCountFactor), _.shuffle(R.range(0, maxPlayers))),
     _.shuffle,
-  )(gameState.players)
+  )(state.players)
 
   createWalls()
 
@@ -164,7 +165,7 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
       zIndex: Layer.FOREGROUND,
     },
   )
-  if (isFirstPlace(id)) {
+  if (playerRepository.isFirstPlace(id)) {
     const crown = new PIXI.Sprite(l1.getTexture('crown'))
     l1.add(crown, {
       parent: player,
@@ -189,7 +190,7 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
   player.preventTrail = 0
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
-    const p = getPlayer(id)
+    const p = playerRepository.find(id)
 
     if (!p) {
       warn(`Player with id: ${id} not found`)

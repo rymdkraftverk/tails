@@ -11,7 +11,8 @@ import http from './http'
 import Scene from './Scene'
 import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
-import gameState, { getPlayer, CurrentState } from './gameState'
+import { State, state } from './state'
+import playerRepository from './playerRepository'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
 import * as qrCode from './qrCode'
@@ -43,12 +44,12 @@ const turnPlayer = (pId, angle) => {
   player.turnRate = angle
 }
 
-const gameInShapeForNewRound = () => [CurrentState.LOBBY, CurrentState.SCORE_OVERVIEW]
-  .includes(gameState.currentState)
+const gameInShapeForNewRound = () => [State.LOBBY, State.SCORE_OVERVIEW]
+  .includes(state.state)
 
 const isReady = R.propEq('ready', true)
-const getReadyCount = () => R.filter(isReady, gameState.players).length
-const allReady = () => R.all(isReady, gameState.players)
+const getReadyCount = () => R.filter(isReady, state.players).length
+const allReady = () => R.all(isReady, state.players)
 
 const scheduleForceStartEnablement = () => {
   setTimeout(
@@ -64,7 +65,7 @@ const scheduleForceStartEnablement = () => {
 }
 
 const readyPlayer = (id) => {
-  getPlayer(id).ready = true
+  playerRepository.find(id).ready = true
 
   if (getReadyCount() === 1) {
     scheduleForceStartEnablement()
@@ -79,10 +80,10 @@ const roundStart = (options = { collectMetrics: false }) => {
   const { collectMetrics } = options
 
   if (gameInShapeForNewRound()) {
-    gameState
+    state
       .players
       .forEach(({ id }) => {
-        getPlayer(id)
+        playerRepository.find(id)
           .send(Channel.RELIABLE, {
             event:   Event.ROUND_STARTED,
             payload: {},
@@ -108,8 +109,8 @@ const roundStart = (options = { collectMetrics: false }) => {
 }
 
 const createGame = ({ gameCode }) => {
-  gameState.gameCode = gameCode
-  transitionToLobby(gameState.gameCode)
+  state.gameCode = gameCode
+  transitionToLobby(state.gameCode)
 }
 
 const onPlayerData = id => (message) => {
@@ -131,7 +132,7 @@ const onPlayerData = id => (message) => {
 }
 
 const broadcast = (message) => {
-  gameState
+  state
     .players
     .forEach((c) => {
       c.send(
@@ -141,7 +142,7 @@ const broadcast = (message) => {
     })
 }
 
-const morePlayersAllowed = () => gameState.players.length < MAX_PLAYERS_ALLOWED
+const morePlayersAllowed = () => state.players.length < MAX_PLAYERS_ALLOWED
 
 export const onPlayerJoin = ({
   id,
@@ -165,7 +166,7 @@ export const onPlayerJoin = ({
   })
 
   if (l1.get(Scene.LOBBY)) {
-    const numOfPlayers = gameState.players.length
+    const numOfPlayers = state.players.length
     createLobbyPlayer(player, numOfPlayers - 1, { newPlayer: true })
   }
 
@@ -174,21 +175,21 @@ export const onPlayerJoin = ({
     payload: {
       id,
       color:   player.color,
-      started: gameState.currentState === CurrentState.PLAYING_ROUND,
+      started: state.state === State.PLAYING_ROUND,
     },
   })
 
   broadcast({
     event:   Event.PLAYER_COUNT,
-    payload: gameState.players.length,
+    payload: state.players.length,
   })
 
   setOnData(onPlayerData(id))
 }
 
 const createNewPlayer = ({ id, send }) => {
-  const [color] = gameState.availableColors
-  gameState.availableColors = gameState.availableColors.filter(c => c !== color)
+  const [color] = state.availableColors
+  state.availableColors = state.availableColors.filter(c => c !== color)
   const player = {
     id,
     score: 0,
@@ -196,23 +197,23 @@ const createNewPlayer = ({ id, send }) => {
     send,
   }
 
-  gameState.players = gameState.players.concat(player)
+  state.players = state.players.concat(player)
   return player
 }
 
 const onPlayerLeave = (id) => {
   log(`[Player Leave] ${id}`)
 
-  const player = getPlayer(id)
-  gameState.availableColors = [player.color].concat(gameState.availableColors)
-  gameState.players = R.reject(R.propEq('id', id), gameState.players)
+  const player = playerRepository.find(id)
+  state.availableColors = [player.color].concat(state.availableColors)
+  state.players = R.reject(R.propEq('id', id), state.players)
 
-  if (gameState.currentState === CurrentState.LOBBY) {
+  if (state.state === State.LOBBY) {
     l1
       .getByLabel('lobby-player')
       .forEach(l1.destroy)
 
-    gameState
+    state
       .players
       .forEach((p, i) => {
         createLobbyPlayer(p, i, { newPlayer: false })
@@ -221,7 +222,7 @@ const onPlayerLeave = (id) => {
 
   broadcast({
     event:   Event.PLAYER_COUNT,
-    payload: gameState.players.length,
+    payload: state.players.length,
   })
 }
 
@@ -312,8 +313,8 @@ const initMetricsBehavior = (appReference) => {
     },
   })
 
-  gameState
-    .events
+  state
+    .eventEmitter
     .on(GameEvent.ROUND_END, () => {
       const csv = formatMetricsCSV(metrics)
 
@@ -344,8 +345,6 @@ const formatMetricsCSV = R.pipe(
     'DisplayObjects, PixiElapsedMS, L1LoopDuration',
   ),
 )
-
-const state = () => gameState
 
 window.debug = {
   ...window.debug,
