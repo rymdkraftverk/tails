@@ -84,6 +84,47 @@ test('scoreToWin', () => {
 
 // --- Write ---
 
+test('add', () => {
+  repo.add({
+    color: 'pink',
+    id:    'unique',
+    extra: 'stuff',
+  })
+
+  expect(state.players)
+    .toEqual([
+      {
+        color: 'pink',
+        id:    'unique',
+        extra: 'stuff',
+      },
+      {
+        color:         'blue',
+        id:            'foo',
+        previousScore: 0,
+        score:         1,
+      },
+      {
+        color:         'red',
+        id:            'bar',
+        previousScore: 0,
+        score:         3,
+      },
+      {
+        color:         'yellow',
+        id:            'baz',
+        previousScore: 0,
+        score:         2,
+      },
+      {
+        color:         'green',
+        id:            'qux',
+        previousScore: 0,
+        score:         3,
+      },
+    ])
+})
+
 test('remove', () => {
   repo.remove('foo')
   expect(state.players)

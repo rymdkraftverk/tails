@@ -45,6 +45,10 @@ const scoreToWin = R.pipe(
 )
 
 // --- Write ---
+const add = R.curry((players, player) => R.pipe(
+  R.concat([player]),
+  R.tap(write),
+)(players))
 
 const remove = R.curry((players, id) => R.pipe(
   R.reject(R.propEq('id', id)),
@@ -60,6 +64,7 @@ const resetScores = R.pipe(
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
+  add,
   count,
   countFactor,
   find,

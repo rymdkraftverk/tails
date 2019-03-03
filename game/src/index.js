@@ -197,7 +197,7 @@ const createNewPlayer = ({ id, send }) => {
     send,
   }
 
-  state.players = state.players.concat(player)
+  playerRepository.add(player)
   return player
 }
 
