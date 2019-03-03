@@ -47,10 +47,6 @@ const turnPlayer = (pId, angle) => {
 const gameInShapeForNewRound = () => [State.LOBBY, State.SCORE_OVERVIEW]
   .includes(state.state)
 
-const isReady = R.propEq('ready', true)
-const getReadyCount = () => R.filter(isReady, state.players).length
-const allReady = () => R.all(isReady, state.players)
-
 const scheduleForceStartEnablement = () => {
   setTimeout(
     () => {
@@ -67,9 +63,9 @@ const scheduleForceStartEnablement = () => {
 const readyPlayer = (id) => {
   playerRepository.find(id).ready = true
 
-  if (getReadyCount() === 1) {
+  if (playerRepository.getReadyCount() === 1) {
     scheduleForceStartEnablement()
-  } else if (allReady()) {
+  } else if (playerRepository.allReady()) {
     roundStart()
   }
 }

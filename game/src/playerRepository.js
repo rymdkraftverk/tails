@@ -11,12 +11,16 @@ const getHighestScore = R.pipe(
   R.prop('score'),
 )
 
+const isReady = R.propEq('ready', true)
+
 const write = (x) => {
   state.players = x
 }
 
 // --- Public ---
 // --- Read ---
+
+const allReady = R.all(isReady)
 
 const count = R.length
 
@@ -26,6 +30,11 @@ const countFactor = R.pipe(
 )
 
 const find = R.curry((players, id) => R.find(R.propEq('id', id), players))
+
+const getReadyCount = R.pipe(
+  R.filter(isReady),
+  count,
+)
 
 const getWithHighestScores = players => R.pipe(
   getHighestScore,
@@ -65,9 +74,11 @@ const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
   add,
+  allReady,
   count,
   countFactor,
   find,
+  getReadyCount,
   getWithHighestScores,
   isFirstPlace,
   remove,

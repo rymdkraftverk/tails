@@ -6,31 +6,44 @@ beforeEach(() => {
     {
       color:         'blue',
       id:            'foo',
-      previousScore: 0,
+      previousScore: 1,
+      ready:         true,
       score:         1,
     },
     {
       color:         'red',
       id:            'bar',
-      previousScore: 0,
+      previousScore: 1,
+      ready:         true,
       score:         3,
     },
     {
       color:         'yellow',
       id:            'baz',
-      previousScore: 0,
+      previousScore: 1,
+      ready:         false,
       score:         2,
     },
     {
       color:         'green',
       id:            'qux',
-      previousScore: 0,
+      previousScore: 2,
+      ready:         true,
       score:         3,
     },
   ]
 })
 
 // --- Read ---
+test('allReady', () => {
+  expect(repo.allReady())
+    .toBe(false)
+
+  state.players[2].ready = true
+  expect(repo.allReady())
+    .toBe(true)
+})
+
 test('count', () => {
   expect(repo.count())
     .toBe(4)
@@ -46,9 +59,15 @@ test('find', () => {
     .toEqual({
       color:         'blue',
       id:            'foo',
-      previousScore: 0,
+      previousScore: 1,
+      ready:         true,
       score:         1,
     })
+})
+
+test('getReadyCount', () => {
+  expect(repo.getReadyCount())
+    .toBe(3)
 })
 
 test('getWithHighestScores', () => {
@@ -57,13 +76,15 @@ test('getWithHighestScores', () => {
       {
         color:         'red',
         id:            'bar',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         true,
         score:         3,
       },
       {
         color:         'green',
         id:            'qux',
-        previousScore: 0,
+        previousScore: 2,
+        ready:         true,
         score:         3,
       },
     ])
@@ -101,25 +122,29 @@ test('add', () => {
       {
         color:         'blue',
         id:            'foo',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         true,
         score:         1,
       },
       {
         color:         'red',
         id:            'bar',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         true,
         score:         3,
       },
       {
         color:         'yellow',
         id:            'baz',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         false,
         score:         2,
       },
       {
         color:         'green',
         id:            'qux',
-        previousScore: 0,
+        previousScore: 2,
+        ready:         true,
         score:         3,
       },
     ])
@@ -132,19 +157,22 @@ test('remove', () => {
       {
         color:         'red',
         id:            'bar',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         true,
         score:         3,
       },
       {
         color:         'yellow',
         id:            'baz',
-        previousScore: 0,
+        previousScore: 1,
+        ready:         false,
         score:         2,
       },
       {
         color:         'green',
         id:            'qux',
-        previousScore: 0,
+        previousScore: 2,
+        ready:         true,
         score:         3,
       },
     ])
@@ -158,24 +186,28 @@ test('resetScores', () => {
         color:         'blue',
         id:            'foo',
         previousScore: 0,
+        ready:         true,
         score:         0,
       },
       {
         color:         'red',
         id:            'bar',
         previousScore: 0,
+        ready:         true,
         score:         0,
       },
       {
         color:         'yellow',
         id:            'baz',
         previousScore: 0,
+        ready:         false,
         score:         0,
       },
       {
         color:         'green',
         id:            'qux',
         previousScore: 0,
+        ready:         true,
         score:         0,
       },
     ])
