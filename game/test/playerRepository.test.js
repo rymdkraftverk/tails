@@ -84,6 +84,31 @@ test('scoreToWin', () => {
 
 // --- Write ---
 
+test('remove', () => {
+  repo.remove('foo')
+  expect(state.players)
+    .toEqual([
+      {
+        color:         'red',
+        id:            'bar',
+        previousScore: 0,
+        score:         3,
+      },
+      {
+        color:         'yellow',
+        id:            'baz',
+        previousScore: 0,
+        score:         2,
+      },
+      {
+        color:         'green',
+        id:            'qux',
+        previousScore: 0,
+        score:         3,
+      },
+    ])
+})
+
 test('resetScores', () => {
   repo.resetScores()
   expect(state.players)

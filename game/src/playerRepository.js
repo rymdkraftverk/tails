@@ -46,6 +46,11 @@ const scoreToWin = R.pipe(
 
 // --- Write ---
 
+const remove = R.curry((players, id) => R.pipe(
+  R.reject(R.propEq('id', id)),
+  R.tap(write),
+)(players))
+
 const resetScores = R.pipe(
   R.map(x => ({ ...x, score: 0, previousScore: 0 })),
   R.tap(write),
@@ -60,6 +65,7 @@ export default R.map(deferStateApplication, {
   find,
   getWithHighestScores,
   isFirstPlace,
+  remove,
   resetScores,
   scoreToWin,
 })

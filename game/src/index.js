@@ -206,7 +206,7 @@ const onPlayerLeave = (id) => {
 
   const player = playerRepository.find(id)
   state.availableColors = [player.color].concat(state.availableColors)
-  state.players = R.reject(R.propEq('id', id), state.players)
+  playerRepository.remove(id)
 
   if (state.state === State.LOBBY) {
     l1
