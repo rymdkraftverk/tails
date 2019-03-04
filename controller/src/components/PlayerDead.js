@@ -11,24 +11,27 @@ const Container = styled(IOSDisableDoubleTap)`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: 100vh;
   user-select: none;
   background: ${R.prop('color')};
-  align-items: center;
 `
 
-const Text = styled.div`
+const DeadText = styled.div`
   font-weight: bold;
+  font-size: 5vw;
 `
 
 const TouchArea = styled.div`
   background-color: black;
-  height: 200px;
-  width: 100vw;
-  color: white;
+  height: 40vw;
+  width: 60vw;
+  color: gray;
+  font-size: 3vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 16px;
 `;
 
 const noop = () => {}
@@ -85,13 +88,15 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
     <Container
       color={playerColor}
     >
-      <Text>{'You\'re dead'}</Text>
+      <DeadText>{'You\'re dead'}</DeadText>
       <TouchArea 
         onTouchEnd={onTouchEnd}
         ref={touchAreaElement} 
         onTouchStart={onPlayerDeadClick} 
         onTouchMove={onPlayerDeadClick}
-      >{'Tap to Sparkle!'}</TouchArea>
+      >
+        {'Tap to Sparkle!'}
+      </TouchArea>
     </Container>
   )
 }
