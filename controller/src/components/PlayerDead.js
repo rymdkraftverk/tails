@@ -41,7 +41,10 @@ navigator.vibrate =
   noop
 
 const PlayerDead = ({ playerColor, sendReliable }) => {
-  navigator.vibrate(100)
+  useEffect(() => {
+    navigator.vibrate(100)
+  }, [])
+
   const touchAreaElement = useRef(null)
   const [position, setPosition] = useState(null)
   const [sendData, setSendData] = useState(false)
