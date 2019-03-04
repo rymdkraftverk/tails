@@ -45,6 +45,7 @@ const GameJoinButton = styled.button`
 
 const onFocus = (e) => {
   e.target.placeholder = ''
+  e.target.select()
 }
 
 const onBlur = (e) => {
