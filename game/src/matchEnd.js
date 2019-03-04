@@ -10,7 +10,7 @@ import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
 import { state } from './state'
-import playerRepository from './playerRepository'
+import playerRepository from './repository/player'
 import { playTrack } from './music'
 import Sound from './constant/sound'
 

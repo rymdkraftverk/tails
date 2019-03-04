@@ -1,5 +1,5 @@
 import R from 'ramda'
-import { state } from './state'
+import { state } from '../state'
 
 // -- Private ---
 

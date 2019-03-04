@@ -10,7 +10,7 @@ import * as TextStyle from './constant/textStyle'
 import { transitionToMatchEnd } from './matchEnd'
 import Layer from './constant/layer'
 import { state } from './state'
-import playerRepository from './playerRepository'
+import playerRepository from './repository/player'
 
 const WORM_START_Y = 80
 const PLAYER_SPACING = 64

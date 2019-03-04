@@ -1,5 +1,5 @@
-import { state } from '../src/state'
-import repo from '../src/playerRepository'
+import { state } from '../../src/state'
+import repo from '../../src/repository/player'
 
 beforeEach(() => {
   state.players = [
