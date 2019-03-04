@@ -150,8 +150,8 @@ test('add', () => {
     ])
 })
 
-test('incScores', () => {
-  repo.incScores([
+test('incrementScores', () => {
+  repo.incrementScores([
     'foo',
     'baz',
     'qux',

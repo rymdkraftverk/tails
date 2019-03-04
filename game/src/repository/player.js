@@ -17,7 +17,7 @@ const getHighestScore = R.pipe(
 
 const isReady = R.propEq('ready', true)
 
-const incScore = R.over(
+const incrementScore = R.over(
   R.lensProp('score'),
   R.inc,
 )
@@ -72,13 +72,13 @@ const add = R.curry((players, player) => R.pipe(
   R.tap(write),
 )(players))
 
-const incScores = R.curry((players, whitelist) => R.pipe(
+const incrementScores = R.curry((players, whitelist) => R.pipe(
   R.map(R.when(
     R.pipe(
       R.prop('id'),
       includes(whitelist),
     ),
-    incScore,
+    incrementScore,
   )),
   R.tap(write),
 )(players))
@@ -106,7 +106,7 @@ export default R.map(deferStateApplication, {
   find,
   getReadyCount,
   getWithHighestScores,
-  incScores,
+  incrementScores,
   isFirstPlace,
   remove,
   resetReady,

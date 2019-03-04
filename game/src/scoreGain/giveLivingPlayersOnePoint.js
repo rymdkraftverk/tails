@@ -5,7 +5,7 @@ import playerRepository from '../repository/player'
 const incAliveScores = R.pipe(
   R.filter(R.propEq('alive', true)),
   R.pluck('id'),
-  playerRepository.incScores,
+  playerRepository.incrementScores,
 )
 
 export const giveLivingPlayersOnePoint = () => {
