@@ -12,7 +12,7 @@ const Container = styled(IOSDisableDoubleTap)`
   align-items: center;
   height: 100vh;
   background-color: ${R.prop('backgroundColor')};
-  font-size: 4vw;
+  font-size: 5vw;
 `
 
 const Instructions = styled.div`
@@ -47,7 +47,18 @@ const InstructionsLine = styled.div`
 `;
 
 const AwaitingPlayers = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`
+
+const AwaitingPlayersTitle = styled.div`
   ${label};
+`
+
+const AwaitingPlayersSubtitle = styled.div`
+  font-size: 3vw;
+  user-select: none;
 `
 
 const AwaitingReadyPlayers = styled.div`
@@ -113,7 +124,7 @@ class GameLobby extends Component {
                     `}
                   </InstructionsLine>
                   <InstructionsLine>
-                    {` 
+                    {`
                       Play on the other screen
                     `}
                   </InstructionsLine>
@@ -127,8 +138,14 @@ class GameLobby extends Component {
 
             :
               <AwaitingPlayers>
-                Awaiting more players...
+                <AwaitingPlayersTitle>
+                  Ask a friend to join!
+                </AwaitingPlayersTitle>
+                <AwaitingPlayersSubtitle>
+                  (2 players minimum)
+                </AwaitingPlayersSubtitle>
               </AwaitingPlayers>
+
         }
       </Container>
     )
