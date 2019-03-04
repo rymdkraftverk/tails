@@ -150,6 +150,46 @@ test('add', () => {
     ])
 })
 
+test('incScores', () => {
+  repo.incScores([
+    'foo',
+    'baz',
+    'qux',
+  ])
+
+  expect(state.players)
+    .toEqual([
+      {
+        color:         'blue',
+        id:            'foo',
+        previousScore: 1,
+        ready:         true,
+        score:         2,
+      },
+      {
+        color:         'red',
+        id:            'bar',
+        previousScore: 1,
+        ready:         true,
+        score:         3,
+      },
+      {
+        color:         'yellow',
+        id:            'baz',
+        previousScore: 1,
+        ready:         false,
+        score:         3,
+      },
+      {
+        color:         'green',
+        id:            'qux',
+        previousScore: 2,
+        ready:         true,
+        score:         4,
+      },
+    ])
+})
+
 test('remove', () => {
   repo.remove('foo')
   expect(state.players)

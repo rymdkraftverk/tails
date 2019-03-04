@@ -1,19 +1,13 @@
+import R from 'ramda'
 import * as l1 from 'l1'
-import { state } from '../state'
+import playerRepository from '../repository/player'
+
+const incAliveScores = R.pipe(
+  R.filter(R.propEq('alive', true)),
+  R.pluck('id'),
+  playerRepository.incScores,
+)
 
 export const giveLivingPlayersOnePoint = () => {
-  const livingPlayers = l1
-    .getByLabel('player')
-    .filter(p => p && p.alive)
-
-  const livingIDs = new Set(livingPlayers.map(p => p.id))
-
-  state.players = state
-    .players
-    .map(player => (livingIDs.has(player.id)
-      ? ({
-        ...player,
-        score: player.score + 1,
-      })
-      : player))
+  incAliveScores(l1.getByLabel('player'))
 }

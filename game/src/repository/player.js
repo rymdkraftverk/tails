@@ -7,6 +7,7 @@ import { state } from '../state'
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 const subtract = R.flip(R.subtract)
+const includes = R.flip(R.contains)
 
 const getHighestScore = R.pipe(
   R.sortBy(R.prop('score')),
@@ -15,6 +16,11 @@ const getHighestScore = R.pipe(
 )
 
 const isReady = R.propEq('ready', true)
+
+const incScore = R.over(
+  R.lensProp('score'),
+  R.inc,
+)
 
 const write = (x) => {
   state.players = x
@@ -66,6 +72,17 @@ const add = R.curry((players, player) => R.pipe(
   R.tap(write),
 )(players))
 
+const incScores = R.curry((players, whitelist) => R.pipe(
+  R.map(R.when(
+    R.pipe(
+      R.prop('id'),
+      includes(whitelist),
+    ),
+    incScore,
+  )),
+  R.tap(write),
+)(players))
+
 const remove = R.curry((players, id) => R.pipe(
   R.reject(R.propEq('id', id)),
   R.tap(write),
@@ -89,6 +106,7 @@ export default R.map(deferStateApplication, {
   find,
   getReadyCount,
   getWithHighestScores,
+  incScores,
   isFirstPlace,
   remove,
   resetReady,
