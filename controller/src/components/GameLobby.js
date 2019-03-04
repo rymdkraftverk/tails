@@ -12,7 +12,7 @@ const Container = styled(IOSDisableDoubleTap)`
   align-items: center;
   height: 100vh;
   background-color: ${R.prop('backgroundColor')};
-  font-size: 4vw;
+  font-size: 5vw;
 `
 
 const Instructions = styled.div`
