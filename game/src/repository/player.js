@@ -3,7 +3,11 @@ import { state } from '../state'
 
 // -- Private ---
 
+// eslint-disable-next-line fp/no-rest-parameters
+const deferStateApplication = f => (...args) => f(state.players, ...args)
+
 const subtract = R.flip(R.subtract)
+const includes = R.flip(R.contains)
 
 const getHighestScore = R.pipe(
   R.sortBy(R.prop('score')),
@@ -13,11 +17,20 @@ const getHighestScore = R.pipe(
 
 const isReady = R.propEq('ready', true)
 
+const incrementScore = R.over(
+  R.lensProp('score'),
+  R.inc,
+)
+
 const write = (x) => {
   state.players = x
 }
 
 // --- Public ---
+// All functions below MUST take a list of players as
+// their first argument. It will automatically get injected
+// into the exported functions thanks to `deferStateApplication`
+
 // --- Read ---
 
 const allReady = R.all(isReady)
@@ -59,18 +72,31 @@ const add = R.curry((players, player) => R.pipe(
   R.tap(write),
 )(players))
 
+const incrementScores = R.curry((players, whitelist) => R.pipe(
+  R.map(R.when(
+    R.pipe(
+      R.prop('id'),
+      includes(whitelist),
+    ),
+    incrementScore,
+  )),
+  R.tap(write),
+)(players))
+
 const remove = R.curry((players, id) => R.pipe(
   R.reject(R.propEq('id', id)),
   R.tap(write),
 )(players))
 
+const resetReady = R.pipe(
+  R.map(R.assoc('ready', false)),
+  R.tap(write),
+)
+
 const resetScores = R.pipe(
   R.map(x => ({ ...x, score: 0, previousScore: 0 })),
   R.tap(write),
 )
-
-// eslint-disable-next-line fp/no-rest-parameters
-const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
   add,
@@ -80,8 +106,10 @@ export default R.map(deferStateApplication, {
   find,
   getReadyCount,
   getWithHighestScores,
+  incrementScores,
   isFirstPlace,
   remove,
+  resetReady,
   resetScores,
   scoreToWin,
 })
