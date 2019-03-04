@@ -3,6 +3,9 @@ import { state } from '../state'
 
 // -- Private ---
 
+// eslint-disable-next-line fp/no-rest-parameters
+const deferStateApplication = f => (...args) => f(state.players, ...args)
+
 const subtract = R.flip(R.subtract)
 
 const getHighestScore = R.pipe(
@@ -18,6 +21,10 @@ const write = (x) => {
 }
 
 // --- Public ---
+// All functions below MUST take a list of players as
+// their first argument. It will automatically get injected
+// into the exported functions thanks to `deferStateApplication`
+
 // --- Read ---
 
 const allReady = R.all(isReady)
@@ -68,9 +75,6 @@ const resetScores = R.pipe(
   R.map(x => ({ ...x, score: 0, previousScore: 0 })),
   R.tap(write),
 )
-
-// eslint-disable-next-line fp/no-rest-parameters
-const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 export default R.map(deferStateApplication, {
   add,
