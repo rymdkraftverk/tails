@@ -178,6 +178,41 @@ test('remove', () => {
     ])
 })
 
+test('resetReady', () => {
+  repo.resetReady()
+  expect(state.players)
+    .toEqual([
+      {
+        color:         'blue',
+        id:            'foo',
+        previousScore: 1,
+        ready:         false,
+        score:         1,
+      },
+      {
+        color:         'red',
+        id:            'bar',
+        previousScore: 1,
+        ready:         false,
+        score:         3,
+      },
+      {
+        color:         'yellow',
+        id:            'baz',
+        previousScore: 1,
+        ready:         false,
+        score:         2,
+      },
+      {
+        color:         'green',
+        id:            'qux',
+        previousScore: 2,
+        ready:         false,
+        score:         3,
+      },
+    ])
+})
+
 test('resetScores', () => {
   repo.resetScores()
   expect(state.players)

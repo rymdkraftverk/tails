@@ -9,6 +9,7 @@ import Layer from './constant/layer'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
 import { State, state } from './state'
+import playerRepository from './repository/player'
 import repository from './repository'
 import http from './http'
 
@@ -16,7 +17,7 @@ const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
   state.state = State.SCORE_OVERVIEW
-  state.players = state.players.map(R.assoc('ready', false))
+  playerRepository.resetReady()
 
   const { winner } = state.lastRoundResult
   http.postScoreBoard(repository.identifiableScoreBoard())
