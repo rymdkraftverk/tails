@@ -47,7 +47,17 @@ const InstructionsLine = styled.div`
 `;
 
 const AwaitingPlayers = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`
+
+const AwaitingPlayersTitle = styled.div`
   ${label};
+`
+
+const AwaitingPlayersSubtitle = styled.div`
+  font-size: 3vw;
 `
 
 const AwaitingReadyPlayers = styled.div`
@@ -127,8 +137,14 @@ class GameLobby extends Component {
 
             :
               <AwaitingPlayers>
-                Awaiting more players...
+                <AwaitingPlayersTitle>
+                  Ask a friend to join!
+                </AwaitingPlayersTitle>
+                <AwaitingPlayersSubtitle>
+                  (2 players minimum)
+                </AwaitingPlayersSubtitle>
               </AwaitingPlayers>
+
         }
       </Container>
     )
