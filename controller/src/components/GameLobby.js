@@ -58,6 +58,7 @@ const AwaitingPlayersTitle = styled.div`
 
 const AwaitingPlayersSubtitle = styled.div`
   font-size: 3vw;
+  user-select: none;
 `
 
 const AwaitingReadyPlayers = styled.div`
