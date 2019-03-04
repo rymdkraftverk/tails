@@ -123,7 +123,7 @@ class GameLobby extends Component {
                     `}
                   </InstructionsLine>
                   <InstructionsLine>
-                    {` 
+                    {`
                       Play on the other screen
                     `}
                   </InstructionsLine>
