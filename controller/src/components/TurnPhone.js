@@ -28,8 +28,6 @@ const TurnPhone = props => {
   )
 }
 
-TurnPhone.propTypes = {
-
-}
+TurnPhone.propTypes = {}
 
 export default TurnPhone
