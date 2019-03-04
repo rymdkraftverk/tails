@@ -8,17 +8,18 @@ import * as TextStyle from './constant/textStyle'
 import Layer from './constant/layer'
 import Scene from './Scene'
 import { transitionToScoreScene } from './score'
-import gameState, { CurrentState, identifiableScoreBoard } from './gameState'
+import { State, state } from './state'
+import repository from './repository'
 import http from './http'
 
 const TIME_UNTIL_ROUND_END_RESTARTS = 240
 
 export const transitionToRoundEnd = () => {
-  gameState.currentState = CurrentState.SCORE_OVERVIEW
-  gameState.players = gameState.players.map(R.assoc('ready', false))
+  state.state = State.SCORE_OVERVIEW
+  state.players = state.players.map(R.assoc('ready', false))
 
-  const { winner } = gameState.lastRoundResult
-  http.postScoreBoard(identifiableScoreBoard())
+  const { winner } = state.lastRoundResult
+  http.postScoreBoard(repository.identifiableScoreBoard())
 
   const roundEndText = new PIXI.Text(
     `${winner} wins!`,

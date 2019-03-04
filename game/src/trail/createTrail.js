@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 
 import Scene from '../Scene'
-import gameState from '../gameState'
+import { state } from '../state'
 import { addEntityToTree } from '../kd-tree'
 import Trail from '../constant/trail'
 import Layer from '../constant/layer'
@@ -10,7 +10,7 @@ import Layer from '../constant/layer'
 export const createTrail = ({
   player, scale, speedMultiplier, duration,
 }) => ({
-  id:       `createTrail-${player.playerId}`,
+  id:       `createTrail-${player.id}`,
   duration: duration || Trail.CREATE_TRAIL_FREQUENCY,
   loop:     true,
   onInit:   () => {
@@ -49,7 +49,7 @@ export const createTrail = ({
     trailE.x = x - (player.width / 2)
     trailE.y = y - (player.height / 2)
     trailE.active = false
-    trailE.player = player.playerId
+    trailE.player = player.id
 
     l1.add(trailE, {
       parent: player.trailContainer,
@@ -79,7 +79,7 @@ export const createTrail = ({
     const options = {
       getCoord: (e, dim) => e[dim],
     }
-    gameState.kdTree = addEntityToTree(options, gameState.kdTree, trailE)
+    state.kdTree = addEntityToTree(options, state.kdTree, trailE)
   },
 })
 

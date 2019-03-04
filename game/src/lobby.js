@@ -6,7 +6,7 @@ import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'
 import { GameColor, toRadians } from './game'
-import gameState, { CurrentState } from './gameState'
+import { State, state } from './state'
 import Layer from './constant/layer'
 import bounce from './bounce'
 import Scene from './Scene'
@@ -63,7 +63,7 @@ const addText = ({
 }
 
 export const transitionToLobby = (gameCode, players = []) => {
-  gameState.currentState = CurrentState.LOBBY
+  state.state = State.LOBBY
 
   const controllerUrl = getControllerUrl()
 

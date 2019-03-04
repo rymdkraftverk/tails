@@ -8,7 +8,7 @@ import Scene from '../Scene'
 import Layer from '../constant/layer'
 import Sound from '../constant/sound'
 import Trail from '../constant/trail'
-import gameState from '../gameState'
+import { state } from '../state'
 import sparks from '../particleEmitter/sparks'
 
 const killPlayer = (player, speedMultiplier) => {
@@ -47,13 +47,13 @@ const killPlayer = (player, speedMultiplier) => {
   player.alive = false
 
   const behaviorsToRemove = [
-    `collisionCheckerTrail-${player.playerId}`,
-    `collisionCheckerWalls-${player.playerId}`,
-    `createHoleMaker-${player.playerId}`,
-    `holeMaker-${player.playerId}`,
-    `createTrail-${player.playerId}`,
-    `move-${player.playerId}`,
-    `pivot-${player.playerId}`,
+    `collisionCheckerTrail-${player.id}`,
+    `collisionCheckerWalls-${player.id}`,
+    `createHoleMaker-${player.id}`,
+    `holeMaker-${player.id}`,
+    `createTrail-${player.id}`,
+    `move-${player.id}`,
+    `pivot-${player.id}`,
   ]
 
   R.forEach(
@@ -61,7 +61,7 @@ const killPlayer = (player, speedMultiplier) => {
     behaviorsToRemove,
   )
 
-  gameState.events.emit(GameEvent.PLAYER_COLLISION, player.color)
+  state.eventEmitter.emit(GameEvent.PLAYER_COLLISION, player.color)
   player.event.emit(GameEvent.PLAYER_COLLISION)
 
   const {
