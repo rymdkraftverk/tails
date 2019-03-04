@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
+import MediaQuery from 'react-responsive';
 import { Event, Color, Channel } from 'common'
 import signaling from 'signaling'
 
@@ -13,6 +14,7 @@ import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 import getUrlParams from '../util/getUrlParams'
+import TurnPhone from './TurnPhone';
 
 const { error: logError } = console
 
@@ -252,7 +254,12 @@ class App extends Component {
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
-      { this.appStateComponent() }
+        <MediaQuery orientation="portrait">
+          <TurnPhone />
+        </MediaQuery>
+        <MediaQuery orientation="landscape">
+            { this.appStateComponent() }
+        </MediaQuery>
       </Fullscreen>
     )
   }
