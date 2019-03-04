@@ -8,7 +8,7 @@ import Logo from './Logo';
 const PLACEHOLDER = 'Code'
 
 const PageContainer = styled(IOSDisableDoubleTap)`
-  
+
 `
 
 const Container = styled.div`
