@@ -80,7 +80,21 @@ jobs:
           paths:
             - game/public
           root: .
-  deploy_game:
+  deploy_game_s3:
+    docker:
+      - image: circleci/python:2.7-jessie
+    working_directory: ~/tails
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install AWS CLI
+          command: sudo pip install awscli
+      - run:
+          name: Upload to AWS S3
+          command: aws s3 sync public/ s3://rkv-game/ --acl public-read
+          working_directory: game
+  deploy_game_itch:
     docker:
       - image: circleci/node:latest # interchangeable for any image with curl and unzip
     working_directory: ~/tails
@@ -141,7 +155,10 @@ workflows:
       - build_game:
           requires:
             - setup
-      - deploy_game:
+      - deploy_game_s3:
+          requires:
+            - build_game
+      - deploy_game_itch:
           requires:
             - build_game
       - deploy_backend:
