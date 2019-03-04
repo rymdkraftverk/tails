@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo';
 
+const PLACEHOLDER = 'Code'
+
 const PageContainer = styled(IOSDisableDoubleTap)`
   
 `
@@ -41,6 +43,14 @@ const GameJoinButton = styled.button`
   opacity: ${({ disabled }) => (disabled ? '0.2' : '1')};
 `
 
+const onFocus = (e) => {
+  e.target.placeholder = ''
+}
+
+const onBlur = (e) => {
+  e.target.placeholder = PLACEHOLDER
+}
+
 class LockerRoom extends Component {
   componentDidMount() {
     const {
@@ -74,8 +84,6 @@ class LockerRoom extends Component {
       gameCodeChange,
     } = this.props
 
-    const placeholder = 'Code'
-
     return (
       <PageContainer>
         <Logo />
@@ -85,9 +93,9 @@ class LockerRoom extends Component {
               type="text"
               value={gameCode}
               onChange={gameCodeChange}
-              placeholder={placeholder}
-              onFocus={(e) => { e.target.placeholder = '' }}
-              onBlur={(e) => { e.target.placeholder = placeholder }}
+              placeholder={PLACEHOLDER}
+              onFocus={onFocus}
+              onBlur={onBlur}
               onKeyPress={this.onKeyPress}
               className="game-join-input"
               spellCheck="false"
