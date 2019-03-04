@@ -9,6 +9,11 @@ jobs:
       - run:
           name: Combine timestamp and sha of last commit to create version
           command: git show -s --format="%ct-%h" > version
+      - run:
+          name: Tag version in git
+          command: |
+            git tag `cat version`
+            git push --tags
       - persist_to_workspace:
           paths: .
           root: .
