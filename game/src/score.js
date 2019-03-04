@@ -142,6 +142,16 @@ const createPlayer = (index) => {
       0,
       6,
     )
+
+    if (playerRepository.isFirstPlace(player.id)) {
+      const crown = new PIXI.Sprite(l1.getTexture('crown'))
+      l1.add(crown, {
+        parent: head,
+      })
+      crown.scale.set(1.5)
+      crown.x -= crown.width / 4
+      crown.y -= crown.height * 0.9
+    }
   }
 
   const tail = new PIXI.Graphics()
