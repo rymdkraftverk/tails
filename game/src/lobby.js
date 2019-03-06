@@ -19,10 +19,17 @@ import * as qrCode from './qrCode'
 const TEXT_BOUNCE_INTERVAL = 600
 
 const TextAnchor = {
+  TAILS_START_X:       92,
+  TAILS_START_Y:       64,
   INSTRUCTION_START_X: 92,
   INSTRUCTION_START_Y: 180,
   X_OFFSET:            80,
   Y_OFFSET:            150,
+}
+
+const TextSize = {
+  TAILS:       32,
+  INSTRUCTION: 50,
 }
 
 const TextColor = {
@@ -88,12 +95,12 @@ export const transitionToLobby = (gameCode, players = []) => {
   )
 
   addText({
-    x:     92,
-    y:     64,
+    x:     TextAnchor.TAILS_START_X,
+    y:     TextAnchor.TAILS_START_Y,
     text:  'tails',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 32,
+      fontSize: TextSize.TAILS,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -105,7 +112,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -117,7 +124,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -144,7 +151,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
