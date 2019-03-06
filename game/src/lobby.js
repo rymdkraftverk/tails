@@ -99,7 +99,6 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
 
-
   addText({
     x:     TextAnchor.INSTRUCTION_START_X,
     y:     TextAnchor.INSTRUCTION_START_Y,
