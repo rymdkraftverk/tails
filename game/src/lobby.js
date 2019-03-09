@@ -22,8 +22,8 @@ const TEXT_BOUNCE_INTERVAL = 600
 const TextAnchor = {
   TAILS_START_X:       92,
   TAILS_START_Y:       64,
-  SUBHEADING_START_X:  280,
-  SUBHEADING_START_Y:  40,
+  SUBHEADING_START_X:  280 + 250,
+  SUBHEADING_START_Y:  40 + 30,
   INSTRUCTION_START_X: 92,
   INSTRUCTION_START_Y: 210,
   X_OFFSET:            80,
@@ -139,9 +139,8 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
 
-  // TODO: why you break?!
-  // subheading1.anchor.set(0.5)
-  // subheading2.anchor.set(0.5)
+  subheading1.anchor.set(0.5)
+  subheading2.anchor.set(0.5)
 
   // First bounce
   l1.addBehavior(textBounce(subheading1))
