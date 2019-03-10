@@ -16,6 +16,7 @@
   },
   "scripts": {
     "test": "jest ./game/test ./signaling/test",
-    "lint": "./run_lint.sh"
+    "lint": "./run_lint.sh",
+    "postinstall": "npm install --prefix backend && npm install --prefix signaling"
   }
 }

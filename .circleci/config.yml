@@ -105,26 +105,15 @@ jobs:
           command: butler push game/public rymdkraftverk/tails:web
   deploy_backend:
     docker:
-      - image: docker:latest
-    working_directory: ~/tails
-    steps:
-      - attach_workspace:
-          at: .
-      - run: apk add --no-cache py-pip
-      - run: pip install docker-compose
-      - setup_remote_docker
-      - run: docker-compose -f docker-compose.yml build backend
-      - run: docker tag tails_backend:latest registry.heroku.com/rkv-backend/web
-      - run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-      - run: docker push registry.heroku.com/rkv-backend/web
-  release_backend:
-    docker:
       - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
-      - run: heroku container:release web -a rkv-backend
+      - run: heroku git:remote --ssh-git -a rkv-backend
+      - add_ssh_keys
+      - run: ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+      - run: git push --force heroku $CIRCLE_BRANCH:master
       - run:
           name: Set version in env
           command: |
@@ -155,6 +144,3 @@ workflows:
       - deploy_backend:
           requires:
             - setup
-      - release_backend:
-          requires:
-            - deploy_backend
