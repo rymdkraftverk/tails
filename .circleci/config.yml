@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   setup:
     docker:
-      - image: circleci/node:latest
+      - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - checkout
@@ -46,14 +46,11 @@ jobs:
           root: .
   deploy_controller:
     docker:
-      - image: circleci/python:2.7-jessie
+      - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: Install AWS CLI
-          command: sudo pip install awscli
       - run:
           name: Upload to AWS S3
           command: aws s3 sync build/ s3://rkv-controller/ --acl public-read
@@ -87,35 +84,25 @@ jobs:
           root: .
   deploy_game_s3:
     docker:
-      - image: circleci/python:2.7-jessie
+      - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: Install AWS CLI
-          command: sudo pip install awscli
       - run:
           name: Upload to AWS S3
           command: aws s3 sync public/ s3://rkv-game/ --acl public-read
           working_directory: game
   deploy_game_itch:
     docker:
-      - image: circleci/node:latest # interchangeable for any image with curl and unzip
+      - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
       - run:
-          name: Install butler CLI
-          command: |
-            curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-            unzip butler.zip
-            chmod +x butler
-            ./butler -V
-      - run:
           name: Upload to itch.io
-          command: ./butler push game/public rymdkraftverk/tails:web
+          command: butler push game/public rymdkraftverk/tails:web
   deploy_backend:
     docker:
       - image: docker:latest
@@ -132,12 +119,11 @@ jobs:
       - run: docker push registry.heroku.com/rkv-backend/web
   release_backend:
     docker:
-      - image: tutum/curl:latest
+      - image: rymdkraftverk/ci:latest
     working_directory: ~/tails
     steps:
       - attach_workspace:
           at: .
-      - run: curl https://cli-assets.heroku.com/install.sh | sh
       - run: heroku container:release web -a rkv-backend
       - run:
           name: Set version in env
