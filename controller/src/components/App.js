@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
-import MediaQuery from 'react-responsive';
+import MediaQuery from 'react-responsive'
 import { Event, Color, Channel } from 'common'
 import getUrlParams from 'common/getUrlParams'
 import signaling from 'signaling'
@@ -14,7 +14,7 @@ import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
-import TurnPhone from './TurnPhone';
+import TurnPhone from './TurnPhone'
 
 const { error: logError } = console
 
@@ -22,22 +22,18 @@ const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
 const TIMEOUT_SECONDS = 20
 
 const AppState = {
-  LOCKER_ROOM:     'locker-room',
+  LOCKER_ROOM: 'locker-room',
   GAME_CONNECTING: 'game-connecting',
-  GAME_LOBBY:      'game-lobby',
-  GAME_PLAYING:    'game-playing',
-  PLAYER_DEAD:     'player-dead',
+  GAME_LOBBY: 'game-lobby',
+  GAME_PLAYING: 'game-playing',
+  PLAYER_DEAD: 'player-dead',
 }
 
-const joinState = ({ started, color }) => (
-  {
-    ...newRoundState,
-    playerColor: color,
-    appState: started
-      ? AppState.AWAITING_NEXT_ROUND
-      : AppState.GAME_LOBBY,
-  }
-)
+const joinState = ({ started, color }) => ({
+  ...newRoundState,
+  playerColor: color,
+  appState: started ? AppState.AWAITING_NEXT_ROUND : AppState.GAME_LOBBY,
+})
 
 const newRoundState = {
   appState: AppState.GAME_LOBBY,
@@ -47,36 +43,44 @@ const newRoundState = {
 
 const errorState = message => ({
   appState: AppState.LOCKER_ROOM,
-  error:    message,
+  error: message,
 })
 
 const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
-const writeGameCodeToUrl = (gameCode) => {
+const writeGameCodeToUrl = gameCode => {
   window.history.pushState({ gameCode }, '', `?code=${gameCode}`)
 }
 
 const eventState = ({ event, payload }) => {
   switch (event) {
-    case Event.PLAYER_COUNT: return { playerCount: payload }
-    case Event.PLAYER_JOINED: return joinState(payload)
-    case Event.START_ENABLED: return { startEnabled: true }
-    case Event.GAME_FULL: return errorState('Game is full')
-    case Event.PLAYER_DIED: return { appState: AppState.PLAYER_DEAD }
-    case Event.ROUND_END: return newRoundState
-    case Event.ROUND_STARTED: return { appState: AppState.GAME_PLAYING }
-    default: return null
+    case Event.PLAYER_COUNT:
+      return { playerCount: payload }
+    case Event.PLAYER_JOINED:
+      return joinState(payload)
+    case Event.START_ENABLED:
+      return { startEnabled: true }
+    case Event.GAME_FULL:
+      return errorState('Game is full')
+    case Event.PLAYER_DIED:
+      return { appState: AppState.PLAYER_DEAD }
+    case Event.ROUND_END:
+      return newRoundState
+    case Event.ROUND_STARTED:
+      return { appState: AppState.GAME_PLAYING }
+    default:
+      return null
   }
 }
 
 class App extends Component {
   state = {
-    appState:    AppState.LOCKER_ROOM,
-    error:       '',
-    fullscreen:  false,
-    gameCode:    '',
-    gyro:        false,
+    appState: AppState.LOCKER_ROOM,
+    error: '',
+    fullscreen: false,
+    gameCode: '',
+    gyro: false,
     playerColor: null,
-    ready:       false,
+    ready: false,
   }
 
   componentDidMount = () => {
@@ -89,7 +93,7 @@ class App extends Component {
     }
   }
 
-  onData = (message) => {
+  onData = message => {
     const state = eventState(message)
 
     if (!state) {
@@ -106,7 +110,7 @@ class App extends Component {
     this.join(gameCode)
   }
 
-  join = (gameCode) => {
+  join = gameCode => {
     this.setState({ appState: AppState.GAME_CONNECTING, error: '' })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
@@ -114,7 +118,7 @@ class App extends Component {
     this.connectToGame(gameCode)
   }
 
-  displayError = (message) => {
+  displayError = message => {
     this.setState(errorState(message))
   }
 
@@ -131,9 +135,7 @@ class App extends Component {
 
   gameCodeChange = ({ target: { value } }) =>
     this.setState({
-      gameCode: value
-        .substr(0, 4)
-        .toUpperCase(),
+      gameCode: value.substr(0, 4).toUpperCase(),
     })
 
   checkConnectionTimeout = () => {
@@ -147,18 +149,19 @@ class App extends Component {
       this.displayError('Connection failed')
     }
 
-    signaling.runInitiator({
-      channelConfigs,
-      onClose,
-      onData:     this.onData,
-      receiverId: gameCode,
-      wsAddress:  WS_ADDRESS,
-    })
-      .then((send) => {
+    signaling
+      .runInitiator({
+        channelConfigs,
+        onClose,
+        onData: this.onData,
+        receiverId: gameCode,
+        wsAddress: WS_ADDRESS,
+      })
+      .then(send => {
         this.sendSteering = send(Channel.RELIABLE_STEERING)
         this.sendReliable = send(Channel.RELIABLE)
       })
-      .catch((error) => {
+      .catch(error => {
         const message = {
           NOT_FOUND: `Game with code ${gameCode} not found`,
         }[error.cause]
@@ -184,7 +187,7 @@ class App extends Component {
     this.setState({ ready: true })
   }
 
-  setGyro = (gyro) => {
+  setGyro = gyro => {
     this.setState({ gyro })
   }
 
@@ -203,41 +206,44 @@ class App extends Component {
     } = this.state
 
     switch (appState) {
-      case AppState.LOCKER_ROOM: 
-        return <LockerRoom
-         clearError={this.clearError}
-         error={error}
-         gameCodeChange={this.gameCodeChange}
-         gameCode={gameCode}
-         onJoinClick={this.onJoinClick}
-        />
-      case AppState.GAME_CONNECTING: 
+      case AppState.LOCKER_ROOM:
+        return (
+          <LockerRoom
+            clearError={this.clearError}
+            error={error}
+            gameCodeChange={this.gameCodeChange}
+            gameCode={gameCode}
+            onJoinClick={this.onJoinClick}
+          />
+        )
+      case AppState.GAME_CONNECTING:
         return <LockerRoomLoader />
-      case AppState.GAME_LOBBY: 
-        return <GameLobby
-          startGame={this.startGame}
-          readyPlayer={this.readyPlayer}
-          playerColor={playerColor}
-          playerCount={playerCount}
-          ready={ready}
-          startEnabled={startEnabled}
-        />
-      case AppState.GAME_PLAYING: 
-        return <GamePlaying
-          gyro={gyro}
-          playerColor={Color[playerColor]}
-          send={this.sendSteering}
-          setGyro={this.setGyro}
-        />
-      case AppState.PLAYER_DEAD: 
-        return <PlayerDead
-          playerColor={Color[playerColor]}
-        />
-      case AppState.AWAITING_NEXT_ROUND: 
-        return <AwaitingNextRound
-          playerColor={Color[playerColor]}
-        />
-      default: return null
+      case AppState.GAME_LOBBY:
+        return (
+          <GameLobby
+            startGame={this.startGame}
+            readyPlayer={this.readyPlayer}
+            playerColor={playerColor}
+            playerCount={playerCount}
+            ready={ready}
+            startEnabled={startEnabled}
+          />
+        )
+      case AppState.GAME_PLAYING:
+        return (
+          <GamePlaying
+            gyro={gyro}
+            playerColor={Color[playerColor]}
+            send={this.sendSteering}
+            setGyro={this.setGyro}
+          />
+        )
+      case AppState.PLAYER_DEAD:
+        return <PlayerDead playerColor={Color[playerColor]} />
+      case AppState.AWAITING_NEXT_ROUND:
+        return <AwaitingNextRound playerColor={Color[playerColor]} />
+      default:
+        return null
     }
   }
 
@@ -258,7 +264,7 @@ class App extends Component {
           <TurnPhone />
         </MediaQuery>
         <MediaQuery orientation="landscape">
-            { this.appStateComponent() }
+          {this.appStateComponent()}
         </MediaQuery>
       </Fullscreen>
     )

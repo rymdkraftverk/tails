@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/browser'
 
 const { REACT_APP_ERROR_LOGGING: ERROR_LOGGING = false } = process.env
 
 class Boundary extends Component {
   constructor(props) {
-    super(props);
-    this.state = { error: null };
+    super(props)
+    this.state = { error: null }
   }
 
   componentDidMount() {
@@ -15,26 +15,26 @@ class Boundary extends Component {
       : ''
     Sentry.init({
       dsn,
-    });
+    })
   }
 
   componentDidCatch(error, errorInfo) {
-    this.setState({ error });
+    this.setState({ error })
     Sentry.withScope(scope => {
       Object.keys(errorInfo).forEach(key => {
-        scope.setExtra(key, errorInfo[key]);
-      });
-      Sentry.captureException(error);
-    });
+        scope.setExtra(key, errorInfo[key])
+      })
+      Sentry.captureException(error)
+    })
   }
 
   render() {
     if (this.state.error) {
       return (
         <div onClick={() => Sentry.showReportDialog()}>Report feedback</div>
-      );
+      )
     } else {
-      return this.props.children;
+      return this.props.children
     }
   }
 }

@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import React, { Component } from 'react'
-import Switch from "react-switch";
+import Switch from 'react-switch'
 import PropTypes from 'prop-types'
 import { Event, SteeringCommand } from 'common'
 import styled from 'styled-components'
@@ -51,10 +51,12 @@ const SteeringContainer = styled.div`
 
 const noop = () => {}
 
-navigator.vibrate = (navigator.vibrate ||
+navigator.vibrate =
+  navigator.vibrate ||
   navigator.webkitVibrate ||
   navigator.mozVibrate ||
-  navigator.msVibrate || noop)
+  navigator.msVibrate ||
+  noop
 
 class GamePlaying extends Component {
   state = {
@@ -63,7 +65,7 @@ class GamePlaying extends Component {
 
   sendCommand = command => () => {
     this.props.send({
-      event:   Event.PLAYER_MOVEMENT,
+      event: Event.PLAYER_MOVEMENT,
       payload: command,
     })
   }
@@ -72,39 +74,28 @@ class GamePlaying extends Component {
     if (!this.props.gyro) return
 
     this.props.send({
-      event:   Event.PLAYER_MOVEMENT,
+      event: Event.PLAYER_MOVEMENT,
       payload: beta / 6,
     })
   }
 
-  toggleOrientationListener = (on) => () => {
+  toggleOrientationListener = on => () => {
     const method = on ? 'addEventListener' : 'removeEventListener'
-    window[method](
-      "deviceorientation",
-      this.handleOrientation,
-      true
-    )
+    window[method]('deviceorientation', this.handleOrientation, true)
   }
 
   componentDidMount = this.toggleOrientationListener(true)
   componentWillUnmount = this.toggleOrientationListener(false)
 
   render() {
-    const {
-      gyro,
-      playerColor,
-      setGyro,
-    } = this.props
+    const { gyro, playerColor, setGyro } = this.props
 
     return (
       <Container>
         <TogglePane>
           GYRO
           <VerticalSeparator />
-          <Switch
-            onChange={setGyro}
-            checked={gyro}
-          />
+          <Switch onChange={setGyro} checked={gyro} />
         </TogglePane>
         <SteeringContainer>
           <SteerButton
@@ -133,11 +124,10 @@ class GamePlaying extends Component {
 }
 
 GamePlaying.propTypes = {
-  gyro:        PropTypes.bool.isRequired,
+  gyro: PropTypes.bool.isRequired,
   playerColor: PropTypes.string.isRequired,
-  send:        PropTypes.func.isRequired,
-  setGyro:     PropTypes.func.isRequired,
+  send: PropTypes.func.isRequired,
+  setGyro: PropTypes.func.isRequired,
 }
 
 export default GamePlaying
-

@@ -20,18 +20,18 @@ const Text = styled.div`
 
 const noop = () => {}
 
-navigator.vibrate = (navigator.vibrate ||
+navigator.vibrate =
+  navigator.vibrate ||
   navigator.webkitVibrate ||
   navigator.mozVibrate ||
-  navigator.msVibrate || noop)
+  navigator.msVibrate ||
+  noop
 
 const PlayerDead = ({ playerColor }) => {
   navigator.vibrate(100)
   return (
-    <Container
-      color={playerColor}
-    >
-      <Text>{'You\'re dead'}</Text>
+    <Container color={playerColor}>
+      <Text>{"You're dead"}</Text>
     </Container>
   )
 }

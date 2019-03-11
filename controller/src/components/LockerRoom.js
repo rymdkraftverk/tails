@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
 import styled from 'styled-components'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import Logo from './Logo';
+import Logo from './Logo'
 
 const PLACEHOLDER = 'Code'
 
-const PageContainer = styled(IOSDisableDoubleTap)`
-
-`
+const PageContainer = styled(IOSDisableDoubleTap)``
 
 const Container = styled.div`
   display: flex;
@@ -43,47 +41,42 @@ const GameJoinButton = styled.button`
   opacity: ${({ disabled }) => (disabled ? '0.2' : '1')};
 `
 
-const onFocus = (e) => {
+const onFocus = e => {
   e.target.placeholder = ''
   e.target.select()
 }
 
-const onBlur = (e) => {
+const onBlur = e => {
   e.target.placeholder = PLACEHOLDER
 }
 
 class LockerRoom extends Component {
   componentDidMount() {
-    const {
-      error,
-    } = this.props
+    const { error } = this.props
 
     if (error) {
       notify.show(error, 'error')
     }
 
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection
     if (connection && connection.type === 'cellular') {
       notify.show('Connect to WiFi for best experience', 'warning')
     }
   }
 
-  onKeyPress = (e) => {
+  onKeyPress = e => {
     if (this.isSubmit(e.key)) this.props.onJoinClick()
   }
 
-  isSubmit = pressed =>
-    this.gameCodeFilled() &&
-    pressed === 'Enter'
+  isSubmit = pressed => this.gameCodeFilled() && pressed === 'Enter'
 
   gameCodeFilled = () => this.props.gameCode.length === 4
 
   render() {
-    const {
-      gameCode,
-      onJoinClick,
-      gameCodeChange,
-    } = this.props
+    const { gameCode, onJoinClick, gameCodeChange } = this.props
 
     return (
       <PageContainer>
@@ -107,7 +100,6 @@ class LockerRoom extends Component {
           </ContainerColumn>
           <ContainerColumn>
             {
-
               <GameJoinButton
                 disabled={!this.gameCodeFilled()}
                 onClick={onJoinClick}
@@ -124,9 +116,9 @@ class LockerRoom extends Component {
 }
 
 LockerRoom.propTypes = {
-  error:          PropTypes.string,
-  gameCode:       PropTypes.string.isRequired,
-  onJoinClick:    PropTypes.func.isRequired,
+  error: PropTypes.string,
+  gameCode: PropTypes.string.isRequired,
+  onJoinClick: PropTypes.func.isRequired,
   gameCodeChange: PropTypes.func.isRequired,
 }
 

@@ -40,11 +40,11 @@ const Button = styled.button`
 
 const ActionContainer = styled.div`
   margin-bottom: auto;
-`;
+`
 
 const InstructionsLine = styled.div`
   margin-bottom: 16px;
-`;
+`
 
 const AwaitingPlayers = styled.div`
   align-items: center;
@@ -80,85 +80,61 @@ class GameLobby extends Component {
     } = this.props
 
     if (!ready) {
-      return <Button
-        onClick={readyPlayer}
-        >
-        {'Ready!'}
-      </Button>
+      return <Button onClick={readyPlayer}>{'Ready!'}</Button>
     }
 
     if (startEnabled) {
-      return <Button
-        onClick={startGame}
-        >
-        {'Start Game!'}
-      </Button>
+      return <Button onClick={startGame}>{'Start Game!'}</Button>
     }
 
-    return <AwaitingReadyPlayers
-      color={getColorCode(playerColor)}
-      >
-
-      All players not ready
-    </AwaitingReadyPlayers>
+    return (
+      <AwaitingReadyPlayers color={getColorCode(playerColor)}>
+        All players not ready
+      </AwaitingReadyPlayers>
+    )
   }
 
   render() {
-    const {
-      playerColor,
-      playerCount,
-    } = this.props
+    const { playerColor, playerCount } = this.props
 
     return (
-      <Container
-        backgroundColor={getColorCode(playerColor)}
-      >
-        {
-          playerCount > 1
-            ?
-              <Fragment>
-                <Instructions>
-                  <InstructionsLine>
-                    {`
+      <Container backgroundColor={getColorCode(playerColor)}>
+        {playerCount > 1 ? (
+          <Fragment>
+            <Instructions>
+              <InstructionsLine>
+                {`
                       Phone = controller
                     `}
-                  </InstructionsLine>
-                  <InstructionsLine>
-                    {`
+              </InstructionsLine>
+              <InstructionsLine>
+                {`
                       Play on the other screen
                     `}
-                  </InstructionsLine>
-                </Instructions>
-                <ActionContainer>
-                {
-                  this.getAction()
-                }
-                </ActionContainer>
-              </Fragment>
-
-            :
-              <AwaitingPlayers>
-                <AwaitingPlayersTitle>
-                  Ask a friend to join!
-                </AwaitingPlayersTitle>
-                <AwaitingPlayersSubtitle>
-                  (2 players minimum)
-                </AwaitingPlayersSubtitle>
-              </AwaitingPlayers>
-
-        }
+              </InstructionsLine>
+            </Instructions>
+            <ActionContainer>{this.getAction()}</ActionContainer>
+          </Fragment>
+        ) : (
+          <AwaitingPlayers>
+            <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>
+            <AwaitingPlayersSubtitle>
+              (2 players minimum)
+            </AwaitingPlayersSubtitle>
+          </AwaitingPlayers>
+        )}
       </Container>
     )
   }
 }
 
 GameLobby.propTypes = {
-  playerColor:  PropTypes.string.isRequired,
-  playerCount:  PropTypes.number,
-  ready:        PropTypes.bool.isRequired,
+  playerColor: PropTypes.string.isRequired,
+  playerCount: PropTypes.number,
+  ready: PropTypes.bool.isRequired,
   startEnabled: PropTypes.bool.isRequired,
-  readyPlayer:  PropTypes.func.isRequired,
-  startGame:    PropTypes.func.isRequired,
+  readyPlayer: PropTypes.func.isRequired,
+  startGame: PropTypes.func.isRequired,
 }
 
 GameLobby.defaultProps = {
