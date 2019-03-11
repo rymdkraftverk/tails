@@ -22,7 +22,7 @@ const addGameEndpoint = (app) => {
 const addScoreBoardEndpoint = (app) => {
   app.post('/scoreBoard', (req, res) => {
     slack.postScoreBoard(req.body)
-      .then((responseMsg) => {
+      .then(() => {
         res.sendStatus(200)
       })
       .catch(error)

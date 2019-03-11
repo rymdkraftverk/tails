@@ -1,3 +1,4 @@
+import R from 'ramda'
 import { addEntityToTree, initEmptyTree, nearestNeighbour } from '../src/kd-tree'
 
 const constructTree = (options, entities) => {
@@ -19,7 +20,7 @@ const constructTree = (options, entities) => {
 const parseOptions = ({ earlyReturn, filter }) => {
   const settings = {
     earlyReturn: {
-      true:  () => true,
+      true:  R.T,
       false: null,
     },
     filter: {
