@@ -9,11 +9,6 @@ jobs:
       - run:
           name: Combine timestamp and sha of last commit to create version
           command: git show -s --format="%ct-%h" > version
-      - run:
-          name: Tag version in git
-          command: |
-            git tag `cat version`
-            git push --tags
       - persist_to_workspace:
           paths: .
           root: .
@@ -119,6 +114,18 @@ jobs:
           command: |
             VERSION=`cat ~/tails/version`
             heroku config:set VERSION=$VERSION -a rkv-backend
+  tag:
+    docker:
+      - image: rymdkraftverk/ci:latest
+    working_directory: ~/tails
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys
+      - run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run: |
+          git tag `cat version`
+          git push --tags
 workflows:
   default:
     jobs:
@@ -144,3 +151,9 @@ workflows:
       - deploy_backend:
           requires:
             - setup
+      - tag:
+          requires:
+            - deploy_controller
+            - deploy_game_s3
+            - deploy_game_itch
+            - deploy_backend
