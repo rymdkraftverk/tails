@@ -39,7 +39,7 @@ const TextSize = {
 const TextColor = {
   TEXT:       'white',
   SUBHEADING: '#44d800', // light green
-  HIGHLIGHT:  '#04A4EC',
+  HIGHLIGHT:  '#04A4EC', // light blue
 }
 
 const getPlayerPosition = l1.grid({
