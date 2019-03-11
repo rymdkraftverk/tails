@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Logo from './Logo'
-import turnPhone from '../images/turnPhone.GIF'
+import turnPhone from '../images/turnPhone.gif'
 
 const Content = styled.div`
   color: white;
