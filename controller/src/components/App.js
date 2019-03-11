@@ -239,7 +239,12 @@ class App extends Component {
           />
         )
       case AppState.PLAYER_DEAD:
-        return <PlayerDead playerColor={Color[playerColor]} />
+        return (
+          <PlayerDead
+            sendReliable={this.sendReliable}
+            playerColor={Color[playerColor]}
+          />
+        )
       case AppState.AWAITING_NEXT_ROUND:
         return <AwaitingNextRound playerColor={Color[playerColor]} />
       default:

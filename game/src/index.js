@@ -15,6 +15,7 @@ import { State, state } from './state'
 import playerRepository from './repository/player'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
+import playerDead from './playerDead'
 import * as qrCode from './qrCode'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
@@ -121,6 +122,9 @@ const onPlayerData = id => (message) => {
       break
     case Event.ROUND_START:
       roundStart()
+      break
+    case Event.PLAYER_DEAD_TAP:
+      playerDead(id, payload)
       break
     default:
       warn(`Unhandled event for message: ${message}`)

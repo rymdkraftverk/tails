@@ -1,4 +1,6 @@
-export default ({ texture, scaleFactor, radius }) => {
+export default ({
+  texture, scaleFactor, radius, pos = { x: 0, y: 0 },
+}) => {
   const textures = [texture]
 
   const config = {
@@ -32,13 +34,10 @@ export default ({ texture, scaleFactor, radius }) => {
     blendMode:    'normal',
     frequency:    0.02,
     maxParticles: 500,
-    pos:          {
-      x: 0,
-      y: 0,
-    },
-    addAtBack:   false,
-    spawnType:   'circle',
-    spawnCircle: {
+    pos,
+    addAtBack:    false,
+    spawnType:    'circle',
+    spawnCircle:  {
       x: radius / 2,
       y: radius / 2,
       r: radius,
