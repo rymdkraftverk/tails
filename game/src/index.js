@@ -112,40 +112,45 @@ const createGame = ({ gameCode }) => {
 }
 
 const makePlayerDeadTap = (id) => {
-  const neonDeathParticleContainer = new PIXI.Container()
+  let sparkleParticleContainer
   return ({ x, y }) => {
-    let player
-    if (!player) {
-      player = l1.get(id)
-      // Delay adding the particle container since Scene.GAME does
+    const player = l1.get(id)
+    if (!sparkleParticleContainer
+        || (sparkleParticleContainer.l1 && sparkleParticleContainer.l1.isDestroyed())) {
+      // Delay creating the particle container since Scene.GAME does
       // not exist when makePlayerDeadTap is called
-      l1.add(neonDeathParticleContainer, {
+      sparkleParticleContainer = new PIXI.Container()
+      l1.add(sparkleParticleContainer, {
         parent: l1.get(Scene.GAME),
+        labels: ['particleContainer'],
         zIndex: Layer.FOREGROUND + 10,
       })
     }
 
-    if (player) {
-      const {
-        textures: neonTextures,
-        config: neonConfig,
-      } = sparks({
-        texture:     player.texture,
-        scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
-        radius:      player.width * 2,
-        pos:         {
-          x: x * GAME_WIDTH,
-          y: HEADER_HEIGHT + (y * (GAME_HEIGHT - HEADER_HEIGHT)),
-        },
-      })
-
-      new PIXI.particles.Emitter(
-        neonDeathParticleContainer,
-        neonTextures,
-        neonConfig,
-      )
-        .playOnceAndDestroy()
+    // This is needed since events might be sent during score screen when player does not exist
+    if (!player || (sparkleParticleContainer.l1 && sparkleParticleContainer.l1.isDestroyed())) {
+      return
     }
+
+    const {
+      textures: neonTextures,
+      config: neonConfig,
+    } = sparks({
+      texture:     player.texture,
+      scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
+      radius:      player.width * 2,
+      pos:         {
+        x: x * GAME_WIDTH,
+        y: HEADER_HEIGHT + (y * (GAME_HEIGHT - HEADER_HEIGHT)),
+      },
+    })
+
+    new PIXI.particles.Emitter(
+      sparkleParticleContainer,
+      neonTextures,
+      neonConfig,
+    )
+      .playOnceAndDestroy()
   }
 }
 
