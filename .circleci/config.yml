@@ -51,6 +51,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: npm test
+      - run: npm run lint
   build_controller:
     docker:
       - image: circleci/node:latest
