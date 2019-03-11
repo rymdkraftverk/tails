@@ -7,9 +7,6 @@
 * [z-index](#z-index)
 * [eslint](#eslint)
 * [VS Code](#vs-code)
-   * [stylelint](#stylelint)
-   * [prettier](#prettier)
-   * [vscode-styled-components](#vscode-styled-components)
 * [update protobuf schemas](#update-protobuf-schemas)
 * [debugging](#debugging)
 
@@ -49,7 +46,7 @@ It is strongly recommended to turn on the following settings:
 
 The following extensions are strongly recommended:
 
-#### stylelint
+- stylelint
 
 With settings:
 
@@ -57,9 +54,9 @@ With settings:
 "stylelint.enable": true,
 ```
 
-#### prettier
+- prettier
 
-#### vscode-styled-components
+- vscode-styled-components
 
 ### update protobuf schemas
 1. Add/modify .proto file in [controller/src/protobuf](controller/src/protobuf)
