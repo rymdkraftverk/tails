@@ -68,7 +68,10 @@ document.addEventListener(
   { passive: false },
 )
 
-ReactDOM.render(<Boundary>
-  <GlobalStyle/>
-  <App />
-</Boundary>, document.getElementById('root'))
+ReactDOM.render(
+  <Boundary>
+    <GlobalStyle />
+    <App />
+  </Boundary>,
+  document.getElementById('root'),
+)

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Event } from 'common'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
-const SEND_PLAYER_DEAD_TAP_INTERVAL = 60;
+const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 
 const Container = styled(IOSDisableDoubleTap)`
   height: 100vh;
@@ -26,7 +26,7 @@ const DeadText = styled.div`
 const TouchText = styled.div`
   font-size: 4vw;
   color: white;
-`;
+`
 
 const TouchArea = styled.div`
   background-color: black;
@@ -36,7 +36,7 @@ const TouchArea = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
+`
 
 const noop = () => {}
 
@@ -62,7 +62,7 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
 
       const x = clientX / rect.width
       const y = clientY / rect.height
-      
+
       setPosition({ x, y })
     }
   }
@@ -74,7 +74,7 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
   useEffect(() => {
     const timeoutId = setInterval(() => {
       setSendData(true)
-    }, SEND_PLAYER_DEAD_TAP_INTERVAL);
+    }, SEND_PLAYER_DEAD_TAP_INTERVAL)
     return () => {
       clearTimeout(timeoutId)
     }
@@ -85,23 +85,17 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
       sendReliable({ event: Event.PLAYER_DEAD_TAP, payload: position })
       setSendData(false)
     }
-  },[sendData, position])
+  }, [sendData, position])
 
   return (
-    <Container
-      color={playerColor}
-    >
-      <TouchArea 
+    <Container color={playerColor}>
+      <TouchArea
         onTouchEnd={onTouchEnd}
-        onTouchStart={onPlayerDeadClick} 
+        onTouchStart={onPlayerDeadClick}
         onTouchMove={onPlayerDeadClick}
-        >
-          <DeadText>
-            {'You\'re dead'}
-          </DeadText>
-          <TouchText>
-            {'Touch to Sparkle!'}
-          </TouchText>
+      >
+        <DeadText>{"You're dead"}</DeadText>
+        <TouchText>{'Touch to Sparkle!'}</TouchText>
       </TouchArea>
     </Container>
   )
