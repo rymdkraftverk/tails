@@ -9,7 +9,6 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "common": "file:../common",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
