@@ -65,12 +65,12 @@ document.addEventListener(
   e => {
     e.preventDefault()
   },
-  { passive: false }
+  { passive: false },
 )
 
 ReactDOM.render(
   <Boundary>
     <App />
   </Boundary>,
-  document.getElementById('root')
+  document.getElementById('root'),
 )
