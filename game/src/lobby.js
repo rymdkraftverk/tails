@@ -2,6 +2,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
 import R from 'ramda'
+import getUrlParams from 'common/getUrlParams'
 import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'
@@ -19,15 +20,26 @@ import * as qrCode from './qrCode'
 const TEXT_BOUNCE_INTERVAL = 600
 
 const TextAnchor = {
+  TAILS_START_X:       92,
+  TAILS_START_Y:       64,
+  SUBHEADING_START_X:  280 + 250,
+  SUBHEADING_START_Y:  40 + 30,
   INSTRUCTION_START_X: 92,
-  INSTRUCTION_START_Y: 180,
+  INSTRUCTION_START_Y: 210,
   X_OFFSET:            80,
   Y_OFFSET:            150,
 }
 
+const TextSize = {
+  TAILS:       32,
+  SUBHEADING:  40,
+  INSTRUCTION: 50,
+}
+
 const TextColor = {
-  TEXT:      'white',
-  HIGHLIGHT: '#04A4EC',
+  TEXT:       'white',
+  SUBHEADING: '#44d800', // light green
+  HIGHLIGHT:  '#04A4EC', // light blue
 }
 
 const getPlayerPosition = l1.grid({
@@ -66,6 +78,10 @@ export const transitionToLobby = (gameCode, players = []) => {
   state.state = State.LOBBY
 
   const controllerUrl = getControllerUrl()
+  const {
+    subheading1: subheading1content,
+    subheading2: subheading2content,
+  } = getUrlParams(window.location.search)
 
   qrCode.display(controllerUrl, gameCode)
 
@@ -88,17 +104,47 @@ export const transitionToLobby = (gameCode, players = []) => {
   )
 
   addText({
-    x:     92,
-    y:     64,
+    x:     TextAnchor.TAILS_START_X,
+    y:     TextAnchor.TAILS_START_Y,
     text:  'tails',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 32,
+      fontSize: TextSize.TAILS,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
   })
 
+  const subheading1 = addText({
+    x:     TextAnchor.SUBHEADING_START_X,
+    y:     TextAnchor.SUBHEADING_START_Y,
+    text:  subheading1content,
+    style: {
+      ...TextStyle.MEDIUM,
+      fontSize: TextSize.SUBHEADING,
+      fill:     TextColor.SUBHEADING,
+    },
+    parent: lobbyScene,
+  })
+
+  const subheading2 = addText({
+    x:     TextAnchor.SUBHEADING_START_X,
+    y:     TextAnchor.SUBHEADING_START_Y + 60,
+    text:  subheading2content,
+    style: {
+      ...TextStyle.MEDIUM,
+      fontSize: TextSize.SUBHEADING,
+      fill:     TextColor.SUBHEADING,
+    },
+    parent: lobbyScene,
+  })
+
+  subheading1.anchor.set(0.5)
+  subheading2.anchor.set(0.5)
+
+  // First bounce
+  l1.addBehavior(textBounce(subheading1))
+  l1.addBehavior(textBounce(subheading2))
 
   addText({
     x:     TextAnchor.INSTRUCTION_START_X,
@@ -106,7 +152,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Grab your phone',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -118,7 +164,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Go to',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -137,7 +183,12 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
   url.anchor.set(0.5)
-  l1.addBehavior(textBounce(url))
+  // Second bounce
+  delay(TEXT_BOUNCE_INTERVAL / 3)
+    .then(() => {
+      l1.addBehavior(textBounce(url))
+    })
+
 
   addText({
     x:     TextAnchor.INSTRUCTION_START_X + (TextAnchor.X_OFFSET * 2),
@@ -145,7 +196,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     text:  'Enter Code',
     style: {
       ...TextStyle.MEDIUM,
-      fontSize: 50,
+      fontSize: TextSize.INSTRUCTION,
       fill:     TextColor.TEXT,
     },
     parent: lobbyScene,
@@ -165,7 +216,8 @@ export const transitionToLobby = (gameCode, players = []) => {
     parent: lobbyScene,
   })
   code.anchor.set(0.5)
-  delay(TEXT_BOUNCE_INTERVAL / 2)
+  // Third bounce
+  delay(TEXT_BOUNCE_INTERVAL / 3 * 2)
     .then(() => {
       l1.addBehavior(textBounce(code))
     })

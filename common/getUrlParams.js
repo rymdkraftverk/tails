@@ -13,4 +13,4 @@ const getUrlParams = (query) => {
   }, { });
 }
 
-export default getUrlParams
+module.exports = getUrlParams

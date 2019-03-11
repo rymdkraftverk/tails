@@ -58,6 +58,9 @@ With settings:
 1. Add/modify .proto file in [controller/src/protobuf](controller/src/protobuf)
 1. ` ./update_proto.sh`
 
+### Game lobby heading
+Add query params `subheading1` and `subheading2` to game url to display subheadings with dynamic content
+
 ### debugging
 There are a few functions available to help with debugging from the game view.
 They can be accessed from the console on the `debug` object.

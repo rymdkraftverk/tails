@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
 import MediaQuery from 'react-responsive';
 import { Event, Color, Channel } from 'common'
+import getUrlParams from 'common/getUrlParams'
 import signaling from 'signaling'
 
 import channelConfigs from '../channelConfigs'
@@ -13,7 +14,6 @@ import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
-import getUrlParams from '../util/getUrlParams'
 import TurnPhone from './TurnPhone';
 
 const { error: logError } = console
