@@ -8,10 +8,6 @@ import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60;
 
 const Container = styled(IOSDisableDoubleTap)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
   user-select: none;
   background: ${R.prop('color')};
@@ -19,19 +15,26 @@ const Container = styled(IOSDisableDoubleTap)`
 
 const DeadText = styled.div`
   font-weight: bold;
-  font-size: 5vw;
+  font-size: 3vw;
+  color: gray;
+  margin-bottom: 16px;
 `
+
+const TouchText = styled.div`
+  font-size: 4vw;
+  color: white;
+`;
 
 const TouchArea = styled.div`
   background-color: black;
-  height: 40vw;
-  width: 60vw;
-  color: gray;
-  font-size: 3vw;
+
+  /* TODO: Change this to 100vh once we fix the issues with it on iOS */
+  height: 80vh;
+  width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
 `;
 
 const noop = () => {}
@@ -58,7 +61,7 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
       const rect = touchAreaElement.current.getBoundingClientRect()
 
       const x = clientX / rect.width
-      const y = (clientY - rect.top) / rect.height
+      const y = clientY / rect.height
       
       setPosition({ x, y })
     }
@@ -88,14 +91,18 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
     <Container
       color={playerColor}
     >
-      <DeadText>{'You\'re dead'}</DeadText>
       <TouchArea 
         onTouchEnd={onTouchEnd}
         ref={touchAreaElement} 
         onTouchStart={onPlayerDeadClick} 
         onTouchMove={onPlayerDeadClick}
-      >
-        {'Tap to Sparkle!'}
+        >
+          <DeadText>
+            {'You\'re dead'}
+          </DeadText>
+          <TouchText>
+            {'Touch to Sparkle!'}
+          </TouchText>
       </TouchArea>
     </Container>
   )
