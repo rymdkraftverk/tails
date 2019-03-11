@@ -2,16 +2,55 @@ version: 2.1
 jobs:
   setup:
     docker:
-      - image: rymdkraftverk/ci:latest
+      - image: circleci/node:latest
     working_directory: ~/tails
     steps:
       - checkout
       - run:
           name: Combine timestamp and sha of last commit to create version
           command: git show -s --format="%ct-%h" > version
+
+      # npm install root
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: v1-npm-{{ checksum "package.json" }}
+          paths:
+          - node_modules
+
+      # npm install controller
+      - restore_cache:
+          key: v1-npm-{{ checksum "controller/package.json" }}
+      - run:
+          command: npm install
+          working_directory: controller
+      - save_cache:
+          key: v1-npm-{{ checksum "controller/package.json" }}
+          paths:
+          - controller/node_modules
+
+      # npm install game
+      - restore_cache:
+          key: v1-npm-{{ checksum "game/package.json" }}
+      - run:
+          command: npm install
+          working_directory: game
+      - save_cache:
+          key: v1-npm-{{ checksum "game/package.json" }}
+          paths:
+          - game/node_modules
       - persist_to_workspace:
           paths: .
           root: .
+  test:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/tails
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm test
   build_controller:
     docker:
       - image: circleci/node:latest
@@ -23,15 +62,6 @@ jobs:
           name: Load version into env
           command: |
             echo 'export REACT_APP_VERSION=`cat ~/tails/version`' >> $BASH_ENV
-      - restore_cache:
-          key: v1-npm-{{ checksum "controller/package.json" }}
-      - run:
-          command: npm install
-          working_directory: controller
-      - save_cache:
-          key: v1-npm-{{ checksum "controller/package.json" }}
-          paths:
-          - controller/node_modules
       - run:
           command: npm run build
           working_directory: controller
@@ -61,15 +91,6 @@ jobs:
           name: Load version into env
           command: |
             echo 'export VERSION=`cat ~/tails/version`' >> $BASH_ENV
-      - restore_cache:
-          key: v1-npm-{{ checksum "game/package.json" }}
-      - run:
-          command: npm install
-          working_directory: game
-      - save_cache:
-          key: v1-npm-{{ checksum "game/package.json" }}
-          paths:
-          - game/node_modules
       - run:
           command: npm run build
           working_directory: game
@@ -129,19 +150,25 @@ jobs:
 workflows:
   default:
     jobs:
-      - setup:
+      - setup
+      - test:
+          requires:
+            - setup
+      - build_controller:
+          requires:
+            - test
           filters:
             branches:
               only: master
-      - build_controller:
-          requires:
-            - setup
       - deploy_controller:
           requires:
             - build_controller
       - build_game:
           requires:
-            - setup
+            - test
+          filters:
+            branches:
+              only: master
       - deploy_game_s3:
           requires:
             - build_game
@@ -150,7 +177,10 @@ workflows:
             - build_game
       - deploy_backend:
           requires:
-            - setup
+            - test
+          filters:
+            branches:
+              only: master
       - tag:
           requires:
             - deploy_controller
