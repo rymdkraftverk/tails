@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -52,14 +52,13 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
     navigator.vibrate(100)
   }, [])
 
-  const touchAreaElement = useRef(null)
   const [position, setPosition] = useState(null)
   const [sendData, setSendData] = useState(false)
 
-  const onPlayerDeadClick = ({ touches }) => {
-    if (touches && touchAreaElement.current) {
+  const onPlayerDeadClick = ({ touches, target }) => {
+    if (touches && target) {
       const [{ clientX, clientY }] = touches
-      const rect = touchAreaElement.current.getBoundingClientRect()
+      const rect = target.getBoundingClientRect()
 
       const x = clientX / rect.width
       const y = clientY / rect.height
@@ -94,7 +93,6 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
     >
       <TouchArea 
         onTouchEnd={onTouchEnd}
-        ref={touchAreaElement} 
         onTouchStart={onPlayerDeadClick} 
         onTouchMove={onPlayerDeadClick}
         >
