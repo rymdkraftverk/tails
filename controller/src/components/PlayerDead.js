@@ -18,6 +18,9 @@ const DeadText = styled.div`
   font-size: 3vw;
   color: gray;
   margin-bottom: 16px;
+
+  /* TODO: Remove this once we fix the issues with it on iOS */
+  margin-top: -50px;
 `
 
 const TouchText = styled.div`
@@ -27,9 +30,7 @@ const TouchText = styled.div`
 
 const TouchArea = styled.div`
   background-color: black;
-
-  /* TODO: Change this to 100vh once we fix the issues with it on iOS */
-  height: 80vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
