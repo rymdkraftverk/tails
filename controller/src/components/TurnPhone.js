@@ -18,14 +18,14 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-`;
+`
 
 const GIF = styled.img`
   width: 100vw;
   height: auto;
   margin-bottom: -80px;
   margin-top: -200px;
-`;
+`
 
 const TurnPhone = props => {
   return (
@@ -33,9 +33,7 @@ const TurnPhone = props => {
       <Logo />
       <Content>
         <GIF src={turnPhone} />
-        <div>
-          Please turn your phone to landscape
-        </div>
+        <div>Please turn your phone to landscape</div>
       </Content>
     </PageContainer>
   )

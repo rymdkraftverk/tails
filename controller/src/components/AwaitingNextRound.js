@@ -18,9 +18,7 @@ const Text = styled.div`
   font-weight: bold;
 `
 const AwaitingNextRound = ({ playerColor }) => (
-  <Container
-    color={playerColor}
-  >
+  <Container color={playerColor}>
     <Text>Awaiting next round</Text>
   </Container>
 )
