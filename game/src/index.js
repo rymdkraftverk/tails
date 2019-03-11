@@ -5,7 +5,7 @@ import { Event, Channel } from 'common'
 import R from 'ramda'
 import * as Sentry from '@sentry/browser'
 import signaling from 'signaling'
-import { transitionToGameScene, SPEED_MULTIPLIER } from './game'
+import { transitionToGameScene } from './game'
 import { transitionToLobby, createLobbyPlayer } from './lobby'
 import http from './http'
 import Scene from './Scene'
@@ -15,9 +15,8 @@ import { State, state } from './state'
 import playerRepository from './repository/player'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
+import playerDead from './playerDead'
 import * as qrCode from './qrCode'
-import sparks from './particleEmitter/sparks'
-import { HEADER_HEIGHT } from './header'
 
 const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
@@ -111,70 +110,24 @@ const createGame = ({ gameCode }) => {
   transitionToLobby(state.gameCode)
 }
 
-const makePlayerDeadTap = (id) => {
-  let sparkleParticleContainer
-  return ({ x, y }) => {
-    const player = l1.get(id)
-    if (!sparkleParticleContainer
-        || (sparkleParticleContainer.l1 && sparkleParticleContainer.l1.isDestroyed())) {
-      // Delay creating the particle container since Scene.GAME does
-      // not exist when makePlayerDeadTap is called
-      sparkleParticleContainer = new PIXI.Container()
-      l1.add(sparkleParticleContainer, {
-        parent: l1.get(Scene.GAME),
-        labels: ['particleContainer'],
-        zIndex: Layer.FOREGROUND + 10,
-      })
-    }
+const onPlayerData = id => (message) => {
+  const { event, payload } = message
 
-    // This is needed since events might be sent during score screen when player does not exist
-    if (!player || (sparkleParticleContainer.l1 && sparkleParticleContainer.l1.isDestroyed())) {
-      return
-    }
-
-    const {
-      textures: neonTextures,
-      config: neonConfig,
-    } = sparks({
-      texture:     player.texture,
-      scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
-      radius:      player.width * 2,
-      pos:         {
-        x: x * GAME_WIDTH,
-        y: HEADER_HEIGHT + (y * (GAME_HEIGHT - HEADER_HEIGHT)),
-      },
-    })
-
-    new PIXI.particles.Emitter(
-      sparkleParticleContainer,
-      neonTextures,
-      neonConfig,
-    )
-      .playOnceAndDestroy()
-  }
-}
-
-const onPlayerData = (id) => {
-  const playerDeadTap = makePlayerDeadTap(id)
-  return (message) => {
-    const { event, payload } = message
-
-    switch (event) {
-      case Event.PLAYER_MOVEMENT:
-        turnPlayer(id, payload)
-        break
-      case Event.PLAYER_READY:
-        readyPlayer(id)
-        break
-      case Event.ROUND_START:
-        roundStart()
-        break
-      case Event.PLAYER_DEAD_TAP:
-        playerDeadTap(payload)
-        break
-      default:
-        warn(`Unhandled event for message: ${message}`)
-    }
+  switch (event) {
+    case Event.PLAYER_MOVEMENT:
+      turnPlayer(id, payload)
+      break
+    case Event.PLAYER_READY:
+      readyPlayer(id)
+      break
+    case Event.ROUND_START:
+      roundStart()
+      break
+    case Event.PLAYER_DEAD_TAP:
+      playerDead(id, payload)
+      break
+    default:
+      warn(`Unhandled event for message: ${message}`)
   }
 }
 
