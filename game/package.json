@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify -p [ tinyify --no-flat ] src/index.js -o public/bundle.js -t [ babelify ]",
     "start": "http-server -p 8081",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "watch": "watchify src/index.js -o public/bundle.js -t [ babelify ] --debug"
   },
   "devDependencies": {
