@@ -38,7 +38,7 @@ const TextSize = {
 
 const TextColor = {
   TEXT:       'white',
-  SUBHEADING: 'yellow',
+  SUBHEADING: '#44d800', // light green
   HIGHLIGHT:  '#04A4EC',
 }
 
