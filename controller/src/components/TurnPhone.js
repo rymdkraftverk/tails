@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Logo from './Logo'
-import turnPhone from '../images/turnPhone.gif'
+import turnPhoneGifPath from '../images/turnPhone.gif'
 
 const Content = styled.div`
   color: white;
@@ -32,7 +32,7 @@ const TurnPhone = props => {
     <PageContainer>
       <Logo />
       <Content>
-        <GIF src={turnPhone} />
+        <GIF src={turnPhoneGifPath} />
         <div>Please turn your phone to landscape</div>
       </Content>
     </PageContainer>
