@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Logo from './Logo'
 import turnPhoneGifPath from '../images/turnPhone.gif'
+import turnPhoneSoundPath from '../sounds/key.mp3'
+
+const turnPhoneSound = new Audio(turnPhoneSoundPath)
 
 const Content = styled.div`
   color: white;
@@ -28,6 +31,10 @@ const GIF = styled.img`
 `
 
 const TurnPhone = props => {
+  useEffect(() => () => {
+    turnPhoneSound.play()
+  }, [])
+
   return (
     <PageContainer>
       <Logo />
