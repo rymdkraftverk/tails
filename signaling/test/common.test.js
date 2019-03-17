@@ -1,5 +1,17 @@
 const common = require('../common')
 
+test('makeOnRtcMessage', () => {
+  // Without protobuf
+  expect(common.makeOnRtcMessage(
+    {
+      onData: ({ foo }) => foo * 3,
+    },
+  )({
+    data: '{ "foo": 2 }',
+  }))
+    .toEqual(6)
+})
+
 test('hoistInternal', () => {
   expect(common.hoistInternal(
     [
