@@ -33,7 +33,9 @@ const GIF = styled.img`
 const TurnPhone = props => {
   useEffect(
     () => () => {
-      turnPhoneSound.play()
+      turnPhoneSound.play().catch(error => {
+        console.error('Turn phone sound failed: ', error)
+      })
     },
     [],
   )
