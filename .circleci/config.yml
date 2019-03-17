@@ -45,7 +45,9 @@ jobs:
           root: .
   test:
     docker:
-      - image: circleci/node:latest
+        # TODO: revert to latest when fixed
+        # https://stackoverflow.com/a/55060832/1859989
+      - image: circleci/node:11.10
     working_directory: ~/tails
     steps:
       - attach_workspace:
