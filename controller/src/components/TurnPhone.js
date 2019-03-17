@@ -31,9 +31,12 @@ const GIF = styled.img`
 `
 
 const TurnPhone = props => {
-  useEffect(() => () => {
-    turnPhoneSound.play()
-  }, [])
+  useEffect(
+    () => () => {
+      turnPhoneSound.play()
+    },
+    [],
+  )
 
   return (
     <PageContainer>
