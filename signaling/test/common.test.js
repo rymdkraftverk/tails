@@ -1,5 +1,42 @@
 const common = require('../common')
 
+test('hoistInternal', () => {
+  expect(common.hoistInternal(
+    [
+      {
+        label: 'someotherchannel',
+        name:  'bar',
+      },
+      {
+        label: common.INTERNAL_CHANNEL.name,
+        name:  'foo',
+      },
+      {
+        label: 'somethirdchannel',
+        name:  'baz',
+      },
+    ],
+  ))
+    .toEqual(
+      [
+        {
+          label: common.INTERNAL_CHANNEL.name,
+          name:  'foo',
+        },
+        [
+          {
+            label: 'someotherchannel',
+            name:  'bar',
+          },
+          {
+            label: 'somethirdchannel',
+            name:  'baz',
+          },
+        ],
+      ],
+    )
+})
+
 test('packageChannels', () => {
   expect(common.packageChannels(
     [{
