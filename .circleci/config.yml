@@ -1,4 +1,22 @@
 version: 2.1
+commands:
+  npm_install:
+    parameters:
+      dir:
+        type: string
+    steps:
+      - restore_cache:
+          name: "[<< parameters.dir >>] restore_cache"
+          key: v1-npm-{{ checksum "<< parameters.dir >>/package-lock.json" }}
+      - run:
+          name: "[<< parameters.dir >>] npm ci"
+          command: if [ ! -d "node_modules" ]; then npm ci; fi
+          working_directory: << parameters.dir >>
+      - save_cache:
+          name: "[<< parameters.dir >>] save_cache"
+          key: v1-npm-{{ checksum "<< parameters.dir >>/package-lock.json" }}
+          paths:
+          - "<< parameters.dir >>/node_modules"
 jobs:
   setup:
     docker:
@@ -9,37 +27,16 @@ jobs:
       - run:
           name: Combine timestamp and sha of last commit to create version
           command: git show -s --format="%ct-%h" > version
-
-      # npm install root
-      - restore_cache:
-          key: v1-npm-{{ checksum "package.json" }}
-      - run: npm install
-      - save_cache:
-          key: v1-npm-{{ checksum "package.json" }}
-          paths:
-          - node_modules
-
-      # npm install controller
-      - restore_cache:
-          key: v1-npm-{{ checksum "controller/package.json" }}
-      - run:
-          command: npm install
-          working_directory: controller
-      - save_cache:
-          key: v1-npm-{{ checksum "controller/package.json" }}
-          paths:
-          - controller/node_modules
-
-      # npm install game
-      - restore_cache:
-          key: v1-npm-{{ checksum "game/package.json" }}
-      - run:
-          command: npm install
-          working_directory: game
-      - save_cache:
-          key: v1-npm-{{ checksum "game/package.json" }}
-          paths:
-          - game/node_modules
+      - npm_install:
+         dir: "."
+      - npm_install:
+          dir: "controller"
+      - npm_install:
+          dir: "game"
+      - npm_install:
+          dir: "signaling"
+      - npm_install:
+          dir: "backend"
       - persist_to_workspace:
           paths: .
           root: .
