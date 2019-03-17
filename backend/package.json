@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "nodemon": "nodemon src/index.js",
-    "lint": "eslint src"
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.4",

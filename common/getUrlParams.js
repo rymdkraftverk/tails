@@ -1,4 +1,4 @@
-const getUrlParams = query => {
+const getUrlParams = (query) => {
   if (!query) {
     return {}
   }
@@ -7,7 +7,6 @@ const getUrlParams = query => {
     .split('&')
     .reduce((params, param) => {
       const [key, value] = param.split('=')
-      // eslint-disable-next-line no-param-reassign
       params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : ''
       return params
     }, {})

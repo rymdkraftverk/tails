@@ -1,6 +1,5 @@
 const R = require('ramda')
 const _ = require('lodash/fp')
-const { URL } = require('url')
 const util = require('util')
 const redis = require('redis')
 

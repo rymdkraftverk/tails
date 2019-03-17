@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+
 const url = process.env.SLACK_WEBHOOK_URL
 
 const { log } = console
@@ -12,19 +13,19 @@ const postScoreBoard = (scoreBoard) => {
   const body = JSON.stringify({
     username: 'Score board monitor',
     // Nested stringification to receive the string representation in slack
-    text: JSON.stringify(scoreBoard), 
+    text:     JSON.stringify(scoreBoard),
   })
 
   return fetch(
     url,
     {
-      method: 'POST',
+      method:  'POST',
       body,
       headers: { 'Content-Type': 'application/json' },
-    }
+    },
   )
 }
 
 module.exports = {
-  postScoreBoard
+  postScoreBoard,
 }

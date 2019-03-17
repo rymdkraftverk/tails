@@ -4,6 +4,8 @@ import { nearestNeighbour } from '../src/kd-tree/nearest-neighbour'
 
 const greenLogColor = '\x1b[32m'
 
+const { log } = console
+
 export const performanceTest = (entityCount) => {
   const entities = randomElements(entityCount)
 
@@ -11,7 +13,7 @@ export const performanceTest = (entityCount) => {
   const tree = constructTree(entities)
   const constructEnd = performance.now()
 
-  console.log(greenLogColor, `constructing KD-tree with ${entityCount} entities took ${constructEnd - constructStart} ms`)
+  log(greenLogColor, `constructing KD-tree with ${entityCount} entities took ${constructEnd - constructStart} ms`)
 
   const testIterations = 5000
   const entitiesToFind = randomElements(testIterations)
@@ -24,7 +26,7 @@ export const performanceTest = (entityCount) => {
   entitiesToFind.forEach(e => testList(entities, e))
   const listEnd = performance.now()
 
-  console.log(greenLogColor, `adding one element and checking if it collides with any of ${entityCount} entities took on average ${(treeEnd - treeStart) / testIterations} ms using KD-Tree and ${(listEnd - listStart) / testIterations} ms using a list`)
+  log(greenLogColor, `adding one element and checking if it collides with any of ${entityCount} entities took on average ${(treeEnd - treeStart) / testIterations} ms using KD-Tree and ${(listEnd - listStart) / testIterations} ms using a list`)
 }
 
 const randomElements = entityCount => R
