@@ -1,7 +1,7 @@
-const { packageChannels } = require('../common')
+const common = require('../common')
 
-test('joins matching elements', () => {
-  expect(packageChannels(
+test('packageChannels', () => {
+  expect(common.packageChannels(
     [{
       name:   'reliable',
       schema: 'JSON',
