@@ -34,7 +34,7 @@ Logo.propTypes = {
 }
 
 Logo.defaultProps = {
-  className: ''
+  className: '',
 }
 
 export default Logo
