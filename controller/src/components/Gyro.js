@@ -13,20 +13,26 @@ const handleOrientation = (enabled, send) => ({ beta }) => {
 
 const Gyro = ({ enabled, send }) => {
   useEffect(() => {
-    window.addEventListener('deviceorientation', handleOrientation(enabled, send), true)
+    window.addEventListener(
+      'deviceorientation',
+      handleOrientation(enabled, send),
+      true,
+    )
     return () => {
-      window.removeEventListener('deviceorientation', handleOrientation(enabled, send), true)
+      window.removeEventListener(
+        'deviceorientation',
+        handleOrientation(enabled, send),
+        true,
+      )
     }
   }, [enabled, send])
 
-  return (
-    null
-  )
+  return null
 }
 
 Gyro.propTypes = {
   enabled: PropTypes.bool.isRequired,
-  send: PropTypes.func.isRequired
+  send: PropTypes.func.isRequired,
 }
 
 export default Gyro

@@ -15,7 +15,7 @@ import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 import TurnPhone from './TurnPhone'
-import Gyro from './Gyro';
+import Gyro from './Gyro'
 
 const { error: logError } = console
 
