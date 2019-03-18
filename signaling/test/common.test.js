@@ -1,5 +1,39 @@
 const common = require('../common')
 
+test('mappify', () => {
+  expect(common.mappify(
+    'name',
+    [
+      {
+        name:  'foo',
+        color: 'blue',
+      },
+      {
+        name:  'bar',
+        color: 'green',
+      },
+      {
+        name:  'baz',
+        color: 'yellow',
+      },
+    ],
+  ))
+    .toEqual({
+      foo: {
+        name:  'foo',
+        color: 'blue',
+      },
+      bar: {
+        name:  'bar',
+        color: 'green',
+      },
+      baz: {
+        name:  'baz',
+        color: 'yellow',
+      },
+    })
+})
+
 test('makeOnRtcMessage', () => {
   // Without protobuf
   expect(common.makeOnRtcMessage(

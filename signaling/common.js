@@ -126,9 +126,8 @@ const hoistInternal = R.pipe(
   ([internals, externals]) => [R.head(internals), externals],
 )
 
-const mappify = R.curry((key, list) => list
-  .map(x => ({ [x[key]]: x }))
-  .reduce(R.merge))
+
+const mappify = R.curry((key, list) => R.indexBy(R.prop(key), list))
 
 const packageChannels = innerJoinWith(
   R.curry((info, channel) => R.merge({ channel }, info)),
