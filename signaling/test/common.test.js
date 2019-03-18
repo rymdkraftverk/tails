@@ -182,4 +182,20 @@ test('warnNotFound', () => {
   expect(console.warn)
     .toHaveBeenCalledWith('[Foo not found] 4321')
 })
+
+test('wsSend', () => {
+  const f = jest.fn()
+
+  common.wsSend(
+    {
+      send: f,
+    },
+    'foo',
+    'bar',
+  )
+
+  expect(f)
+    .toHaveBeenCalledWith('{"event":"foo","payload":"bar"}')
+})
+
 /* eslint-enable no-console */
