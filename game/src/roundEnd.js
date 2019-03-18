@@ -63,7 +63,7 @@ const pauseAndTransitionToScoreScene = () => ({
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
 
     l1.getAllBehaviors()
-      .map(l1.removeBehavior)
+      .forEach(l1.removeBehavior)
     l1.destroy(Scene.GAME)
 
     transitionToScoreScene()
