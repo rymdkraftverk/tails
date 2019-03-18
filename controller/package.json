@@ -25,6 +25,7 @@
     "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react": "^16.8.4",
+    "react-div-100vh": "^0.3.2",
     "react-dom": "^16.8.4",
     "react-full-screen": "^0.2.4",
     "react-notify-toast": "^0.5.0",
