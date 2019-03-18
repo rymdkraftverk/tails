@@ -2,20 +2,21 @@ import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components/macro'
+import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+import LockOrientation from './LockOrientation';
 
-const Container = styled(IOSDisableDoubleTap)`
+const FullPage = styled(Div100vh)`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 100vh;
   background-color: ${R.prop('backgroundColor')};
   font-size: 5vw;
 `
 
-const Instructions = styled.div`
+const Instructions = styled(Div100vh)`
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -24,7 +25,6 @@ const Instructions = styled.div`
   text-align: center;
   margin-top: auto;
   margin-bottom: 16px;
-  height: 30vh;
 `
 
 const label = css`
@@ -98,32 +98,35 @@ class GameLobby extends Component {
     const { playerColor, playerCount } = this.props
 
     return (
-      <Container backgroundColor={getColorCode(playerColor)}>
-        {playerCount > 1 ? (
-          <Fragment>
-            <Instructions>
-              <InstructionsLine>
-                {`
-                      Phone = controller
-                    `}
-              </InstructionsLine>
-              <InstructionsLine>
-                {`
-                      Play on the other screen
-                    `}
-              </InstructionsLine>
-            </Instructions>
-            <ActionContainer>{this.getAction()}</ActionContainer>
-          </Fragment>
-        ) : (
-          <AwaitingPlayers>
-            <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>
-            <AwaitingPlayersSubtitle>
-              (2 players minimum)
-            </AwaitingPlayersSubtitle>
-          </AwaitingPlayers>
-        )}
-      </Container>
+      <IOSDisableDoubleTap>
+        <FullPage backgroundColor={getColorCode(playerColor)}>
+        <LockOrientation />
+          {playerCount > 1 ? (
+            <Fragment>
+              <Instructions style={{ height: '30rvh' }}>
+                <InstructionsLine>
+                  {`
+                    Phone = controller
+                  `}
+                </InstructionsLine>
+                <InstructionsLine>
+                  {`
+                    Play on the other screen
+                  `}
+                </InstructionsLine>
+              </Instructions>
+              <ActionContainer>{this.getAction()}</ActionContainer>
+            </Fragment>
+          ) : (
+            <AwaitingPlayers>
+              <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>
+              <AwaitingPlayersSubtitle>
+                (2 players minimum)
+              </AwaitingPlayersSubtitle>
+            </AwaitingPlayers>
+          )}
+        </FullPage>
+      </IOSDisableDoubleTap>
     )
   }
 }

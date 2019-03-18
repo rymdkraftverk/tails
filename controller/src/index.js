@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components/macro'
 import Boundary from './components/Boundary'
 import App from './components/App'
 
@@ -26,7 +26,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: 'patchy-robots';
     background: #414844;
-    height: 100%;
   }
 
   .fullscreen-enabled {
@@ -58,15 +57,6 @@ const GlobalStyle = createGlobalStyle`
 window.addEventListener('devicemotion', e => {
   e.preventDefault()
 })
-
-// Prevent scrolling and two finger zoom on iOS
-document.addEventListener(
-  'touchmove',
-  e => {
-    e.preventDefault()
-  },
-  { passive: false },
-)
 
 ReactDOM.render(
   <Boundary>

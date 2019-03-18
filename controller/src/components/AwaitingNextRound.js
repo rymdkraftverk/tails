@@ -1,13 +1,13 @@
 import React from 'react'
 import * as R from 'ramda'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
+import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 
-const Container = styled(IOSDisableDoubleTap)`
+const Container = styled(Div100vh)`
   display: flex;
   flex-direction: column;
-  height: 100vh;
   user-select: none;
   background: ${R.prop('color')};
   align-items: center;
@@ -18,9 +18,11 @@ const Text = styled.div`
   font-weight: bold;
 `
 const AwaitingNextRound = ({ playerColor }) => (
-  <Container color={playerColor}>
-    <Text>Awaiting next round</Text>
-  </Container>
+  <IOSDisableDoubleTap>
+    <Container color={playerColor}>
+      <Text>Awaiting next round</Text>
+    </Container>
+  </IOSDisableDoubleTap>
 )
 
 AwaitingNextRound.propTypes = {

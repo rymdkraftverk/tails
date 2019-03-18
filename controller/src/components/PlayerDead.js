@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import * as R from 'ramda'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+import Div100vh from 'react-div-100vh'
 
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 
-const Container = styled(IOSDisableDoubleTap)`
-  height: 100vh;
+const Container = styled(Div100vh)`
   user-select: none;
   background: ${R.prop('color')};
 `
@@ -28,9 +28,8 @@ const TouchText = styled.div`
   color: white;
 `
 
-const TouchArea = styled.div`
+const TouchArea = styled(Div100vh)`
   background-color: black;
-  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -88,16 +87,18 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
   }, [sendData, position])
 
   return (
-    <Container color={playerColor}>
-      <TouchArea
-        onTouchEnd={onTouchEnd}
-        onTouchStart={onPlayerDeadClick}
-        onTouchMove={onPlayerDeadClick}
-      >
-        <DeadText>{"You're dead"}</DeadText>
-        <TouchText>{'Touch to Sparkle!'}</TouchText>
-      </TouchArea>
-    </Container>
+    <IOSDisableDoubleTap>
+      <Container color={playerColor}>
+        <TouchArea
+          onTouchEnd={onTouchEnd}
+          onTouchStart={onPlayerDeadClick}
+          onTouchMove={onPlayerDeadClick}
+        >
+          <DeadText>{"You're dead"}</DeadText>
+          <TouchText>{'Touch to Sparkle!'}</TouchText>
+        </TouchArea>
+      </Container>
+    </IOSDisableDoubleTap>
   )
 }
 

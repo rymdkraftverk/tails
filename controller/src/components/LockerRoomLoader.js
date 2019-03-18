@@ -1,15 +1,15 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components/macro'
+import Div100vh from 'react-div-100vh'
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `
 
-const Spinner = styled.div`
+const Spinner = styled(Div100vh)`
   position: absolute;
   left: 50%;
-  top: 50%;
   z-index: 1;
   margin: -75px 0 0 -75px;
   border: 16px solid #f3f3f3;
@@ -22,7 +22,7 @@ const Spinner = styled.div`
 
 const LockerRoomLoader = () => (
   <div>
-    <Spinner />
+    <Spinner style={{ top: '50rvh' }} />
   </div>
 )
 

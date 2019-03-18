@@ -3,8 +3,10 @@ import React, { Component } from 'react'
 import Switch from 'react-switch'
 import PropTypes from 'prop-types'
 import { Event, SteeringCommand } from 'common'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
+import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+import LockOrientation from './LockOrientation';
 
 const SteerButton = styled.div`
   flex: 1;
@@ -37,8 +39,7 @@ const TogglePane = styled.div`
   user-select: none;
 `
 
-const Container = styled(IOSDisableDoubleTap)`
-  height: 100vh;
+const Container = styled(Div100vh)`
   display: flex;
   flex-direction: column;
 `
@@ -91,34 +92,37 @@ class GamePlaying extends Component {
     const { gyro, playerColor, setGyro } = this.props
 
     return (
-      <Container>
-        <TogglePane>
-          GYRO
-          <VerticalSeparator />
-          <Switch onChange={setGyro} checked={gyro} />
-        </TogglePane>
-        <SteeringContainer>
-          <SteerButton
-            playerColor={playerColor}
-            onMouseDown={this.sendCommand(SteeringCommand.LEFT)}
-            onMouseUp={this.sendCommand(SteeringCommand.NONE)}
-            onTouchStart={this.sendCommand(SteeringCommand.LEFT)}
-            onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
-          >
-            <div>{'<'} </div>
-          </SteerButton>
-          <BlackSeparator />
-          <SteerButton
-            playerColor={playerColor}
-            onMouseDown={this.sendCommand(SteeringCommand.RIGHT)}
-            onMouseUp={this.sendCommand(SteeringCommand.NONE)}
-            onTouchStart={this.sendCommand(SteeringCommand.RIGHT)}
-            onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
-          >
-            <div>{'>'} </div>
-          </SteerButton>
-        </SteeringContainer>
-      </Container>
+      <IOSDisableDoubleTap>
+        <LockOrientation />
+        <Container>
+          <TogglePane>
+            GYRO
+            <VerticalSeparator />
+            <Switch onChange={setGyro} checked={gyro} />
+          </TogglePane>
+          <SteeringContainer>
+            <SteerButton
+              playerColor={playerColor}
+              onMouseDown={this.sendCommand(SteeringCommand.LEFT)}
+              onMouseUp={this.sendCommand(SteeringCommand.NONE)}
+              onTouchStart={this.sendCommand(SteeringCommand.LEFT)}
+              onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
+            >
+              <div>{'<'} </div>
+            </SteerButton>
+            <BlackSeparator />
+            <SteerButton
+              playerColor={playerColor}
+              onMouseDown={this.sendCommand(SteeringCommand.RIGHT)}
+              onMouseUp={this.sendCommand(SteeringCommand.NONE)}
+              onTouchStart={this.sendCommand(SteeringCommand.RIGHT)}
+              onTouchEnd={this.sendCommand(SteeringCommand.NONE)}
+            >
+              <div>{'>'} </div>
+            </SteerButton>
+          </SteeringContainer>
+        </Container>
+      </IOSDisableDoubleTap>
     )
   }
 }

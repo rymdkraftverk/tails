@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notifications, { notify } from 'react-notify-toast'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
+import Div100vh from 'react-div-100vh'
+import LockOrientation from './LockOrientation';
 
 const PLACEHOLDER = 'Code'
 
-const PageContainer = styled(IOSDisableDoubleTap)``
-
-const Container = styled.div`
+const Container = styled(Div100vh)`
   display: flex;
-  height: 60vh;
 `
+
+const StyledLogo = styled(Logo)`
+  margin-top: 1vw;
+`;
 
 const ContainerColumn = styled.div`
   width: 50vw;
@@ -79,9 +82,11 @@ class LockerRoom extends Component {
     const { gameCode, onJoinClick, gameCodeChange } = this.props
 
     return (
-      <PageContainer>
-        <Logo />
-        <Container>
+      <IOSDisableDoubleTap>
+        <LockOrientation />
+        <Div100vh >
+        <StyledLogo />
+        <Container style={{ height: '50rvh' }}>
           <ContainerColumn>
             <GameCodeInput
               type="text"
@@ -110,7 +115,8 @@ class LockerRoom extends Component {
           </ContainerColumn>
           <Notifications />
         </Container>
-      </PageContainer>
+        </Div100vh>
+      </IOSDisableDoubleTap>
     )
   }
 }
