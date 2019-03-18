@@ -192,6 +192,19 @@ test('rtcMapSend', () => {
     .not.toHaveBeenCalled()
 })
 
+test('rtcSend', () => {
+  const channel = {
+    send: jest.fn(),
+  }
+  common.rtcSend(
+    JSON.stringify,
+    channel,
+    { foo: 'bar' },
+  )
+  expect(channel.send)
+    .toHaveBeenCalledWith('{"foo":"bar"}')
+})
+
 test('warnNotFound', () => {
   common.warnNotFound('foo')(4321)
   expect(console.warn)
