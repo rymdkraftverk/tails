@@ -4,7 +4,7 @@ const preventDefault = e => {
   e.preventDefault()
 }
 
-// This component should be rendered on every page that needs to lock orientation
+// This component should be rendered on every page that needs to lock scroll
 
 const ScrollLock = props => {
   useEffect(() => {
