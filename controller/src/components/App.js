@@ -15,6 +15,7 @@ import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/localStorage'
 import TurnPhone from './TurnPhone'
+import Gyro from './Gyro';
 
 const { error: logError } = console
 
@@ -81,6 +82,8 @@ class App extends Component {
     gyro: false,
     playerColor: null,
     ready: false,
+    sendSteering: () => {},
+    sendReliable: () => {},
   }
 
   componentDidMount = () => {
@@ -158,8 +161,10 @@ class App extends Component {
         wsAddress: WS_ADDRESS,
       })
       .then(send => {
-        this.sendSteering = send(Channel.RELIABLE_STEERING)
-        this.sendReliable = send(Channel.RELIABLE)
+        this.setState({
+          sendSteering: send(Channel.RELIABLE_STEERING),
+          sendReliable: send(Channel.RELIABLE),
+        })
       })
       .catch(error => {
         const message = {
@@ -179,11 +184,11 @@ class App extends Component {
   }
 
   startGame = () => {
-    this.sendReliable({ event: Event.ROUND_START })
+    this.state.sendReliable({ event: Event.ROUND_START })
   }
 
   readyPlayer = () => {
-    this.sendReliable({ event: Event.PLAYER_READY })
+    this.state.sendReliable({ event: Event.PLAYER_READY })
     this.setState({ ready: true })
   }
 
@@ -203,6 +208,8 @@ class App extends Component {
       playerCount,
       ready,
       startEnabled,
+      sendSteering,
+      sendReliable,
     } = this.state
 
     switch (appState) {
@@ -234,14 +241,14 @@ class App extends Component {
           <GamePlaying
             gyro={gyro}
             playerColor={Color[playerColor]}
-            send={this.sendSteering}
+            send={sendSteering}
             setGyro={this.setGyro}
           />
         )
       case AppState.PLAYER_DEAD:
         return (
           <PlayerDead
-            sendReliable={this.sendReliable}
+            sendReliable={sendReliable}
             playerColor={Color[playerColor]}
           />
         )
@@ -258,6 +265,8 @@ class App extends Component {
       throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
     }
 
+    const { gyro, sendSteering } = this.state
+
     return (
       // Fullscreen currently not used.
       // Error is raised if there is no user input before toggle
@@ -265,6 +274,7 @@ class App extends Component {
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
+        <Gyro send={sendSteering} enabled={gyro} />
         <MediaQuery orientation="portrait">
           <TurnPhone />
         </MediaQuery>
