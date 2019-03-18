@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components/macro'
 import Div100vh from 'react-div-100vh'
-import ScrollLock from './ScrollLock';
+import ScrollLock from './ScrollLock'
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }

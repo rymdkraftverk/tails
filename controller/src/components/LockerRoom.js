@@ -5,7 +5,7 @@ import styled from 'styled-components/macro'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
 import Div100vh from 'react-div-100vh'
-import ScrollLock from './ScrollLock';
+import ScrollLock from './ScrollLock'
 
 const PLACEHOLDER = 'Code'
 
@@ -15,7 +15,7 @@ const Container = styled(Div100vh)`
 
 const StyledLogo = styled(Logo)`
   margin-top: 1vw;
-`;
+`
 
 const ContainerColumn = styled.div`
   width: 50vw;
@@ -84,37 +84,37 @@ class LockerRoom extends Component {
     return (
       <IOSDisableDoubleTap>
         <ScrollLock />
-        <Div100vh >
-        <StyledLogo />
-        <Container style={{ height: '50rvh' }}>
-          <ContainerColumn>
-            <GameCodeInput
-              type="text"
-              value={gameCode}
-              onChange={gameCodeChange}
-              placeholder={PLACEHOLDER}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onKeyPress={this.onKeyPress}
-              className="game-join-input"
-              spellCheck="false"
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-            />
-          </ContainerColumn>
-          <ContainerColumn>
-            {
-              <GameJoinButton
-                disabled={!this.gameCodeFilled()}
-                onClick={onJoinClick}
-              >
-                Join
-              </GameJoinButton>
-            }
-          </ContainerColumn>
-          <Notifications />
-        </Container>
+        <Div100vh>
+          <StyledLogo />
+          <Container style={{ height: '50rvh' }}>
+            <ContainerColumn>
+              <GameCodeInput
+                type="text"
+                value={gameCode}
+                onChange={gameCodeChange}
+                placeholder={PLACEHOLDER}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onKeyPress={this.onKeyPress}
+                className="game-join-input"
+                spellCheck="false"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+              />
+            </ContainerColumn>
+            <ContainerColumn>
+              {
+                <GameJoinButton
+                  disabled={!this.gameCodeFilled()}
+                  onClick={onJoinClick}
+                >
+                  Join
+                </GameJoinButton>
+              }
+            </ContainerColumn>
+            <Notifications />
+          </Container>
         </Div100vh>
       </IOSDisableDoubleTap>
     )

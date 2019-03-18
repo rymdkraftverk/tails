@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const preventDefault = (e) => {
+const preventDefault = e => {
   e.preventDefault()
 }
 
@@ -8,30 +8,21 @@ const preventDefault = (e) => {
 
 const ScrollLock = props => {
   useEffect(() => {
-    
     setTimeout(() => {
       window.scrollTo(0, -1000)
       // This timeout is the lowest number that worked on iOS Safari
-    }, 290);
-    
+    }, 290)
+
     // Prevent scrolling and two finger zoom on iOS
-      document.addEventListener(
-        'touchmove',
-        preventDefault,
-        { passive: false },
-        )
+    document.addEventListener('touchmove', preventDefault, { passive: false })
     return () => {
-      document.removeEventListener(
-        'touchmove',
-        preventDefault,
-        { passive: false },
-      ) 
+      document.removeEventListener('touchmove', preventDefault, {
+        passive: false,
+      })
     }
   }, [])
 
-  return (
-    null
-  )
+  return null
 }
 
 export default ScrollLock

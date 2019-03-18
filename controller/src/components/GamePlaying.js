@@ -6,7 +6,7 @@ import { Event, SteeringCommand } from 'common'
 import styled from 'styled-components/macro'
 import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import ScrollLock from './ScrollLock';
+import ScrollLock from './ScrollLock'
 
 const SteerButton = styled.div`
   flex: 1;

@@ -5,7 +5,7 @@ import { Color } from 'common'
 import styled, { css } from 'styled-components/macro'
 import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import ScrollLock from './ScrollLock';
+import ScrollLock from './ScrollLock'
 
 const FullPage = styled(Div100vh)`
   display: flex;
@@ -100,7 +100,7 @@ class GameLobby extends Component {
     return (
       <IOSDisableDoubleTap>
         <FullPage backgroundColor={getColorCode(playerColor)}>
-        <ScrollLock />
+          <ScrollLock />
           {playerCount > 1 ? (
             <Fragment>
               <Instructions style={{ height: '30rvh' }}>

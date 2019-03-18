@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Event } from 'common'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Div100vh from 'react-div-100vh'
-import ScrollLock from './ScrollLock';
+import ScrollLock from './ScrollLock'
 
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 
