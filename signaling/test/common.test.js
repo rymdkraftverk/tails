@@ -1,3 +1,11 @@
+// Mute logging
+/* eslint-disable no-console */
+global.console = {
+  error: jest.fn(),
+  log:   jest.fn(),
+  warn:  jest.fn(),
+}
+
 const common = require('../common')
 
 test('mappify', () => {
@@ -168,3 +176,10 @@ test('rtcMapSend', () => {
   expect(g)
     .not.toHaveBeenCalled()
 })
+
+test('warnNotFound', () => {
+  common.warnNotFound('foo')(4321)
+  expect(console.warn)
+    .toHaveBeenCalledWith('[Foo not found] 4321')
+})
+/* eslint-enable no-console */
