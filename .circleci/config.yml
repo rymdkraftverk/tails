@@ -20,7 +20,7 @@ commands:
 jobs:
   setup:
     docker:
-      - image: circleci/node:latest
+      - image: node:11.11
     working_directory: ~/tails
     steps:
       - checkout
@@ -42,7 +42,7 @@ jobs:
           root: .
   test:
     docker:
-      - image: circleci/node:latest
+      - image: node:11.11
     working_directory: ~/tails
     steps:
       - attach_workspace:
@@ -51,7 +51,7 @@ jobs:
       - run: npm run lint
   build_controller:
     docker:
-      - image: circleci/node:latest
+      - image: node:11.11
     working_directory: ~/tails
     steps:
       - attach_workspace:
@@ -80,7 +80,7 @@ jobs:
           working_directory: controller
   build_game:
     docker:
-      - image: circleci/node:latest
+      - image: node:11.11
     working_directory: ~/tails
     steps:
       - attach_workspace:
