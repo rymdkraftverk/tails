@@ -30,7 +30,11 @@ const Logo = ({ className }) => {
 }
 
 Logo.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
+}
+
+Logo.defaultProps = {
+  className: ''
 }
 
 export default Logo
