@@ -42,6 +42,21 @@ test('mappify', () => {
     })
 })
 
+test('makeCloseConnections', () => {
+  const connections = [
+    { close: jest.fn() },
+    { close: jest.fn() },
+    { close: jest.fn() },
+    { close: jest.fn() },
+  ]
+
+  common.makeCloseConnections(connections)()
+
+  const allCalledOnce = connections.every(c => c.close.mock.calls[0].length === 0)
+  expect(allCalledOnce)
+    .toBe(true)
+})
+
 test('makeOnRtcMessage', () => {
   // Without protobuf
   expect(common.makeOnRtcMessage(
