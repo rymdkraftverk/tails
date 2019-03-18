@@ -83,6 +83,20 @@ test('hoistInternal', () => {
     )
 })
 
+test('onWsMessage', () => {
+  const f = jest.fn()
+  const g = jest.fn()
+
+  common.onWsMessage({ f, g })(
+    '{ "event": "f","payload": 2 }',
+  )
+
+  expect(f)
+    .toHaveBeenCalled()
+  expect(g)
+    .not.toHaveBeenCalled()
+})
+
 test('packageChannels', () => {
   expect(common.packageChannels(
     [{
