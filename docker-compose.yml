@@ -4,22 +4,30 @@ services:
         image: 'redis:latest'
 
     backend:
+        image: 'node:carbon'
+        working_dir: /tails/backend
+        command: ["sh", "./run-dev.sh"]
+        volumes:
+          - ./backend:/tails/backend
+          - ./common:/tails/common
+          - ./signaling:/tails/signaling
         environment:
             - CORS_WHITELIST=${CORS_WHITELIST}
             - GAME_CODE=${GAME_CODE}
             - REDIS_URL=${REDIS_URL}
             - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
             - VERSION=${VERSION}
-        build:
-            context: .
-            dockerfile: ./backend/Dockerfile
         ports:
             - '3000:3000'
 
     game:
-        build:
-            context: .
-            dockerfile: ./game/Dockerfile
+        image: 'node:carbon'
+        working_dir: /tails/game
+        command: ["sh", "./run-dev.sh"]
+        volumes:
+            - ./game:/tails/game
+            - ./common:/tails/common
+            - ./signaling:/tails/signaling
         ports:
             - '8081:8081'
         environment:
@@ -30,12 +38,16 @@ services:
             - WS_ADDRESS=${WS_ADDRESS}
 
     controller:
+        image: 'node:carbon'
+        working_dir: /tails/controller
+        command: ["sh", "./run-dev.sh"]
+        volumes:
+          - ./controller:/tails/controller
+          - ./common:/tails/common
+          - ./signaling:/tails/signaling
         environment:
             - REACT_APP_ERROR_LOGGING=${REACT_APP_ERROR_LOGGING}
             - REACT_APP_VERSION=${REACT_APP_VERSION}
             - REACT_APP_WS_ADDRESS=${REACT_APP_WS_ADDRESS}
-        build:
-            context: .
-            dockerfile: ./controller/Dockerfile
         ports:
             - '4001:4001'

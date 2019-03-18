@@ -16,9 +16,6 @@ Otherwise app will crash.
 Start dev env:
 $ REACT_APP_WS_ADDRESS=ws://localhost:3000 docker-compose up
 
-Start prod env:
-$ docker-compose -f docker-compose.yml up
-
 ### z-index
 
 When setting z-index, always use the constants defined in `layer.js`, and set the z-index relative to them.
