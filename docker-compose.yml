@@ -4,7 +4,7 @@ services:
         image: 'redis:latest'
 
     backend:
-        image: 'node:carbon'
+        image: 'node:11.11'
         working_dir: /tails/backend
         command: ["sh", "./run-dev.sh"]
         volumes:
@@ -21,7 +21,7 @@ services:
             - '3000:3000'
 
     game:
-        image: 'node:carbon'
+        image: 'node:11.11'
         working_dir: /tails/game
         command: ["sh", "./run-dev.sh"]
         volumes:
@@ -38,7 +38,7 @@ services:
             - WS_ADDRESS=${WS_ADDRESS}
 
     controller:
-        image: 'node:carbon'
+        image: 'node:11.11'
         working_dir: /tails/controller
         command: ["sh", "./run-dev.sh"]
         volumes:
