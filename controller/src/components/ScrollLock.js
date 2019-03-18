@@ -9,6 +9,7 @@ const preventDefault = e => {
 const ScrollLock = props => {
   useEffect(() => {
     setTimeout(() => {
+      // -1000 is an arbitrary number that definitely scroll to the top
       window.scrollTo(0, -1000)
       // This timeout is the lowest number that worked on iOS Safari
     }, 290)
