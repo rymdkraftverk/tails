@@ -138,3 +138,33 @@ test('prettyId', () => {
   expect(common.prettyId('abcdefgh'))
     .toEqual('abcd')
 })
+
+test('rtcMapSend', () => {
+  // Without protobuf
+  const f = jest.fn()
+  const g = jest.fn()
+
+  common.rtcMapSend(
+    {
+      foo: {
+        channel: {
+          send:       g,
+          readyState: common.ReadyState.OPEN,
+        },
+      },
+      bar: {
+        channel: {
+          send:       f,
+          readyState: common.ReadyState.OPEN,
+        },
+      },
+    },
+    'bar',
+    { foo: 2 },
+  )
+
+  expect(f)
+    .toHaveBeenCalledWith('{"foo":2}')
+  expect(g)
+    .not.toHaveBeenCalled()
+})
