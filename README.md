@@ -4,17 +4,17 @@
 [![CircleCI](https://circleci.com/gh/sajmoni/tails/tree/master.svg?style=svg&circle-token=730c3b9ac413e0d54208d17994f02b2cec5d7a72)](https://circleci.com/gh/sajmoni/tails/tree/master)
 
 ## Index
+* [run locally](#run-locally)
 * [z-index](#z-index)
 * [eslint](#eslint)
 * [VS Code](#vs-code)
 * [update protobuf schemas](#update-protobuf-schemas)
 * [debugging](#debugging)
 
-Env variable `REACT_APP_WS_ADDRESS` has to be set. 
-Otherwise app will crash.
-
-Start dev env:
-$ REACT_APP_WS_ADDRESS=ws://localhost:3000 docker-compose up
+### run locally
+1. Copy `.env.example` to  `.env`
+1. Change desired envs in `.env`
+1. Execute `./run.sh`
 
 ### z-index
 
