@@ -70,23 +70,6 @@ class GamePlaying extends Component {
     })
   }
 
-  handleOrientation = ({ beta }) => {
-    if (!this.props.gyro) return
-
-    this.props.send({
-      event: Event.PLAYER_MOVEMENT,
-      payload: beta / 6,
-    })
-  }
-
-  toggleOrientationListener = on => () => {
-    const method = on ? 'addEventListener' : 'removeEventListener'
-    window[method]('deviceorientation', this.handleOrientation, true)
-  }
-
-  componentDidMount = this.toggleOrientationListener(true)
-  componentWillUnmount = this.toggleOrientationListener(false)
-
   render() {
     const { gyro, playerColor, setGyro } = this.props
 
