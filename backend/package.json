@@ -9,21 +9,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
-    "lodash": "^4.17.10",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
     "node-fetch": "^2.3.0",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.1",
     "redis": "^2.8.0",
     "signaling": "file:../signaling",
-    "uuid": "^3.2.1",
-    "ws": "^5.1.1"
+    "uuid": "^3.3.2",
+    "ws": "^6.2.0"
   },
   "devDependencies": {
-    "eslint": "^5.10.0",
+    "eslint": "^5.15.2",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.17.5"
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.10"
   }
 }
