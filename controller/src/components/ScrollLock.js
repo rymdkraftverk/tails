@@ -6,23 +6,20 @@ const preventDefault = (e) => {
 
 // This component should be rendered on every page that needs to lock orientation
 
-// The timeouts used in this file are from trial and error in iOS Safari
-
-const LockOrientation = props => {
+const ScrollLock = props => {
   useEffect(() => {
     
-    // Prevent scrolling and two finger zoom on iOS
     setTimeout(() => {
       window.scrollTo(0, -1000)
+      // This timeout is the lowest number that worked on iOS Safari
     }, 290);
-
-    setTimeout(() => {
+    
+    // Prevent scrolling and two finger zoom on iOS
       document.addEventListener(
         'touchmove',
         preventDefault,
         { passive: false },
         )
-    }, 100);
     return () => {
       document.removeEventListener(
         'touchmove',
@@ -37,4 +34,4 @@ const LockOrientation = props => {
   )
 }
 
-export default LockOrientation
+export default ScrollLock

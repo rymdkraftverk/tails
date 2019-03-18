@@ -6,7 +6,7 @@ import { Event, SteeringCommand } from 'common'
 import styled from 'styled-components/macro'
 import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import LockOrientation from './LockOrientation';
+import ScrollLock from './ScrollLock';
 
 const SteerButton = styled.div`
   flex: 1;
@@ -93,7 +93,7 @@ class GamePlaying extends Component {
 
     return (
       <IOSDisableDoubleTap>
-        <LockOrientation />
+        <ScrollLock />
         <Container>
           <TogglePane>
             GYRO

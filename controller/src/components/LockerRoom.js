@@ -5,7 +5,7 @@ import styled from 'styled-components/macro'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
 import Div100vh from 'react-div-100vh'
-import LockOrientation from './LockOrientation';
+import ScrollLock from './ScrollLock';
 
 const PLACEHOLDER = 'Code'
 
@@ -83,7 +83,7 @@ class LockerRoom extends Component {
 
     return (
       <IOSDisableDoubleTap>
-        <LockOrientation />
+        <ScrollLock />
         <Div100vh >
         <StyledLogo />
         <Container style={{ height: '50rvh' }}>
