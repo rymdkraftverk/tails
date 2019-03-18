@@ -62,10 +62,9 @@ const pauseAndTransitionToScoreScene = () => ({
       .getByLabel('particleContainer')
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
 
-    l1.destroy(Scene.GAME)
     l1.getAllBehaviors()
-      .map(l1.removeBehavior)
-    // l1.removeBehavior(l1.getBehaviorByLabel('collisionCheckerPowerup'))
+      .forEach(l1.removeBehavior)
+    l1.destroy(Scene.GAME)
 
     transitionToScoreScene()
   },
