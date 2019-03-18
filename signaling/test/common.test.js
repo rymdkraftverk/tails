@@ -133,3 +133,8 @@ test('packageChannels', () => {
       schema: 'protobuf',
     }])
 })
+
+test('prettyId', () => {
+  expect(common.prettyId('abcdefgh'))
+    .toEqual('abcd')
+})
