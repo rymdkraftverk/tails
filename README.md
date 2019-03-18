@@ -69,7 +69,9 @@ Add query params `subheading1` and `subheading2` to game url to display subheadi
 There are a few functions available to help with debugging from the game view.
 They can be accessed from the console on the `debug` object.
 
-The following functions are available:
+The following functions and properties are available:
+
+#### Functions
 
 * `debug.addMockPlayers(count)`
 * `debug.addSpiralMockPlayers(count)`
@@ -81,7 +83,10 @@ The following functions are available:
 * `debug.printBehaviors()`
 * `debug.start()`
 * `debug.stop()`
-* `debug.state()`
+
+#### Properties
+
+* `debug.state`
 
 `transitionToLobby` is currently a bit problematic due to race conditions in rendering the lobby.
 If some other function tries to render the lobby again the game engine will crash.
