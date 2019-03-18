@@ -11,7 +11,7 @@ const ScrollLock = props => {
     setTimeout(() => {
       // -1000 is an arbitrary number that definitely scroll to the top
       window.scrollTo(0, -1000)
-      // This timeout is the lowest number that worked on iOS Safari
+      // This timeout is the lowest number that worked on iOS Safari. It's enough time for address bar to be visible.
     }, 290)
 
     // Prevent scrolling and two finger zoom on iOS
