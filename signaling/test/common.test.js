@@ -8,67 +8,6 @@ global.console = {
 
 const common = require('../common')
 
-test('mappify', () => {
-  expect(common.mappify(
-    'name',
-    [
-      {
-        name:  'foo',
-        color: 'blue',
-      },
-      {
-        name:  'bar',
-        color: 'green',
-      },
-      {
-        name:  'baz',
-        color: 'yellow',
-      },
-    ],
-  ))
-    .toEqual({
-      foo: {
-        name:  'foo',
-        color: 'blue',
-      },
-      bar: {
-        name:  'bar',
-        color: 'green',
-      },
-      baz: {
-        name:  'baz',
-        color: 'yellow',
-      },
-    })
-})
-
-test('makeCloseConnections', () => {
-  const connections = [
-    { close: jest.fn() },
-    { close: jest.fn() },
-    { close: jest.fn() },
-    { close: jest.fn() },
-  ]
-
-  common.makeCloseConnections(connections)()
-
-  const allCalledOnce = connections.every(c => c.close.mock.calls[0].length === 0)
-  expect(allCalledOnce)
-    .toBe(true)
-})
-
-test('makeOnRtcMessage', () => {
-  // Without protobuf
-  expect(common.makeOnRtcMessage(
-    {
-      onData: ({ foo }) => foo * 3,
-    },
-  )({
-    data: '{ "foo": 2 }',
-  }))
-    .toEqual(6)
-})
-
 test('hoistInternal', () => {
   expect(common.hoistInternal(
     [
@@ -104,6 +43,67 @@ test('hoistInternal', () => {
         ],
       ],
     )
+})
+
+test('makeCloseConnections', () => {
+  const connections = [
+    { close: jest.fn() },
+    { close: jest.fn() },
+    { close: jest.fn() },
+    { close: jest.fn() },
+  ]
+
+  common.makeCloseConnections(connections)()
+
+  const allCalledOnce = connections.every(c => c.close.mock.calls[0].length === 0)
+  expect(allCalledOnce)
+    .toBe(true)
+})
+
+test('makeOnRtcMessage', () => {
+  // Without protobuf
+  expect(common.makeOnRtcMessage(
+    {
+      onData: ({ foo }) => foo * 3,
+    },
+  )({
+    data: '{ "foo": 2 }',
+  }))
+    .toEqual(6)
+})
+
+test('mappify', () => {
+  expect(common.mappify(
+    'name',
+    [
+      {
+        name:  'foo',
+        color: 'blue',
+      },
+      {
+        name:  'bar',
+        color: 'green',
+      },
+      {
+        name:  'baz',
+        color: 'yellow',
+      },
+    ],
+  ))
+    .toEqual({
+      foo: {
+        name:  'foo',
+        color: 'blue',
+      },
+      bar: {
+        name:  'bar',
+        color: 'green',
+      },
+      baz: {
+        name:  'baz',
+        color: 'yellow',
+      },
+    })
 })
 
 test('onWsMessage', () => {
