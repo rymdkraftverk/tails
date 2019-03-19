@@ -55,7 +55,7 @@ test('makeCloseConnections', () => {
 
   common.makeCloseConnections(connections)()
 
-  const allCalledOnce = connections.every(c => c.close.mock.calls[0].length === 0)
+  const allCalledOnce = connections.every(c => c.close.mock.calls.length === 1)
   expect(allCalledOnce)
     .toBe(true)
 })
