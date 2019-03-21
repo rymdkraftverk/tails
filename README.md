@@ -5,6 +5,7 @@
 
 ## Index
 * [run locally](#run-locally)
+* [npm scripts](#npm-scripts)
 * [z-index](#z-index)
 * [eslint](#eslint)
 * [VS Code](#vs-code)
@@ -15,6 +16,14 @@
 1. Copy `.env.example` to  `.env`
 1. Change desired envs in `.env`
 1. Execute `./run.sh`
+
+### Npm scripts
+
+`lint` - Run linter in root and subfolders
+
+`clean` - Delete `node_modules` in root and subfolders
+
+`install` - Installs dependencies in root, backend and signaling
 
 ### z-index
 
