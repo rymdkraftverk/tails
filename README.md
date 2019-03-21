@@ -23,7 +23,7 @@
 
 `clean` - Delete `node_modules` in root and subfolders
 
-`install` - Installs dependencies in root, backend and signaling
+`install` - Install dependencies in root, backend and signaling
 
 ### z-index
 
