@@ -9,40 +9,40 @@ global.console = {
 const common = require('../common')
 
 test('hoistInternal', () => {
-  expect(common.hoistInternal(
+  const channels = [
+    {
+      label: 'someotherchannel',
+      name:  'bar',
+    },
+    {
+      label: common.INTERNAL_CHANNEL.name,
+      name:  'foo',
+    },
+    {
+      label: 'somethirdchannel',
+      name:  'baz',
+    },
+  ]
+
+  const hoistedChannelAndRest = [
+    {
+      label: common.INTERNAL_CHANNEL.name,
+      name:  'foo',
+    },
     [
       {
         label: 'someotherchannel',
         name:  'bar',
       },
       {
-        label: common.INTERNAL_CHANNEL.name,
-        name:  'foo',
-      },
-      {
         label: 'somethirdchannel',
         name:  'baz',
       },
     ],
-  ))
-    .toEqual(
-      [
-        {
-          label: common.INTERNAL_CHANNEL.name,
-          name:  'foo',
-        },
-        [
-          {
-            label: 'someotherchannel',
-            name:  'bar',
-          },
-          {
-            label: 'somethirdchannel',
-            name:  'baz',
-          },
-        ],
-      ],
-    )
+  ]
+
+  expect(common.hoistInternal(channels))
+    .toEqual(hoistedChannelAndRest)
 })
 
 test('makeCloseConnections', () => {
@@ -60,59 +60,65 @@ test('makeCloseConnections', () => {
     .toBe(true)
 })
 
+// Without protobuf
 test('makeOnRtcMessage', () => {
-  // Without protobuf
-  expect(common.makeOnRtcMessage(
-    {
-      onData: ({ foo }) => foo * 3,
-    },
-  )({
+  const options = {
+    onData: ({ foo }) => foo * 3,
+  }
+  const message = {
     data: '{ "foo": 2 }',
-  }))
+  }
+  expect(common.makeOnRtcMessage(options)(message))
     .toEqual(6)
 })
 
 test('mappify', () => {
+  const keyName = 'name'
+  const listOfObjects = [
+    {
+      name:  'foo',
+      color: 'blue',
+    },
+    {
+      name:  'bar',
+      color: 'green',
+    },
+    {
+      name:  'baz',
+      color: 'yellow',
+    },
+  ]
+
+  const object = {
+    foo: {
+      name:  'foo',
+      color: 'blue',
+    },
+    bar: {
+      name:  'bar',
+      color: 'green',
+    },
+    baz: {
+      name:  'baz',
+      color: 'yellow',
+    },
+  }
+
   expect(common.mappify(
-    'name',
-    [
-      {
-        name:  'foo',
-        color: 'blue',
-      },
-      {
-        name:  'bar',
-        color: 'green',
-      },
-      {
-        name:  'baz',
-        color: 'yellow',
-      },
-    ],
+    keyName,
+    listOfObjects,
   ))
-    .toEqual({
-      foo: {
-        name:  'foo',
-        color: 'blue',
-      },
-      bar: {
-        name:  'bar',
-        color: 'green',
-      },
-      baz: {
-        name:  'baz',
-        color: 'yellow',
-      },
-    })
+    .toEqual(object)
 })
 
 test('onWsMessage', () => {
   const f = jest.fn()
   const g = jest.fn()
 
-  common.onWsMessage({ f, g })(
-    '{ "event": "f","payload": 2 }',
-  )
+  const eventMap = { f, g }
+  const message = '{ "event": "f","payload": 2 }'
+
+  common.onWsMessage(eventMap)(message)
 
   expect(f)
     .toHaveBeenCalled()
@@ -121,40 +127,46 @@ test('onWsMessage', () => {
 })
 
 test('packageChannels', () => {
-  expect(common.packageChannels(
-    [{
-      name:   'reliable',
-      schema: 'JSON',
-    }, {
-      name:   'unreliable',
-      schema: 'protobuf',
-    }],
-    [{
-      label: 'internal',
-      rtc:   'RTC',
-    }, {
+  const channelInfos = [{
+    name:   'reliable',
+    schema: 'JSON',
+  }, {
+    name:   'unreliable',
+    schema: 'protobuf',
+  }]
+
+  const channels = [{
+    label: 'internal',
+    rtc:   'RTC',
+  }, {
+    label: 'reliable',
+    rtc:   'RTC',
+  }, {
+    label: 'unreliable',
+    rtc:   'RTC',
+  }]
+
+  const packagedChannels = [{
+    channel: {
       label: 'reliable',
       rtc:   'RTC',
-    }, {
+    },
+    name:   'reliable',
+    schema: 'JSON',
+  }, {
+    channel: {
       label: 'unreliable',
       rtc:   'RTC',
-    }],
+    },
+    name:   'unreliable',
+    schema: 'protobuf',
+  }]
+
+  expect(common.packageChannels(
+    channelInfos,
+    channels,
   ))
-    .toEqual([{
-      channel: {
-        label: 'reliable',
-        rtc:   'RTC',
-      },
-      name:   'reliable',
-      schema: 'JSON',
-    }, {
-      channel: {
-        label: 'unreliable',
-        rtc:   'RTC',
-      },
-      name:   'unreliable',
-      schema: 'protobuf',
-    }])
+    .toEqual(packagedChannels)
 })
 
 test('prettyId', () => {
@@ -162,28 +174,32 @@ test('prettyId', () => {
     .toEqual('abcd')
 })
 
+// Without protobuf
 test('rtcMapSend', () => {
-  // Without protobuf
   const f = jest.fn()
   const g = jest.fn()
 
-  common.rtcMapSend(
-    {
-      foo: {
-        channel: {
-          send:       g,
-          readyState: common.ReadyState.OPEN,
-        },
-      },
-      bar: {
-        channel: {
-          send:       f,
-          readyState: common.ReadyState.OPEN,
-        },
+  const channelMap = {
+    foo: {
+      channel: {
+        send:       g,
+        readyState: common.ReadyState.OPEN,
       },
     },
-    'bar',
-    { foo: 2 },
+    bar: {
+      channel: {
+        send:       f,
+        readyState: common.ReadyState.OPEN,
+      },
+    },
+  }
+  const channelName = 'bar'
+  const data = { foo: 2 }
+
+  common.rtcMapSend(
+    channelMap,
+    channelName,
+    data,
   )
 
   expect(f)
@@ -196,13 +212,17 @@ test('rtcSend', () => {
   const channel = {
     send: jest.fn(),
   }
+  const data = { foo: 'bar' }
+  const serializedData = '{"foo":"bar"}'
+
   common.rtcSend(
     JSON.stringify,
     channel,
-    { foo: 'bar' },
+    data,
   )
+
   expect(channel.send)
-    .toHaveBeenCalledWith('{"foo":"bar"}')
+    .toHaveBeenCalledWith(serializedData)
 })
 
 test('warnNotFound', () => {
@@ -214,12 +234,16 @@ test('warnNotFound', () => {
 test('wsSend', () => {
   const f = jest.fn()
 
+  const ws = {
+    send: f,
+  }
+  const event = 'foo'
+  const payload = 'bar'
+
   common.wsSend(
-    {
-      send: f,
-    },
-    'foo',
-    'bar',
+    ws,
+    event,
+    payload,
   )
 
   expect(f)
