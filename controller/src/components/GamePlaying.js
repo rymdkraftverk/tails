@@ -7,6 +7,7 @@ import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 import TapSteering from './TapSteering'
+import GyroSteering from './GyroSteering'
 
 const VerticalSeparator = styled.div`
   width: 20px;
@@ -51,7 +52,7 @@ const GamePlaying = props => {
           <VerticalSeparator />
           <Switch onChange={setGyro} checked={gyro} />
         </TogglePane>
-        <TapSteering send={send} />
+        {gyro ? <GyroSteering /> : <TapSteering send={send} />}
       </Container>
     </IOSDisableDoubleTap>
   )
