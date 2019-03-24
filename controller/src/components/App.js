@@ -13,7 +13,7 @@ import GamePlaying from './GamePlaying'
 import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
 import isMobileDevice from '../util/isMobileDevice'
-import { getLastGameCode, setLastGameCode } from '../util/localStorage'
+import { getLastGameCode, setLastGameCode } from '../util/sessionStorage'
 import TurnPhone from './TurnPhone'
 import Gyro from './Gyro'
 
