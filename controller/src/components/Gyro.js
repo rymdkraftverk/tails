@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
+import useOrientation from '../hook/useOrientation';
 
 const handleOrientation = (enabled, send) => ({ beta }) => {
   if (!enabled) return
@@ -12,20 +12,7 @@ const handleOrientation = (enabled, send) => ({ beta }) => {
 }
 
 const Gyro = ({ enabled, send }) => {
-  useEffect(() => {
-    window.addEventListener(
-      'deviceorientation',
-      handleOrientation(enabled, send),
-      true,
-    )
-    return () => {
-      window.removeEventListener(
-        'deviceorientation',
-        handleOrientation(enabled, send),
-        true,
-      )
-    }
-  }, [enabled, send])
+  useOrientation(handleOrientation(enabled, send));
 
   return null
 }
