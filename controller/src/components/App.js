@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
+import Notifications from 'react-notify-toast'
 import MediaQuery from 'react-responsive'
 import { Event, Color, Channel } from 'common'
 import getUrlParams from 'common/getUrlParams'
@@ -274,6 +275,7 @@ class App extends Component {
         enabled={this.enableFullscreen()}
         onChange={fullscreen => this.setState({ fullscreen })}
       >
+        <Notifications />
         <Gyro send={sendSteering} enabled={gyro} />
         <MediaQuery orientation="portrait">
           <TurnPhone />

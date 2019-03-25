@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Notifications, { notify } from 'react-notify-toast'
+import { notify } from 'react-notify-toast'
 import styled from 'styled-components/macro'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
@@ -113,7 +113,6 @@ class LockerRoom extends Component {
                 </GameJoinButton>
               }
             </ContainerColumn>
-            <Notifications />
           </Container>
         </Div100vh>
       </IOSDisableDoubleTap>
