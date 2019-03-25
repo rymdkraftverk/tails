@@ -9,7 +9,6 @@ import ScrollLock from './ScrollLock'
 const Container = styled(Div100vh)`
   display: flex;
   flex-direction: column;
-  user-select: none;
   background: ${R.prop('color')};
   align-items: center;
   justify-content: center;
