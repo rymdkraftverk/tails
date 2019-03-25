@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { Event } from 'common'
-import useOrientation from '../hook/useOrientation';
+import useOrientation from '../hook/useOrientation'
 
 const handleOrientation = (enabled, send) => ({ beta }) => {
   if (!enabled) return
@@ -12,7 +12,7 @@ const handleOrientation = (enabled, send) => ({ beta }) => {
 }
 
 const Gyro = ({ enabled, send }) => {
-  useOrientation(handleOrientation(enabled, send));
+  useOrientation(handleOrientation(enabled, send))
 
   return null
 }
