@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'patchy-robots';
     src: url('patchy-robots.ttf');
   }
-  
+
   html {
     /* This is needed to prevent double tap zoom on iOS Safari */
     touch-action: manipulation;
