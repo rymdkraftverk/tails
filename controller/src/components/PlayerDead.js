@@ -10,7 +10,6 @@ import ScrollLock from './ScrollLock'
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 
 const Container = styled(Div100vh)`
-  user-select: none;
   background: ${R.prop('color')};
 `
 

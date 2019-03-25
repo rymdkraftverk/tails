@@ -16,7 +16,6 @@ const Container = styled.div`
 
 const Button = styled.div`
   flex: 1;
-  user-select: none;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -39,7 +39,6 @@ const GameCodeInput = styled.input`
   color: #4085af;
 `
 const GameJoinButton = styled.button`
-  user-select: none;
   color: #4085af;
   opacity: ${({ disabled }) => (disabled ? '0.2' : '1')};
 `

@@ -51,6 +51,10 @@ const GlobalStyle = createGlobalStyle`
     top: 0.1em;
     left: 0.1em;
   }
+
+  * {
+    user-select: none;
+  }
 `
 
 // Prevent displaying "undo text" dialog on iOS when device is accidentally shaken

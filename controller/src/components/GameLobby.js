@@ -17,7 +17,6 @@ const FullPage = styled(Div100vh)`
 `
 
 const Instructions = styled(Div100vh)`
-  user-select: none;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -28,7 +27,6 @@ const Instructions = styled(Div100vh)`
 `
 
 const label = css`
-  user-select: none;
   padding: 8px;
   font-family: inherit;
 `
@@ -58,7 +56,6 @@ const AwaitingPlayersTitle = styled.div`
 
 const AwaitingPlayersSubtitle = styled.div`
   font-size: 3vw;
-  user-select: none;
 `
 
 const AwaitingReadyPlayers = styled.div`
