@@ -1,18 +1,31 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 
-const Container = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+const Canvas = styled.canvas`
   height: 100%;
-  justify-content: center;
-  font-size: 5vw;
 `
 
 const GyroSteering = ({ angle }) => {
-  return <Container>Tilt phone to steer! {Math.round(angle)}</Container>
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    ctx.beginPath()
+    ctx.strokeStyle = 'black'
+    ctx.lineWidth = 10
+    const diff = canvas.height / 18 * angle
+    ctx.moveTo(0, canvas.height - diff)
+    ctx.lineTo(canvas.width, diff)
+    ctx.stroke()
+
+  }, [angle])
+
+  return <Canvas ref={canvasRef} />
 }
 
 GyroSteering.propTypes = {
