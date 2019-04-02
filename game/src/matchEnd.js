@@ -1,5 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
+import { Emitter } from 'pixi-particles'
 import { Event, Color, Channel } from 'common'
 
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
@@ -144,7 +145,7 @@ const createFireworks = (creator, color) => ({
       x,
       y,
     })
-    const fireworkEmitter = new PIXI.particles.Emitter(
+    const fireworkEmitter = new Emitter(
       creator,
       textures.map(l1.getTexture),
       config,

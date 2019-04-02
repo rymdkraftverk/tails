@@ -1,6 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
-import 'pixi-particles'
+import { Emitter } from 'pixi-particles'
 import { SPEED_MULTIPLIER } from '../game'
 import Layer from '../constant/layer'
 import sparks from '../particleEmitter/sparks'
@@ -41,7 +41,7 @@ export default (id, { x, y }) => {
     },
   })
 
-  new PIXI.particles.Emitter(
+  new Emitter(
     sparkleParticleContainer,
     neonTextures,
     neonConfig,
