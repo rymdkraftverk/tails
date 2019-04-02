@@ -66,6 +66,8 @@ const pauseAndTransitionToScoreScene = () => ({
       .forEach(l1.removeBehavior)
     l1.destroy(Scene.GAME)
 
+    state.portalPairs = 0
+
     transitionToScoreScene()
   },
 })
