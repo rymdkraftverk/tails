@@ -36,7 +36,7 @@ export const initPowerups = ({
   // as an optimization, to avoid filtering on every tick
   const players = l1.getByLabel('player')
 
-  const getAnimatedSprite = (textures) => {
+  const getPortalAnimatedSprite = (textures) => {
     const displayObject = new PIXI.extras.AnimatedSprite(textures.map(l1.getTexture))
     displayObject.animationSpeed = 0.03
     displayObject.scale.set((snakeSpeed / speedMultiplier) * 3)
@@ -45,7 +45,7 @@ export const initPowerups = ({
   }
 
   const createPortal = (textures) => {
-    const portalSprite = getAnimatedSprite(textures)
+    const portalSprite = getPortalAnimatedSprite(textures)
     portalSprite.x = l1.getRandomInRange(100, gameWidth - 100)
     portalSprite.y = l1.getRandomInRange(100, gameHeight - 100)
     portalSprite.anchor.set(0.5)
