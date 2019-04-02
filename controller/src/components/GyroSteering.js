@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 
 const GyroSteering = ({ angle }) => {
-  return <Container>Tilt phone to steer! {angle}</Container>
+  return <Container>Tilt phone to steer! {Math.round(angle)}</Container>
 }
 
 GyroSteering.propTypes = {
