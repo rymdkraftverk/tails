@@ -10,10 +10,13 @@ import ghost from './powerUpGhost'
 import speed from './powerUpSpeed'
 import bounce from '../bounce'
 import indicateExpiration from './indicateExpiration'
+import { state } from '../state'
 
 const powerUps = [speed, ghost]
 
 const portalTextures = ['portal/portal0', 'portal/portal1', 'portal/portal2']
+
+const PORTAL_APPEAR_CHANCE = 0.5 // Out of 1
 
 export const initPowerups = ({
   snakeSpeed,
@@ -34,7 +37,7 @@ export const initPowerups = ({
   const players = l1.getByLabel('player')
 
   const getAnimatedSprite = (textures) => {
-    const displayObject = new PIXI.extras.AnimatedSprite(textures)
+    const displayObject = new PIXI.extras.AnimatedSprite(textures.map(l1.getTexture))
     displayObject.animationSpeed = 0.03
     displayObject.scale.set((snakeSpeed / speedMultiplier) * 3)
     displayObject.play()
@@ -56,7 +59,7 @@ export const initPowerups = ({
     return portalSprite
   }
 
-  const createHitBox = (sprite, onCollision) => {
+  const createHitBox = (sprite, powerupDuration, onCollision) => {
     const hitBox = new PIXI.Container()
     hitBox.x = sprite.x - (sprite.width / 2)
     hitBox.y = sprite.y - (sprite.height / 2)
@@ -102,8 +105,6 @@ export const initPowerups = ({
     }
 
     l1.addBehavior(collisionChecker)
-    const powerupDuration = 3 * l1
-      .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
 
     l1.addBehavior(indicateExpiration(powerupDuration, sprite))
     l1.addBehavior(powerUpSuicideBehavior(
@@ -116,27 +117,39 @@ export const initPowerups = ({
     }
   }
 
+  const generatePortals = () => {
+    state.portalPairs += 1
+
+    const portal1 = createPortal(portalTextures)
+    const portal2 = createPortal(portalTextures)
+
+    const portal1Collision = (collidingPlayer) => {
+      collidingPlayer.x = portal2.x
+      collidingPlayer.y = portal2.y
+      state.portalPairs -= 1
+    }
+    const portal2Collision = (collidingPlayer) => {
+      collidingPlayer.x = portal1.x
+      collidingPlayer.y = portal1.y
+      state.portalPairs -= 1
+    }
+
+    const powerupDuration = 3 * l1
+      .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
+    const hitBox1 = createHitBox(portal1, powerupDuration, portal1Collision)
+    const hitBox2 = createHitBox(portal2, powerupDuration, portal2Collision)
+
+    hitBox1.collisionChecker.data.onCollision = hitBox2.destroy
+    hitBox2.collisionChecker.data.onCollision = hitBox1.destroy
+  }
+
   const generatePowerups = () => ({
     id:         'generatePowerups',
     duration:   l1.getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM),
     loop:       true,
     onComplete: () => {
-      if (Math.random() > 0.5) {
-        // Generate portals
-        const portal1 = createPortal(portalTextures)
-        const portal2 = createPortal(portalTextures)
-        const portal1Collision = (collidingPlayer) => {
-          collidingPlayer.x = portal2.x
-          collidingPlayer.y = portal2.y
-        }
-        const portal2Collision = (collidingPlayer) => {
-          collidingPlayer.x = portal1.x
-          collidingPlayer.y = portal1.y
-        }
-        const hitBox1 = createHitBox(portal1, portal1Collision)
-        const hitBox2 = createHitBox(portal2, portal2Collision)
-        hitBox1.collisionChecker.data.onCollision = hitBox2.destroy
-        hitBox2.collisionChecker.data.onCollision = hitBox1.destroy
+      if (Math.random() > PORTAL_APPEAR_CHANCE && state.portalPairs === 0) {
+        generatePortals()
       } else {
         // Generate powerups
         const { texture, behaviorsToRemove, powerUp } = _.sample(powerUps)
@@ -160,7 +173,9 @@ export const initPowerups = ({
 
           l1.addBehavior(powerUp({ player: collidingPlayer, speedMultiplier, snakeSpeed }))
         }
-        createHitBox(powerUpSprite, onCollision)
+        const powerupDuration = 3 * l1
+          .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
+        createHitBox(powerUpSprite, powerupDuration, onCollision)
       }
     },
   })
