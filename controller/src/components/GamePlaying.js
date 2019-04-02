@@ -40,7 +40,7 @@ navigator.vibrate =
   noop
 
 const GamePlaying = props => {
-  const { gyro, playerColor, send, setGyro } = props
+  const { angle, gyro, playerColor, send, setGyro } = props
 
   return (
     <IOSDisableDoubleTap>
@@ -51,13 +51,14 @@ const GamePlaying = props => {
           <VerticalSeparator />
           <Switch onChange={setGyro} checked={gyro} />
         </TogglePane>
-        {gyro ? <GyroSteering /> : <TapSteering send={send} />}
+        {gyro ? <GyroSteering angle={angle} /> : <TapSteering send={send} />}
       </Container>
     </IOSDisableDoubleTap>
   )
 }
 
 GamePlaying.propTypes = {
+  angle: PropTypes.number.isRequired,
   gyro: PropTypes.bool.isRequired,
   playerColor: PropTypes.string.isRequired,
   send: PropTypes.func.isRequired,
