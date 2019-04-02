@@ -2,12 +2,14 @@ import PropTypes from 'prop-types'
 import { Event } from 'common'
 import useOrientation from '../hook/useOrientation'
 
+// 18 degrees angle = 3 degrees turn rate (max)
 const handleOrientation = ({ enabled, send, setAngle }) => ({ beta }) => {
   if (!enabled) return
 
+  const zoomedOutBeta = beta / 6 // between -30 and +30 instead of -180 and +180
   send({
     event: Event.PLAYER_MOVEMENT,
-    payload: beta / 6,
+    payload: zoomedOutBeta,
   })
 
   setAngle(beta)
