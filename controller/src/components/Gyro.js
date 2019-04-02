@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types'
 import { Event } from 'common'
 import useOrientation from '../hook/useOrientation'
+import * as R from 'ramda'
+
+const MAX_ANGLE = 18
+const MIN_ANGLE = -MAX_ANGLE
 
 // 18 degrees angle = 3 degrees turn rate (max)
 const handleOrientation = ({ enabled, send, setAngle }) => ({ beta }) => {
@@ -12,7 +16,9 @@ const handleOrientation = ({ enabled, send, setAngle }) => ({ beta }) => {
     payload: zoomedOutBeta,
   })
 
-  setAngle(beta)
+  // Need to be synced with throttling in game/src/game.js
+  const throttledBeta = R.clamp(MIN_ANGLE, MAX_ANGLE, beta)
+  setAngle(throttledBeta)
 }
 
 const Gyro = props => {
