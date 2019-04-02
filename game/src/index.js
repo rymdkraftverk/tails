@@ -1,6 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
-import 'pixi-particles'
+import { Emitter } from 'pixi-particles'
 import { Event, Channel } from 'common'
 import R from 'ramda'
 import * as Sentry from '@sentry/browser'
