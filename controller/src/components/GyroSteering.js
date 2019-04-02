@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 
 const Container = styled.div`
@@ -10,8 +11,12 @@ const Container = styled.div`
   font-size: 5vw;
 `
 
-const GyroSteering = props => {
-  return <Container>Tilt phone to steer!</Container>
+const GyroSteering = ({ angle }) => {
+  return <Container>Tilt phone to steer! {angle}</Container>
+}
+
+GyroSteering.propTypes = {
+  angle: PropTypes.number.isRequired,
 }
 
 export default GyroSteering
