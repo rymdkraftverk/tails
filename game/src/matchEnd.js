@@ -105,9 +105,10 @@ export const transitionToMatchEnd = () => {
 const textMovement = text => ({
   id:   'textMovement',
   data: {
+    // This will not look good if the user resizes the window while this animation is running
     sine: createSine({
-      start: 1,
-      end:   1.2,
+      start: text.scale.x,
+      end:   text.scale.x * 1.2,
       speed: 120,
     }),
   },
