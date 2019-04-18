@@ -24,7 +24,8 @@ const TogglePane = styled.div`
   justify-content: center;
 `
 
-const Container = styled(Div100vh)`
+// Workaround to avoid warning when unknown props are passed to the DOM
+const Container = styled(({ playerColor, ...rest }) => <Div100vh {...rest}/>)`
   display: flex;
   flex-direction: column;
   background: ${R.prop('playerColor')};
