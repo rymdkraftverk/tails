@@ -55,6 +55,8 @@ export const transitionToGameScene = (maxPlayers) => {
   state.state = State.PLAYING_ROUND
   state.kdTree = initEmptyTree()
 
+  state.portalPairs = 0
+
   // The header is persistent across game and score
   createHeader({
     url:  getControllerUrl(),
