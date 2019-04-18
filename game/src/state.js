@@ -18,4 +18,5 @@ export const state = {
   eventEmitter:    new EventEmitter(),
   availableColors: Object.keys(Color),
   players:         [],
+  portalPairs:     0,
 }
