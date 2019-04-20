@@ -8,7 +8,9 @@ import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 
 // Workaround to avoid warning when unknown props are passed to the DOM
-const FullPage = styled(({ backgroundColor, ...rest }) => <Div100vh {...rest}/>)`
+const FullPage = styled(({ backgroundColor, ...rest }) => (
+  <Div100vh {...rest} />
+))`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
