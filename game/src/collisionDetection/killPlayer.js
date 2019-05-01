@@ -1,6 +1,7 @@
 import R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
+import { Emitter } from 'pixi-particles'
 
 import GameEvent from '../constant/gameEvent'
 import explode from '../particleEmitter/explode'
@@ -32,7 +33,7 @@ const killPlayer = (player, speedMultiplier) => {
       labels: ['particleContainer'],
     },
   )
-  new PIXI.particles.Emitter(
+  new Emitter(
     particleContainer,
     textures.map(l1.getTexture),
     config,
@@ -101,7 +102,7 @@ const killPlayer = (player, speedMultiplier) => {
           parent: l1.get(Scene.GAME),
           labels: ['particleContainer'],
         })
-        new PIXI.particles.Emitter(
+        new Emitter(
           neonDeathParticleContainer,
           neonTextures,
           neonConfig,
