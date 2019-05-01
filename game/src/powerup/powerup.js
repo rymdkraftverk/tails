@@ -37,7 +37,7 @@ export const initPowerups = ({
   const players = l1.getByLabel('player')
 
   const getPortalAnimatedSprite = (textures) => {
-    const displayObject = new PIXI.extras.AnimatedSprite(textures.map(l1.getTexture))
+    const displayObject = new PIXI.AnimatedSprite(textures.map(l1.getTexture))
     displayObject.animationSpeed = 0.03
     displayObject.scale.set((snakeSpeed / speedMultiplier) * 3)
     displayObject.play()
