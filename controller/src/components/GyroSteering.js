@@ -6,6 +6,8 @@ const Canvas = styled.canvas`
   height: 100%;
 `
 
+const getDiff = (height, angle) => angle * (height / (18 * 2))
+
 const GyroSteering = ({ angle }) => {
   const canvasRef = useRef(null)
 
@@ -32,7 +34,7 @@ const GyroSteering = ({ angle }) => {
     ctx.clearRect(0, 0, width, height)
 
     // Calculate line
-    const diff = (height / (18 * 2)) * angle
+    const diff = getDiff(height, angle)
     const middleY = height / 2
     const y1 = middleY + diff
     const y2 = middleY - diff
