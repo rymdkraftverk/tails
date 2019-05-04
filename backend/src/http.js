@@ -1,4 +1,4 @@
-const http = require('http')
+const http = require('https')
 const express = require('express')
 const cors = require('cors')
 
@@ -38,6 +38,8 @@ const init = (port) => {
 
   addGameEndpoint(app)
   addScoreBoardEndpoint(app)
+
+  app.get('/hello', (req, res) => res.json({ foo: 'FOO' }))
 
   const httpServer = http.createServer(app)
   httpServer.listen(port)
