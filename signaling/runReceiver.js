@@ -113,7 +113,7 @@ const onInternalData = ({ event, payload: initiatorId }) => {
 
 const onIceCandidate = initiator => ({ candidate }) => {
   if (candidate) {
-    log(`[Ice Candidate] ${prettyId(initiator.id)}`)
+    log(`[Ice Candidate] ${prettyId(initiator.id)}`, candidate)
     return
   }
 
