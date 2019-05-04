@@ -30,8 +30,8 @@ const browser = Bowser.getParser(window.navigator.userAgent)
 
 const isUnsupportedBrowser = !supportedBrowserNames.includes(browser)
 
-const UNSUPPORTED_BROWSER_MESSAGE_LINE_1 = 'Current browser is'
-const UNSUPPORTED_BROWSER_MESSAGE_LINE_2 = 'is not supported :('
+const UNSUPPORTED_BROWSER_MESSAGE_LINE_1 = `${browser} is not`
+const UNSUPPORTED_BROWSER_MESSAGE_LINE_2 = 'supported :('
 
 const TEXT_BOUNCE_INTERVAL = 600
 
@@ -53,9 +53,10 @@ const TextSize = {
 }
 
 const TextColor = {
-  TEXT:       'white',
-  SUBHEADING: '#44d800', // light green
-  HIGHLIGHT:  '#04A4EC', // light blue
+  TEXT:                'white',
+  SUBHEADING:          '#44d800', // light green
+  HIGHLIGHT:           '#04A4EC', // light blue
+  UNSUPPORTED_BROWSER: '#ff5b5b', // light red
 }
 
 const getPlayerPosition = l1.grid({
@@ -138,7 +139,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     style: {
       ...TextStyle.MEDIUM,
       fontSize: TextSize.SUBHEADING,
-      fill:     TextColor.SUBHEADING,
+      fill:     isUnsupportedBrowser ? TextColor.UNSUPPORTED_BROWSER : TextColor.SUBHEADING,
     },
     parent: lobbyScene,
   })
@@ -150,7 +151,7 @@ export const transitionToLobby = (gameCode, players = []) => {
     style: {
       ...TextStyle.MEDIUM,
       fontSize: TextSize.SUBHEADING,
-      fill:     TextColor.SUBHEADING,
+      fill:     isUnsupportedBrowser ? TextColor.UNSUPPORTED_BROWSER : TextColor.SUBHEADING,
     },
     parent: lobbyScene,
   })
