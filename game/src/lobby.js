@@ -2,6 +2,8 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
 import R from 'ramda'
+import Bowser from 'bowser'
+
 import getUrlParams from 'common/getUrlParams'
 import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
@@ -16,6 +18,20 @@ import { Track, playTrack } from './music'
 import Sound from './constant/sound'
 import delay from './delay'
 import * as qrCode from './qrCode'
+
+const supportedBrowserNames = [
+  'Chrome',
+  'Firefox',
+  'Safari',
+]
+
+const browser = Bowser.getParser(window.navigator.userAgent)
+  .getBrowserName()
+
+const isUnsupportedBrowser = !supportedBrowserNames.includes(browser)
+
+const UNSUPPORTED_BROWSER_MESSAGE_LINE_1 = `${browser} is not`
+const UNSUPPORTED_BROWSER_MESSAGE_LINE_2 = 'supported :('
 
 const TEXT_BOUNCE_INTERVAL = 600
 
@@ -37,9 +53,10 @@ const TextSize = {
 }
 
 const TextColor = {
-  TEXT:       'white',
-  SUBHEADING: '#44d800', // light green
-  HIGHLIGHT:  '#04A4EC', // light blue
+  TEXT:                'white',
+  SUBHEADING:          '#44d800', // light green
+  HIGHLIGHT:           '#04A4EC', // light blue
+  UNSUPPORTED_BROWSER: '#ff5b5b', // light red
 }
 
 const getPlayerPosition = l1.grid({
@@ -118,11 +135,11 @@ export const transitionToLobby = (gameCode, players = []) => {
   const subheading1 = addText({
     x:     TextAnchor.SUBHEADING_START_X,
     y:     TextAnchor.SUBHEADING_START_Y,
-    text:  subheading1content,
+    text:  subheading1content || (isUnsupportedBrowser ? UNSUPPORTED_BROWSER_MESSAGE_LINE_1 : ''),
     style: {
       ...TextStyle.MEDIUM,
       fontSize: TextSize.SUBHEADING,
-      fill:     TextColor.SUBHEADING,
+      fill:     isUnsupportedBrowser ? TextColor.UNSUPPORTED_BROWSER : TextColor.SUBHEADING,
     },
     parent: lobbyScene,
   })
@@ -130,11 +147,11 @@ export const transitionToLobby = (gameCode, players = []) => {
   const subheading2 = addText({
     x:     TextAnchor.SUBHEADING_START_X,
     y:     TextAnchor.SUBHEADING_START_Y + 60,
-    text:  subheading2content,
+    text:  subheading2content || (isUnsupportedBrowser ? UNSUPPORTED_BROWSER_MESSAGE_LINE_2 : ''),
     style: {
       ...TextStyle.MEDIUM,
       fontSize: TextSize.SUBHEADING,
-      fill:     TextColor.SUBHEADING,
+      fill:     isUnsupportedBrowser ? TextColor.UNSUPPORTED_BROWSER : TextColor.SUBHEADING,
     },
     parent: lobbyScene,
   })
@@ -225,7 +242,7 @@ export const transitionToLobby = (gameCode, players = []) => {
   addText({
     x:     GAME_WIDTH - 175,
     y:     GAME_HEIGHT - 30,
-    text:  '© Rymdkraftverk 2018',
+    text:  '© Rymdkraftverk 2019',
     style: {
       fontSize:   16,
       fontfamily: 'helvetica',
