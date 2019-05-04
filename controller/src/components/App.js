@@ -197,10 +197,15 @@ class App extends Component {
     this.setState({ gyro })
   }
 
+  setAngle = angle => {
+    this.setState({ angle })
+  }
+
   enableFullscreen = () => this.state.fullscreen && isMobileDevice()
 
   appStateComponent = () => {
     const {
+      angle,
       appState,
       error,
       gameCode,
@@ -240,6 +245,7 @@ class App extends Component {
       case AppState.GAME_PLAYING:
         return (
           <GamePlaying
+            angle={angle}
             gyro={gyro}
             playerColor={Color[playerColor]}
             send={sendSteering}
@@ -276,7 +282,7 @@ class App extends Component {
         onChange={fullscreen => this.setState({ fullscreen })}
       >
         <Notifications />
-        <Gyro send={sendSteering} enabled={gyro} />
+        <Gyro send={sendSteering} enabled={gyro} setAngle={this.setAngle} />
         <MediaQuery orientation="portrait">
           <TurnPhone />
         </MediaQuery>
