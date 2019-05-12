@@ -5,6 +5,7 @@ import { Color } from 'common'
 import styled, { css } from 'styled-components/macro'
 import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
+import Button from './Button'
 import ScrollLock from './ScrollLock'
 
 // Workaround to avoid warning when unknown props are passed to the DOM
@@ -32,11 +33,6 @@ const Instructions = styled(Div100vh)`
 const label = css`
   padding: 8px;
   font-family: inherit;
-`
-
-const Button = styled.button`
-  ${label};
-  border: 0.1em solid black;
 `
 
 const ActionContainer = styled.div`
