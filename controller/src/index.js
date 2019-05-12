@@ -39,7 +39,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'patchy-robots';
     border: 0.1em solid #4085af;
     border-radius: 0.12em;
-    box-shadow: 0.1em 0.1em;
     transition: all ease 0.05s;
     position: relative;
     top: 0;
