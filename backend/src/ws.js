@@ -2,14 +2,14 @@ const R = require('ramda')
 const WebSocket = require('ws')
 const uuid = require('uuid/v4')
 
-const { Event } = require('signaling')
+const { Event } = require('rkv-signaling')
 
 const {
   warnNotFound,
   wsSend,
   onWsMessage,
   prettyId,
-} = require('signaling/common')
+} = require('rkv-signaling/common')
 
 const Type = {
   INITIATOR: 'initiator',

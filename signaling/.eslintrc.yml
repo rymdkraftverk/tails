@@ -1,5 +1,0 @@
-globals:
-  WebSocket: true
-  RTCIceCandidate: true
-  RTCSessionDescription: true
-  RTCPeerConnection: true
