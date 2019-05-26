@@ -4,7 +4,7 @@ import Notifications from 'react-notify-toast'
 import MediaQuery from 'react-responsive'
 import { Event, Color, Channel } from 'common'
 import getUrlParams from 'common/getUrlParams'
-import signaling from 'signaling'
+import signaling from 'rkv-signaling'
 
 import channelConfigs from '../channelConfigs'
 import LockerRoom from './LockerRoom'

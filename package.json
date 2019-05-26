@@ -17,9 +17,9 @@
     "jest": "^24.5.0"
   },
   "scripts": {
-    "test": "jest ./game/test ./signaling/test",
+    "test": "jest ./game/test",
     "lint": "./run_lint.sh",
     "clean": "find . -name node_modules -exec rm -rf {} \\;",
-    "postinstall": "npm install --prefix backend && npm install --prefix signaling"
+    "postinstall": "npm install --prefix backend"
   }
 }
