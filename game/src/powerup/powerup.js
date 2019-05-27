@@ -145,7 +145,7 @@ export const initPowerups = ({
 
   const generatePowerups = () => ({
     id:         'generatePowerups',
-    duration:   l1.getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM),
+    duration:   l1.getRandomInRange(PowerUp.SPAWN_TIME_MINIMUM, PowerUp.SPAWN_TIME_MAXIMUM),
     loop:       true,
     onComplete: () => {
       if (Math.random() > PORTAL_APPEAR_CHANCE && state.portalPairs === 0) {
