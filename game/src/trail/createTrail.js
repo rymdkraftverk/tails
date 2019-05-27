@@ -94,7 +94,8 @@ const middle = (
  * This behavior is needed so that the player wont immediately collide with its own tail.
  */
 const activate = trail => ({
-  duration:   15,
+  // Arbitrary duration, has to be long enough so the player can't turn around and hit itself
+  duration:   90,
   onComplete: () => {
     trail.active = true
   },

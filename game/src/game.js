@@ -180,7 +180,6 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
   player.visible = false
 
   player.speed = snakeSpeed
-  player.scaleFactor = snakeSpeed
   player.degrees = l1.getRandomInRange(0, 360)
   player.turnRate = 0
   player.event = new EventEmitter()
@@ -188,6 +187,7 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
   player.alive = true
   player.id = id
   player.preventTrail = 0
+  player.fatLevel = 1
 
   player.event.on(GameEvent.PLAYER_COLLISION, () => {
     const p = playerRepository.find(id)
@@ -203,9 +203,19 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
     })
   })
 
-  player.scale.set(player.scaleFactor / SPEED_MULTIPLIER / 2)
+  player.scaleFactor = player.speed
 
-  const playerSize = PLAYER_HITBOX_SIZE * (snakeSpeed / SPEED_MULTIPLIER)
+  setPlayerSize(player, player.fatLevel)
+
+  return player
+})
+
+export const setPlayerSize = (player, sizeMultiplier) => {
+  player.scaleFactor = player.speed
+
+  player.scale.set((player.scaleFactor / SPEED_MULTIPLIER / 2) * sizeMultiplier)
+
+  const playerSize = PLAYER_HITBOX_SIZE * (player.speed / SPEED_MULTIPLIER) * sizeMultiplier
 
   player.hitArea = new PIXI.Rectangle(
     0,
@@ -215,9 +225,7 @@ const createPlayer = R.curry((playerCountFactor, index, { id, color }) => {
   )
   // Offset the sprite so that the player hitbox is in the middle
   player.anchor.set((1 - (playerSize / player.width)) / 2)
-
-  return player
-})
+}
 
 const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   const bouncer = new PIXI.Container()
