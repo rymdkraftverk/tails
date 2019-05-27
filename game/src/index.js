@@ -239,6 +239,9 @@ document
 l1.init(app, {
   debug:   false,
   logging: false,
+  onError: (e) => {
+    Sentry.captureException(e)
+  },
 })
 
 app.loader.add('assets/spritesheet.json')
