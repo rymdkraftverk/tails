@@ -24,7 +24,8 @@ export const transitionToScoreScene = () => {
   l1.add(
     scoreScene,
     {
-      id: Scene.SCORE,
+      id:     Scene.SCORE,
+      zIndex: Layer.FOREGROUND + 2,
     },
   )
 
