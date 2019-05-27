@@ -15,7 +15,7 @@
     "node-fetch": "^2.3.0",
     "ramda": "^0.26.1",
     "redis": "^2.8.0",
-    "rkv-signaling": "0.0.1",
+    "rkv-signaling": "0.0.3",
     "uuid": "^3.3.2",
     "ws": "^6.2.0"
   },
