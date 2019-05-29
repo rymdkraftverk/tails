@@ -4,6 +4,7 @@ import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
+import { initEmptyTree } from 'bounded-kd-tree'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import { State, state } from './state'
 import playerRepository from './repository/player'
@@ -18,7 +19,6 @@ import { Track, playTrack } from './music'
 import { collisionCheckerWalls, collisionCheckerTrail } from './collisionDetection'
 import { createTrail, createHoleMaker } from './trail'
 import GameEvent from './constant/gameEvent'
-import { initEmptyTree } from './kd-tree'
 import createHeader, { HEADER_HEIGHT } from './header'
 import getControllerUrl from './getControllerUrl'
 
@@ -53,7 +53,16 @@ export const GameColor = {
 
 export const transitionToGameScene = (maxPlayers) => {
   state.state = State.PLAYING_ROUND
-  state.kdTree = initEmptyTree()
+  state.kdTree = initEmptyTree({
+    x: {
+      min: 0,
+      max: GAME_WIDTH,
+    },
+    y: {
+      min: 0,
+      max: GAME_HEIGHT,
+    },
+  })
 
   state.portalPairs = 0
 
