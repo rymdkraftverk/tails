@@ -1,6 +1,5 @@
 import R from 'ramda'
-import { addEntityToTree, initEmptyTree } from '../src/kd-tree/add-entity-to-tree'
-import { nearestNeighbour } from '../src/kd-tree/nearest-neighbour'
+import { addEntityToTree, initEmptyTree, nearestNeighbour } from 'bounded-kd-tree'
 
 const greenLogColor = '\x1b[32m'
 

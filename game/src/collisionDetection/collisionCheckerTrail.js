@@ -1,8 +1,8 @@
 import * as l1 from 'l1'
 import R from 'ramda'
+import { nearestNeighbour } from 'bounded-kd-tree'
 
 import { state } from '../state'
-import { nearestNeighbour } from '../kd-tree'
 import checkPlayersAlive from './checkPlayersAlive'
 import killPlayer from './killPlayer'
 

@@ -1,9 +1,9 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
+import { addEntityToTree } from 'bounded-kd-tree'
 
 import Scene from '../Scene'
 import { state } from '../state'
-import { addEntityToTree } from '../kd-tree'
 import Trail from '../constant/trail'
 import Layer from '../constant/layer'
 
