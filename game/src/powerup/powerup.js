@@ -8,11 +8,12 @@ import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
 import ghost from './powerUpGhost'
 import speed from './powerUpSpeed'
+import fat from './powerUpFat'
 import bounce from '../bounce'
 import indicateExpiration from './indicateExpiration'
 import { state } from '../state'
 
-const powerUps = [speed, ghost]
+const powerUps = [fat, ghost, speed]
 
 const portalTextures = ['portal/portal0', 'portal/portal1', 'portal/portal2']
 
@@ -145,7 +146,7 @@ export const initPowerups = ({
 
   const generatePowerups = () => ({
     id:         'generatePowerups',
-    duration:   l1.getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM),
+    duration:   l1.getRandomInRange(PowerUp.SPAWN_TIME_MINIMUM, PowerUp.SPAWN_TIME_MAXIMUM),
     loop:       true,
     onComplete: () => {
       if (Math.random() > PORTAL_APPEAR_CHANCE && state.portalPairs === 0) {
@@ -171,7 +172,9 @@ export const initPowerups = ({
             behaviorsToRemove(collidingPlayer),
           )
 
-          l1.addBehavior(powerUp({ player: collidingPlayer, speedMultiplier, snakeSpeed }))
+          powerUp({
+            player: collidingPlayer, speedMultiplier, snakeSpeed, players,
+          })
         }
         const powerupDuration = 3 * l1
           .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
