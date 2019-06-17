@@ -50,8 +50,6 @@ jobs:
       - npm_install:
           dir: "game"
       - npm_install:
-          dir: "signaling"
-      - npm_install:
           dir: "backend"
       - persist_to_workspace:
           paths: .
