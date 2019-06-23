@@ -5,6 +5,7 @@ import MediaQuery from 'react-responsive'
 import { Event, Color, Channel } from 'common'
 import getUrlParams from 'common/getUrlParams'
 import signaling from 'rkv-signaling'
+import * as Sentry from '@sentry/browser'
 
 import channelConfigs from '../channelConfigs'
 import LockerRoom from './LockerRoom'
@@ -145,6 +146,7 @@ class App extends Component {
   checkConnectionTimeout = () => {
     if (this.state.appState === AppState.GAME_CONNECTING) {
       this.displayError('Connection failed, joining Wi-Fi may help')
+      Sentry.captureMessage('Controller connection timeout')
     }
   }
 
