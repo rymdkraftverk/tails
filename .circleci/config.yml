@@ -49,8 +49,6 @@ jobs:
           dir: "controller"
       - npm_install:
           dir: "game"
-      - npm_install:
-          dir: "backend"
       - persist_to_workspace:
           paths: .
           root: .
@@ -129,22 +127,6 @@ jobs:
       - run:
           name: Upload to itch.io
           command: butler push game/public rymdkraftverk/tails:web
-  deploy_backend:
-    docker:
-      - image: rymdkraftverk/ci:latest
-    working_directory: ~/tails
-    steps:
-      - attach_workspace:
-          at: .
-      - run: heroku git:remote --ssh-git -a rkv-backend
-      - add_ssh_keys
-      - run: ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-      - run: git push --force heroku $CIRCLE_BRANCH:master
-      - run:
-          name: Set version in env
-          command: |
-            VERSION=`cat ~/tails/version`
-            heroku config:set VERSION=$VERSION -a rkv-backend
   tag:
     docker:
       - image: rymdkraftverk/ci:latest
@@ -185,15 +167,8 @@ workflows:
       - deploy_game_itch:
           requires:
             - build_game
-      - deploy_backend:
-          requires:
-            - test
-          filters:
-            branches:
-              only: master
       - tag:
           requires:
             - deploy_controller
             - deploy_game_s3
             - deploy_game_itch
-            - deploy_backend

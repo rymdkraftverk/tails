@@ -23,8 +23,6 @@
 
 `clean` - Delete `node_modules` in root and subfolders
 
-`install` - Install dependencies in root, backend and signaling
-
 ### z-index
 
 When setting z-index, always use the constants defined in `layer.js`, and set the z-index relative to them.
