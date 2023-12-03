@@ -127,18 +127,6 @@ jobs:
       - run:
           name: Upload to itch.io
           command: butler push game/public rymdkraftverk/tails:web
-  tag:
-    docker:
-      - image: rymdkraftverk/ci:latest
-    working_directory: ~/tails
-    steps:
-      - attach_workspace:
-          at: .
-      - add_ssh_keys
-      - run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-      - run: |
-          git tag `cat version`
-          git push --tags
 workflows:
   default:
     jobs:
@@ -167,8 +155,3 @@ workflows:
       - deploy_game_itch:
           requires:
             - build_game
-      - tag:
-          requires:
-            - deploy_controller
-            - deploy_game_s3
-            - deploy_game_itch
