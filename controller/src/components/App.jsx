@@ -84,7 +84,7 @@ class App extends Component {
     playerColor: null,
     ready: false,
     sendSteering: () => {},
-    sendReliable: (_message) => {},
+    sendReliable: _message => {},
   }
 
   componentDidMount() {
