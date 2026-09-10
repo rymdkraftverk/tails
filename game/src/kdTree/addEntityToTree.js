@@ -59,7 +59,7 @@ const addEntityToTree = (options, tree, entity) => {
   if (isNode(tree)) {
     const coord = options.getCoord(entity, tree.dimension)
     const middle = calculateMiddle(tree.borders, tree.dimension)
-    const surpassesMiddle = coord > middle
+    const surpassesMiddle = String(coord > middle)
 
     const subTree = tree[surpassesMiddle]
 

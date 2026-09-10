@@ -47,8 +47,8 @@ state
   .on(GameEvent.PLAYER_COLLISION, giveLivingPlayersOnePoint)
 
 export const GameColor = {
-  BLUE:  '0x0B4D6C',
-  WHITE: '0xeeeeee',
+  BLUE:  0x0B4D6C,
+  WHITE: 0xeeeeee,
 }
 
 export const transitionToGameScene = (maxPlayers) => {

@@ -268,20 +268,20 @@ export const transitionToLobby = (gameCode, players = []) => {
   playersDivider.cacheAsBitmap = true
 
   drawInstructionArrow({
-    x:            TextAnchor.INSTRUCTION_START_X + 320,
-    y:            TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET / 2) - 24),
-    angle:        90,
-    id:           '1',
-    parentEntity: lobbyScene,
+    x:      TextAnchor.INSTRUCTION_START_X + 320,
+    y:      TextAnchor.INSTRUCTION_START_Y + ((TextAnchor.Y_OFFSET / 2) - 24),
+    angle:  90,
+    id:     '1',
+    parent: lobbyScene,
   })
 
   drawInstructionArrow({
     x: TextAnchor.INSTRUCTION_START_X + 420,
     y: TextAnchor.INSTRUCTION_START_Y
       + TextAnchor.Y_OFFSET + ((TextAnchor.Y_OFFSET / 2) - 24),
-    angle:        90,
-    id:           '2',
-    parentEntity: lobbyScene,
+    angle:  90,
+    id:     '2',
+    parent: lobbyScene,
   })
 
   _

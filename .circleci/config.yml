@@ -61,6 +61,7 @@ jobs:
           at: .
       - run: npm test
       - run: npm run lint
+      - run: npm run typecheck
   build_controller:
     docker:
       - image: node:22

@@ -8,12 +8,12 @@ import Trail from '../constant/trail'
 import Layer from '../constant/layer'
 
 export const createTrail = ({
-  player, scale, speedMultiplier, duration,
+  player, scale, speedMultiplier, duration = Trail.CREATE_TRAIL_FREQUENCY,
 }) => ({
-  id:       `createTrail-${player.id}`,
-  duration: duration || Trail.CREATE_TRAIL_FREQUENCY,
-  loop:     true,
-  onInit:   () => {
+  id:     `createTrail-${player.id}`,
+  duration,
+  loop:   true,
+  onInit: () => {
     if (!player.trailContainer) {
       // This container is used to group all trails into one parent
       // It is used for the "lights out" death animation

@@ -21,11 +21,13 @@ const nearestNeighbour = (options, tree, entity) => {
   const middle = calculateMiddle(tree.borders, tree.dimension)
   const entityCoord = options.getCoord(entity, tree.dimension)
   const surpassesMiddle = entityCoord > middle
+  const nearerSide = String(surpassesMiddle)
+  const fartherSide = String(!surpassesMiddle)
 
-  const candidate = nearestNeighbour(options, tree[surpassesMiddle], entity)
+  const candidate = nearestNeighbour(options, tree[nearerSide], entity)
 
   if (!candidate) {
-    return nearestNeighbour(options, tree[!surpassesMiddle], entity)
+    return nearestNeighbour(options, tree[fartherSide], entity)
   }
 
   if (options.earlyReturn(candidate)) {
@@ -42,7 +44,7 @@ const nearestNeighbour = (options, tree, entity) => {
     return candidate
   }
 
-  const otherCandidate = nearestNeighbour(options, tree[!surpassesMiddle], entity)
+  const otherCandidate = nearestNeighbour(options, tree[fartherSide], entity)
 
   if (otherCandidate === null) {
     return candidate

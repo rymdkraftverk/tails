@@ -50,7 +50,7 @@ const displayGainedPoint = R.curry((color, player) => {
   R.forEach(
     l1.addBehavior,
     [
-      move(player),
+      move(),
       suicide(),
     ],
   )

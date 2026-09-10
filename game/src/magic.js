@@ -4,10 +4,11 @@ const { error } = console
 
 /**
  *
- * @param {number} x1 -
- * @param {number} x2 -
- * @param {number} y -
- * @param {number} [modifier]
+ * @param {object} options
+ * @param {number} options.start
+ * @param {number} options.end
+ * @param {number} options.offset
+ * @param {number} [options.modifier]
  */
 export const createParabola = ({
   start, end, offset, modifier = 1,
@@ -60,9 +61,10 @@ export const createEaseInAndOut = ({
 
 /**
  *
- * @param {*} start
- * @param {*} end
- * @param {*} speed
+ * @param {object} options
+ * @param {number} options.start
+ * @param {number} options.end
+ * @param {number} options.speed
  */
 export const createSine = ({
   start, end, speed,

@@ -5,7 +5,7 @@ export default () => {
   div.style.color = 'red'
   div.style.position = 'absolute'
   div.style.top = '0px'
-  div.style.zIndex = 10
+  div.style.zIndex = '10'
   document.body.appendChild(div)
 
   setInterval(() => {
