@@ -30,7 +30,7 @@ const GIF = styled.img`
   margin-top: -200px;
 `
 
-const TurnPhone = props => {
+function TurnPhone() {
   useEffect(
     () => () => {
       turnPhoneSound.play().catch(error => {

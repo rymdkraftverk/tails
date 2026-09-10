@@ -10,7 +10,7 @@
     "test": "vitest run",
     "stylelint": "stylelint './src/**/*.{js,jsx}'",
     "prettier": "prettier --write 'src/**/*.{js,jsx}'",
-    "lint": "prettier --check 'src/**/*.{js,jsx}' && eslint src && npm run stylelint"
+    "lint": "prettier --check 'src/**/*.{js,jsx}' && npm run stylelint"
   },
   "dependencies": {
     "@sentry/browser": "^4.6.4",
@@ -30,8 +30,6 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-styled-components": "^2.1.4",
-    "eslint": "^8.57.1",
-    "eslint-config-react-app": "^7.0.1",
     "jsdom": "^27.0.0",
     "prettier": "^1.16.4",
     "stylelint": "^9.10.1",

@@ -206,7 +206,6 @@ export const transitionToLobby = (gameCode, players = []) => {
       l1.addBehavior(textBounce(url))
     })
 
-
   addText({
     x:     TextAnchor.INSTRUCTION_START_X + (TextAnchor.X_OFFSET * 2),
     y:     TextAnchor.INSTRUCTION_START_Y + (TextAnchor.Y_OFFSET * 2),
@@ -234,7 +233,7 @@ export const transitionToLobby = (gameCode, players = []) => {
   })
   code.anchor.set(0.5)
   // Third bounce
-  delay(TEXT_BOUNCE_INTERVAL / 3 * 2)
+  delay((TEXT_BOUNCE_INTERVAL / 3) * 2)
     .then(() => {
       l1.addBehavior(textBounce(code))
     })

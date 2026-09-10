@@ -61,7 +61,6 @@ export const transitionToScoreScene = () => {
   )
   goalText.anchor.x = 0.5
 
-  // eslint-disable-next-line lodash-fp/no-unused-result
   _
     .times(createPlayer, MAX_PLAYERS_ALLOWED)
 

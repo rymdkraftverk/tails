@@ -6,7 +6,7 @@ const preventDefault = e => {
 
 // This component should be rendered on every page that needs to lock scroll
 
-const ScrollLock = props => {
+function ScrollLock() {
   useEffect(() => {
     setTimeout(() => {
       // -1000 is an arbitrary number that definitely scroll to the top

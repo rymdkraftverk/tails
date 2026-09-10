@@ -87,7 +87,7 @@ class App extends Component {
     sendReliable: () => {},
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.alertIfNoRtc()
     const codeFromUrl = getGameCodeFromUrl()
     const gameCode = codeFromUrl || getLastGameCode()
@@ -269,7 +269,6 @@ class App extends Component {
 
   render() {
     if (!WS_ADDRESS) {
-      // eslint-disable-next-line fp/no-throw
       throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
     }
 

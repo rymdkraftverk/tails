@@ -1,4 +1,3 @@
-
 export default {
   ABSOLUTE_BACKGROUND: -9999,
   BACKGROUND:          -1000,

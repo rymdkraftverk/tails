@@ -76,11 +76,11 @@ class GameLobby extends Component {
     } = this.props
 
     if (!ready) {
-      return <Button onClick={readyPlayer}>{'Ready!'}</Button>
+      return <Button onClick={readyPlayer}>Ready!</Button>
     }
 
     if (startEnabled) {
-      return <Button onClick={startGame}>{'Start Game!'}</Button>
+      return <Button onClick={startGame}>Start Game!</Button>
     }
 
     return (
@@ -98,7 +98,7 @@ class GameLobby extends Component {
         <FullPage backgroundColor={getColorCode(playerColor)}>
           <ScrollLock />
           {playerCount > 1 ? (
-            <Fragment>
+            <>
               <Instructions style={{ height: '30rvh' }}>
                 <InstructionsLine>
                   {`
@@ -112,7 +112,7 @@ class GameLobby extends Component {
                 </InstructionsLine>
               </Instructions>
               <ActionContainer>{this.getAction()}</ActionContainer>
-            </Fragment>
+            </>
           ) : (
             <AwaitingPlayers>
               <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>

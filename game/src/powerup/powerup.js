@@ -108,9 +108,7 @@ export const initPowerups = ({
     l1.addBehavior(collisionChecker)
 
     l1.addBehavior(indicateExpiration(powerupDuration, sprite))
-    l1.addBehavior(powerUpSuicideBehavior(
-      powerupDuration, sprite, hitBox, collisionCheckerId,
-    ))
+    l1.addBehavior(powerUpSuicideBehavior(powerupDuration, sprite, hitBox, collisionCheckerId))
 
     return {
       collisionChecker,

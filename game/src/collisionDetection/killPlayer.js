@@ -90,7 +90,6 @@ const killPlayer = (player, speedMultiplier) => {
       }
       let trail = player.trailContainer.children[data.index]
 
-      // eslint-disable-next-line fp/no-loops
       while (
         data.index >= 0
         && (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * Trail.NEON_DEATH_SPEED))

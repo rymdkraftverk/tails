@@ -40,7 +40,7 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-const GamePlaying = props => {
+function GamePlaying(props) {
   const { angle, gyro, playerColor, send, setGyro } = props
 
   return (

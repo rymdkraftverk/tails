@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
 
 const ERROR_LOGGING = process.env.REACT_APP_ERROR_LOGGING || false
@@ -29,14 +30,21 @@ class Boundary extends Component {
   }
 
   render() {
-    if (this.state.error) {
+    const { error } = this.state
+    const { children } = this.props
+
+    if (error) {
       return (
         <div onClick={() => Sentry.showReportDialog()}>Report feedback</div>
       )
-    } else {
-      return this.props.children
     }
+
+    return children
   }
+}
+
+Boundary.propTypes = {
+  children: PropTypes.node.isRequired,
 }
 
 export default Boundary

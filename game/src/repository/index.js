@@ -3,7 +3,6 @@ import { state } from '../state'
 
 // -- Private ---
 
-// eslint-disable-next-line fp/no-rest-parameters
 const deferStateApplication = f => (...args) => f(state, ...args)
 
 const scoreBoard = R.reduce(

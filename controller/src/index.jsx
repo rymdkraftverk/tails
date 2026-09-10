@@ -9,7 +9,6 @@ const { log } = console
 
 log(`Version: ${VERSION}`)
 
-/* eslint-disable-next-line no-unused-expressions */
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'patchy-robots';

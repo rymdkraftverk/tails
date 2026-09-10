@@ -2,21 +2,18 @@
   "name": "tails",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "eslint": "^5.15.2",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-eslint-comments": "^3.1.1",
-    "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-lodash-fp": "^2.2.0-a1",
-    "eslint-plugin-prefer-arrow": "^1.1.5",
-    "eslint-plugin-ramda": "^2.5.1"
-  },
+  "type": "module",
   "scripts": {
     "test": "npm test --prefix game && npm test --prefix controller",
-    "lint": "./run_lint.sh",
+    "lint": "eslint . && npm run lint --prefix controller",
     "clean": "find . -name node_modules -exec rm -rf {} \\;"
+  },
+  "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^9.39.0",
+    "eslint-config-airbnb-extended": "^3.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.5.0"
   }
 }

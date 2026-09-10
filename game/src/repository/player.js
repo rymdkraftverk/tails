@@ -3,7 +3,6 @@ import { state } from '../state'
 
 // -- Private ---
 
-// eslint-disable-next-line fp/no-rest-parameters
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 const subtract = R.flip(R.subtract)

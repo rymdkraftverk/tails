@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Event } from 'common'
-import useOrientation from '../hook/useOrientation'
 import * as R from 'ramda'
+import useOrientation from '../hook/useOrientation'
 
 const MAX_ANGLE = 18
 const MIN_ANGLE = -MAX_ANGLE
@@ -21,8 +21,8 @@ const handleOrientation = ({ enabled, send, setAngle }) => ({ beta }) => {
   setAngle(throttledBeta)
 }
 
-const Gyro = props => {
-  useOrientation(handleOrientation(props))
+function Gyro({ enabled, send, setAngle }) {
+  useOrientation(handleOrientation({ enabled, send, setAngle }))
 
   return null
 }

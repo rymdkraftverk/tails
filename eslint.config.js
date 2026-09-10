@@ -1,0 +1,103 @@
+import globals from 'globals'
+import prettier from 'eslint-config-prettier/flat'
+import comments from '@eslint-community/eslint-plugin-eslint-comments/configs'
+import { configs, plugins } from 'eslint-config-airbnb-extended'
+
+const CONTROLLER = ['controller/**/*.{js,jsx}']
+
+const houseStyle = {
+  name:  'tails/house-style',
+  rules: {
+    '@eslint-community/eslint-comments/no-unused-disable': 'error',
+    '@stylistic/arrow-parens':                             [
+      'error',
+      'as-needed',
+      { requireForBlockBody: true },
+    ],
+    '@stylistic/function-call-spacing':    ['error', 'never'],
+    '@stylistic/key-spacing':              ['error', { align: 'value' }],
+    '@stylistic/max-len':                  ['error', { code: 100 }],
+    '@stylistic/newline-per-chained-call': ['error', { ignoreChainWithDepth: 1 }],
+    '@stylistic/semi':                     ['error', 'never'],
+    'import-x/no-cycle':                   'off',
+    'import-x/no-rename-default':          'off',
+    'no-param-reassign':                   'off',
+    'no-use-before-define':                'off',
+  },
+}
+
+export default [
+  { ignores: ['**/dist/', 'game/public/', 'controller/public/'] },
+  plugins.stylistic,
+  plugins.importX,
+  ...configs.base.recommended,
+  comments.recommended,
+  {
+    name:            'tails/language',
+    languageOptions: {
+      ecmaVersion:   'latest',
+      sourceType:    'module',
+      parserOptions: { ecmaVersion: 'latest' },
+    },
+  },
+  houseStyle,
+  {
+    name:            'tails/game',
+    files:           ['game/**/*.js'],
+    languageOptions: { globals: { ...globals.browser, process: 'readonly' } },
+    rules:           {
+      'func-style':                     ['error', 'expression', { allowArrowFunctions: true }],
+      'import-x/prefer-default-export': 'off',
+      'no-restricted-globals':          ['error', 'Text'],
+    },
+  },
+  {
+    name:  'tails/common',
+    files: ['common/**/*.js'],
+    rules: {
+      'func-style':          ['error', 'expression', { allowArrowFunctions: true }],
+      'import-x/extensions': ['error', 'always'],
+    },
+  },
+  plugins.react,
+  plugins.reactA11y,
+  plugins.reactHooks,
+  ...configs.react.recommended.map(config => ({ ...config, files: CONTROLLER })),
+  {
+    name:            'tails/controller',
+    files:           CONTROLLER,
+    languageOptions: { globals: { ...globals.browser, process: 'readonly' } },
+    rules:           {
+      'class-methods-use-this':                  'off',
+      'jsx-a11y/click-events-have-key-events':   'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
+      'react-hooks/exhaustive-deps':             'warn',
+      'react-hooks/set-state-in-effect':         'warn',
+      'react/destructuring-assignment':          'off',
+      'react/sort-comp':                         'off',
+      'react/state-in-constructor':              'off',
+    },
+  },
+  { name: 'tails/controller-formatting', files: CONTROLLER, ...prettier },
+  {
+    name:            'tails/tests',
+    files:           ['**/test/**/*.js', '**/*.test.{js,jsx}'],
+    languageOptions: { globals: globals.vitest },
+    rules:           {
+      '@stylistic/max-len':                  'off',
+      'import-x/no-extraneous-dependencies': 'off',
+    },
+  },
+  {
+    name:            'tails/node-scripts',
+    files:           ['localIp.js'],
+    languageOptions: { globals: globals.node },
+    rules:           { 'no-console': 'off' },
+  },
+  {
+    name:            'tails/config-files',
+    files:           ['**/vite.config.js', 'eslint.config.js'],
+    languageOptions: { globals: globals.node },
+    rules:           { 'import-x/no-extraneous-dependencies': 'off' },
+  },
+]

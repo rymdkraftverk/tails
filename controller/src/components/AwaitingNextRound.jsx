@@ -17,14 +17,16 @@ const Container = styled(Div100vh)`
 const Text = styled.div`
   font-weight: bold;
 `
-const AwaitingNextRound = ({ playerColor }) => (
-  <IOSDisableDoubleTap>
-    <ScrollLock />
-    <Container color={playerColor}>
-      <Text>Awaiting next round</Text>
-    </Container>
-  </IOSDisableDoubleTap>
-)
+function AwaitingNextRound({ playerColor }) {
+  return (
+    <IOSDisableDoubleTap>
+      <ScrollLock />
+      <Container color={playerColor}>
+        <Text>Awaiting next round</Text>
+      </Container>
+    </IOSDisableDoubleTap>
+  )
+}
 
 AwaitingNextRound.propTypes = {
   playerColor: PropTypes.string.isRequired,

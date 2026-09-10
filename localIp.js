@@ -1,22 +1,8 @@
-const os = require('os')
-const R = require('ramda')
+import os from 'node:os'
 
-const getLocalIp = R.pipe(
-  R.toPairs,
-  R.chain(R.last),
-  R.find(
-    R.both(
-      R.propEq('family', 'IPv4'),
-      R.propEq('internal', false)
-    )
-  ),
-  R.prop('address')
-)
+const { address } = Object
+  .values(os.networkInterfaces())
+  .flat()
+  .find(({ family, internal }) => family === 'IPv4' && !internal)
 
-const logLocalIp = R.pipe(
-  R.invoker(0, 'networkInterfaces'),
-  getLocalIp,
-  console.log
-)
-
-logLocalIp(os)
+console.log(address)

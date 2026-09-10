@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { notify } from 'react-notify-toast'
 import styled from 'styled-components'
+import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
-import Div100vh from 'react-div-100vh'
 import ScrollLock from './ScrollLock'
 
 const PLACEHOLDER = 'Code'
@@ -103,14 +103,12 @@ class LockerRoom extends Component {
               />
             </ContainerColumn>
             <ContainerColumn>
-              {
-                <GameJoinButton
-                  disabled={!this.gameCodeFilled()}
-                  onClick={onJoinClick}
-                >
-                  Join
-                </GameJoinButton>
-              }
+              <GameJoinButton
+                disabled={!this.gameCodeFilled()}
+                onClick={onJoinClick}
+              >
+                Join
+              </GameJoinButton>
             </ContainerColumn>
           </Container>
         </Div100vh>

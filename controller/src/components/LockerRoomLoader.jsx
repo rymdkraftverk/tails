@@ -21,11 +21,13 @@ const Spinner = styled(Div100vh)`
   animation: ${spin} 2s linear infinite;
 `
 
-const LockerRoomLoader = () => (
-  <div>
-    <ScrollLock />
-    <Spinner style={{ top: '50rvh' }} />
-  </div>
-)
+function LockerRoomLoader() {
+  return (
+    <div>
+      <ScrollLock />
+      <Spinner style={{ top: '50rvh' }} />
+    </div>
+  )
+}
 
 export default LockerRoomLoader

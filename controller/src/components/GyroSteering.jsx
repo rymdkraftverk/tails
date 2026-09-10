@@ -8,7 +8,7 @@ const Canvas = styled.canvas`
 
 const getDiff = (height, angle) => angle * (height / (18 * 2))
 
-const GyroSteering = ({ angle }) => {
+function GyroSteering({ angle }) {
   const canvasRef = useRef(null)
 
   const [ctx, setCtx] = useState(null)
@@ -17,11 +17,11 @@ const GyroSteering = ({ angle }) => {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
+    const context = canvas.getContext('2d')
 
-    ctx.strokeStyle = 'black'
-    ctx.lineWidth = 10
-    setCtx(ctx)
+    context.strokeStyle = 'black'
+    context.lineWidth = 10
+    setCtx(context)
 
     setHeight(canvas.height)
     setWidth(canvas.width)

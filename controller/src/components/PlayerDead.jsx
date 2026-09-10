@@ -3,8 +3,8 @@ import * as R from 'ramda'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
-import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Div100vh from 'react-div-100vh'
+import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
@@ -46,7 +46,7 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-const PlayerDead = ({ playerColor, sendReliable }) => {
+function PlayerDead({ playerColor, sendReliable }) {
   useEffect(() => {
     navigator.vibrate(100)
   }, [])
@@ -95,8 +95,8 @@ const PlayerDead = ({ playerColor, sendReliable }) => {
           onTouchStart={onPlayerDeadClick}
           onTouchMove={onPlayerDeadClick}
         >
-          <DeadText>{"You're dead"}</DeadText>
-          <TouchText>{'Touch to Sparkle!'}</TouchText>
+          <DeadText>You&apos;re dead</DeadText>
+          <TouchText>Touch to Sparkle!</TouchText>
         </TouchArea>
       </Container>
     </IOSDisableDoubleTap>

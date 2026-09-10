@@ -343,7 +343,9 @@ const formatMetricsCSV = R.pipe(
     )(displayObjectMeasurements)
   }),
   R.reduce(
-    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) => `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`,
+    (str, { pixiElapsedMS, displayObjects, l1LoopDuration }) => (
+      `${str}\n${displayObjects}, ${pixiElapsedMS}, ${l1LoopDuration}`
+    ),
     'DisplayObjects, PixiElapsedMS, L1LoopDuration',
   ),
 )
