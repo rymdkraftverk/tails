@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
@@ -15,7 +14,7 @@ const Container = styled(FullHeight)`
 const Text = styled.div`
   font-weight: bold;
 `
-function AwaitingNextRound({ playerColor }) {
+function AwaitingNextRound({ playerColor }: { playerColor: string }) {
   return (
     <IOSDisableDoubleTap>
       <ScrollLock />
@@ -24,10 +23,6 @@ function AwaitingNextRound({ playerColor }) {
       </Container>
     </IOSDisableDoubleTap>
   )
-}
-
-AwaitingNextRound.propTypes = {
-  playerColor: PropTypes.string.isRequired,
 }
 
 export default AwaitingNextRound

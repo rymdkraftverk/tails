@@ -1,5 +1,4 @@
 import Switch from 'react-switch'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
@@ -37,7 +36,15 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-function GamePlaying(props) {
+type GamePlayingProps = {
+  angle: number
+  gyro: boolean
+  playerColor: string
+  send: (message: object) => void
+  setGyro: (gyro: boolean) => void
+}
+
+function GamePlaying(props: GamePlayingProps) {
   const { angle, gyro, playerColor, send, setGyro } = props
 
   return (
@@ -53,14 +60,6 @@ function GamePlaying(props) {
       </Container>
     </IOSDisableDoubleTap>
   )
-}
-
-GamePlaying.propTypes = {
-  angle: PropTypes.number.isRequired,
-  gyro: PropTypes.bool.isRequired,
-  playerColor: PropTypes.string.isRequired,
-  send: PropTypes.func.isRequired,
-  setGyro: PropTypes.func.isRequired,
 }
 
 export default GamePlaying

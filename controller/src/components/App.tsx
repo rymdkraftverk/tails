@@ -27,13 +27,26 @@ const AppState = {
   GAME_LOBBY: 'game-lobby',
   GAME_PLAYING: 'game-playing',
   PLAYER_DEAD: 'player-dead',
-}
+  AWAITING_NEXT_ROUND: 'awaiting-next-round',
+} as const
 
-const joinState = ({ started, color }) => ({
-  ...newRoundState,
-  playerColor: color,
-  appState: started ? AppState.AWAITING_NEXT_ROUND : AppState.GAME_LOBBY,
-})
+type AppStateValue = (typeof AppState)[keyof typeof AppState]
+
+type Notice = { text: string; type: 'error' | 'warning' }
+
+type AppStateShape = {
+  angle?: number
+  appState: AppStateValue
+  gameCode: string
+  gyro: boolean
+  notice: Notice | null
+  playerColor: keyof typeof Color | null
+  playerCount?: number
+  ready: boolean
+  startEnabled?: boolean
+  sendSteering: (message: object) => void
+  sendReliable: (message: object) => void
+}
 
 const newRoundState = {
   appState: AppState.GAME_LOBBY,
@@ -41,17 +54,23 @@ const newRoundState = {
   startEnabled: false,
 }
 
-const errorState = message => ({
+const joinState = ({ started, color }: { started: boolean; color: keyof typeof Color }) => ({
+  ...newRoundState,
+  playerColor: color,
+  appState: started ? AppState.AWAITING_NEXT_ROUND : AppState.GAME_LOBBY,
+})
+
+const errorState = (message: string) => ({
   appState: AppState.LOCKER_ROOM,
-  notice: { text: message, type: 'error' },
+  notice: { text: message, type: 'error' } as Notice,
 })
 
 const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
-const writeGameCodeToUrl = gameCode => {
+const writeGameCodeToUrl = (gameCode: string) => {
   window.history.pushState({ gameCode }, '', `?code=${gameCode}`)
 }
 
-const eventState = ({ event, payload }) => {
+const eventState = ({ event, payload }: { event: string; payload: never }) => {
   switch (event) {
     case Event.PLAYER_COUNT:
       return { playerCount: payload }
@@ -72,16 +91,16 @@ const eventState = ({ event, payload }) => {
   }
 }
 
-class App extends Component {
-  state = {
+class App extends Component<Record<string, never>, AppStateShape> {
+  state: AppStateShape = {
     appState: AppState.LOCKER_ROOM,
     gameCode: '',
     gyro: false,
-    notice: /** @type {{ text: string, type: string } | null} */ (null),
+    notice: null,
     playerColor: null,
     ready: false,
     sendSteering: () => {},
-    sendReliable: _message => {},
+    sendReliable: () => {},
   }
 
   componentDidMount() {
@@ -95,7 +114,7 @@ class App extends Component {
     }
   }
 
-  onData = message => {
+  onData = (message: { event: string; payload: never }) => {
     const state = eventState(message)
 
     if (!state) {
@@ -103,7 +122,7 @@ class App extends Component {
       return
     }
 
-    this.setState(state)
+    this.setState(state as Pick<AppStateShape, keyof AppStateShape>)
   }
 
   onJoinClick = () => {
@@ -112,7 +131,7 @@ class App extends Component {
     this.join(gameCode)
   }
 
-  join = gameCode => {
+  join = (gameCode: string) => {
     this.setState({ appState: AppState.GAME_CONNECTING, notice: null })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
@@ -120,7 +139,7 @@ class App extends Component {
     this.connectToGame(gameCode)
   }
 
-  displayError = message => {
+  displayError = (message: string) => {
     this.setState(errorState(message))
   }
 
@@ -146,12 +165,12 @@ class App extends Component {
         'Unfortunately the game cannot be played in this browser.' +
         'See list of supported browsers here: https://caniuse.com/#search=webrtc'
 
-      // eslint-disable-next-line no-alert
+       
       alert(message)
     }
   }
 
-  gameCodeChange = ({ target: { value } }) =>
+  gameCodeChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
     this.setState({
       gameCode: value.substr(0, 4).toUpperCase(),
     })
@@ -163,7 +182,7 @@ class App extends Component {
     }
   }
 
-  connectToGame(gameCode) {
+  connectToGame(gameCode: string) {
     const onClose = () => {
       this.displayError('Connection failed')
     }
@@ -174,7 +193,7 @@ class App extends Component {
         onClose,
         onData: this.onData,
         receiverId: gameCode,
-        wsAddress: WS_ADDRESS,
+        wsAddress: WS_ADDRESS as string,
       })
       .then(send => {
         this.setState({
@@ -182,10 +201,10 @@ class App extends Component {
           sendReliable: send(Channel.RELIABLE),
         })
       })
-      .catch(error => {
-        const message = {
-          NOT_FOUND: `Game with code ${gameCode} not found`,
-        }[error.cause]
+      .catch((error: { cause?: string }) => {
+        const message = error.cause === 'NOT_FOUND'
+          ? `Game with code ${gameCode} not found`
+          : undefined
 
         if (message) {
           this.displayError(message)
@@ -208,27 +227,34 @@ class App extends Component {
     this.setState({ ready: true })
   }
 
-  setGyro = gyro => {
+  setGyro = (gyro: boolean) => {
     this.setState({ gyro })
   }
 
-  setAngle = angle => {
+  setAngle = (angle: number) => {
     this.setState({ angle })
   }
 
   appStateComponent = () => {
     const {
-      angle,
+      angle = 0,
       appState,
       gameCode,
       gyro,
       playerColor,
       playerCount,
       ready,
-      startEnabled,
+      startEnabled = false,
       sendSteering,
       sendReliable,
     } = this.state
+
+    // Every screen past the lobby is only reachable once the game has
+    // assigned this player a colour
+    if (!playerColor && appState !== AppState.LOCKER_ROOM
+      && appState !== AppState.GAME_CONNECTING) {
+      return null
+    }
 
     switch (appState) {
       case AppState.LOCKER_ROOM:
@@ -246,7 +272,7 @@ class App extends Component {
           <GameLobby
             startGame={this.startGame}
             readyPlayer={this.readyPlayer}
-            playerColor={playerColor}
+            playerColor={playerColor!}
             playerCount={playerCount}
             ready={ready}
             startEnabled={startEnabled}
@@ -257,7 +283,7 @@ class App extends Component {
           <GamePlaying
             angle={angle}
             gyro={gyro}
-            playerColor={Color[playerColor]}
+            playerColor={Color[playerColor!]}
             send={sendSteering}
             setGyro={this.setGyro}
           />
@@ -266,11 +292,11 @@ class App extends Component {
         return (
           <PlayerDead
             sendReliable={sendReliable}
-            playerColor={Color[playerColor]}
+            playerColor={Color[playerColor!]}
           />
         )
       case AppState.AWAITING_NEXT_ROUND:
-        return <AwaitingNextRound playerColor={Color[playerColor]} />
+        return <AwaitingNextRound playerColor={Color[playerColor!]} />
       default:
         return null
     }

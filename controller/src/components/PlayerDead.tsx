@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { Event } from 'common'
 import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
@@ -45,20 +44,21 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-function PlayerDead({ playerColor, sendReliable }) {
+function PlayerDead({ playerColor, sendReliable }: {
+  playerColor: string
+  sendReliable: (message: object) => void
+}) {
   useEffect(() => {
     navigator.vibrate(100)
   }, [])
 
-  const [position, setPosition] = useState(
-    /** @type {{ x: number, y: number } | null} */ (null),
-  )
+  const [position, setPosition] = useState<{ x: number, y: number } | null>(null)
   const [sendData, setSendData] = useState(false)
 
-  const onPlayerDeadClick = ({ touches, target }) => {
+  const onPlayerDeadClick = ({ touches, target }: React.TouchEvent<HTMLDivElement>) => {
     if (touches && target) {
-      const [{ clientX, clientY }] = touches
-      const rect = target.getBoundingClientRect()
+      const { clientX, clientY } = touches[0]
+      const rect = (target as HTMLElement).getBoundingClientRect()
 
       const x = clientX / rect.width
       const y = clientY / rect.height
@@ -102,11 +102,6 @@ function PlayerDead({ playerColor, sendReliable }) {
       </Container>
     </IOSDisableDoubleTap>
   )
-}
-
-PlayerDead.propTypes = {
-  playerColor: PropTypes.string.isRequired,
-  sendReliable: PropTypes.func.isRequired,
 }
 
 export default PlayerDead

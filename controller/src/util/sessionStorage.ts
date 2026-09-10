@@ -3,7 +3,7 @@ export const getLastGameCode = () => {
   return gameCode || ''
 }
 
-export const setLastGameCode = gameCode => {
+export const setLastGameCode = (gameCode: string) => {
   sessionStorage.setItem('gameCode', gameCode)
   return gameCode
 }

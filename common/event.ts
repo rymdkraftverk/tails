@@ -10,6 +10,6 @@ const Event = {
   PLAYER_DIED:     'player.died',
   START_ENABLED:   'start.enabled',
   PLAYER_DEAD_TAP: 'player.dead.tap',
-}
+} as const
 
 export default Event

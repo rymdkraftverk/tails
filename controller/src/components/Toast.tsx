@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const VISIBLE_MILLISECONDS = 5000
@@ -22,7 +21,15 @@ const Banner = styled.div`
   background: var(--toast-background);
 `
 
-class Toast extends Component {
+type ToastProps = {
+  onHide: () => void
+  text: string
+  type: keyof typeof background
+}
+
+class Toast extends Component<ToastProps, { visible: boolean }> {
+  timer: ReturnType<typeof setTimeout> | undefined
+
   state = { visible: true }
 
   componentDidMount() {
@@ -48,12 +55,6 @@ class Toast extends Component {
       <Banner style={{ '--toast-background': background[type] }}>{text}</Banner>
     )
   }
-}
-
-Toast.propTypes = {
-  onHide: PropTypes.func.isRequired,
-  text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['error', 'warning']).isRequired,
 }
 
 export default Toast

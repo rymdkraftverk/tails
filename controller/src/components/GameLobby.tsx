@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
 import FullHeight from './FullHeight'
@@ -59,9 +58,18 @@ const AwaitingReadyPlayers = styled.div`
   padding: 7px;
 `
 
-const getColorCode = color => Color[color]
+const getColorCode = (color: keyof typeof Color) => Color[color]
 
-class GameLobby extends Component {
+type GameLobbyProps = {
+  playerColor: keyof typeof Color
+  playerCount?: number
+  ready: boolean
+  startEnabled: boolean
+  readyPlayer: () => void
+  startGame: () => void
+}
+
+class GameLobby extends Component<GameLobbyProps> {
   getAction = () => {
     const { playerColor, ready, readyPlayer, startEnabled, startGame } =
       this.props
@@ -84,7 +92,7 @@ class GameLobby extends Component {
   }
 
   render() {
-    const { playerColor, playerCount } = this.props
+    const { playerColor, playerCount = 0 } = this.props
 
     return (
       <IOSDisableDoubleTap>
@@ -118,19 +126,6 @@ class GameLobby extends Component {
       </IOSDisableDoubleTap>
     )
   }
-}
-
-GameLobby.propTypes = {
-  playerColor: PropTypes.string.isRequired,
-  playerCount: PropTypes.number,
-  ready: PropTypes.bool.isRequired,
-  startEnabled: PropTypes.bool.isRequired,
-  readyPlayer: PropTypes.func.isRequired,
-  startGame: PropTypes.func.isRequired,
-}
-
-GameLobby.defaultProps = {
-  playerCount: 0,
 }
 
 export default GameLobby

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const preventDefault = e => {
+const preventDefault = (e: Event) => {
   e.preventDefault()
 }
 

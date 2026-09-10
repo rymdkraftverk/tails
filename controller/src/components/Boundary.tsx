@@ -1,11 +1,13 @@
 import { Component } from 'react'
-import PropTypes from 'prop-types'
+import type { ErrorInfo, ReactNode } from 'react'
 import * as Sentry from '@sentry/browser'
 
 const ERROR_LOGGING = process.env.REACT_APP_ERROR_LOGGING || false
 
-class Boundary extends Component {
-  constructor(props) {
+type BoundaryProps = { children: ReactNode }
+
+class Boundary extends Component<BoundaryProps, { error: Error | null }> {
+  constructor(props: BoundaryProps) {
     super(props)
     this.state = { error: null }
   }
@@ -18,12 +20,10 @@ class Boundary extends Component {
     }
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error })
     Sentry.withScope(scope => {
-      Object.keys(errorInfo).forEach(key => {
-        scope.setExtra(key, errorInfo[key])
-      })
+      scope.setExtra('componentStack', errorInfo.componentStack)
       Sentry.captureException(error)
     })
   }
@@ -40,10 +40,6 @@ class Boundary extends Component {
 
     return children
   }
-}
-
-Boundary.propTypes = {
-  children: PropTypes.node.isRequired,
 }
 
 export default Boundary

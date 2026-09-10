@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const Canvas = styled.canvas`
   height: 100%;
 `
 
-const getDiff = (height, angle) => angle * (height / (18 * 2))
+const getDiff = (height: number, angle: number) => angle * (height / (18 * 2))
 
-function GyroSteering({ angle }) {
-  const canvasRef = useRef(/** @type {HTMLCanvasElement | null} */ (null))
+function GyroSteering({ angle }: { angle: number }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  const [ctx, setCtx] = useState(
-    /** @type {CanvasRenderingContext2D | null} */ (null),
-  )
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
 
@@ -54,10 +51,6 @@ function GyroSteering({ angle }) {
   }, [angle])
 
   return <Canvas ref={canvasRef} />
-}
-
-GyroSteering.propTypes = {
-  angle: PropTypes.number.isRequired,
 }
 
 export default GyroSteering

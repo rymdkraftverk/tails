@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Event, SteeringCommand } from 'common'
 
@@ -22,8 +21,8 @@ const Button = styled.div`
   font-size: 100pt;
 `
 
-function TapSteering(props) {
-  const sendCommand = command => () => {
+function TapSteering(props: { send: (message: object) => void }) {
+  const sendCommand = (command: number) => () => {
     props.send({
       event: Event.PLAYER_MOVEMENT,
       payload: command,
@@ -51,10 +50,6 @@ function TapSteering(props) {
       </Button>
     </Container>
   )
-}
-
-TapSteering.propTypes = {
-  send: PropTypes.func.isRequired,
 }
 
 export default TapSteering

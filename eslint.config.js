@@ -2,8 +2,9 @@ import globals from 'globals'
 import prettier from 'eslint-config-prettier/flat'
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs'
 import { configs, plugins } from 'eslint-config-airbnb-extended'
+import tseslint from 'typescript-eslint'
 
-const CONTROLLER = ['controller/**/*.{js,jsx}']
+const CONTROLLER = ['controller/**/*.{js,jsx,ts,tsx}']
 
 const houseStyle = {
   name:  'tails/house-style',
@@ -30,7 +31,8 @@ export default [
   { ignores: ['**/dist/', '**/*.d.ts', 'game/public/', 'controller/public/'] },
   plugins.stylistic,
   plugins.importX,
-  ...configs.base.recommended,
+  ...configs.base.typescript,
+  ...tseslint.configs.recommended,
   comments.recommended,
   {
     name:            'tails/language',
@@ -53,10 +55,11 @@ export default [
   },
   {
     name:  'tails/common',
-    files: ['common/**/*.js'],
+    files: ['common/**/*.ts'],
     rules: {
-      'func-style':          ['error', 'expression', { allowArrowFunctions: true }],
-      'import-x/extensions': ['error', 'always'],
+      'func-style':             ['error', 'expression', { allowArrowFunctions: true }],
+      'import-x/extensions':    ['error', 'always'],
+      'import-x/no-unresolved': 'off',
     },
   },
   plugins.react,
@@ -68,27 +71,32 @@ export default [
     files:           CONTROLLER,
     languageOptions: { globals: { ...globals.browser, process: 'readonly' } },
     rules:           {
-      'class-methods-use-this':                  'off',
-      'jsx-a11y/click-events-have-key-events':   'off',
-      'jsx-a11y/no-static-element-interactions': 'off',
-      'react-hooks/exhaustive-deps':             'warn',
-      'react-hooks/set-state-in-effect':         'warn',
-      'react/destructuring-assignment':          'off',
-      'react/jsx-uses-react':                    'off',
-      'react/react-in-jsx-scope':                'off',
-      'react/require-default-props':             ['error', { functions: 'defaultArguments' }],
-      'react/sort-comp':                         'off',
-      'react/state-in-constructor':              'off',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      'class-methods-use-this':                         'off',
+      'import-x/extensions':                            ['error', 'never', { json: 'always' }],
+      'jsx-a11y/click-events-have-key-events':          'off',
+      'jsx-a11y/no-static-element-interactions':        'off',
+      'react-hooks/exhaustive-deps':                    'warn',
+      'react-hooks/set-state-in-effect':                'warn',
+      'react/destructuring-assignment':                 'off',
+      'react/jsx-filename-extension':                   ['error', { extensions: ['.jsx', '.tsx'] }],
+      'react/jsx-uses-react':                           'off',
+      'react/react-in-jsx-scope':                       'off',
+      'react/sort-comp':                                'off',
+      'react/require-default-props':                    'off',
+      'react/state-in-constructor':                     'off',
     },
   },
   { name: 'tails/controller-formatting', files: CONTROLLER, ...prettier },
   {
     name:            'tails/tests',
-    files:           ['**/test/**/*.js', '**/*.test.{js,jsx}'],
+    files:           ['**/test/**/*.{js,ts}', '**/*.test.{js,jsx,ts,tsx}'],
     languageOptions: { globals: globals.vitest },
     rules:           {
       '@stylistic/max-len':                  'off',
       'import-x/no-extraneous-dependencies': 'off',
+      'no-var':                              'off',
+      'vars-on-top':                         'off',
     },
   },
   {

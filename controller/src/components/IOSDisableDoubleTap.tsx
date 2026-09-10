@@ -1,6 +1,9 @@
-import PropTypes from 'prop-types'
+import type { ReactNode } from 'react'
 
-function IOSDisableDoubleTap({ children, className = undefined }) {
+function IOSDisableDoubleTap({ children, className }: {
+  children: ReactNode
+  className?: string
+}) {
   return (
     <div
       className={className}
@@ -13,11 +16,6 @@ function IOSDisableDoubleTap({ children, className = undefined }) {
       {children}
     </div>
   )
-}
-
-IOSDisableDoubleTap.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
 }
 
 IOSDisableDoubleTap.displayName = 'IOSDisableDoubleTap'

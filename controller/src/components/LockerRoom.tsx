@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
@@ -42,21 +41,27 @@ const GameJoinButton = styled.button`
   opacity: ${({ disabled }) => (disabled ? '0.2' : '1')};
 `
 
-const onFocus = e => {
+const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   e.target.placeholder = ''
   e.target.select()
 }
 
-const onBlur = e => {
+const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   e.target.placeholder = PLACEHOLDER
 }
 
-class LockerRoom extends Component {
-  onKeyPress = e => {
+type LockerRoomProps = {
+  gameCode: string
+  onJoinClick: () => void
+  gameCodeChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+class LockerRoom extends Component<LockerRoomProps> {
+  onKeyPress = (e: React.KeyboardEvent) => {
     if (this.isSubmit(e.key)) this.props.onJoinClick()
   }
 
-  isSubmit = pressed => this.gameCodeFilled() && pressed === 'Enter'
+  isSubmit = (pressed: string) => this.gameCodeFilled() && pressed === 'Enter'
 
   gameCodeFilled = () => this.props.gameCode.length === 4
 
@@ -98,12 +103,6 @@ class LockerRoom extends Component {
       </IOSDisableDoubleTap>
     )
   }
-}
-
-LockerRoom.propTypes = {
-  gameCode: PropTypes.string.isRequired,
-  onJoinClick: PropTypes.func.isRequired,
-  gameCodeChange: PropTypes.func.isRequired,
 }
 
 export default LockerRoom

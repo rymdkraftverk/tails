@@ -12,6 +12,6 @@ const Color = {
   purple:    '#9300C9',
   brown:     '#754701',
   none:      '#999999',
-}
+} as const
 
 export default Color
