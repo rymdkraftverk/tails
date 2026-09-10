@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@sentry/browser": "^4.6.4",
-    "bounded-kd-tree": "0.0.2",
     "bowser": "^2.4.0",
     "common": "file:../common",
     "eventemitter3": "^3.1.0",

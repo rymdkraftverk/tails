@@ -9,3 +9,8 @@ rules:
   no-restricted-globals:
     - error
     - Text
+overrides:
+  - files:
+      - vite.config.js
+    rules:
+      import/no-extraneous-dependencies: off
