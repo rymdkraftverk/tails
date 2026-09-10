@@ -31,7 +31,7 @@ const Container = styled(({ playerColor, ...rest }) => <Div100vh {...rest} />)`
   background: ${R.prop('playerColor')};
 `
 
-const noop = () => {}
+const noop = () => false
 
 navigator.vibrate =
   navigator.vibrate ||

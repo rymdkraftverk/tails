@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 export default callback => {
-  const savedCallback = useRef()
+  const savedCallback = useRef(callback)
 
   // Remember the latest callback
   useEffect(() => {

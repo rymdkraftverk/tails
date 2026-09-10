@@ -17,9 +17,7 @@ function ScrollLock() {
     // Prevent scrolling and two finger zoom on iOS
     document.addEventListener('touchmove', preventDefault, { passive: false })
     return () => {
-      document.removeEventListener('touchmove', preventDefault, {
-        passive: false,
-      })
+      document.removeEventListener('touchmove', preventDefault)
     }
   }, [])
 

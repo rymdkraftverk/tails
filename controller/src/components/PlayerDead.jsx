@@ -37,7 +37,7 @@ const TouchArea = styled(Div100vh)`
   align-items: center;
 `
 
-const noop = () => {}
+const noop = () => false
 
 navigator.vibrate =
   navigator.vibrate ||

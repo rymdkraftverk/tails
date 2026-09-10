@@ -10,7 +10,8 @@
     "test": "vitest run",
     "stylelint": "stylelint './src/**/*.{js,jsx}'",
     "prettier": "prettier --write 'src/**/*.{js,jsx}'",
-    "lint": "prettier --check 'src/**/*.{js,jsx}' && npm run stylelint"
+    "lint": "prettier --check 'src/**/*.{js,jsx}' && npm run stylelint",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@sentry/browser": "^4.6.4",
@@ -28,6 +29,8 @@
     "styled-components": "^4.1.3"
   },
   "devDependencies": {
+    "@types/react": "^16.14.70",
+    "@types/react-dom": "^16.9.25",
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-styled-components": "^2.1.4",
     "jsdom": "^27.0.0",
@@ -36,6 +39,7 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.5.2",
+    "typescript": "^5.9.3",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"
   }
