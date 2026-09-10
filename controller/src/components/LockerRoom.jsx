@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { notify } from 'react-notify-toast'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
 import Div100vh from 'react-div-100vh'

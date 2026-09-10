@@ -1,7 +1,7 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import { Event, Channel } from 'common'
-import R from 'ramda'
+import * as R from 'ramda'
 import * as Sentry from '@sentry/browser'
 import signaling from 'rkv-signaling'
 import { transitionToGameScene } from './game'

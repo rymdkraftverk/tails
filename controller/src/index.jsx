@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createGlobalStyle } from 'styled-components/macro'
+import { createGlobalStyle } from 'styled-components'
 import Boundary from './components/Boundary'
 import App from './components/App'
 
@@ -13,7 +13,7 @@ log(`Version: ${VERSION}`)
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'patchy-robots';
-    src: url('patchy-robots.ttf');
+    src: url('/patchy-robots.ttf');
   }
 
   html {

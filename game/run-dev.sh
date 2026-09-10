@@ -1,3 +1,2 @@
 npm i
-npm run watch &
-npm run start
+npm start

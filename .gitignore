@@ -1,6 +1,7 @@
 .DS_Store
 **/.vscode/settings.json
 node_modules
-bundle.js
+dist
+build
 tmp
 .env

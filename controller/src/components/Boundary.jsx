@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as Sentry from '@sentry/browser'
 
-const { REACT_APP_ERROR_LOGGING: ERROR_LOGGING = false } = process.env
+const ERROR_LOGGING = process.env.REACT_APP_ERROR_LOGGING || false
 
 class Boundary extends Component {
   constructor(props) {

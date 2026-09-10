@@ -1,11 +1,5 @@
-const Channel = require('./channel')
-const Color = require('./color')
-const Event = require('./event')
-const SteeringCommand = require('./steeringCommand')
-
-module.exports = {
-  Channel,
-  Color,
-  Event,
-  SteeringCommand,
-}
+export { default as Channel } from './channel.js'
+export { default as Color } from './color.js'
+export { default as Event } from './event.js'
+export { default as getUrlParams } from './getUrlParams.js'
+export { default as SteeringCommand } from './steeringCommand.js'

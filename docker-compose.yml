@@ -1,7 +1,7 @@
 version: '3'
 services:
     game:
-        image: 'node:11.11'
+        image: 'node:22'
         working_dir: /tails/game
         command: ["sh", "./run-dev.sh"]
         volumes:
@@ -17,7 +17,7 @@ services:
             - WS_ADDRESS=${WS_ADDRESS}
 
     controller:
-        image: 'node:11.11'
+        image: 'node:22'
         working_dir: /tails/controller
         command: ["sh", "./run-dev.sh"]
         volumes:

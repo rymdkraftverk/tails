@@ -2,7 +2,7 @@ import * as l1 from 'l1'
 import _ from 'lodash/fp'
 import uuid from 'uuid/v4'
 import * as PIXI from 'pixi.js'
-import R from 'ramda'
+import * as R from 'ramda'
 import Scene from '../Scene'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
@@ -88,7 +88,7 @@ export const initPowerups = ({
       },
       onUpdate: ({ data }) => {
         const isCollidingWithLiving = R.both(
-          R.propEq('alive', true),
+          R.propEq(true, 'alive'),
           R.curry(l1.isColliding)(hitBox),
         )
 

@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import Fullscreen from 'react-full-screen'
 import Notifications from 'react-notify-toast'
 import MediaQuery from 'react-responsive'
-import { Event, Color, Channel } from 'common'
-import getUrlParams from 'common/getUrlParams'
+import { Event, Color, Channel, getUrlParams } from 'common'
 import signaling from 'rkv-signaling'
 import * as Sentry from '@sentry/browser'
 
@@ -21,7 +20,7 @@ import Gyro from './Gyro'
 
 const { error: logError } = console
 
-const { REACT_APP_WS_ADDRESS: WS_ADDRESS } = process.env
+const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS
 const TIMEOUT_SECONDS = 20
 
 const AppState = {

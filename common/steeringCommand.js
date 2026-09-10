@@ -4,4 +4,4 @@ const Command = {
   RIGHT: 3.0,
 }
 
-module.exports = Command
+export default Command

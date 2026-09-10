@@ -1,6 +1,6 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
-import R from 'ramda'
+import * as R from 'ramda'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
 import { GAME_WIDTH } from './constant/rendering'

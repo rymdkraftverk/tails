@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components/macro'
+import styled, { keyframes } from 'styled-components'
 import Div100vh from 'react-div-100vh'
 import ScrollLock from './ScrollLock'
 

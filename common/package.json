@@ -8,5 +8,6 @@
     "lint": "eslint ."
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }

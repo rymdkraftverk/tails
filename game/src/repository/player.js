@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { state } from '../state'
 
 // -- Private ---
@@ -7,7 +7,7 @@ import { state } from '../state'
 const deferStateApplication = f => (...args) => f(state.players, ...args)
 
 const subtract = R.flip(R.subtract)
-const includes = R.flip(R.contains)
+const includes = R.flip(R.includes)
 
 const getHighestScore = R.pipe(
   R.sortBy(R.prop('score')),
@@ -15,7 +15,7 @@ const getHighestScore = R.pipe(
   R.prop('score'),
 )
 
-const isReady = R.propEq('ready', true)
+const isReady = R.propEq(true, 'ready')
 
 const incrementScore = R.over(
   R.lensProp('score'),
@@ -42,7 +42,7 @@ const countFactor = R.pipe(
   Math.sqrt,
 )
 
-const find = R.curry((players, id) => R.find(R.propEq('id', id), players))
+const find = R.curry((players, id) => R.find(R.propEq(id, 'id'), players))
 
 const getReadyCount = R.pipe(
   R.filter(isReady),
@@ -51,13 +51,13 @@ const getReadyCount = R.pipe(
 
 const getWithHighestScores = players => R.pipe(
   getHighestScore,
-  score => R.filter(R.propEq('score', score), players),
+  score => R.filter(R.propEq(score, 'score'), players),
 )(players)
 
 const isFirstPlace = R.curry((players, id) => R.pipe(
   getWithHighestScores,
-  R.reject(R.propEq('score', 0)),
-  R.any(R.propEq('id', id)),
+  R.reject(R.propEq(0, 'score')),
+  R.any(R.propEq(id, 'id')),
 )(players))
 
 const scoreToWin = R.pipe(
@@ -84,7 +84,7 @@ const incrementScores = R.curry((players, whitelist) => R.pipe(
 )(players))
 
 const remove = R.curry((players, id) => R.pipe(
-  R.reject(R.propEq('id', id)),
+  R.reject(R.propEq(id, 'id')),
   R.tap(write),
 )(players))
 

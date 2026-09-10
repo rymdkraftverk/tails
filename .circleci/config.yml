@@ -36,7 +36,7 @@ commands:
 jobs:
   setup:
     docker:
-      - image: node:11.11
+      - image: node:22
     working_directory: ~/tails
     steps:
       - checkout
@@ -54,7 +54,7 @@ jobs:
           root: .
   test:
     docker:
-      - image: node:11.11
+      - image: node:22
     working_directory: ~/tails
     steps:
       - attach_workspace:
@@ -63,7 +63,7 @@ jobs:
       - run: npm run lint
   build_controller:
     docker:
-      - image: node:11.11
+      - image: node:22
     working_directory: ~/tails
     steps:
       - attach_workspace:
@@ -77,7 +77,7 @@ jobs:
           working_directory: controller
       - persist_to_workspace:
           paths:
-            - controller/build
+            - controller/dist
           root: .
   deploy_controller:
     docker:
@@ -88,10 +88,10 @@ jobs:
           at: .
       - upload_website:
           bucket: rkv-controller
-          dir: controller/build
+          dir: controller/dist
   build_game:
     docker:
-      - image: node:11.11
+      - image: node:22
     working_directory: ~/tails
     steps:
       - attach_workspace:
@@ -105,7 +105,7 @@ jobs:
           working_directory: game
       - persist_to_workspace:
           paths:
-            - game/public
+            - game/dist
           root: .
   deploy_game_s3:
     docker:
@@ -116,7 +116,7 @@ jobs:
           at: .
       - upload_website:
           bucket: rkv-game
-          dir: game/public
+          dir: game/dist
   deploy_game_itch:
     docker:
       - image: rymdkraftverk/ci:latest
@@ -126,7 +126,7 @@ jobs:
           at: .
       - run:
           name: Upload to itch.io
-          command: butler push game/public rymdkraftverk/tails:web
+          command: butler push game/dist rymdkraftverk/tails:web
 workflows:
   default:
     jobs:

@@ -14,4 +14,4 @@ const Color = {
   none:      '#999999',
 }
 
-module.exports = Color
+export default Color

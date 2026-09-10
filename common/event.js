@@ -12,4 +12,4 @@ const Event = {
   PLAYER_DEAD_TAP: 'player.dead.tap',
 }
 
-module.exports = Event
+export default Event

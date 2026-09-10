@@ -1,9 +1,9 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import * as l1 from 'l1'
 import playerRepository from '../repository/player'
 
 const incAliveScores = R.pipe(
-  R.filter(R.propEq('alive', true)),
+  R.filter(R.propEq(true, 'alive')),
   R.pluck('id'),
   playerRepository.incrementScores,
 )

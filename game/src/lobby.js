@@ -1,10 +1,10 @@
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import _ from 'lodash/fp'
-import R from 'ramda'
+import * as R from 'ramda'
 import Bowser from 'bowser'
+import { getUrlParams } from 'common'
 
-import getUrlParams from 'common/getUrlParams'
 import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'

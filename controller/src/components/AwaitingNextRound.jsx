@@ -1,6 +1,6 @@
 import React from 'react'
 import * as R from 'ramda'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Div100vh from 'react-div-100vh'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'

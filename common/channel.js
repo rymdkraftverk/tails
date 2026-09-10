@@ -3,4 +3,4 @@ const Channel = {
   RELIABLE_STEERING: 'reliable.steering',
 }
 
-module.exports = Channel
+export default Channel

@@ -13,7 +13,7 @@
     }
 
   </script>
-  <link href='style.css' rel='stylesheet' type='text/css'>
+  <link href="/style.css" rel="stylesheet" type="text/css">
   <link rel="shortcut icon" type="image/png" href="/favicon2.png">
   <title>Rymdkraftverk</title>
 </head>
@@ -22,7 +22,13 @@
   <div id="container">
     <div id="game"></div>
   </div>
-  <script src="loading.js"></script>
-  <script src="bundle.js"></script>
+  <script>
+    const loading = document.createElement('div')
+    loading.innerHTML = 'loading...'
+    loading.setAttribute('id', 'loading')
+    document.getElementById('container').appendChild(loading)
+    document.addEventListener('DOMContentLoaded', () => loading.remove())
+  </script>
+  <script type="module" src="/src/index.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import _ from 'lodash/fp'
-import R from 'ramda'
+import * as R from 'ramda'
 import * as l1 from 'l1'
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'

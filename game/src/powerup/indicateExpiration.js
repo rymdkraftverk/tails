@@ -1,5 +1,5 @@
 import * as l1 from 'l1'
-import R from 'ramda'
+import * as R from 'ramda'
 import { createSine } from '../magic'
 
 const EXPIRATION_STATE_SOON = 'EXPIRATION_STATE_SOON'

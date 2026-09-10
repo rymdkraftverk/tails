@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as R from 'ramda'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
