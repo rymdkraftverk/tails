@@ -59,9 +59,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: npm test
-      - run: npm run lint
-      - run: npm run typecheck
+      - run: npm run qa
   build_controller:
     docker:
       - image: node:22
