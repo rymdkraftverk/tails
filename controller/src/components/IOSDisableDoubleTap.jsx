@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-function IOSDisableDoubleTap({ children, className = null }) {
+function IOSDisableDoubleTap({ children, className = undefined }) {
   return (
     <div
       className={className}

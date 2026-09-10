@@ -50,7 +50,9 @@ function PlayerDead({ playerColor, sendReliable }) {
     navigator.vibrate(100)
   }, [])
 
-  const [position, setPosition] = useState(null)
+  const [position, setPosition] = useState(
+    /** @type {{ x: number, y: number } | null} */ (null),
+  )
   const [sendData, setSendData] = useState(false)
 
   const onPlayerDeadClick = ({ touches, target }) => {

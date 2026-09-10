@@ -77,7 +77,7 @@ class App extends Component {
     appState: AppState.LOCKER_ROOM,
     gameCode: '',
     gyro: false,
-    notice: null,
+    notice: /** @type {{ text: string, type: string } | null} */ (null),
     playerColor: null,
     ready: false,
     sendSteering: () => {},

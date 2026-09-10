@@ -236,6 +236,7 @@ export const setPlayerSize = (player, sizeMultiplier) => {
   player.anchor.set((1 - (playerSize / player.width)) / 2)
 }
 
+/** @returns {Promise<void>} */
 const bouncePlayers = (players, playerCountFactor) => new Promise((resolve) => {
   const bouncer = new PIXI.Container()
   l1.add(bouncer, {

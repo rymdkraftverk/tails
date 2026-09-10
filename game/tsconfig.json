@@ -7,7 +7,19 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "skipLibCheck": true,
-    "types": ["vitest/globals"]
+    "types": [
+      "vitest/globals"
+    ],
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "strictNullChecks": true
   },
-  "include": ["src", "test", "types", "../common"]
+  "include": [
+    "src",
+    "test",
+    "types",
+    "../common"
+  ]
 }

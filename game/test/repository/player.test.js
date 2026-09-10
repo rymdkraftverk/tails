@@ -1,10 +1,13 @@
 import { state } from '../../src/state'
 import repo from '../../src/repository/player'
 
+const send = () => {}
+
 beforeEach(() => {
   state.players = [
     {
       color:         'blue',
+      send,
       id:            'foo',
       previousScore: 1,
       ready:         true,
@@ -12,6 +15,7 @@ beforeEach(() => {
     },
     {
       color:         'red',
+      send,
       id:            'bar',
       previousScore: 1,
       ready:         true,
@@ -19,6 +23,7 @@ beforeEach(() => {
     },
     {
       color:         'yellow',
+      send,
       id:            'baz',
       previousScore: 1,
       ready:         false,
@@ -26,6 +31,7 @@ beforeEach(() => {
     },
     {
       color:         'green',
+      send,
       id:            'qux',
       previousScore: 2,
       ready:         true,
@@ -58,6 +64,7 @@ test('find', () => {
   expect(repo.find('foo'))
     .toEqual({
       color:         'blue',
+      send,
       id:            'foo',
       previousScore: 1,
       ready:         true,
@@ -75,6 +82,7 @@ test('getWithHighestScores', () => {
     .toEqual([
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 1,
         ready:         true,
@@ -82,6 +90,7 @@ test('getWithHighestScores', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 2,
         ready:         true,
@@ -108,6 +117,7 @@ test('scoreToWin', () => {
 test('add', () => {
   repo.add({
     color: 'pink',
+    send,
     id:    'unique',
     extra: 'stuff',
   })
@@ -116,11 +126,13 @@ test('add', () => {
     .toEqual([
       {
         color: 'pink',
+        send,
         id:    'unique',
         extra: 'stuff',
       },
       {
         color:         'blue',
+        send,
         id:            'foo',
         previousScore: 1,
         ready:         true,
@@ -128,6 +140,7 @@ test('add', () => {
       },
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 1,
         ready:         true,
@@ -135,6 +148,7 @@ test('add', () => {
       },
       {
         color:         'yellow',
+        send,
         id:            'baz',
         previousScore: 1,
         ready:         false,
@@ -142,6 +156,7 @@ test('add', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 2,
         ready:         true,
@@ -161,6 +176,7 @@ test('incrementScores', () => {
     .toEqual([
       {
         color:         'blue',
+        send,
         id:            'foo',
         previousScore: 1,
         ready:         true,
@@ -168,6 +184,7 @@ test('incrementScores', () => {
       },
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 1,
         ready:         true,
@@ -175,6 +192,7 @@ test('incrementScores', () => {
       },
       {
         color:         'yellow',
+        send,
         id:            'baz',
         previousScore: 1,
         ready:         false,
@@ -182,6 +200,7 @@ test('incrementScores', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 2,
         ready:         true,
@@ -196,6 +215,7 @@ test('remove', () => {
     .toEqual([
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 1,
         ready:         true,
@@ -203,6 +223,7 @@ test('remove', () => {
       },
       {
         color:         'yellow',
+        send,
         id:            'baz',
         previousScore: 1,
         ready:         false,
@@ -210,6 +231,7 @@ test('remove', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 2,
         ready:         true,
@@ -224,6 +246,7 @@ test('resetReady', () => {
     .toEqual([
       {
         color:         'blue',
+        send,
         id:            'foo',
         previousScore: 1,
         ready:         false,
@@ -231,6 +254,7 @@ test('resetReady', () => {
       },
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 1,
         ready:         false,
@@ -238,6 +262,7 @@ test('resetReady', () => {
       },
       {
         color:         'yellow',
+        send,
         id:            'baz',
         previousScore: 1,
         ready:         false,
@@ -245,6 +270,7 @@ test('resetReady', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 2,
         ready:         false,
@@ -259,6 +285,7 @@ test('resetScores', () => {
     .toEqual([
       {
         color:         'blue',
+        send,
         id:            'foo',
         previousScore: 0,
         ready:         true,
@@ -266,6 +293,7 @@ test('resetScores', () => {
       },
       {
         color:         'red',
+        send,
         id:            'bar',
         previousScore: 0,
         ready:         true,
@@ -273,6 +301,7 @@ test('resetScores', () => {
       },
       {
         color:         'yellow',
+        send,
         id:            'baz',
         previousScore: 0,
         ready:         false,
@@ -280,6 +309,7 @@ test('resetScores', () => {
       },
       {
         color:         'green',
+        send,
         id:            'qux',
         previousScore: 0,
         ready:         true,

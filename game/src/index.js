@@ -232,9 +232,13 @@ export const app = new PIXI.Application({
   clearBeforeRender: false,
 })
 
-document
-  .getElementById('game')
-  .appendChild(app.view)
+const gameElement = document.getElementById('game')
+
+if (!gameElement) {
+  throw new Error('Found no #game element to mount the canvas into')
+}
+
+gameElement.appendChild(app.view)
 
 l1.init(app, {
   debug:   false,

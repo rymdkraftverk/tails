@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'

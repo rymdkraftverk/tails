@@ -125,7 +125,7 @@ const createPlayer = (index) => {
 
   if (player) {
     const playerScore = new PIXI.Text(
-      player.score,
+      String(player.score),
       {
         ...TextStyle.SMALL,
         fill: 'white',

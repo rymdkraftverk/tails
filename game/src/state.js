@@ -11,12 +11,14 @@ export const State = {
 export const state = {
   state:           State.LOBBY,
   gameCode:        '',
+  /** @type {ReturnType<typeof import('./kdTree').initEmptyTree> | null} */
   kdTree:          null,
   lastRoundResult: {
     winner: null,
   },
   eventEmitter:    new EventEmitter(),
   availableColors: Object.keys(Color),
+  /** @type {Player[]} */
   players:         [],
   portalPairs:     0,
 }

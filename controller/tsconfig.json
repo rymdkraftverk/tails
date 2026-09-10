@@ -8,7 +8,19 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "skipLibCheck": true,
-    "types": ["vite/client", "vitest/globals"]
+    "types": [
+      "vite/client",
+      "vitest/globals"
+    ],
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "strictNullChecks": true
   },
-  "include": ["src", "types", "../common"]
+  "include": [
+    "src",
+    "types",
+    "../common"
+  ]
 }
