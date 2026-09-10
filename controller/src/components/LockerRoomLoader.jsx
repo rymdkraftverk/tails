@@ -1,6 +1,4 @@
-import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import Div100vh from 'react-div-100vh'
 import ScrollLock from './ScrollLock'
 
 const spin = keyframes`
@@ -8,7 +6,7 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `
 
-const Spinner = styled(Div100vh)`
+const Spinner = styled.div`
   position: absolute;
   left: 50%;
   z-index: 1;
@@ -25,7 +23,7 @@ function LockerRoomLoader() {
   return (
     <div>
       <ScrollLock />
-      <Spinner style={{ top: '50rvh' }} />
+      <Spinner style={{ top: '50dvh' }} />
     </div>
   )
 }

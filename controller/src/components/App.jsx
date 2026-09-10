@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import Fullscreen from 'react-full-screen'
-import Notifications from 'react-notify-toast'
+import { Component } from 'react'
 import MediaQuery from 'react-responsive'
 import { Event, Color, Channel, getUrlParams } from 'common'
 import signaling from 'rkv-signaling'
@@ -13,10 +11,10 @@ import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
-import isMobileDevice from '../util/isMobileDevice'
 import { getLastGameCode, setLastGameCode } from '../util/sessionStorage'
 import TurnPhone from './TurnPhone'
 import Gyro from './Gyro'
+import Toast from './Toast'
 
 const { error: logError } = console
 
@@ -45,7 +43,7 @@ const newRoundState = {
 
 const errorState = message => ({
   appState: AppState.LOCKER_ROOM,
-  error: message,
+  notice: { text: message, type: 'error' },
 })
 
 const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
@@ -77,10 +75,9 @@ const eventState = ({ event, payload }) => {
 class App extends Component {
   state = {
     appState: AppState.LOCKER_ROOM,
-    error: '',
-    fullscreen: false,
     gameCode: '',
     gyro: false,
+    notice: null,
     playerColor: null,
     ready: false,
     sendSteering: () => {},
@@ -89,6 +86,7 @@ class App extends Component {
 
   componentDidMount() {
     this.alertIfNoRtc()
+    this.warnIfCellular()
     const codeFromUrl = getGameCodeFromUrl()
     const gameCode = codeFromUrl || getLastGameCode()
     this.setState({ gameCode })
@@ -115,7 +113,7 @@ class App extends Component {
   }
 
   join = gameCode => {
-    this.setState({ appState: AppState.GAME_CONNECTING, error: '' })
+    this.setState({ appState: AppState.GAME_CONNECTING, notice: null })
     setLastGameCode(gameCode)
     setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
     writeGameCodeToUrl(gameCode)
@@ -124,6 +122,22 @@ class App extends Component {
 
   displayError = message => {
     this.setState(errorState(message))
+  }
+
+  warnIfCellular = () => {
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection
+
+    if (connection && connection.type === 'cellular') {
+      this.setState({
+        notice: {
+          text: 'Connect to WiFi for best experience',
+          type: 'warning',
+        },
+      })
+    }
   }
 
   alertIfNoRtc = () => {
@@ -181,8 +195,8 @@ class App extends Component {
       })
   }
 
-  clearError = () => {
-    this.setState({ error: '' })
+  hideNotice = () => {
+    this.setState({ notice: null })
   }
 
   startGame = () => {
@@ -202,13 +216,10 @@ class App extends Component {
     this.setState({ angle })
   }
 
-  enableFullscreen = () => this.state.fullscreen && isMobileDevice()
-
   appStateComponent = () => {
     const {
       angle,
       appState,
-      error,
       gameCode,
       gyro,
       playerColor,
@@ -223,8 +234,6 @@ class App extends Component {
       case AppState.LOCKER_ROOM:
         return (
           <LockerRoom
-            clearError={this.clearError}
-            error={error}
             gameCodeChange={this.gameCodeChange}
             gameCode={gameCode}
             onJoinClick={this.onJoinClick}
@@ -272,16 +281,18 @@ class App extends Component {
       throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
     }
 
-    const { gyro, sendSteering } = this.state
+    const { gyro, notice, sendSteering } = this.state
 
     return (
-      // Fullscreen currently not used.
-      // Error is raised if there is no user input before toggle
-      <Fullscreen
-        enabled={this.enableFullscreen()}
-        onChange={fullscreen => this.setState({ fullscreen })}
-      >
-        <Notifications />
+      <>
+        {notice && (
+          <Toast
+            key={notice.text}
+            text={notice.text}
+            type={notice.type}
+            onHide={this.hideNotice}
+          />
+        )}
         <Gyro send={sendSteering} enabled={gyro} setAngle={this.setAngle} />
         <MediaQuery orientation="portrait">
           <TurnPhone />
@@ -289,7 +300,7 @@ class App extends Component {
         <MediaQuery orientation="landscape">
           {this.appStateComponent()}
         </MediaQuery>
-      </Fullscreen>
+      </>
     )
   }
 }

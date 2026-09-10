@@ -1,9 +1,7 @@
-import * as R from 'ramda'
-import React from 'react'
 import Switch from 'react-switch'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Div100vh from 'react-div-100vh'
+import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 import TapSteering from './TapSteering'
@@ -24,11 +22,10 @@ const TogglePane = styled.div`
   justify-content: center;
 `
 
-// Workaround to avoid warning when unknown props are passed to the DOM
-const Container = styled(({ playerColor, ...rest }) => <Div100vh {...rest} />)`
+const Container = styled(FullHeight)`
   display: flex;
   flex-direction: column;
-  background: ${R.prop('playerColor')};
+  background: var(--player-color);
 `
 
 const noop = () => false
@@ -46,7 +43,7 @@ function GamePlaying(props) {
   return (
     <IOSDisableDoubleTap>
       <ScrollLock />
-      <Container playerColor={playerColor}>
+      <Container style={{ '--player-color': playerColor }}>
         <TogglePane>
           GYRO
           <VerticalSeparator />

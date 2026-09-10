@@ -10,7 +10,6 @@ const inlined = [
 export default defineConfig({
   plugins: [
     react({
-      jsxRuntime: 'classic',
       babel: { plugins: ['babel-plugin-styled-components'] },
     }),
   ],

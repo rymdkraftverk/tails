@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import LogoImg from '../images/logo.png'
@@ -20,7 +19,7 @@ const Title = styled.p`
   margin-top: 3vw;
 `
 
-function Logo({ className }) {
+function Logo({ className = '' }) {
   return (
     <Container className={className}>
       <Img src={LogoImg} alt="Logo" />
@@ -31,10 +30,6 @@ function Logo({ className }) {
 
 Logo.propTypes = {
   className: PropTypes.string,
-}
-
-Logo.defaultProps = {
-  className: '',
 }
 
 export default Logo

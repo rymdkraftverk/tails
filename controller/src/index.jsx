@@ -1,5 +1,4 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { createGlobalStyle } from 'styled-components'
 import Boundary from './components/Boundary'
 import App from './components/App'
@@ -25,10 +24,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: 'patchy-robots';
     background: #414844;
-  }
-
-  .fullscreen-enabled {
-    background-color: #414844;
   }
 
   button {
@@ -60,10 +55,9 @@ window.addEventListener('devicemotion', e => {
   e.preventDefault()
 })
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <Boundary>
     <GlobalStyle />
     <App />
   </Boundary>,
-  document.getElementById('root'),
 )

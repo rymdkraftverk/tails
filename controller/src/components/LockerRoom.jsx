@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { notify } from 'react-notify-toast'
 import styled from 'styled-components'
-import Div100vh from 'react-div-100vh'
+import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Logo from './Logo'
 import ScrollLock from './ScrollLock'
 
 const PLACEHOLDER = 'Code'
 
-const Container = styled(Div100vh)`
+const Container = styled.div`
   display: flex;
 `
 
@@ -53,22 +52,6 @@ const onBlur = e => {
 }
 
 class LockerRoom extends Component {
-  componentDidMount() {
-    const { error } = this.props
-
-    if (error) {
-      notify.show(error, 'error')
-    }
-
-    const connection =
-      navigator.connection ||
-      navigator.mozConnection ||
-      navigator.webkitConnection
-    if (connection && connection.type === 'cellular') {
-      notify.show('Connect to WiFi for best experience', 'warning')
-    }
-  }
-
   onKeyPress = e => {
     if (this.isSubmit(e.key)) this.props.onJoinClick()
   }
@@ -83,9 +66,9 @@ class LockerRoom extends Component {
     return (
       <IOSDisableDoubleTap>
         <ScrollLock />
-        <Div100vh>
+        <FullHeight>
           <StyledLogo />
-          <Container style={{ height: '50rvh' }}>
+          <Container style={{ height: '50dvh' }}>
             <ContainerColumn>
               <GameCodeInput
                 type="text"
@@ -111,21 +94,16 @@ class LockerRoom extends Component {
               </GameJoinButton>
             </ContainerColumn>
           </Container>
-        </Div100vh>
+        </FullHeight>
       </IOSDisableDoubleTap>
     )
   }
 }
 
 LockerRoom.propTypes = {
-  error: PropTypes.string,
   gameCode: PropTypes.string.isRequired,
   onJoinClick: PropTypes.func.isRequired,
   gameCodeChange: PropTypes.func.isRequired,
-}
-
-LockerRoom.defaultProps = {
-  error: null,
 }
 
 export default LockerRoom

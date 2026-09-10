@@ -1,12 +1,9 @@
 ---
-processors:
-- stylelint-processor-styled-components
-syntax: scss
+customSyntax: postcss-styled-syntax
 extends:
 - stylelint-config-standard
-- stylelint-config-styled-components
 rules:
   declaration-empty-line-before: null
+  font-family-name-quotes: null
   font-family-no-missing-generic-family-keyword: null
-  max-empty-lines: null
   rule-empty-line-before: null

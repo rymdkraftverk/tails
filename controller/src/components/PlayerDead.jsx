@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import * as R from 'ramda'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Event } from 'common'
-import Div100vh from 'react-div-100vh'
+import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 
-const Container = styled(Div100vh)`
-  background: ${R.prop('color')};
+const Container = styled(FullHeight)`
+  background: var(--player-color);
 `
 
 const DeadText = styled.div`
@@ -28,7 +27,7 @@ const TouchText = styled.div`
   color: white;
 `
 
-const TouchArea = styled(Div100vh)`
+const TouchArea = styled(FullHeight)`
   background-color: black;
   width: 100vw;
   display: flex;
@@ -89,7 +88,7 @@ function PlayerDead({ playerColor, sendReliable }) {
   return (
     <IOSDisableDoubleTap>
       <ScrollLock />
-      <Container color={playerColor}>
+      <Container style={{ '--player-color': playerColor }}>
         <TouchArea
           onTouchEnd={onTouchEnd}
           onTouchStart={onPlayerDeadClick}

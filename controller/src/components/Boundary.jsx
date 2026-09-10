@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
 
@@ -11,12 +11,11 @@ class Boundary extends Component {
   }
 
   componentDidMount() {
-    const dsn = ERROR_LOGGING
-      ? 'https://caf6a0992e884f0780da4343bc62e372@sentry.io/1325309'
-      : ''
-    Sentry.init({
-      dsn,
-    })
+    if (ERROR_LOGGING) {
+      Sentry.init({
+        dsn: 'https://caf6a0992e884f0780da4343bc62e372@sentry.io/1325309',
+      })
+    }
   }
 
   componentDidCatch(error, errorInfo) {

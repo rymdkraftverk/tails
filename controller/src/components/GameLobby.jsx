@@ -1,26 +1,22 @@
-import React, { Component, Fragment } from 'react'
-import * as R from 'ramda'
+import { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
-import Div100vh from 'react-div-100vh'
+import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Button from './Button'
 import ScrollLock from './ScrollLock'
 
-// Workaround to avoid warning when unknown props are passed to the DOM
-const FullPage = styled(({ backgroundColor, ...rest }) => (
-  <Div100vh {...rest} />
-))`
+const FullPage = styled(FullHeight)`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: ${R.prop('backgroundColor')};
+  background-color: var(--player-color);
   font-size: 5vw;
 `
 
-const Instructions = styled(Div100vh)`
+const Instructions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -58,7 +54,7 @@ const AwaitingPlayersSubtitle = styled.div`
 `
 
 const AwaitingReadyPlayers = styled.div`
-  color: ${R.prop('color')};
+  color: var(--player-color);
   background: black;
   padding: 7px;
 `
@@ -67,13 +63,8 @@ const getColorCode = color => Color[color]
 
 class GameLobby extends Component {
   getAction = () => {
-    const {
-      playerColor,
-      ready,
-      readyPlayer,
-      startEnabled,
-      startGame,
-    } = this.props
+    const { playerColor, ready, readyPlayer, startEnabled, startGame } =
+      this.props
 
     if (!ready) {
       return <Button onClick={readyPlayer}>Ready!</Button>
@@ -84,7 +75,9 @@ class GameLobby extends Component {
     }
 
     return (
-      <AwaitingReadyPlayers color={getColorCode(playerColor)}>
+      <AwaitingReadyPlayers
+        style={{ '--player-color': getColorCode(playerColor) }}
+      >
         All players not ready
       </AwaitingReadyPlayers>
     )
@@ -95,11 +88,11 @@ class GameLobby extends Component {
 
     return (
       <IOSDisableDoubleTap>
-        <FullPage backgroundColor={getColorCode(playerColor)}>
+        <FullPage style={{ '--player-color': getColorCode(playerColor) }}>
           <ScrollLock />
           {playerCount > 1 ? (
             <>
-              <Instructions style={{ height: '30rvh' }}>
+              <Instructions style={{ height: '30dvh' }}>
                 <InstructionsLine>
                   {`
                     Phone = controller

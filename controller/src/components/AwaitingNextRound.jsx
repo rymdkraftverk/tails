@@ -1,15 +1,13 @@
-import React from 'react'
-import * as R from 'ramda'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Div100vh from 'react-div-100vh'
+import FullHeight from './FullHeight'
 import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import ScrollLock from './ScrollLock'
 
-const Container = styled(Div100vh)`
+const Container = styled(FullHeight)`
   display: flex;
   flex-direction: column;
-  background: ${R.prop('color')};
+  background: var(--player-color);
   align-items: center;
   justify-content: center;
 `
@@ -21,7 +19,7 @@ function AwaitingNextRound({ playerColor }) {
   return (
     <IOSDisableDoubleTap>
       <ScrollLock />
-      <Container color={playerColor}>
+      <Container style={{ '--player-color': playerColor }}>
         <Text>Awaiting next round</Text>
       </Container>
     </IOSDisableDoubleTap>
