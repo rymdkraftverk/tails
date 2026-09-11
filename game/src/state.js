@@ -14,7 +14,7 @@ export const state = {
   /** @type {ReturnType<typeof import('./kdTree').initEmptyTree> | null} */
   kdTree:          null,
   lastRoundResult: {
-    winner: null,
+    winner: /** @type {keyof typeof Color} */ (/** @type {*} */ (null)),
   },
   eventEmitter:    new EventEmitter(),
   availableColors: Object.keys(Color),

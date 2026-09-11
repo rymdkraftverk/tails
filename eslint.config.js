@@ -58,7 +58,7 @@ export default [
     files: ['common/**/*.ts'],
     rules: {
       'func-style':             ['error', 'expression', { allowArrowFunctions: true }],
-      'import-x/extensions':    ['error', 'always'],
+      'import-x/extensions':    ['error', 'never'],
       'import-x/no-unresolved': 'off',
     },
   },

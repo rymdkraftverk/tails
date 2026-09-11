@@ -44,7 +44,10 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-function PlayerDead({ playerColor, sendReliable }: {
+function PlayerDead({
+  playerColor,
+  sendReliable,
+}: {
   playerColor: string
   sendReliable: (message: object) => void
 }) {
@@ -52,10 +55,15 @@ function PlayerDead({ playerColor, sendReliable }: {
     navigator.vibrate(100)
   }, [])
 
-  const [position, setPosition] = useState<{ x: number, y: number } | null>(null)
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(
+    null,
+  )
   const [sendData, setSendData] = useState(false)
 
-  const onPlayerDeadClick = ({ touches, target }: React.TouchEvent<HTMLDivElement>) => {
+  const onPlayerDeadClick = ({
+    touches,
+    target,
+  }: React.TouchEvent<HTMLDivElement>) => {
     if (touches && target) {
       const { clientX, clientY } = touches[0]
       const rect = (target as HTMLElement).getBoundingClientRect()

@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 
-function IOSDisableDoubleTap({ children, className }: {
+function IOSDisableDoubleTap({
+  children,
+  className,
+}: {
   children: ReactNode
   className?: string
 }) {

@@ -54,7 +54,13 @@ const newRoundState = {
   startEnabled: false,
 }
 
-const joinState = ({ started, color }: { started: boolean; color: keyof typeof Color }) => ({
+const joinState = ({
+  started,
+  color,
+}: {
+  started: boolean
+  color: keyof typeof Color
+}) => ({
   ...newRoundState,
   playerColor: color,
   appState: started ? AppState.AWAITING_NEXT_ROUND : AppState.GAME_LOBBY,
@@ -165,12 +171,13 @@ class App extends Component<Record<string, never>, AppStateShape> {
         'Unfortunately the game cannot be played in this browser.' +
         'See list of supported browsers here: https://caniuse.com/#search=webrtc'
 
-       
       alert(message)
     }
   }
 
-  gameCodeChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
+  gameCodeChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) =>
     this.setState({
       gameCode: value.substr(0, 4).toUpperCase(),
     })
@@ -202,9 +209,10 @@ class App extends Component<Record<string, never>, AppStateShape> {
         })
       })
       .catch((error: { cause?: string }) => {
-        const message = error.cause === 'NOT_FOUND'
-          ? `Game with code ${gameCode} not found`
-          : undefined
+        const message =
+          error.cause === 'NOT_FOUND'
+            ? `Game with code ${gameCode} not found`
+            : undefined
 
         if (message) {
           this.displayError(message)
@@ -251,8 +259,11 @@ class App extends Component<Record<string, never>, AppStateShape> {
 
     // Every screen past the lobby is only reachable once the game has
     // assigned this player a colour
-    if (!playerColor && appState !== AppState.LOCKER_ROOM
-      && appState !== AppState.GAME_CONNECTING) {
+    if (
+      !playerColor &&
+      appState !== AppState.LOCKER_ROOM &&
+      appState !== AppState.GAME_CONNECTING
+    ) {
       return null
     }
 
