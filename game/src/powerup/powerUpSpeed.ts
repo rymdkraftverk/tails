@@ -1,0 +1,46 @@
+import * as l1 from 'l1'
+import Sound from '../constant/sound'
+import PowerUp from '../constant/powerUp'
+import { createTrail } from '../trail'
+import type { PowerUpModule, PowerUpOptions } from './types'
+
+export default {
+  powerUp: ({
+    player,
+    speedMultiplier,
+    snakeSpeed,
+  }: PowerUpOptions) => {
+    l1.addBehavior({
+      id:       `speed-${player.id}`,
+      data:     { },
+      duration: PowerUp.DURATION,
+      onInit:   () => {
+        l1.addBehavior(createTrail({
+          player,
+          scale:    player.scaleFactor,
+          speedMultiplier,
+          duration: 1,
+        }))
+        player.speed = snakeSpeed * 1.5
+      },
+      onComplete: () => {
+        if (player.alive) {
+          player.speed = snakeSpeed
+
+          l1.addBehavior(createTrail({
+            player,
+            scale: player.scaleFactor,
+            speedMultiplier,
+          }))
+
+          l1.sound({
+            src:    Sound.POWERUP_EXPIRED,
+            volume: 0.6,
+          })
+        }
+      },
+    })
+  },
+  texture:           () => l1.getTexture('powerup/powerup-lightning'),
+  behaviorsToRemove: () => [],
+} satisfies PowerUpModule

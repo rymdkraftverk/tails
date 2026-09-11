@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "noEmit": true,
     "target": "es2020",
     "module": "esnext",
@@ -10,11 +8,7 @@
     "types": [
       "vitest/globals"
     ],
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "useUnknownInCatchVariables": true,
-    "strictNullChecks": true
+    "strict": true
   },
   "include": [
     "src",

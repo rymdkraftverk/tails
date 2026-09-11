@@ -16,16 +16,14 @@
     "common": "file:../common",
     "eventemitter3": "^3.1.0",
     "l1": "^0.5.28",
-    "lodash": "^4.17.13",
     "pixi-particles": "^4.1.0",
     "pixi.js": "^5.0.0",
     "qrcode": "^1.3.3",
-    "ramda": "^0.31.3",
-    "rkv-signaling": "0.0.3",
-    "uuid": "^3.3.2"
+    "rkv-signaling": "0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
+    "@types/qrcode": "^1.5.6",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.2",
     "eslint-config-airbnb-base": "^13.1.0",
