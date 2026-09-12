@@ -2,7 +2,7 @@ import * as l1 from './l1'
 import type { Behavior } from './l1'
 import type { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
-import { Emitter } from 'pixi-particles'
+import { emit } from './particles'
 import { Event, Color, Channel } from 'common'
 
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
@@ -19,7 +19,7 @@ import Sound from './constant/sound'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
-let fireworkEmitters: Emitter[] = []
+let fireworkEmitters: ReturnType<typeof emit>[] = []
 
 export const transitionToMatchEnd = () => {
   // this cleans up things to prevent this from crashing when calling from
@@ -151,11 +151,11 @@ const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => 
       x,
       y,
     })
-    const fireworkEmitter = new Emitter(
-      creator,
-      textures.map(l1.getTexture),
-      config,
-    )
+    const fireworkEmitter = emit({
+      parent:   creator,
+      textures: textures.map(l1.getTexture),
+      ...config,
+    })
     fireworkEmitters = fireworkEmitters.concat(fireworkEmitter)
   },
 })
@@ -174,11 +174,10 @@ const pause = () => ({
     l1.removeBehavior('createFireworks')
     l1.removeBehavior('textMovement')
 
-    // This is needed due to pixi-particles crashing if you destroy
-    // the parent of an emitter while particles are still active
-    fireworkEmitters.forEach((e) => {
-      e.cleanup()
-      e.destroy()
+    // Fireworks outlive their emitter's lifetime, so stop them before
+    // the scene they are drawn into goes away
+    fireworkEmitters.forEach((fireworkEmitter) => {
+      fireworkEmitter.destroy()
     })
     fireworkEmitters = []
 

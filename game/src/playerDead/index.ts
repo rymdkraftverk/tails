@@ -1,6 +1,6 @@
 import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
-import { Emitter } from 'pixi-particles'
+import { emit } from '../particles'
 import { SPEED_MULTIPLIER } from '../game'
 import Layer from '../constant/layer'
 import sparks from '../particleEmitter/sparks'
@@ -41,10 +41,9 @@ export default (id: string, { x, y }: { x: number, y: number }) => {
     },
   })
 
-  new Emitter(
-    sparkleParticleContainer,
-    neonTextures,
-    neonConfig,
-  )
-    .playOnceAndDestroy()
+  emit({
+    parent:   sparkleParticleContainer,
+    textures: neonTextures,
+    ...neonConfig,
+  })
 }

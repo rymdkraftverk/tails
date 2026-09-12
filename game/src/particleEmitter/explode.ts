@@ -6,57 +6,40 @@ export default ({
   radius:      number
   x:           number
   y:           number
-}) => {
-  const textures = ['particle-smoke']
-  const config = {
-    alpha: {
-      start: 1,
-      end:   1,
-    },
-    speed: {
-      start:                  150,
-      end:                    50,
-      minimumSpeedMultiplier: 0.1,
-    },
-    acceleration: {
-      x: 0,
-      y: 0,
-    },
-    maxSpeed:        0,
-    noRotation:      true,
-    blendMode:       'normal',
-    frequency:       0.01,
-    emitterLifetime: 0.1,
-    maxParticles:    500,
-    addAtBack:       false,
-    spawnType:       'circle',
-    startRotation:   {
-      min: (degrees - 180) - 30,
-      max: (degrees - 180) + 30,
-    },
-    scale: {
-      start:                  2 * (1 / scaleFactor),
-      end:                    0.6 * (1 / scaleFactor),
-      minimumScaleMultiplier: 0.1,
-    },
-    pos: {
-      x,
-      y,
-    },
-    lifetime: {
-      min: 0.4 * (1 / scaleFactor),
-      max: 1.6 * (1 / scaleFactor),
-    },
+}) => ({
+  textures: ['particle-smoke'],
+  config:   {
+    pos:         { x, y },
     spawnCircle: {
       x: radius / 2,
       y: radius / 2,
       r: radius,
     },
-    autoUpdate: true,
-  }
-
-  return {
-    config,
-    textures,
-  }
-}
+    frequency:       0.01,
+    emitterLifetime: 0.1,
+    maxParticles:    500,
+    lifetime:        {
+      min: 0.4 * (1 / scaleFactor),
+      max: 1.6 * (1 / scaleFactor),
+    },
+    speed: {
+      start:             150,
+      end:               50,
+      minimumMultiplier: 0.1,
+    },
+    scale: {
+      start:             2 * (1 / scaleFactor),
+      end:               0.6 * (1 / scaleFactor),
+      minimumMultiplier: 0.1,
+    },
+    alpha: {
+      start: 1,
+      end:   1,
+    },
+    startRotation: {
+      min: (degrees - 180) - 30,
+      max: (degrees - 180) + 30,
+    },
+    rotateSprite: false,
+  },
+})

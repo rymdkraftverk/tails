@@ -1,6 +1,6 @@
 import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
-import { Emitter } from 'pixi-particles'
+import { emit } from '../particles'
 
 import GameEvent from '../constant/gameEvent'
 import explode from '../particleEmitter/explode'
@@ -32,12 +32,11 @@ const killPlayer = (player: PIXI.Sprite, speedMultiplier: number) => {
       labels: ['particleContainer'],
     },
   )
-  new Emitter(
-    particleContainer,
-    textures.map(l1.getTexture),
-    config,
-  )
-    .playOnceAndDestroy()
+  emit({
+    parent:   particleContainer,
+    textures: textures.map(l1.getTexture),
+    ...config,
+  })
 
   l1.sound({
     src:    Sound.DEATH,
@@ -98,12 +97,11 @@ const killPlayer = (player: PIXI.Sprite, speedMultiplier: number) => {
           parent: l1.get(Scene.GAME),
           labels: ['particleContainer'],
         })
-        new Emitter(
-          neonDeathParticleContainer,
-          neonTextures,
-          neonConfig,
-        )
-          .playOnceAndDestroy()
+        emit({
+          parent:   neonDeathParticleContainer,
+          textures: neonTextures,
+          ...neonConfig,
+        })
         trail.sprite.texture = l1.getTexture(`square-dark/square-${player.color}-dark`)
         data.index -= 1
         trail = player.trailContainer.children[data.index]
