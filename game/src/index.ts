@@ -227,65 +227,67 @@ const onPlayerLeave = (id: string) => {
 
 export const app = new PIXI.Application()
 
-await app.init({
-  width:             GAME_WIDTH,
-  height:            GAME_HEIGHT,
-  antialias:         true,
-  clearBeforeRender: false,
-})
-
-const gameElement = document.getElementById('game')
-
-if (!gameElement) {
-  throw new Error('Found no #game element to mount the canvas into')
-}
-
-gameElement.appendChild(app.canvas)
-
-l1.init(app, {
-  logging: false,
-  onError: (e: Error) => {
-    Sentry.captureException(e)
-  },
-})
-
-await document.fonts.load('10pt "patchy-robots"')
-  .catch(() => {
-    error('Unable to load font')
+const boot = async () => {
+  await app.init({
+    width:             GAME_WIDTH,
+    height:            GAME_HEIGHT,
+    antialias:         true,
+    clearBeforeRender: false,
   })
 
-l1.useSpritesheets([await PIXI.Assets.load('assets/spritesheet.json')])
+  const gameElement = document.getElementById('game')
 
-const background = new PIXI.Sprite(l1.getTexture('background'))
+  if (!gameElement) {
+    throw new Error('Found no #game element to mount the canvas into')
+  }
 
-background.scale.set(10)
+  gameElement.appendChild(app.canvas)
 
-l1.add(background, {
-  id:     'background',
-  zIndex: Layer.ABSOLUTE_BACKGROUND,
-})
+  l1.init(app, {
+    logging: false,
+    onError: (e: Error) => {
+      Sentry.captureException(e)
+    },
+  })
 
-http.createGame()
-  .then(({ gameCode }) => {
-    createGame({ gameCode })
-    log(`[Game created] ${gameCode}`)
-
-    signaling.runReceiver({
-      wsAddress:        WS_ADDRESS,
-      receiverId:       gameCode,
-      onInitiatorJoin:  onPlayerJoin,
-      onInitiatorLeave: onPlayerLeave,
+  await document.fonts.load('10pt "patchy-robots"')
+    .catch(() => {
+      error('Unable to load font')
     })
+
+  l1.useSpritesheets([await PIXI.Assets.load('assets/spritesheet.json')])
+
+  const background = new PIXI.Sprite(l1.getTexture('background'))
+
+  background.scale.set(10)
+
+  l1.add(background, {
+    id:     'background',
+    zIndex: Layer.ABSOLUTE_BACKGROUND,
   })
 
-const resizeGame = () => {
-  const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
-  l1.resize(screenWidth, screenHeight)
-}
-resizeGame()
+  http.createGame()
+    .then(({ gameCode }) => {
+      createGame({ gameCode })
+      log(`[Game created] ${gameCode}`)
 
-window.addEventListener('resize', resizeGame)
+      signaling.runReceiver({
+        wsAddress:        WS_ADDRESS,
+        receiverId:       gameCode,
+        onInitiatorJoin:  onPlayerJoin,
+        onInitiatorLeave: onPlayerLeave,
+      })
+    })
+
+  const resizeGame = () => {
+    const screenWidth = window.innerWidth
+    const screenHeight = window.innerHeight
+    l1.resize(screenWidth, screenHeight)
+  }
+  resizeGame()
+
+  window.addEventListener('resize', resizeGame)
+}
 
 const printBehaviors = () => {
   log('BEHAVIORS:')
@@ -374,3 +376,5 @@ window.debug = {
   stop,
   state,
 }
+
+boot()
