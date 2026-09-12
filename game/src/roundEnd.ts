@@ -49,8 +49,7 @@ export const transitionToRoundEnd = () => {
 const pauseAndTransitionToScoreScene = () => ({
   duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
-    // This is needed due to pixi-particles crashing if you destroy
-    // the parent of an emitter while particles are still active
+    // Clear the particle containers before the scene they sit in goes away
     l1
       .getByLabel('particleContainer')
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
@@ -65,17 +64,26 @@ const pauseAndTransitionToScoreScene = () => ({
 
 const WINNER_TEXT_ANIMATION_DURATION = 120
 
+type WinnerTextData = { animation: ((t: number) => number) | null }
+
 const roundWinnerTextAnimation = (roundEndText: PIXI.Text) => ({
   duration: WINNER_TEXT_ANIMATION_DURATION,
-  data:     {
-    animation: createEaseInAndOut({
+  data:     { animation: null } as WinnerTextData,
+  onInit:   ({ data }: Behavior<WinnerTextData>) => {
+    if (roundEndText.l1.isDestroyed()) {
+      return
+    }
+
+    data.animation = createEaseInAndOut({
       start:    -(roundEndText.width / 2),
       end:      GAME_WIDTH + (roundEndText.width / 2),
       duration: WINNER_TEXT_ANIMATION_DURATION,
-    }),
+    })
   },
-  onUpdate: ({ counter, data }: Behavior<{ animation: (t: number) => number }>) => {
-    roundEndText.x = data.animation(counter)
+  onUpdate: ({ counter, data }: Behavior<WinnerTextData>) => {
+    if (data.animation) {
+      roundEndText.x = data.animation(counter)
+    }
   },
 })
 
