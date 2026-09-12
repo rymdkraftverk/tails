@@ -4,7 +4,7 @@ import { createParabola } from './magic'
 
 type BounceData = { animation: ((t: number) => number) | null }
 
-export default (displayObject: PIXI.DisplayObject, modifier: number) => ({
+export default (displayObject: PIXI.Container, modifier: number) => ({
   duration: 20,
   data:     { animation: null } as BounceData,
   onInit:   ({ data }: Behavior<BounceData>) => {

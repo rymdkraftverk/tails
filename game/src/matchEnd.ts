@@ -48,14 +48,14 @@ export const transitionToMatchEnd = () => {
   if (matchWinners.length === 1) {
     const [{ color }] = matchWinners
 
-    const text = new PIXI.Text(
-      `${color} is the champion!`,
-      {
+    const text = new PIXI.Text({
+      text:  `${color} is the champion!`,
+      style: {
         ...TextStyle.BIG,
         fontSize: 38,
         fill:     Color[color],
       },
-    )
+    })
     l1.add(
       text,
       {
@@ -82,14 +82,14 @@ export const transitionToMatchEnd = () => {
 
     l1.addBehavior(createFireworks(fireworkCreator, matchWinners[0].color))
   } else {
-    const text = new PIXI.Text(
-      'It\'s a draw, better luck next time!',
-      {
+    const text = new PIXI.Text({
+      text:  'It\'s a draw, better luck next time!',
+      style: {
         ...TextStyle.BIG,
         fontSize: 38,
         fill:     'white',
       },
-    )
+    })
     l1.add(
       text,
       {

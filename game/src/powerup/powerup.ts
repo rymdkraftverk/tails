@@ -188,8 +188,8 @@ export const initPowerups = ({
 
 const powerUpSuicideBehavior = (
   duration: number,
-  powerupSprite: PIXI.DisplayObject,
-  powerupHitbox: PIXI.DisplayObject,
+  powerupSprite: PIXI.Container,
+  powerupHitbox: PIXI.Container,
   collisionCheckerId: string,
 ) => ({
   duration,

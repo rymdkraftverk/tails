@@ -9,7 +9,7 @@ const EXPIRATION_STATE_IMMINENT = 'EXPIRATION_STATE_IMMINENT'
 const SOON_TIME_LIMIT = 4 * 60 // 4s
 const IMMINENT_TIME_LIMIT = SOON_TIME_LIMIT / 2
 
-const fluctuateOpacityBehavior = (entity: PIXI.DisplayObject, speed: number, duration: number) => ({
+const fluctuateOpacityBehavior = (entity: PIXI.Container, speed: number, duration: number) => ({
   id:   `fluctuateOpacity-${entity.l1.id}`,
   duration,
   data: {
@@ -29,7 +29,7 @@ const fluctuateOpacityBehavior = (entity: PIXI.DisplayObject, speed: number, dur
 
 type ExpirationData = { expirationState: string | null }
 
-const indicateExpirationBehavior = (duration: number, entity: PIXI.DisplayObject) => ({
+const indicateExpirationBehavior = (duration: number, entity: PIXI.Container) => ({
   data:     { expirationState: null } as ExpirationData,
   onUpdate: ({ counter, data }: Behavior<ExpirationData>) => {
     if (

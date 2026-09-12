@@ -43,13 +43,12 @@ const fadeInOut = (graphics: PIXI.Graphics, duration: number, resolve: () => voi
     const alpha = (data.animation(counter) * -1) / 100
     graphics
       .clear()
-      .beginFill(0x000000, alpha)
       .moveTo(0, 0)
       .lineTo(GAME_WIDTH, 0)
       .lineTo(GAME_WIDTH, GAME_HEIGHT)
       .lineTo(0, GAME_HEIGHT)
       .lineTo(0, 0)
-      .endFill()
+      .fill({ color: 0x000000, alpha })
 
     // Resolve after half the duration has passed,
     // to allow the next screen to fade in

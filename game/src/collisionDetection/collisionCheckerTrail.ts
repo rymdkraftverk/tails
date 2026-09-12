@@ -11,7 +11,7 @@ export const collisionCheckerTrail = (player: PIXI.Sprite, speedMultiplier: numb
   duration:   2,
   loop:       true,
   onComplete: () => {
-    const isColliding = (other: PIXI.DisplayObject) => l1.isColliding(player, other)
+    const isColliding = (other: PIXI.Container) => l1.isColliding(player, other)
 
     const options = {
       earlyReturn: isColliding,

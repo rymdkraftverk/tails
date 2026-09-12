@@ -78,10 +78,7 @@ const addText = ({
   style:   PIXI.TextStyle | Partial<PIXI.TextStyle>
   parent?: PIXI.Container
 }) => {
-  const textObject = new PIXI.Text(
-    text,
-    style,
-  )
+  const textObject = new PIXI.Text({ text, style })
 
   textObject.x = x
   textObject.y = y
@@ -265,11 +262,11 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
   )
 
   playersDivider
-    .lineStyle(4, GameColor.WHITE, 1)
     .moveTo(875, 0)
     .lineTo(875, GAME_HEIGHT)
+    .stroke({ color: GameColor.WHITE, width: 4 })
 
-  playersDivider.cacheAsBitmap = true
+  playersDivider.cacheAsTexture(true)
 
   drawInstructionArrow({
     x:      TextAnchor.INSTRUCTION_START_X + 320,
@@ -323,8 +320,6 @@ const drawInstructionArrow = ({
   instructionArrowOne.y = y
   instructionArrowOne.scale.set(1)
   instructionArrowOne.rotation = toRadians(angle)
-
-  instructionArrowOne.cacheAsBitmap = true
 }
 
 const createOutline = (index: number) => {

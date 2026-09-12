@@ -22,13 +22,13 @@ export const transitionToRoundEnd = () => {
   const { winner } = state.lastRoundResult
   http.postScoreBoard(repository.identifiableScoreBoard())
 
-  const roundEndText = new PIXI.Text(
-    `${winner} wins!`,
-    {
+  const roundEndText = new PIXI.Text({
+    text:  `${winner} wins!`,
+    style: {
       ...TextStyle.BIG,
       fill: Color[winner],
     },
-  )
+  })
   l1.add(
     roundEndText,
     {

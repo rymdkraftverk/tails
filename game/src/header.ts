@@ -44,24 +44,23 @@ export default ({
   )
 
   background
-    .beginFill(GameColor.BLUE)
     .moveTo(0, 0)
     .lineTo(GAME_WIDTH, 0)
     .lineTo(GAME_WIDTH, HEADER_HEIGHT)
     .lineTo(0, HEADER_HEIGHT)
     .lineTo(0, 0)
-    .endFill()
+    .fill(GameColor.BLUE)
 
-  background.cacheAsBitmap = true
+  background.cacheAsTexture(true)
 
-  const urlLabel = new PIXI.Text(
-    'url: ',
-    {
+  const urlLabel = new PIXI.Text({
+    text:  'url: ',
+    style: {
       ...TextStyle.SMALL,
       fontSize: LABEL_FONT_SIZE,
       fill:     'white',
     },
-  )
+  })
   urlLabel.x = URL_POSITION_X
   urlLabel.y = POSITION_Y
   l1.add(urlLabel, {
@@ -69,14 +68,14 @@ export default ({
     id:     HeaderIds.URL_LABEL,
   })
 
-  const urlText = new PIXI.Text(
-    url,
-    {
+  const urlText = new PIXI.Text({
+    text:  url,
+    style: {
       ...TextStyle.CODE,
       fontSize: TEXT_FONT_SIZE,
       fill:     'white',
     },
-  )
+  })
   urlText.x = URL_POSITION_X + urlLabel.width + 8
   urlText.y = POSITION_Y - 4
   l1.add(urlText, {
@@ -84,14 +83,14 @@ export default ({
     id:     HeaderIds.URL,
   })
 
-  const codeLabel = new PIXI.Text(
-    'code: ',
-    {
+  const codeLabel = new PIXI.Text({
+    text:  'code: ',
+    style: {
       ...TextStyle.SMALL,
       fontSize: LABEL_FONT_SIZE,
       fill:     'white',
     },
-  )
+  })
   codeLabel.x = CODE_POSITION_X
   codeLabel.y = POSITION_Y
   l1.add(codeLabel, {
@@ -99,14 +98,14 @@ export default ({
     id:     HeaderIds.CODE_LABEL,
   })
 
-  const codeText = new PIXI.Text(
-    code,
-    {
+  const codeText = new PIXI.Text({
+    text:  code,
+    style: {
       ...TextStyle.CODE,
       fontSize: TEXT_FONT_SIZE,
       fill:     'white',
     },
-  )
+  })
   codeText.x = CODE_POSITION_X + codeLabel.width + 8
   codeText.y = POSITION_Y - 4
   l1.add(codeText, {

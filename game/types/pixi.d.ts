@@ -4,7 +4,7 @@ import type { Color } from 'common'
 
 declare module 'pixi.js' {
   // Expando properties the game hangs on the display objects l1 manages
-  interface DisplayObject {
+  interface Container {
     active: boolean
     alive: boolean
     color: keyof typeof Color

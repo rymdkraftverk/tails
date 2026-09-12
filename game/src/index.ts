@@ -225,7 +225,9 @@ const onPlayerLeave = (id: string) => {
   })
 }
 
-export const app = new PIXI.Application({
+export const app = new PIXI.Application()
+
+await app.init({
   width:             GAME_WIDTH,
   height:            GAME_HEIGHT,
   antialias:         true,
@@ -238,7 +240,7 @@ if (!gameElement) {
   throw new Error('Found no #game element to mount the canvas into')
 }
 
-gameElement.appendChild(app.view)
+gameElement.appendChild(app.canvas)
 
 l1.init(app, {
   logging: false,
@@ -247,36 +249,33 @@ l1.init(app, {
   },
 })
 
-app.loader.add('assets/spritesheet.json')
-
-document.fonts.load('10pt "patchy-robots"')
-  .then(() => {
-    app.loader.load(() => {
-      http.createGame()
-        .then(({ gameCode }) => {
-          createGame({ gameCode })
-          log(`[Game created] ${gameCode}`)
-
-          signaling.runReceiver({
-            wsAddress:        WS_ADDRESS,
-            receiverId:       gameCode,
-            onInitiatorJoin:  onPlayerJoin,
-            onInitiatorLeave: onPlayerLeave,
-          })
-        })
-
-      const background = new PIXI.Sprite(l1.getTexture('background'))
-
-      background.scale.set(10)
-
-      l1.add(background, {
-        id:     'background',
-        zIndex: Layer.ABSOLUTE_BACKGROUND,
-      })
-    })
-  })
+await document.fonts.load('10pt "patchy-robots"')
   .catch(() => {
     error('Unable to load font')
+  })
+
+l1.useSpritesheets([await PIXI.Assets.load('assets/spritesheet.json')])
+
+const background = new PIXI.Sprite(l1.getTexture('background'))
+
+background.scale.set(10)
+
+l1.add(background, {
+  id:     'background',
+  zIndex: Layer.ABSOLUTE_BACKGROUND,
+})
+
+http.createGame()
+  .then(({ gameCode }) => {
+    createGame({ gameCode })
+    log(`[Game created] ${gameCode}`)
+
+    signaling.runReceiver({
+      wsAddress:        WS_ADDRESS,
+      receiverId:       gameCode,
+      onInitiatorJoin:  onPlayerJoin,
+      onInitiatorLeave: onPlayerLeave,
+    })
   })
 
 const resizeGame = () => {

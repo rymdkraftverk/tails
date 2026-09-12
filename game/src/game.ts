@@ -336,12 +336,12 @@ const createWalls = () => {
   const y = HEADER_HEIGHT + halfWallThickness
 
   walls
-    .lineStyle(WALL_THICKNESS, GameColor.WHITE, 1)
     .moveTo(halfWallThickness, y)
     .lineTo(GAME_WIDTH - halfWallThickness, y)
     .lineTo(GAME_WIDTH - halfWallThickness, GAME_HEIGHT)
     .lineTo(halfWallThickness, GAME_HEIGHT)
     .lineTo(halfWallThickness, y)
+    .stroke({ color: GameColor.WHITE, width: WALL_THICKNESS })
 
-  walls.cacheAsBitmap = true
+  walls.cacheAsTexture(true)
 }

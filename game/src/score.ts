@@ -40,13 +40,13 @@ export const transitionToScoreScene = () => {
   goal.y = GOAL_Y
   goal.scale.set(2)
 
-  const goalText = new PIXI.Text(
-    String(playerRepository.scoreToWin()),
-    {
+  const goalText = new PIXI.Text({
+    text:  String(playerRepository.scoreToWin()),
+    style: {
       ...TextStyle.BIG,
       fill: 'white',
     },
-  )
+  })
   l1.add(
     goalText,
     {
@@ -118,13 +118,13 @@ const createPlayer = (index: number) => {
   })
 
   if (player) {
-    const playerScore = new PIXI.Text(
-      String(player.score),
-      {
+    const playerScore = new PIXI.Text({
+      text:  String(player.score),
+      style: {
         ...TextStyle.SMALL,
         fill: 'white',
       },
-    )
+    })
     l1.add(
       playerScore,
       {
@@ -205,12 +205,11 @@ const animate = ({
     tail.clear()
     tail
       // Pixi.Graphics requires color code to start with 0x instead of #
-      .beginFill(Number(`0x${Color[color].substring(1)}`), 1)
       .moveTo(0, 0)
       .lineTo(x + (head.width / 2), 0)
       .lineTo(x + (head.width / 2), 0 + head.height)
       .lineTo(0, 0 + head.height)
       .lineTo(0, 0)
-      .endFill()
+      .fill(Color[color])
   },
 })

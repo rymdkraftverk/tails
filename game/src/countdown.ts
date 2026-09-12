@@ -55,14 +55,14 @@ const countdownBehavior = (countdown: PIXI.Container, resolve: () => void) => ({
       return
     }
 
-    const text = new PIXI.Text(
-      numbers[data.index],
-      {
+    const text = new PIXI.Text({
+      text:  numbers[data.index],
+      style: {
         ...TextStyle.BIG,
         fontSize: 92,
         fill:     'white',
       },
-    )
+    })
     l1.add(
       text,
       {

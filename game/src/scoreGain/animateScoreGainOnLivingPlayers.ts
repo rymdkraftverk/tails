@@ -11,14 +11,14 @@ export const animateScoreGainOnLivingPlayers = (color: string) => l1
   .filter(p => p && p.alive)
   .forEach(player => displayGainedPoint(color, player))
 
-const displayGainedPoint = (color: string, player: PIXI.DisplayObject) => {
-  const scoreGainEntity = new PIXI.Text(
-    '+1',
-    {
+const displayGainedPoint = (color: string, player: PIXI.Container) => {
+  const scoreGainEntity = new PIXI.Text({
+    text:  '+1',
+    style: {
       ...TextStyle.SMALL,
       fill: color,
     },
-  )
+  })
   l1.add(
     scoreGainEntity,
     {

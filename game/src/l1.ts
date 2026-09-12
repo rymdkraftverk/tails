@@ -57,6 +57,7 @@ const counters = {
 
 const registry = {
   app:              null as unknown as PIXI.Application,
+  spritesheets:     [] as PIXI.Spritesheet[],
   ratio:            1,
   gameWidth:        0,
   gameHeight:       0,
@@ -96,7 +97,7 @@ export const add = (displayObject: PIXI.Container, options: AddOptions = {}) => 
     isDestroyed: () => !displayObject.parent,
   }
 
-  displayObject.name = id
+  displayObject.label = id
 
   /*
     This is done to counteract a potential scale change on the canvas. Since changing the scale
@@ -105,8 +106,8 @@ export const add = (displayObject: PIXI.Container, options: AddOptions = {}) => 
     This can be removed when Pixi makes it possible to scale text objects.
   */
   if (displayObject instanceof PIXI.Text) {
-    displayObject.l1.originalSize = displayObject.style.fontSize as number
-    displayObject.style.fontSize = (displayObject.style.fontSize as number) * registry.ratio
+    displayObject.l1.originalSize = Number(displayObject.style.fontSize)
+    displayObject.style.fontSize = Number(displayObject.style.fontSize) * registry.ratio
     displayObject.scale.set(1 / registry.ratio)
   }
 
@@ -264,7 +265,10 @@ export const init = (
 ) => {
   const { logging = false, onError = () => {} } = options
 
-  app.ticker.add(update(onError))
+  const tick = update(onError)
+  app.ticker.add((ticker) => {
+    tick(ticker.deltaTime)
+  })
 
   registry.app = app
   registry.gameWidth = app.renderer.width
@@ -272,18 +276,21 @@ export const init = (
   registry.logging = logging
 }
 
+export const useSpritesheets = (sheets: PIXI.Spritesheet[]) => {
+  registry.spritesheets = sheets
+}
+
 export const getTexture = (filename: string) => {
-  const texture = Object
-    .values(registry.app.loader.resources)
-    .filter(resource => resource.textures)
-    .flatMap(resource => Object.entries(resource.textures as Record<string, PIXI.Texture>))
-    .find(([key]) => key === `${filename}.png`)
+  const texture = registry
+    .spritesheets
+    .map(sheet => sheet.textures[`${filename}.png`])
+    .find(Boolean)
 
   if (!texture) {
     throw new Error(`level1: Texture "${filename}" not found.`)
   }
 
-  return texture[1]
+  return texture
 }
 
 export const resize = (width: number, height: number) => {
@@ -316,18 +323,18 @@ export const resize = (width: number, height: number) => {
 const getManagedDescendants = (displayObject: PIXI.Container): PIXI.Container[] => {
   const fromChildren = displayObject
     .children
-    .flatMap(child => getManagedDescendants(child as PIXI.Container))
+    .flatMap(child => getManagedDescendants(child))
 
   return displayObject.l1 ? fromChildren.concat(displayObject) : fromChildren
 }
 
 export const destroy = (
-  displayObject: PIXI.DisplayObject | string,
+  displayObject: PIXI.Container | string,
   options: { children?: boolean } = { children: true },
 ) => {
   const target = typeof displayObject === 'string'
     ? get(displayObject)
-    : displayObject as PIXI.Container
+    : displayObject
 
   if (!target) {
     log(`level1: Tried to remove non-existent displayObject: ${displayObject}`)
@@ -370,7 +377,7 @@ export const getRandomInRange = (from: number, to: number) => Math
 
 export const getScale = () => registry.ratio
 
-export const getGlobalPosition = (displayObject: PIXI.DisplayObject): Point => {
+export const getGlobalPosition = (displayObject: PIXI.Container): Point => {
   const global = displayObject.toGlobal(new PIXI.Point(0, 0))
 
   return {
@@ -379,19 +386,19 @@ export const getGlobalPosition = (displayObject: PIXI.DisplayObject): Point => {
   }
 }
 
-const getWidth = (displayObject: PIXI.DisplayObject) => {
+const getWidth = (displayObject: PIXI.Container) => {
   const hitArea = displayObject.hitArea as PIXI.Rectangle | null
-  return (hitArea && hitArea.width) || (displayObject as PIXI.Container).width
+  return (hitArea && hitArea.width) || (displayObject).width
 }
 
-const getHeight = (displayObject: PIXI.DisplayObject) => {
+const getHeight = (displayObject: PIXI.Container) => {
   const hitArea = displayObject.hitArea as PIXI.Rectangle | null
-  return (hitArea && hitArea.height) || (displayObject as PIXI.Container).height
+  return (hitArea && hitArea.height) || (displayObject).height
 }
 
 export const isColliding = (
-  displayObject: PIXI.DisplayObject,
-  otherDisplayObject: PIXI.DisplayObject,
+  displayObject: PIXI.Container,
+  otherDisplayObject: PIXI.Container,
 ) => {
   const { x, y } = getGlobalPosition(displayObject)
   const width = getWidth(displayObject)
