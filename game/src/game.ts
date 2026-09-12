@@ -162,11 +162,7 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
-  const sprite = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
   const player = new PIXI.Container()
-  player.addChild(sprite)
-  player.sprite = sprite
-  player.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
   l1.add(
     player,
     {
@@ -176,6 +172,10 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
       zIndex: Layer.FOREGROUND,
     },
   )
+  const sprite = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
+  l1.add(sprite, { parent: player })
+  player.sprite = sprite
+  player.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
   if (playerRepository.isFirstPlace(id)) {
     const crown = new PIXI.Sprite(l1.getTexture('crown'))
     l1.add(crown, {

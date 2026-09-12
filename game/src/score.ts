@@ -174,17 +174,16 @@ const createPlayer = (index: number) => {
 const createHead = ({
   x, y, texture,
 }: { x: number, y: number, texture: string }) => {
-  const sprite = new PIXI.Sprite(l1.getTexture(texture))
   const head = new PIXI.Container()
-  head.addChild(sprite)
-  head.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
-
   l1.add(
     head,
     {
       parent: l1.get(Scene.SCORE),
     },
   )
+  const sprite = new PIXI.Sprite(l1.getTexture(texture))
+  l1.add(sprite, { parent: head })
+  head.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
 
   head.x = x
   head.y = y

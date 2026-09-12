@@ -372,6 +372,9 @@ window.debug = {
   roundStart,
   roundStartMetrics: () => roundStart({ collectMetrics: true }),
   printBehaviors,
+  scenes:            () => Object
+    .values(Scene)
+    .filter(scene => l1.get(scene)),
   start,
   stop,
   state,
