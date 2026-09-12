@@ -74,7 +74,8 @@ const killPlayer = (player: PIXI.Sprite, speedMultiplier: number) => {
 
   const neonDeath = l1.addBehavior({
     data: {
-      index: player.trailContainer.children.length - 1,
+      index:          player.trailContainer.children.length - 1,
+      initialCounter: 0,
     },
     onInit: ({ data }) => {
       data.initialCounter = player.trailContainer.children[data.index].counter

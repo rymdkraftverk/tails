@@ -31,14 +31,20 @@ export default () => new Promise<void>((resolve) => {
   l1.addBehavior(countdownBehavior(countdown, resolve))
 })
 
+type CountdownData = {
+  index: number
+  text:  PIXI.Text | null
+}
+
 const countdownBehavior = (countdown: PIXI.Container, resolve: () => void) => ({
   id:       'countdown',
   duration: TIME_BETWEEN_NUMBERS,
   data:     {
     index: 0,
-  },
+    text:  null,
+  } as CountdownData,
   loop:       true,
-  onComplete: ({ data }: Behavior) => {
+  onComplete: ({ data }: Behavior<CountdownData>) => {
     if (data.text) {
       l1.destroy(data.text)
     }

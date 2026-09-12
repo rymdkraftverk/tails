@@ -12,7 +12,6 @@ export default {
   }: PowerUpOptions) => {
     l1.addBehavior({
       id:       `speed-${player.id}`,
-      data:     { },
       duration: PowerUp.DURATION,
       onInit:   () => {
         l1.addBehavior(createTrail({

@@ -250,7 +250,7 @@ const bouncePlayers = (
       index: 0,
     },
     loop:       true,
-    onComplete: ({ data }: Behavior) => {
+    onComplete: ({ data }: Behavior<{ index: number }>) => {
       const player = players[data.index]
       player.visible = true
 

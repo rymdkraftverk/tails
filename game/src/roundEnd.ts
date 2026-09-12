@@ -67,14 +67,14 @@ const WINNER_TEXT_ANIMATION_DURATION = 120
 
 const roundWinnerTextAnimation = (roundEndText: PIXI.Text) => ({
   duration: WINNER_TEXT_ANIMATION_DURATION,
-  onInit:   ({ data }: Behavior) => {
-    data.animation = createEaseInAndOut({
+  data:     {
+    animation: createEaseInAndOut({
       start:    -(roundEndText.width / 2),
       end:      GAME_WIDTH + (roundEndText.width / 2),
       duration: WINNER_TEXT_ANIMATION_DURATION,
-    })
+    }),
   },
-  onUpdate: ({ counter, data }: Behavior) => {
+  onUpdate: ({ counter, data }: Behavior<{ animation: (t: number) => number }>) => {
     roundEndText.x = data.animation(counter)
   },
 })

@@ -1,5 +1,6 @@
 import * as l1 from './l1'
 import type { Behavior } from './l1'
+import type { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
 import { Emitter } from 'pixi-particles'
 import { Event, Color, Channel } from 'common'
@@ -114,17 +115,20 @@ const textMovement = (text: PIXI.Text) => ({
       speed: 120,
     }),
   },
-  onUpdate: ({ data, counter }: Behavior) => {
+  onUpdate: ({ data, counter }: Behavior<{ sine: (t: number) => number }>) => {
     const scale = data.sine(counter)
     text.scale.set(scale)
   },
 })
 
+type FireworksData = { fireWorksSound: Howl | null }
+
 const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => ({
   id:       'createFireworks',
   duration: l1.getRandomInRange(5, 10),
   loop:     true,
-  onInit:   ({ data }: Behavior) => {
+  data:     { fireWorksSound: null } as FireworksData,
+  onInit:   ({ data }: Behavior<FireworksData>) => {
     stopTrack()
     data.fireWorksSound = l1.sound({
       src:    Sound.FIREWORK,
@@ -132,8 +136,8 @@ const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => 
       loop:   true,
     })
   },
-  onRemove: ({ data: { fireWorksSound } }: Behavior) => {
-    fireWorksSound.stop()
+  onRemove: ({ data: { fireWorksSound } }: Behavior<FireworksData>) => {
+    fireWorksSound?.stop()
   },
   onComplete: () => {
     const x = l1.getRandomInRange(100, GAME_WIDTH - 100)

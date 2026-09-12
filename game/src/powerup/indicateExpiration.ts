@@ -22,13 +22,16 @@ const fluctuateOpacityBehavior = (entity: PIXI.DisplayObject, speed: number, dur
   onRemove: () => {
     entity.alpha = 1
   },
-  onUpdate: ({ counter, data }: Behavior) => {
+  onUpdate: ({ counter, data }: Behavior<{ sine: (t: number) => number }>) => {
     entity.alpha = data.sine(counter)
   },
 })
 
+type ExpirationData = { expirationState: string | null }
+
 const indicateExpirationBehavior = (duration: number, entity: PIXI.DisplayObject) => ({
-  onUpdate: ({ counter, data }: Behavior) => {
+  data:     { expirationState: null } as ExpirationData,
+  onUpdate: ({ counter, data }: Behavior<ExpirationData>) => {
     if (
       (duration - counter) < SOON_TIME_LIMIT
     && !data.expirationState

@@ -94,7 +94,7 @@ export const initPowerups = ({
       data:   {
         onCollision: () => {},
       },
-      onUpdate: ({ data }: Behavior) => {
+      onUpdate: ({ data }: Behavior<{ onCollision: () => void }>) => {
         const collidingPlayer = players
           .find(player => player.alive && l1.isColliding(hitBox, player))
         if (collidingPlayer) {

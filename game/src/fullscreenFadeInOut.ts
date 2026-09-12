@@ -20,6 +20,11 @@ export default () => new Promise<void>((resolve) => {
   l1.addBehavior(fadeInOut(fade, DURATION, resolve))
 })
 
+type FadeData = {
+  hasResolved: boolean
+  animation:   (t: number) => number
+}
+
 const fadeInOut = (graphics: PIXI.Graphics, duration: number, resolve: () => void) => ({
   duration,
   data: {
@@ -34,7 +39,7 @@ const fadeInOut = (graphics: PIXI.Graphics, duration: number, resolve: () => voi
   onComplete: () => {
     l1.destroy(graphics)
   },
-  onUpdate: ({ data, counter }: Behavior) => {
+  onUpdate: ({ data, counter }: Behavior<FadeData>) => {
     const alpha = (data.animation(counter) * -1) / 100
     graphics
       .clear()

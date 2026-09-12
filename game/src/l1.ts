@@ -3,32 +3,29 @@ import * as PIXI from 'pixi.js'
 
 type Point = { x: number, y: number }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BehaviorData = Record<string, any>
-
-export type Behavior = {
+export type Behavior<Data = never> = {
   counter:   number
-  data:      BehaviorData
+  data:      Data
   deltaTime: number
 }
 
-export type BehaviorOptions = {
-  data?:             BehaviorData
+export type BehaviorOptions<Data = never> = {
+  data?:             Data
   duration?:         number
   enabled?:          boolean
   id?:               string
   labels?:           string[]
   loop?:             boolean
-  onComplete?:       (behavior: Behavior) => void
-  onInit?:           (behavior: Behavior) => void
-  onRemove?:         (behavior: Behavior) => void
-  onUpdate?:         (behavior: Behavior) => void
+  onComplete?:       (behavior: Behavior<Data>) => void
+  onInit?:           (behavior: Behavior<Data>) => void
+  onRemove?:         (behavior: Behavior<Data>) => void
+  onUpdate?:         (behavior: Behavior<Data>) => void
   removeOnComplete?: boolean
 }
 
 export type BehaviorRecord = {
   counter:           number
-  data:              BehaviorData
+  data:              unknown
   duration:          number
   enabled:           boolean
   finished:          boolean
@@ -138,8 +135,9 @@ export const getBehavior = (id: string) => behaviors.find(behavior => behavior.i
 
 export const getAllBehaviors = () => behaviors.slice()
 
-export const removeBehavior = (behavior: BehaviorRecord | string) => {
-  const behaviorObject = typeof behavior === 'string' ? getBehavior(behavior) : behavior
+export const removeBehavior = (behavior: { id: string } | string) => {
+  const id = typeof behavior === 'string' ? behavior : behavior.id
+  const behaviorObject = getBehavior(id)
 
   if (!behaviorObject) {
     log(`level1: Tried to remove non-existent behavior: ${behavior}`)
@@ -167,9 +165,9 @@ const toBehavior = (behavior: BehaviorRecord, deltaTime: number) => ({
   counter: behavior.counter,
   data:    behavior.data,
   deltaTime,
-})
+} as Behavior)
 
-export const addBehavior = (options: BehaviorOptions) => {
+export const addBehavior = <Data>(options: BehaviorOptions<Data>) => {
   const {
     id = `behavior-${(counters.behavior += 1)}`,
     labels = [],
@@ -181,7 +179,7 @@ export const addBehavior = (options: BehaviorOptions) => {
     onInit = null,
     onRemove = null,
     enabled = true,
-    data = {},
+    data,
   } = options
 
   if (getBehavior(id)) {
@@ -203,10 +201,10 @@ export const addBehavior = (options: BehaviorOptions) => {
     initHasBeenCalled: false,
     labels,
     loop,
-    onComplete,
-    onInit,
-    onRemove,
-    onUpdate,
+    onComplete:        onComplete,
+    onInit:            onInit,
+    onRemove:          onRemove,
+    onUpdate:          onUpdate,
     removeOnComplete,
   }
 

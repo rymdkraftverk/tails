@@ -11,10 +11,7 @@ export default {
     player, speedMultiplier,
   }: PowerUpOptions) => {
     l1.addBehavior({
-      id:   `ghost-${player.id}`,
-      data: {
-        expirationState: null,
-      },
+      id:       `ghost-${player.id}`,
       duration: PowerUp.DURATION,
       onInit:   () => {
         player.scale.set(player.scaleFactor / speedMultiplier)
