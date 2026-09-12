@@ -9,7 +9,7 @@ import checkPlayersAlive from './checkPlayersAlive'
 export const collisionCheckerWalls = ({
   player, speedMultiplier, wallThickness,
 }: {
-  player:          PIXI.Sprite
+  player:          PIXI.Container
   speedMultiplier: number
   wallThickness:   number
 }) => ({

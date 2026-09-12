@@ -49,7 +49,7 @@ export default {
     })
   },
   texture:           () => l1.getTexture('powerup/powerup-ghost'),
-  behaviorsToRemove: (player: PIXI.Sprite) => [
+  behaviorsToRemove: (player: PIXI.Container) => [
     `ghost-${player.id}`,
   ],
 } satisfies PowerUpModule

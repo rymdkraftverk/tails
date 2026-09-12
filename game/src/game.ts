@@ -162,7 +162,11 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
 
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
-  const player = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
+  const sprite = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
+  const player = new PIXI.Container()
+  player.addChild(sprite)
+  player.sprite = sprite
+  player.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
   l1.add(
     player,
     {
@@ -217,7 +221,7 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
   return player
 }
 
-export const setPlayerSize = (player: PIXI.Sprite, sizeMultiplier: number) => {
+export const setPlayerSize = (player: PIXI.Container, sizeMultiplier: number) => {
   player.scaleFactor = player.speed
 
   player.scale.set((player.scaleFactor / SPEED_MULTIPLIER / 2) * sizeMultiplier)
@@ -231,11 +235,11 @@ export const setPlayerSize = (player: PIXI.Sprite, sizeMultiplier: number) => {
     playerSize,
   )
   // Offset the sprite so that the player hitbox is in the middle
-  player.anchor.set((1 - (playerSize / player.width)) / 2)
+  player.sprite.anchor.set((1 - (playerSize / player.width)) / 2)
 }
 
 const bouncePlayers = (
-  players: PIXI.Sprite[],
+  players: PIXI.Container[],
   playerCountFactor: number,
 ) => new Promise<void>((resolve) => {
   const bouncer = new PIXI.Container()
@@ -293,7 +297,7 @@ const bouncePlayers = (
 
 export const toRadians = (angle: number) => angle * (Math.PI / 180)
 
-const move = (player: PIXI.Sprite) => ({
+const move = (player: PIXI.Container) => ({
   id:       `move-${player.id}`,
   onUpdate: () => {
     const radians = toRadians(player.degrees)
@@ -302,7 +306,7 @@ const move = (player: PIXI.Sprite) => ({
   },
 })
 
-const performanceTestCurl = (player: PIXI.Sprite) => ({
+const performanceTestCurl = (player: PIXI.Container) => ({
   onUpdate: ({ counter }: Behavior) => {
     // inverse relationship with square root is chosen with mathematical precision.
     // factor is chosen by trial and error.
@@ -312,7 +316,7 @@ const performanceTestCurl = (player: PIXI.Sprite) => ({
   },
 })
 
-const pivot = (player: PIXI.Sprite) => ({
+const pivot = (player: PIXI.Container) => ({
   id:       `pivot-${player.id}`,
   onUpdate: () => {
     const throttledTurnRate = Math.min(TURN_RADIUS, Math.max(-TURN_RADIUS, player.turnRate))

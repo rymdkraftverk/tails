@@ -67,7 +67,7 @@ export const initPowerups = ({
   const createHitBox = (
     sprite: PIXI.Sprite,
     powerupDuration: number,
-    onCollision: (collidingPlayer: PIXI.Sprite) => void,
+    onCollision: (collidingPlayer: PIXI.Container) => void,
   ) => {
     const hitBox = new PIXI.Container()
     hitBox.x = sprite.x - (sprite.width / 2)
@@ -126,12 +126,12 @@ export const initPowerups = ({
     const portal1 = createPortal(portalTextures)
     const portal2 = createPortal(portalTextures)
 
-    const portal1Collision = (collidingPlayer: PIXI.Sprite) => {
+    const portal1Collision = (collidingPlayer: PIXI.Container) => {
       collidingPlayer.x = portal2.x
       collidingPlayer.y = portal2.y
       state.portalPairs -= 1
     }
-    const portal2Collision = (collidingPlayer: PIXI.Sprite) => {
+    const portal2Collision = (collidingPlayer: PIXI.Container) => {
       collidingPlayer.x = portal1.x
       collidingPlayer.y = portal1.y
       state.portalPairs -= 1
@@ -168,7 +168,7 @@ export const initPowerups = ({
         powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
         powerUpSprite.anchor.set(0.5)
         l1.addBehavior(bounce(powerUpSprite, 0.01))
-        const onCollision = (collidingPlayer: PIXI.Sprite) => {
+        const onCollision = (collidingPlayer: PIXI.Container) => {
           behaviorsToRemove(collidingPlayer)
             .forEach(id => l1.removeBehavior(id))
 

@@ -6,7 +6,7 @@ import { state } from '../state'
 import checkPlayersAlive from './checkPlayersAlive'
 import killPlayer from './killPlayer'
 
-export const collisionCheckerTrail = (player: PIXI.Sprite, speedMultiplier: number) => ({
+export const collisionCheckerTrail = (player: PIXI.Container, speedMultiplier: number) => ({
   id:         `collisionCheckerTrail-${player.id}`,
   duration:   2,
   loop:       true,

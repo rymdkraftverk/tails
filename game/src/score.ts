@@ -174,7 +174,10 @@ const createPlayer = (index: number) => {
 const createHead = ({
   x, y, texture,
 }: { x: number, y: number, texture: string }) => {
-  const head = new PIXI.Sprite(l1.getTexture(texture))
+  const sprite = new PIXI.Sprite(l1.getTexture(texture))
+  const head = new PIXI.Container()
+  head.addChild(sprite)
+  head.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
 
   l1.add(
     head,
@@ -191,7 +194,7 @@ const createHead = ({
 const animate = ({
   head, tail, fromX, toX, color,
 }: {
-  head:  PIXI.Sprite
+  head:  PIXI.Container
   tail:  PIXI.Graphics
   fromX: number
   toX:   number

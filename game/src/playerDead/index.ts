@@ -32,7 +32,7 @@ export default (id: string, { x, y }: { x: number, y: number }) => {
     textures: neonTextures,
     config: neonConfig,
   } = sparks({
-    texture:     (player as PIXI.Sprite).texture,
+    texture:     player.sprite.texture,
     scaleFactor: (SPEED_MULTIPLIER / player.scaleFactor) / 2,
     radius:      player.width * 2,
     pos:         {

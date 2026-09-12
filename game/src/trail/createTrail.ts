@@ -10,7 +10,7 @@ import Layer from '../constant/layer'
 export const createTrail = ({
   player, scale, speedMultiplier, duration = Trail.CREATE_TRAIL_FREQUENCY,
 }: {
-  player:          PIXI.Sprite
+  player:          PIXI.Container
   scale:           number
   speedMultiplier: number
   duration?:       number
@@ -89,7 +89,7 @@ export const createTrail = ({
   },
 })
 
-const middle = (displayObject: PIXI.Sprite) => {
+const middle = (displayObject: PIXI.Container) => {
   const global = displayObject.toGlobal(new PIXI.Point(0, 0))
   const hitArea = displayObject.hitArea as PIXI.Rectangle
 

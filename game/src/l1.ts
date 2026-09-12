@@ -342,7 +342,7 @@ export const destroy = (
   }
 
   if (!target.parent) {
-    log(`level1: ${target.name} has already been destroyed`)
+    log(`level1: ${target.l1?.id} has already been destroyed`)
     return
   }
 

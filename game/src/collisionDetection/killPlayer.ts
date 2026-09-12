@@ -11,7 +11,7 @@ import Trail from '../constant/trail'
 import { state } from '../state'
 import sparks from '../particleEmitter/sparks'
 
-const killPlayer = (player: PIXI.Sprite, speedMultiplier: number) => {
+const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
   const {
     textures,
     config,
@@ -64,12 +64,12 @@ const killPlayer = (player: PIXI.Sprite, speedMultiplier: number) => {
     textures: neonTextures,
     config: neonConfig,
   } = sparks({
-    texture:     player.texture,
+    texture:     player.sprite.texture,
     scaleFactor: (speedMultiplier / player.scaleFactor),
     radius:      player.width,
   })
 
-  player.texture = l1.getTexture(`circle-dark/circle-${player.color}-dark`)
+  player.sprite.texture = l1.getTexture(`circle-dark/circle-${player.color}-dark`)
 
   const neonDeath = l1.addBehavior({
     data: {
