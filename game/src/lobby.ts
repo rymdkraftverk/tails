@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import Bowser from 'bowser'
 import { getUrlParams } from 'common'
@@ -72,11 +72,11 @@ const addText = ({
   style,
   parent,
 }: {
-  x:       number;
-  y:       number;
-  text:    string;
-  style:   PIXI.TextStyle | Partial<PIXI.TextStyle>;
-  parent?: PIXI.Container;
+  x:       number
+  y:       number
+  text:    string
+  style:   PIXI.TextStyle | Partial<PIXI.TextStyle>
+  parent?: PIXI.Container
 }) => {
   const textObject = new PIXI.Text(
     text,
@@ -303,11 +303,11 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
 const drawInstructionArrow = ({
   x, y, id, angle, parent,
 }: {
-  x:       number;
-  y:       number;
-  id:      string;
-  angle:   number;
-  parent?: PIXI.Container;
+  x:       number
+  y:       number
+  id:      string
+  angle:   number
+  parent?: PIXI.Container
 }) => {
   const instructionArrowOne = new PIXI.Sprite(l1.getTexture('expand-arrow-one'))
   l1.add(

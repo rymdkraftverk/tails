@@ -1,5 +1,5 @@
 import { Event, Color, Channel } from 'common'
-import * as l1 from 'l1'
+import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
@@ -173,7 +173,7 @@ const createPlayer = (index: number) => {
 
 const createHead = ({
   x, y, texture,
-}: { x: number; y: number; texture: string }) => {
+}: { x: number, y: number, texture: string }) => {
   const head = new PIXI.Sprite(l1.getTexture(texture))
 
   l1.add(
@@ -191,11 +191,11 @@ const createHead = ({
 const animate = ({
   head, tail, fromX, toX, color,
 }: {
-  head:  PIXI.Sprite;
-  tail:  PIXI.Graphics;
-  fromX: number;
-  toX:   number;
-  color: keyof typeof Color;
+  head:  PIXI.Sprite
+  tail:  PIXI.Graphics
+  fromX: number
+  toX:   number
+  color: keyof typeof Color
 }) => ({
   duration: ANIMATION_DURATION,
   onUpdate: () => {

@@ -6,12 +6,12 @@ import {
   type GetCoord,
 } from '../src/kdTree'
 
-interface Entity { filter: boolean; asset: { x: number; y: number } }
+type Entity = { filter: boolean, asset: { x: number, y: number } }
 
-interface Options {
-  earlyReturn?: (candidate: Entity) => boolean;
-  filter?:      (candidate: Entity) => boolean;
-  getCoord:     GetCoord<Entity>;
+type Options = {
+  earlyReturn?: (candidate: Entity) => boolean
+  filter?:      (candidate: Entity) => boolean
+  getCoord:     GetCoord<Entity>
 }
 
 const constructTree = (options: Options, entities: Entity[]) => {
@@ -34,8 +34,8 @@ const constructTree = (options: Options, entities: Entity[]) => {
 }
 
 const parseOptions = ({ earlyReturn, filter }: {
-  earlyReturn?: boolean;
-  filter?:      boolean;
+  earlyReturn?: boolean
+  filter?:      boolean
 }): Options => ({
   earlyReturn: earlyReturn ? () => true : undefined,
   filter:      filter ? (e: Entity) => e.filter : undefined,

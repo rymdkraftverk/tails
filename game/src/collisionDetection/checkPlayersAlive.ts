@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import { State, state } from '../state'
 import { transitionToRoundEnd } from '../roundEnd'
 import GameEvent from '../constant/gameEvent'

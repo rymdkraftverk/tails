@@ -1,11 +1,11 @@
 export default ({
   degrees, scaleFactor, radius, x, y,
 }: {
-  degrees:     number;
-  scaleFactor: number;
-  radius:      number;
-  x:           number;
-  y:           number;
+  degrees:     number
+  scaleFactor: number
+  radius:      number
+  x:           number
+  y:           number
 }) => {
   const textures = ['particle-smoke']
   const config = {

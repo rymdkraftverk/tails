@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
 import { Emitter } from 'pixi-particles'
 

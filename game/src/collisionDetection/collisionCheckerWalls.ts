@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
 
 import { HEADER_HEIGHT } from '../header'
@@ -9,9 +9,9 @@ import checkPlayersAlive from './checkPlayersAlive'
 export const collisionCheckerWalls = ({
   player, speedMultiplier, wallThickness,
 }: {
-  player:          PIXI.Sprite;
-  speedMultiplier: number;
-  wallThickness:   number;
+  player:          PIXI.Sprite
+  speedMultiplier: number
+  wallThickness:   number
 }) => ({
   id:         `collisionCheckerWalls-${player.id}`,
   duration:   2,

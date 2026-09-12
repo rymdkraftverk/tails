@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import { Event, Channel } from 'common'
 import * as Sentry from '@sentry/browser'
@@ -109,7 +109,7 @@ const createGame = ({ gameCode }: { gameCode: string }) => {
   transitionToLobby(state.gameCode)
 }
 
-const onPlayerData = (id: string) => (message: { event: string; payload: never }) => {
+const onPlayerData = (id: string) => (message: { event: string, payload: never }) => {
   const { event, payload } = message
 
   switch (event) {
@@ -130,7 +130,7 @@ const onPlayerData = (id: string) => (message: { event: string; payload: never }
   }
 }
 
-const broadcast = (message: { event: string; payload?: unknown }) => {
+const broadcast = (message: { event: string, payload?: unknown }) => {
   state
     .players
     .forEach((c) => {
@@ -241,7 +241,6 @@ if (!gameElement) {
 gameElement.appendChild(app.view)
 
 l1.init(app, {
-  debug:   false,
   logging: false,
   onError: (e: Error) => {
     Sentry.captureException(e)
@@ -334,10 +333,10 @@ const initMetricsBehavior = (appReference: PIXI.Application) => {
     })
 }
 
-interface Metric {
-  displayObjects: number;
-  l1LoopDuration: number;
-  pixiElapsedMS:  number;
+type Metric = {
+  displayObjects: number
+  l1LoopDuration: number
+  pixiElapsedMS:  number
 }
 
 const average = (measurements: Metric[]): Metric => ({

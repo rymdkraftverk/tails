@@ -1,5 +1,5 @@
-import * as l1 from 'l1'
-import type { Behavior } from 'l1'
+import * as l1 from '../l1'
+import type { Behavior } from '../l1'
 import * as PIXI from 'pixi.js'
 import Scene from '../Scene'
 import Sound from '../constant/sound'
@@ -24,10 +24,10 @@ export const initPowerups = ({
   gameWidth,
   gameHeight,
 }: {
-  snakeSpeed:      number;
-  speedMultiplier: number;
-  gameWidth:       number;
-  gameHeight:      number;
+  snakeSpeed:      number
+  speedMultiplier: number
+  gameWidth:       number
+  gameHeight:      number
 }) => {
   const powerupGenerator = new PIXI.Container()
   l1.add(

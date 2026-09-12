@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-import * as l1 from 'l1'
+import * as l1 from './l1'
 import * as TextStyle from './constant/textStyle'
 import { GameColor } from './game'
 import Layer from './constant/layer'
@@ -26,7 +26,7 @@ export const HEADER_HEIGHT = 40
 export default ({
   url,
   code,
-}: { url: string; code: string }) => {
+}: { url: string, code: string }) => {
   const container = new PIXI.Container()
   l1.add(container, {
     id:     'header',

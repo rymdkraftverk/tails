@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import type * as PIXI from 'pixi.js'
 
 const GENERATE_HOLE_MAX_TIME = 300

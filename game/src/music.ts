@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from './l1'
 
 export const Track = {
   GAME:  './sounds/music/zapper_64kbps.mp3',
@@ -10,7 +10,7 @@ let currentTrack: string | undefined
 
 export const playTrack = (
   track: string,
-  options: { forceRestart?: boolean; loop?: boolean; volume?: number } = {},
+  options: { forceRestart?: boolean, loop?: boolean, volume?: number } = {},
 ) => {
   if (currentTrack === track && !options.forceRestart) return
 

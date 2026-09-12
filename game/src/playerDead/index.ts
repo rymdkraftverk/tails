@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
 import { Emitter } from 'pixi-particles'
 import { SPEED_MULTIPLIER } from '../game'
@@ -9,7 +9,7 @@ import Scene from '../Scene'
 import { GAME_WIDTH, GAME_HEIGHT } from '../constant/rendering'
 
 let sparkleParticleContainer: PIXI.Container | undefined
-export default (id: string, { x, y }: { x: number; y: number }) => {
+export default (id: string, { x, y }: { x: number, y: number }) => {
   const player = l1.get(id)
 
   // Create the Container if it hasn't been created before or has been destroyed previous round

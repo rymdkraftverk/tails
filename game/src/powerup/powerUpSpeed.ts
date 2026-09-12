@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
 import { createTrail } from '../trail'

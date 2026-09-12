@@ -1,11 +1,11 @@
-export type Borders = Record<string, { min: number; max: number }>
+export type Borders = Record<string, { min: number, max: number }>
 
-export interface Tree<T> {
-  borders:   Borders;
-  dimension: string;
-  value?:    T;
-  true?:     Tree<T>;
-  false?:    Tree<T>;
+export type Tree<T> = {
+  borders:   Borders
+  dimension: string
+  value?:    T
+  true?:     Tree<T>
+  false?:    Tree<T>
 }
 
 export type GetCoord<T> = (entity: T, dimension: string) => number

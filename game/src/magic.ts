@@ -5,10 +5,10 @@ const { error } = console
 export const createParabola = ({
   start, end, offset, modifier = 1,
 }: {
-  start:     number;
-  end:       number;
-  offset:    number;
-  modifier?: number;
+  start:     number
+  end:       number
+  offset:    number
+  modifier?: number
 }) => (t: number) => {
   const normalizer = getNormalizer(start, end)
   return offset + ((Math.abs(start - end) * modifier) * (normalizer * (t - start) * (t - end)))
@@ -40,10 +40,10 @@ const easeIn = (endX: number, x: number, maxSpeed: number, modifier: number) => 
 export const createEaseInAndOut = ({
   start, end, duration, startTime = 0,
 }: {
-  start:      number;
-  end:        number;
-  duration:   number;
-  startTime?: number;
+  start:      number
+  end:        number
+  duration:   number
+  startTime?: number
 }) => {
   if (duration <= 0) {
     error('createEaseInAndOut: duration has to be positive')
@@ -59,9 +59,9 @@ export const createEaseInAndOut = ({
 export const createSine = ({
   start, end, speed,
 }: {
-  start: number;
-  end:   number;
-  speed: number;
+  start: number
+  end:   number
+  speed: number
 }) => (t: number) => {
   const middle = ((start + end) / 2)
   return middle + ((middle - start) * Math.sin((t * Math.PI * 2) / speed))

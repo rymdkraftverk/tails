@@ -1,4 +1,4 @@
-export default ({ x, y, color }: { x: number; y: number; color: string }) => {
+export default ({ x, y, color }: { x: number, y: number, color: string }) => {
   const textures = [`square/square-${color}`]
   const config = {
     alpha: {

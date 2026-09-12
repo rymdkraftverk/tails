@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from './l1'
 
 export default (duration: number) => new Promise<void>((res) => {
   const delayBehavior = () => ({

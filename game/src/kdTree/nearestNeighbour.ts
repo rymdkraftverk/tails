@@ -1,9 +1,9 @@
 import { calculateMiddle, type GetCoord, type Tree } from './common'
 
-interface Options<T> {
-  earlyReturn: (candidate: T) => boolean;
-  filter:      (candidate: T) => boolean;
-  getCoord:    GetCoord<T>;
+type Options<T> = {
+  earlyReturn: (candidate: T) => boolean
+  filter:      (candidate: T) => boolean
+  getCoord:    GetCoord<T>
 }
 
 const calculateDistance = <T>(

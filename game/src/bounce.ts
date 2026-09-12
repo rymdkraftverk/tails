@@ -1,5 +1,5 @@
 import type * as PIXI from 'pixi.js'
-import type { Behavior } from 'l1'
+import type { Behavior } from './l1'
 import { createParabola } from './magic'
 
 export default (displayObject: PIXI.DisplayObject, modifier: number) => ({

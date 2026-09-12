@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 import * as PIXI from 'pixi.js'
 import { addEntityToTree, type Tree } from '../kdTree'
 
@@ -10,10 +10,10 @@ import Layer from '../constant/layer'
 export const createTrail = ({
   player, scale, speedMultiplier, duration = Trail.CREATE_TRAIL_FREQUENCY,
 }: {
-  player:          PIXI.Sprite;
-  scale:           number;
-  speedMultiplier: number;
-  duration?:       number;
+  player:          PIXI.Sprite
+  scale:           number
+  speedMultiplier: number
+  duration?:       number
 }) => ({
   id:     `createTrail-${player.id}`,
   duration,

@@ -1,4 +1,4 @@
-import * as l1 from 'l1'
+import * as l1 from '../l1'
 
 export default () => {
   const div = document.createElement('div')

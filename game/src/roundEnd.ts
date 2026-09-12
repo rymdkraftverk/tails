@@ -1,5 +1,5 @@
-import * as l1 from 'l1'
-import type { Behavior } from 'l1'
+import * as l1 from './l1'
+import type { Behavior } from './l1'
 import * as PIXI from 'pixi.js'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'

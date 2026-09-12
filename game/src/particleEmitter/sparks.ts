@@ -1,10 +1,10 @@
 export default ({
   texture, scaleFactor, radius, pos = { x: 0, y: 0 },
 }: {
-  texture:     PIXI.Texture;
-  scaleFactor: number;
-  radius:      number;
-  pos?:        { x: number; y: number };
+  texture:     PIXI.Texture
+  scaleFactor: number
+  radius:      number
+  pos?:        { x: number, y: number }
 }) => {
   const textures = [texture]
 
