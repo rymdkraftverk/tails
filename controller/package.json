@@ -21,7 +21,7 @@
     "react-dom": "^19.3.0",
     "react-responsive": "^10.0.1",
     "react-switch": "^7.1.0",
-    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#4801e4d856bc327535fd5fd56140c96cb468d75f",
+    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#e4bf096f4c0335b4b34ab24563a0907c41c1e06a",
     "styled-components": "^6.5.3"
   },
   "devDependencies": {

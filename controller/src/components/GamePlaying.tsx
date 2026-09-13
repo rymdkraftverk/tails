@@ -1,8 +1,10 @@
+import {
+  FullHeight,
+  IOSDisableDoubleTap,
+  ScrollLock,
+} from 'rkv-signaling/screens'
 import Switch from 'react-switch'
 import styled from 'styled-components'
-import FullHeight from './FullHeight'
-import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import ScrollLock from './ScrollLock'
 import TapSteering from './TapSteering'
 import GyroSteering from './GyroSteering'
 

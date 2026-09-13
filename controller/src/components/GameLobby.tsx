@@ -1,10 +1,12 @@
+import {
+  FullHeight,
+  IOSDisableDoubleTap,
+  ScrollLock,
+} from 'rkv-signaling/screens'
 import { Component } from 'react'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
-import FullHeight from './FullHeight'
-import IOSDisableDoubleTap from './IOSDisableDoubleTap'
 import Button from './Button'
-import ScrollLock from './ScrollLock'
 
 const FullPage = styled(FullHeight)`
   display: flex;

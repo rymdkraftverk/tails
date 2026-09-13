@@ -1,23 +1,33 @@
+import {
+  LockerRoom,
+  LockerRoomLoader,
+  Toast,
+  TurnPhone,
+} from 'rkv-signaling/screens'
 import { useReducer } from 'react'
+import styled from 'styled-components'
 import MediaQuery from 'react-responsive'
 import { Event, Color, Channel } from 'common'
 import { useJoin } from 'rkv-signaling/react'
 import * as Sentry from '@sentry/browser'
 
 import channelConfigs from '../channelConfigs'
-import LockerRoom from './LockerRoom'
-import LockerRoomLoader from './LockerRoomLoader'
 import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
-import TurnPhone from './TurnPhone'
 import Gyro from './Gyro'
-import Toast from './Toast'
+import Logo from './Logo'
+import turnPhoneGif from '../images/turnPhone.gif'
+import turnPhoneSound from '../sounds/key.mp3'
 
 const { error: logError } = console
 
 const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS
+
+const LockerRoomLogo = styled(Logo)`
+  margin-top: 1vw;
+`
 
 const Screen = {
   GAME_LOBBY: 'game-lobby',
@@ -157,6 +167,7 @@ function App() {
           gameCodeChange={gameCodeChange}
           gameCode={gameCode}
           onJoinClick={join}
+          logo={<LockerRoomLogo />}
         />
       )
     }
@@ -223,7 +234,7 @@ function App() {
         setAngle={(angle: number) => change({ angle })}
       />
       <MediaQuery orientation="portrait">
-        <TurnPhone />
+        <TurnPhone gif={turnPhoneGif} sound={turnPhoneSound} logo={<Logo />} />
       </MediaQuery>
       <MediaQuery orientation="landscape">{screen()}</MediaQuery>
     </>

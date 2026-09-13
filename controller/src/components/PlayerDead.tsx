@@ -1,9 +1,11 @@
+import {
+  FullHeight,
+  IOSDisableDoubleTap,
+  ScrollLock,
+} from 'rkv-signaling/screens'
 import { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Event } from 'common'
-import FullHeight from './FullHeight'
-import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import ScrollLock from './ScrollLock'
 
 const SEND_PLAYER_DEAD_TAP_INTERVAL = 60
 

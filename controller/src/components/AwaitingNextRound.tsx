@@ -1,7 +1,9 @@
+import {
+  FullHeight,
+  IOSDisableDoubleTap,
+  ScrollLock,
+} from 'rkv-signaling/screens'
 import styled from 'styled-components'
-import FullHeight from './FullHeight'
-import IOSDisableDoubleTap from './IOSDisableDoubleTap'
-import ScrollLock from './ScrollLock'
 
 const Container = styled(FullHeight)`
   display: flex;
