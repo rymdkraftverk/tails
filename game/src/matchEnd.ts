@@ -33,7 +33,11 @@ export const transitionToMatchEnd = () => {
   l1
     .getAll()
     .filter(e => e.l1.id !== 'background')
-    .forEach(displayObject => l1.destroy(displayObject))
+    .forEach((displayObject) => {
+      if (!displayObject.l1.isDestroyed()) {
+        l1.destroy(displayObject)
+      }
+    })
 
   const matchEnd = new PIXI.Container()
   l1.add(

@@ -96,7 +96,11 @@ const roundStart = (options = { collectMetrics: false }) => {
         l1
           .getAll()
           .filter(e => !entitiesToKeep.includes(e.l1.id))
-          .forEach(displayObject => l1.destroy(displayObject))
+          .forEach((displayObject) => {
+            if (!displayObject.l1.isDestroyed()) {
+              l1.destroy(displayObject)
+            }
+          })
 
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
       })
