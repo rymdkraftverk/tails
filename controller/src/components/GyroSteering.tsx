@@ -48,7 +48,7 @@ function GyroSteering({ angle }: { angle: number }) {
     ctx.moveTo(0, y1)
     ctx.lineTo(width, y2)
     ctx.stroke()
-  }, [angle])
+  }, [angle, ctx, height, width])
 
   return <Canvas ref={canvasRef} />
 }

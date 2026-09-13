@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Event } from 'common'
 import FullHeight from './FullHeight'
@@ -55,10 +55,7 @@ function PlayerDead({
     navigator.vibrate(100)
   }, [])
 
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(
-    null,
-  )
-  const [sendData, setSendData] = useState(false)
+  const position = useRef<{ x: number; y: number } | null>(null)
 
   const onPlayerDeadClick = ({
     touches,
@@ -71,29 +68,27 @@ function PlayerDead({
       const x = clientX / rect.width
       const y = clientY / rect.height
 
-      setPosition({ x, y })
+      position.current = { x, y }
     }
   }
 
   const onTouchEnd = () => {
-    setPosition(null)
+    position.current = null
   }
 
   useEffect(() => {
-    const timeoutId = setInterval(() => {
-      setSendData(true)
+    const intervalId = setInterval(() => {
+      if (position.current) {
+        sendReliable({
+          event: Event.PLAYER_DEAD_TAP,
+          payload: position.current,
+        })
+      }
     }, SEND_PLAYER_DEAD_TAP_INTERVAL)
     return () => {
-      clearTimeout(timeoutId)
+      clearInterval(intervalId)
     }
-  }, [])
-
-  useEffect(() => {
-    if (sendData && position) {
-      sendReliable({ event: Event.PLAYER_DEAD_TAP, payload: position })
-      setSendData(false)
-    }
-  }, [sendData, position])
+  }, [sendReliable])
 
   return (
     <IOSDisableDoubleTap>
