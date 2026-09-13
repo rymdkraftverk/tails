@@ -1,7 +1,7 @@
-import { Component } from 'react'
+import { useReducer } from 'react'
 import MediaQuery from 'react-responsive'
-import { Event, Color, Channel, getUrlParams } from 'common'
-import signaling from 'rkv-signaling'
+import { Event, Color, Channel } from 'common'
+import { useJoin } from 'rkv-signaling/react'
 import * as Sentry from '@sentry/browser'
 
 import channelConfigs from '../channelConfigs'
@@ -11,7 +11,6 @@ import GameLobby from './GameLobby'
 import GamePlaying from './GamePlaying'
 import AwaitingNextRound from './AwaitingNextRound'
 import PlayerDead from './PlayerDead'
-import { getLastGameCode, setLastGameCode } from '../util/sessionStorage'
 import TurnPhone from './TurnPhone'
 import Gyro from './Gyro'
 import Toast from './Toast'
@@ -19,327 +18,216 @@ import Toast from './Toast'
 const { error: logError } = console
 
 const WS_ADDRESS = process.env.REACT_APP_WS_ADDRESS
-const TIMEOUT_SECONDS = 20
 
-const AppState = {
-  LOCKER_ROOM: 'locker-room',
-  GAME_CONNECTING: 'game-connecting',
+const Screen = {
   GAME_LOBBY: 'game-lobby',
   GAME_PLAYING: 'game-playing',
   PLAYER_DEAD: 'player-dead',
   AWAITING_NEXT_ROUND: 'awaiting-next-round',
 } as const
 
-type AppStateValue = (typeof AppState)[keyof typeof AppState]
+type ScreenValue = (typeof Screen)[keyof typeof Screen]
 
-type Notice = { text: string; type: 'error' | 'warning' }
-
-type AppStateShape = {
-  angle?: number
-  appState: AppStateValue
-  gameCode: string
+type Game = {
+  angle: number
   gyro: boolean
-  notice: Notice | null
   playerColor: keyof typeof Color | null
   playerCount?: number
   ready: boolean
-  startEnabled?: boolean
-  sendSteering: (message: object) => void
-  sendReliable: (message: object) => void
+  screen: ScreenValue
+  startEnabled: boolean
 }
 
-const newRoundState = {
-  appState: AppState.GAME_LOBBY,
+const initialGame: Game = {
+  angle: 0,
+  gyro: false,
+  playerColor: null,
+  ready: false,
+  screen: Screen.GAME_LOBBY,
+  startEnabled: false,
+}
+
+const newRound = {
+  screen: Screen.GAME_LOBBY,
   ready: false,
   startEnabled: false,
 }
 
-const joinState = ({
+const joined = ({
   started,
   color,
 }: {
   started: boolean
   color: keyof typeof Color
 }) => ({
-  ...newRoundState,
+  ...newRound,
   playerColor: color,
-  appState: started ? AppState.AWAITING_NEXT_ROUND : AppState.GAME_LOBBY,
+  screen: started ? Screen.AWAITING_NEXT_ROUND : Screen.GAME_LOBBY,
 })
 
-const errorState = (message: string) => ({
-  appState: AppState.LOCKER_ROOM,
-  notice: { text: message, type: 'error' } as Notice,
-})
-
-const getGameCodeFromUrl = () => getUrlParams(window.location.search).code
-const writeGameCodeToUrl = (gameCode: string) => {
-  window.history.pushState({ gameCode }, '', `?code=${gameCode}`)
-}
-
-const eventState = ({ event, payload }: { event: string; payload: never }) => {
+const eventChange = ({
+  event,
+  payload,
+}: {
+  event: string
+  payload: never
+}): Partial<Game> | null => {
   switch (event) {
     case Event.PLAYER_COUNT:
       return { playerCount: payload }
     case Event.PLAYER_JOINED:
-      return joinState(payload)
+      return joined(payload)
     case Event.START_ENABLED:
       return { startEnabled: true }
-    case Event.GAME_FULL:
-      return errorState('Game is full')
     case Event.PLAYER_DIED:
-      return { appState: AppState.PLAYER_DEAD }
+      return { screen: Screen.PLAYER_DEAD }
     case Event.ROUND_END:
-      return newRoundState
+      return newRound
     case Event.ROUND_STARTED:
-      return { appState: AppState.GAME_PLAYING }
+      return { screen: Screen.GAME_PLAYING }
     default:
       return null
   }
 }
 
-class App extends Component<Record<string, never>, AppStateShape> {
-  state: AppStateShape = {
-    appState: AppState.LOCKER_ROOM,
-    gameCode: '',
-    gyro: false,
-    notice: null,
-    playerColor: null,
-    ready: false,
-    sendSteering: () => {},
-    sendReliable: () => {},
-  }
+const merge = (game: Game, change: Partial<Game>) => ({ ...game, ...change })
 
-  componentDidMount() {
-    this.alertIfNoRtc()
-    this.warnIfCellular()
-    const codeFromUrl = getGameCodeFromUrl()
-    const gameCode = codeFromUrl || getLastGameCode()
-    this.setState({ gameCode })
-    if (codeFromUrl) {
-      this.join(gameCode)
+function App() {
+  const [game, change] = useReducer(merge, initialGame)
+
+  const onData = (message: { event: string; payload: never }) => {
+    if (message.event === Event.GAME_FULL) {
+      fail('Game is full')
+      return
     }
-  }
 
-  onData = (message: { event: string; payload: never }) => {
-    const state = eventState(message)
+    const next = eventChange(message)
 
-    if (!state) {
+    if (!next) {
       logError(`Unexpected event in message: ${message}`)
       return
     }
 
-    this.setState(state as Pick<AppStateShape, keyof AppStateShape>)
+    change(next)
   }
 
-  onJoinClick = () => {
-    navigator.vibrate(1) // To trigger accept dialog in firefox
-    const { gameCode } = this.state
-    this.join(gameCode)
-  }
-
-  join = (gameCode: string) => {
-    this.setState({ appState: AppState.GAME_CONNECTING, notice: null })
-    setLastGameCode(gameCode)
-    setTimeout(this.checkConnectionTimeout, TIMEOUT_SECONDS * 1000)
-    writeGameCodeToUrl(gameCode)
-    this.connectToGame(gameCode)
-  }
-
-  displayError = (message: string) => {
-    this.setState(errorState(message))
-  }
-
-  warnIfCellular = () => {
-    const connection =
-      navigator.connection ||
-      navigator.mozConnection ||
-      navigator.webkitConnection
-
-    if (connection && connection.type === 'cellular') {
-      this.setState({
-        notice: {
-          text: 'Connect to WiFi for best experience',
-          type: 'warning',
-        },
-      })
-    }
-  }
-
-  alertIfNoRtc = () => {
-    if (typeof RTCPeerConnection === 'undefined') {
-      const message =
-        'Unfortunately the game cannot be played in this browser.' +
-        'See list of supported browsers here: https://caniuse.com/#search=webrtc'
-
-      alert(message)
-    }
-  }
-
-  gameCodeChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) =>
-    this.setState({
-      gameCode: value.substr(0, 4).toUpperCase(),
-    })
-
-  checkConnectionTimeout = () => {
-    if (this.state.appState === AppState.GAME_CONNECTING) {
-      this.displayError('Connection failed, joining Wi-Fi may help')
+  const {
+    status,
+    gameCode,
+    setGameCode,
+    notice,
+    dismissNotice,
+    join,
+    fail,
+    send,
+  } = useJoin({
+    wsAddress: WS_ADDRESS as string,
+    channelConfigs,
+    onData,
+    onTimeout: () => {
       Sentry.captureMessage('Controller connection timeout')
+    },
+  })
+
+  const sendSteering = (message: object) =>
+    send(Channel.RELIABLE_STEERING, message)
+  const sendReliable = (message: object) => send(Channel.RELIABLE, message)
+
+  const gameCodeChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setGameCode(value)
+  }
+
+  const startGame = () => {
+    sendReliable({ event: Event.ROUND_START })
+  }
+
+  const readyPlayer = () => {
+    sendReliable({ event: Event.PLAYER_READY })
+    change({ ready: true })
+  }
+
+  const screen = () => {
+    const { angle, gyro, playerColor, playerCount, ready, startEnabled } = game
+
+    if (status === 'lobby') {
+      return (
+        <LockerRoom
+          gameCodeChange={gameCodeChange}
+          gameCode={gameCode}
+          onJoinClick={join}
+        />
+      )
     }
-  }
-
-  connectToGame(gameCode: string) {
-    const onClose = () => {
-      this.displayError('Connection failed')
-    }
-
-    signaling
-      .runInitiator({
-        channelConfigs,
-        onClose,
-        onData: this.onData,
-        receiverId: gameCode,
-        wsAddress: WS_ADDRESS as string,
-      })
-      .then(send => {
-        this.setState({
-          sendSteering: message => send(Channel.RELIABLE_STEERING, message),
-          sendReliable: message => send(Channel.RELIABLE, message),
-        })
-      })
-      .catch((error: { cause?: string }) => {
-        const message =
-          error.cause === 'NOT_FOUND'
-            ? `Game with code ${gameCode} not found`
-            : undefined
-
-        if (message) {
-          this.displayError(message)
-        } else {
-          logError(error)
-        }
-      })
-  }
-
-  hideNotice = () => {
-    this.setState({ notice: null })
-  }
-
-  startGame = () => {
-    this.state.sendReliable({ event: Event.ROUND_START })
-  }
-
-  readyPlayer = () => {
-    this.state.sendReliable({ event: Event.PLAYER_READY })
-    this.setState({ ready: true })
-  }
-
-  setGyro = (gyro: boolean) => {
-    this.setState({ gyro })
-  }
-
-  setAngle = (angle: number) => {
-    this.setState({ angle })
-  }
-
-  appStateComponent = () => {
-    const {
-      angle = 0,
-      appState,
-      gameCode,
-      gyro,
-      playerColor,
-      playerCount,
-      ready,
-      startEnabled = false,
-      sendSteering,
-      sendReliable,
-    } = this.state
 
     // Every screen past the lobby is only reachable once the game has
     // assigned this player a colour
-    if (
-      !playerColor &&
-      appState !== AppState.LOCKER_ROOM &&
-      appState !== AppState.GAME_CONNECTING
-    ) {
-      return null
+    if (status === 'connecting' || !playerColor) {
+      return <LockerRoomLoader />
     }
 
-    switch (appState) {
-      case AppState.LOCKER_ROOM:
-        return (
-          <LockerRoom
-            gameCodeChange={this.gameCodeChange}
-            gameCode={gameCode}
-            onJoinClick={this.onJoinClick}
-          />
-        )
-      case AppState.GAME_CONNECTING:
-        return <LockerRoomLoader />
-      case AppState.GAME_LOBBY:
+    switch (game.screen) {
+      case Screen.GAME_LOBBY:
         return (
           <GameLobby
-            startGame={this.startGame}
-            readyPlayer={this.readyPlayer}
-            playerColor={playerColor!}
+            startGame={startGame}
+            readyPlayer={readyPlayer}
+            playerColor={playerColor}
             playerCount={playerCount}
             ready={ready}
             startEnabled={startEnabled}
           />
         )
-      case AppState.GAME_PLAYING:
+      case Screen.GAME_PLAYING:
         return (
           <GamePlaying
             angle={angle}
             gyro={gyro}
-            playerColor={Color[playerColor!]}
+            playerColor={Color[playerColor]}
             send={sendSteering}
-            setGyro={this.setGyro}
+            setGyro={(value: boolean) => change({ gyro: value })}
           />
         )
-      case AppState.PLAYER_DEAD:
+      case Screen.PLAYER_DEAD:
         return (
           <PlayerDead
             sendReliable={sendReliable}
-            playerColor={Color[playerColor!]}
+            playerColor={Color[playerColor]}
           />
         )
-      case AppState.AWAITING_NEXT_ROUND:
-        return <AwaitingNextRound playerColor={Color[playerColor!]} />
+      case Screen.AWAITING_NEXT_ROUND:
+        return <AwaitingNextRound playerColor={Color[playerColor]} />
       default:
         return null
     }
   }
 
-  render() {
-    if (!WS_ADDRESS) {
-      throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
-    }
-
-    const { gyro, notice, sendSteering } = this.state
-
-    return (
-      <>
-        {notice && (
-          <Toast
-            key={notice.text}
-            text={notice.text}
-            type={notice.type}
-            onHide={this.hideNotice}
-          />
-        )}
-        <Gyro send={sendSteering} enabled={gyro} setAngle={this.setAngle} />
-        <MediaQuery orientation="portrait">
-          <TurnPhone />
-        </MediaQuery>
-        <MediaQuery orientation="landscape">
-          {this.appStateComponent()}
-        </MediaQuery>
-      </>
-    )
+  if (!WS_ADDRESS) {
+    throw new Error('Please set env variable REACT_APP_WS_ADDRESS')
   }
+
+  return (
+    <>
+      {notice && (
+        <Toast
+          key={notice.text}
+          text={notice.text}
+          type={notice.type}
+          onHide={dismissNotice}
+        />
+      )}
+      <Gyro
+        send={sendSteering}
+        enabled={game.gyro}
+        setAngle={(angle: number) => change({ angle })}
+      />
+      <MediaQuery orientation="portrait">
+        <TurnPhone />
+      </MediaQuery>
+      <MediaQuery orientation="landscape">{screen()}</MediaQuery>
+    </>
+  )
 }
 
 export default App
