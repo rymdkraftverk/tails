@@ -16,7 +16,7 @@
     "common": "file:../common",
     "eventemitter3": "^3.1.0",
     "howler": "^2.2.4",
-    "l2": "git+https://github.com/rymdkraftverk/level2.git#49bc249dc00b1473dbf998b88f827ca27770a2f9",
+    "l2": "github:rymdkraftverk/level2#e6084ae502e85bef613813c5c55edc3e472901f9",
     "pixi.js": "^8.20.1",
     "qrcode": "^1.3.3",
     "rkv-signaling": "0.0.3"

@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 import { nearestNeighbour, type Tree } from '../kdTree'
 
@@ -11,7 +11,7 @@ export const collisionCheckerTrail = (player: PIXI.Container, speedMultiplier: n
   duration:   2,
   loop:       true,
   onComplete: () => {
-    const isColliding = (other: PIXI.Container) => l1.isColliding(player, other)
+    const isColliding = (other: PIXI.Container) => l2.isColliding(player, other)
 
     const options = {
       earlyReturn: isColliding,

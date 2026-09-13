@@ -1,5 +1,5 @@
+import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
-import * as l1 from './l1'
 import * as TextStyle from './constant/textStyle'
 import { GameColor } from './game'
 import Layer from './constant/layer'
@@ -28,13 +28,13 @@ export default ({
   code,
 }: { url: string, code: string }) => {
   const container = new PIXI.Container()
-  l1.add(container, {
+  l2.add(container, {
     id:     'header',
     zIndex: Layer.FOREGROUND + 1,
   })
 
   const background = new PIXI.Graphics()
-  l1.add(
+  l2.add(
     background,
     {
       id:     HeaderIds.HEADER_BACKGROUND,
@@ -63,7 +63,7 @@ export default ({
   })
   urlLabel.x = URL_POSITION_X
   urlLabel.y = POSITION_Y
-  l1.add(urlLabel, {
+  l2.add(urlLabel, {
     parent: container,
     id:     HeaderIds.URL_LABEL,
   })
@@ -78,7 +78,7 @@ export default ({
   })
   urlText.x = URL_POSITION_X + urlLabel.width + 8
   urlText.y = POSITION_Y - 4
-  l1.add(urlText, {
+  l2.add(urlText, {
     parent: container,
     id:     HeaderIds.URL,
   })
@@ -93,7 +93,7 @@ export default ({
   })
   codeLabel.x = CODE_POSITION_X
   codeLabel.y = POSITION_Y
-  l1.add(codeLabel, {
+  l2.add(codeLabel, {
     parent: container,
     id:     HeaderIds.CODE_LABEL,
   })
@@ -108,7 +108,7 @@ export default ({
   })
   codeText.x = CODE_POSITION_X + codeLabel.width + 8
   codeText.y = POSITION_Y - 4
-  l1.add(codeText, {
+  l2.add(codeText, {
     parent: container,
     id:     HeaderIds.CODE,
   })

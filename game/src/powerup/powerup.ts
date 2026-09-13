@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
@@ -31,19 +31,19 @@ export const initPowerups = ({
   gameHeight:      number
 }) => {
   const powerupGenerator = new PIXI.Container()
-  l1.add(
+  l2.add(
     powerupGenerator,
     {
-      parent: l1.get(Scene.GAME),
+      parent: l2.get(Scene.GAME),
     },
   )
 
   // We already know which the players are so storing them here
   // as an optimization, to avoid filtering on every tick
-  const players = l1.getByLabel('player')
+  const players = l2.getByLabel('player')
 
   const getPortalAnimatedSprite = (textures: string[]) => {
-    const displayObject = new PIXI.AnimatedSprite(textures.map(l1.getTexture))
+    const displayObject = new PIXI.AnimatedSprite(textures.map(l2.getTexture))
     displayObject.animationSpeed = 0.03
     displayObject.scale.set((snakeSpeed / speedMultiplier) * 3)
     displayObject.play()
@@ -52,11 +52,11 @@ export const initPowerups = ({
 
   const createPortal = (textures: string[]) => {
     const portalSprite = getPortalAnimatedSprite(textures)
-    portalSprite.x = l1.getRandomInRange(100, gameWidth - 100)
-    portalSprite.y = l1.getRandomInRange(100, gameHeight - 100)
+    portalSprite.x = l2.getRandomInRange(100, gameWidth - 100)
+    portalSprite.y = l2.getRandomInRange(100, gameHeight - 100)
     portalSprite.anchor.set(0.5)
     l2.addBehavior(bounce(portalSprite, 0.01))
-    l1.add(
+    l2.add(
       portalSprite,
       {
         parent: powerupGenerator,
@@ -74,7 +74,7 @@ export const initPowerups = ({
     hitBox.x = sprite.x - (sprite.width / 2)
     hitBox.y = sprite.y - (sprite.height / 2)
     hitBox.hitArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
-    l1.add(
+    l2.add(
       hitBox,
       {
         parent: powerupGenerator,
@@ -82,8 +82,8 @@ export const initPowerups = ({
     )
 
     const destroy = () => {
-      l1.destroy(sprite)
-      l1.destroy(hitBox)
+      l2.destroy(sprite)
+      l2.destroy(hitBox)
       l2.removeBehavior(collisionCheckerId)
     }
 
@@ -97,9 +97,9 @@ export const initPowerups = ({
       },
       onUpdate: ({ data }: Behavior<{ onCollision: () => void }>) => {
         const collidingPlayer = players
-          .find(player => player.alive && l1.isColliding(hitBox, player))
+          .find(player => player.alive && l2.isColliding(hitBox, player))
         if (collidingPlayer) {
-          l1.sound({
+          sound({
             src:    Sound.JOIN1,
             volume: 0.6,
           })
@@ -138,7 +138,7 @@ export const initPowerups = ({
       state.portalPairs -= 1
     }
 
-    const powerupDuration = 3 * l1
+    const powerupDuration = 3 * l2
       .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
     const hitBox1 = createHitBox(portal1, powerupDuration, portal1Collision)
     const hitBox2 = createHitBox(portal2, powerupDuration, portal2Collision)
@@ -149,7 +149,7 @@ export const initPowerups = ({
 
   const generatePowerups = () => ({
     id:         'generatePowerups',
-    duration:   l1.getRandomInRange(PowerUp.SPAWN_TIME_MINIMUM, PowerUp.SPAWN_TIME_MAXIMUM),
+    duration:   l2.getRandomInRange(PowerUp.SPAWN_TIME_MINIMUM, PowerUp.SPAWN_TIME_MAXIMUM),
     loop:       true,
     onComplete: () => {
       if (Math.random() > PORTAL_APPEAR_CHANCE && state.portalPairs === 0) {
@@ -158,14 +158,14 @@ export const initPowerups = ({
         // Generate powerups
         const { texture, behaviorsToRemove, powerUp } = sample(powerUps)
         const powerUpSprite = new PIXI.Sprite(texture())
-        l1.add(
+        l2.add(
           powerUpSprite,
           {
             parent: powerupGenerator,
           },
         )
-        powerUpSprite.x = l1.getRandomInRange(100, gameWidth - 100)
-        powerUpSprite.y = l1.getRandomInRange(100, gameHeight - 100)
+        powerUpSprite.x = l2.getRandomInRange(100, gameWidth - 100)
+        powerUpSprite.y = l2.getRandomInRange(100, gameHeight - 100)
         powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
         powerUpSprite.anchor.set(0.5)
         l2.addBehavior(bounce(powerUpSprite, 0.01))
@@ -177,7 +177,7 @@ export const initPowerups = ({
             player: collidingPlayer, speedMultiplier, snakeSpeed, players,
           })
         }
-        const powerupDuration = 3 * l1
+        const powerupDuration = 3 * l2
           .getRandomInRange(PowerUp.APPEAR_TIME_MINIMUM, PowerUp.APPEAR_TIME_MAXIMUM)
         createHitBox(powerUpSprite, powerupDuration, onCollision)
       }
@@ -195,8 +195,8 @@ const powerUpSuicideBehavior = (
 ) => ({
   duration,
   onComplete: () => {
-    l1.destroy(powerupSprite)
-    l1.destroy(powerupHitbox)
+    l2.destroy(powerupSprite)
+    l2.destroy(powerupHitbox)
     l2.removeBehavior(collisionCheckerId)
   },
 })

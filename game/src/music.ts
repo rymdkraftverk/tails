@@ -1,11 +1,11 @@
-import * as l1 from './l1'
+import { sound } from 'l2/sound'
 
 export const Track = {
   GAME:  './sounds/music/zapper_64kbps.mp3',
   LOBBY: './sounds/music/lobby_music_64kbps.mp3',
 }
 
-let soundEntity: ReturnType<typeof l1.sound> | undefined
+let soundEntity: ReturnType<typeof sound> | undefined
 let currentTrack: string | undefined
 
 export const playTrack = (
@@ -28,7 +28,7 @@ export const playTrack = (
     soundEntity.stop()
   }
 
-  soundEntity = l1.sound(usedOptions)
+  soundEntity = sound(usedOptions)
 
   currentTrack = track
 }

@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
@@ -33,7 +33,7 @@ export default {
             speedMultiplier,
           }))
 
-          l1.sound({
+          sound({
             src:    Sound.POWERUP_EXPIRED,
             volume: 0.6,
           })
@@ -41,6 +41,6 @@ export default {
       },
     })
   },
-  texture:           () => l1.getTexture('powerup/powerup-lightning'),
+  texture:           () => l2.getTexture('powerup/powerup-lightning'),
   behaviorsToRemove: () => [],
 } satisfies PowerUpModule

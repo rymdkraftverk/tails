@@ -1,4 +1,3 @@
-import * as l1 from '../l1'
 import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 
@@ -14,7 +13,7 @@ export const createHoleMaker = (
   speedMultiplier: number,
 ) => ({
   id:       `createHoleMaker-${player.id}`,
-  duration: l1.getRandomInRange(
+  duration: l2.getRandomInRange(
     GENERATE_HOLE_MIN_TIME,
     GENERATE_HOLE_MAX_TIME,
   ),
@@ -25,7 +24,7 @@ export const createHoleMaker = (
 
 const holeMaker = (player: PIXI.Container, speed: number, speedMultiplier: number) => ({
   id:       `holeMaker-${player.id}`,
-  duration: l1.getRandomInRange(
+  duration: l2.getRandomInRange(
     Math.ceil(HOLE_LENGTH_MIN_TIME * (speedMultiplier / speed)),
     Math.ceil(HOLE_LENGTH_MAX_TIME * (speedMultiplier / speed)),
   ),

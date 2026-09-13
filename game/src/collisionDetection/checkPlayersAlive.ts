@@ -1,10 +1,10 @@
-import * as l1 from '../l1'
+import * as l2 from 'l2'
 import { State, state } from '../state'
 import { transitionToRoundEnd } from '../roundEnd'
 import GameEvent from '../constant/gameEvent'
 
 const checkPlayersAlive = () => {
-  const playersAlive = l1
+  const playersAlive = l2
     .getByLabel('player')
     .filter(p => p.alive)
 

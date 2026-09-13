@@ -1,5 +1,4 @@
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
@@ -74,7 +73,7 @@ export const transitionToGameScene = (maxPlayers: number) => {
   })
 
   const gameScene = new PIXI.Container()
-  l1.add(gameScene, {
+  l2.add(gameScene, {
     id: Scene.GAME,
   })
 
@@ -116,10 +115,10 @@ export const transitionToGameScene = (maxPlayers: number) => {
           .filter(behavior => behavior !== null)
           .forEach(behavior => l2.addBehavior(behavior))
 
-        l1.destroy(`${player.id}:direction`)
+        l2.destroy(`${player.id}:direction`)
       })
       initPowerups({
-        snakeSpeed:      l1.getByLabel('player')[0].speed,
+        snakeSpeed:      l2.getByLabel('player')[0].speed,
         speedMultiplier: SPEED_MULTIPLIER,
         gameWidth:       GAME_WIDTH,
         gameHeight:      GAME_HEIGHT + HEADER_HEIGHT,
@@ -164,22 +163,22 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
   const snakeSpeed = SPEED_MULTIPLIER / playerCountFactor
 
   const player = new PIXI.Container()
-  l1.add(
+  l2.add(
     player,
     {
       id,
-      parent: l1.get(Scene.GAME),
+      parent: l2.get(Scene.GAME),
       labels: ['player'],
       zIndex: Layer.FOREGROUND,
     },
   )
-  const sprite = new PIXI.Sprite(l1.getTexture(`circle/circle-${color}`))
-  l1.add(sprite, { parent: player })
+  const sprite = new PIXI.Sprite(l2.getTexture(`circle/circle-${color}`))
+  l2.add(sprite, { parent: player })
   player.sprite = sprite
   player.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
   if (playerRepository.isFirstPlace(id)) {
-    const crown = new PIXI.Sprite(l1.getTexture('crown'))
-    l1.add(crown, {
+    const crown = new PIXI.Sprite(l2.getTexture('crown'))
+    l2.add(crown, {
       parent: player,
     })
     crown.scale.set(2)
@@ -192,7 +191,7 @@ const createPlayer = (playerCountFactor: number, index: number, { id, color }: P
   player.visible = false
 
   player.speed = snakeSpeed
-  player.degrees = l1.getRandomInRange(0, 360)
+  player.degrees = l2.getRandomInRange(0, 360)
   player.turnRate = 0
   player.event = new EventEmitter()
   player.color = color
@@ -244,7 +243,7 @@ const bouncePlayers = (
   playerCountFactor: number,
 ) => new Promise<void>((resolve) => {
   const bouncer = new PIXI.Container()
-  l1.add(bouncer, {
+  l2.add(bouncer, {
     id: 'bouncer',
   })
 
@@ -266,8 +265,8 @@ const bouncePlayers = (
       const directionRadians = toRadians(player.degrees)
       const directionDistanceScale = 200 / playerCountFactor
 
-      const directionIndicator = new PIXI.Sprite(l1.getTexture(`arrow/arrow-${player.color}`))
-      l1.add(
+      const directionIndicator = new PIXI.Sprite(l2.getTexture(`arrow/arrow-${player.color}`))
+      l2.add(
         directionIndicator,
         {
           id:     `${player.id}:direction`,
@@ -286,7 +285,7 @@ const bouncePlayers = (
       directionIndicator.rotation = toRadians(player.degrees)
 
       if (data.index === players.length) {
-        l1.destroy(bouncer)
+        l2.destroy(bouncer)
         l2.removeBehavior('bouncePlayers')
         resolve()
       }
@@ -328,11 +327,11 @@ const pivot = (player: PIXI.Container) => ({
 
 const createWalls = () => {
   const walls = new PIXI.Graphics()
-  l1.add(
+  l2.add(
     walls,
     {
       id:     'walls',
-      parent: l1.get(Scene.GAME),
+      parent: l2.get(Scene.GAME),
       zIndex: Layer.FOREGROUND + 1,
     },
   )

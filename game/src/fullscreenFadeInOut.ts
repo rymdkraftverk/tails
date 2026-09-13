@@ -1,5 +1,4 @@
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
@@ -10,7 +9,7 @@ const DURATION = 50
 
 export default () => new Promise<void>((resolve) => {
   const fade = new PIXI.Graphics()
-  l1.add(
+  l2.add(
     fade,
     {
       id:     'fadeInOut',
@@ -38,7 +37,7 @@ const fadeInOut = (graphics: PIXI.Graphics, duration: number, resolve: () => voi
     }),
   },
   onComplete: () => {
-    l1.destroy(graphics)
+    l2.destroy(graphics)
   },
   onUpdate: ({ data, counter }: Behavior<FadeData>) => {
     const alpha = (data.animation(counter) * -1) / 100

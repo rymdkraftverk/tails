@@ -13,13 +13,6 @@ declare module 'pixi.js' {
     event: EventEmitter
     fatLevel: number
     id: string
-    l1: {
-      id: string
-      labels: string[]
-      zIndex: number | null
-      isDestroyed: () => boolean
-      originalSize?: number
-    }
     player: string
     preventTrail: number
     scaleFactor: number

@@ -1,4 +1,3 @@
-import * as l1 from '../l1'
 import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import { addEntityToTree, type Tree } from '../kdTree'
@@ -24,8 +23,8 @@ export const createTrail = ({
       // This container is used to group all trails into one parent
       // It is used for the "lights out" death animation
       player.trailContainer = new PIXI.Container()
-      l1.add(player.trailContainer, {
-        parent: l1.get(Scene.GAME),
+      l2.add(player.trailContainer, {
+        parent: l2.get(Scene.GAME),
       })
       player.trailContainer.counter = 0
     }
@@ -33,8 +32,8 @@ export const createTrail = ({
       // This container is used to group all trail sprites into one parent
       // So that zIndex will only be set once, since it's an expensive sort operation
       player.trailSpriteContainer = new PIXI.Container()
-      l1.add(player.trailSpriteContainer, {
-        parent: l1.get(Scene.GAME),
+      l2.add(player.trailSpriteContainer, {
+        parent: l2.get(Scene.GAME),
         zIndex: Layer.CENTER,
       })
     }
@@ -56,15 +55,15 @@ export const createTrail = ({
     trailE.active = false
     trailE.player = player.id
 
-    l1.add(trailE, {
+    l2.add(trailE, {
       parent: player.trailContainer,
     })
 
-    const sprite = new PIXI.Sprite(l1.getTexture(`square-game/square-game-${player.color}`))
+    const sprite = new PIXI.Sprite(l2.getTexture(`square-game/square-game-${player.color}`))
     sprite.scale.set(scale / speedMultiplier)
     sprite.x = x
     sprite.y = y
-    const rotation = l1.toRadians(player.degrees)
+    const rotation = l2.toRadians(player.degrees)
     sprite.anchor.set(0.5)
     sprite.rotation = rotation
 
@@ -72,7 +71,7 @@ export const createTrail = ({
     trailE.sprite = sprite
     trailE.hitArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
 
-    l1.add(
+    l2.add(
       sprite,
       {
         parent: player.trailSpriteContainer,
@@ -95,8 +94,8 @@ const middle = (displayObject: PIXI.Container) => {
   const hitArea = displayObject.hitArea as PIXI.Rectangle
 
   return {
-    x: (global.x / l1.getScale()) + (hitArea.width / 2),
-    y: (global.y / l1.getScale()) + (hitArea.height / 2),
+    x: (global.x / l2.getScale()) + (hitArea.width / 2),
+    y: (global.y / l2.getScale()) + (hitArea.height / 2),
   }
 }
 

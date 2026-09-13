@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
@@ -32,7 +32,7 @@ const powerUpBehavior = ({
         speedMultiplier,
       }))
 
-      l1.sound({
+      sound({
         src:    Sound.POWERUP_EXPIRED,
         volume: 0.6,
       })
@@ -48,12 +48,12 @@ export default {
   }: PowerUpOptions) => {
     players.forEach((p) => {
       // Don't apply on the player who picked up the fat powerup
-      if (p.l1.id === player.l1.id) {
+      if (l2.getId(p) === l2.getId(player)) {
         return
       }
       l2.addBehavior(powerUpBehavior({ player: p, speedMultiplier }))
     })
   },
-  texture:           () => l1.getTexture('powerup/powerup-sumo'),
+  texture:           () => l2.getTexture('powerup/powerup-sumo'),
   behaviorsToRemove: () => [],
 } satisfies PowerUpModule

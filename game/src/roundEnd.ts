@@ -1,5 +1,4 @@
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import { Color } from 'common'
@@ -30,11 +29,11 @@ export const transitionToRoundEnd = () => {
       fill: Color[winner],
     },
   })
-  l1.add(
+  l2.add(
     roundEndText,
     {
       id:     Scene.ROUND_END,
-      parent: l1.get(Scene.GAME),
+      parent: l2.get(Scene.GAME),
       zIndex: Layer.FOREGROUND + 10,
     },
   )
@@ -51,13 +50,13 @@ const pauseAndTransitionToScoreScene = () => ({
   duration:   TIME_UNTIL_ROUND_END_RESTARTS,
   onComplete: () => {
     // Clear the particle containers before the scene they sit in goes away
-    l1
+    l2
       .getByLabel('particleContainer')
-      .forEach(displayObject => l1.destroy(displayObject, { children: false }))
+      .forEach(displayObject => l2.destroy(displayObject, { children: false }))
 
     l2.getAllBehaviors()
       .forEach(behavior => l2.removeBehavior(behavior))
-    l1.destroy(Scene.GAME)
+    l2.destroy(Scene.GAME)
 
     transitionToScoreScene()
   },
@@ -71,7 +70,7 @@ const roundWinnerTextAnimation = (roundEndText: PIXI.Text) => ({
   duration: WINNER_TEXT_ANIMATION_DURATION,
   data:     { animation: null } as WinnerTextData,
   onInit:   ({ data }: Behavior<WinnerTextData>) => {
-    if (roundEndText.l1.isDestroyed()) {
+    if (l2.isDestroyed(roundEndText)) {
       return
     }
 

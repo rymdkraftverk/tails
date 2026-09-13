@@ -1,6 +1,5 @@
 import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
-import * as l1 from './l1'
 
 type Range = { min: number, max: number }
 
@@ -79,7 +78,7 @@ const createParticle = (options: EmitOptions): Particle => {
   sprite.x = x
   sprite.y = y
 
-  const radians = l1.toRadians(between(options.startRotation))
+  const radians = l2.toRadians(between(options.startRotation))
 
   if (options.rotateSprite) {
     sprite.rotation = radians

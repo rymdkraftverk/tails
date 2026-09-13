@@ -1,3 +1,4 @@
+import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 import type { Behavior } from 'l2'
 import { createParabola } from './magic'
@@ -8,7 +9,7 @@ export default (displayObject: PIXI.Container, modifier: number) => ({
   duration: 20,
   data:     { animation: null } as BounceData,
   onInit:   ({ data }: Behavior<BounceData>) => {
-    if (displayObject.l1.isDestroyed()) {
+    if (l2.isDestroyed(displayObject)) {
       return
     }
 
@@ -20,7 +21,7 @@ export default (displayObject: PIXI.Container, modifier: number) => ({
     })
   },
   onUpdate: ({ data, counter }: Behavior<BounceData>) => {
-    if (data.animation && !displayObject.l1.isDestroyed()) {
+    if (data.animation && !l2.isDestroyed(displayObject)) {
       displayObject.scale.set(-1 * data.animation(counter))
     }
   },

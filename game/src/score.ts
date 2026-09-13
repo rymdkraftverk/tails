@@ -1,6 +1,5 @@
 import * as l2 from 'l2'
 import { Event, Color, Channel } from 'common'
-import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import Scene from './Scene'
 import { MAX_PLAYERS_ALLOWED } from '.'
@@ -20,7 +19,7 @@ const ANIMATION_DURATION = 60
 
 export const transitionToScoreScene = () => {
   const scoreScene = new PIXI.Container()
-  l1.add(
+  l2.add(
     scoreScene,
     {
       id:     Scene.SCORE,
@@ -28,8 +27,8 @@ export const transitionToScoreScene = () => {
     },
   )
 
-  const goal = new PIXI.Sprite(l1.getTexture('goal-flag'))
-  l1.add(
+  const goal = new PIXI.Sprite(l2.getTexture('goal-flag'))
+  l2.add(
     goal,
     {
       parent: scoreScene,
@@ -48,7 +47,7 @@ export const transitionToScoreScene = () => {
       fill: 'white',
     },
   })
-  l1.add(
+  l2.add(
     goalText,
     {
       parent: scoreScene,
@@ -74,7 +73,7 @@ export const transitionToScoreScene = () => {
   if (matchWinnerCount > 0) {
     delay(120)
       .then(() => {
-        l1.destroy(scoreScene)
+        l2.destroy(scoreScene)
         transitionToMatchEnd()
       })
   } else {
@@ -126,7 +125,7 @@ const createPlayer = (index: number) => {
         fill: 'white',
       },
     })
-    l1.add(
+    l2.add(
       playerScore,
       {
         parent: head,
@@ -139,8 +138,8 @@ const createPlayer = (index: number) => {
     )
 
     if (playerRepository.isFirstPlace(player.id)) {
-      const crown = new PIXI.Sprite(l1.getTexture('crown'))
-      l1.add(crown, {
+      const crown = new PIXI.Sprite(l2.getTexture('crown'))
+      l2.add(crown, {
         parent: head,
       })
       crown.scale.set(1.5)
@@ -150,10 +149,10 @@ const createPlayer = (index: number) => {
   }
 
   const tail = new PIXI.Graphics()
-  l1.add(
+  l2.add(
     tail,
     {
-      parent: l1.get(Scene.SCORE),
+      parent: l2.get(Scene.SCORE),
       zIndex: -10,
     },
   )
@@ -166,7 +165,7 @@ const createPlayer = (index: number) => {
   l2.addBehavior(animate({
     head,
     tail,
-    fromX: head.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale(),
+    fromX: head.toGlobal(new PIXI.Point(0, 0)).x / l2.getScale(),
     toX:   currentX,
     color: (player && player.color) || 'none',
   }))
@@ -176,14 +175,14 @@ const createHead = ({
   x, y, texture,
 }: { x: number, y: number, texture: string }) => {
   const head = new PIXI.Container()
-  l1.add(
+  l2.add(
     head,
     {
-      parent: l1.get(Scene.SCORE),
+      parent: l2.get(Scene.SCORE),
     },
   )
-  const sprite = new PIXI.Sprite(l1.getTexture(texture))
-  l1.add(sprite, { parent: head })
+  const sprite = new PIXI.Sprite(l2.getTexture(texture))
+  l2.add(sprite, { parent: head })
   head.boundsArea = new PIXI.Rectangle(0, 0, sprite.width, sprite.height)
 
   head.x = x
@@ -204,7 +203,7 @@ const animate = ({
   onUpdate: () => {
     const diffX = (toX - fromX) / ANIMATION_DURATION
     head.x += diffX
-    const x = head.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale()
+    const x = head.toGlobal(new PIXI.Point(0, 0)).x / l2.getScale()
     tail.clear()
     tail
       // Pixi.Graphics requires color code to start with 0x instead of #

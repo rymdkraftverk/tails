@@ -1,4 +1,3 @@
-import * as l1 from '../l1'
 import * as l2 from 'l2'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
@@ -7,7 +6,7 @@ import Layer from '../constant/layer'
 
 const DURATION = 60 // ticks
 
-export const animateScoreGainOnLivingPlayers = (color: string) => l1
+export const animateScoreGainOnLivingPlayers = (color: string) => l2
   .getByLabel('player')
   .filter(p => p && p.alive)
   .forEach(player => displayGainedPoint(color, player))
@@ -20,7 +19,7 @@ const displayGainedPoint = (color: string, player: PIXI.Container) => {
       fill: color,
     },
   })
-  l1.add(
+  l2.add(
     scoreGainEntity,
     {
       zIndex: Layer.FOREGROUND,
@@ -41,7 +40,7 @@ const displayGainedPoint = (color: string, player: PIXI.Container) => {
     duration:   DURATION,
     onComplete: () => {
       l2.removeBehavior(move)
-      l1.destroy(scoreGainEntity)
+      l2.destroy(scoreGainEntity)
     },
   })
 }

@@ -10,7 +10,7 @@ const SOON_TIME_LIMIT = 4 * 60 // 4s
 const IMMINENT_TIME_LIMIT = SOON_TIME_LIMIT / 2
 
 const fluctuateOpacityBehavior = (entity: PIXI.Container, speed: number, duration: number) => ({
-  id:   `fluctuateOpacity-${entity.l1.id}`,
+  id:   `fluctuateOpacity-${l2.getId(entity)}`,
   duration,
   data: {
     sine: createSine({
@@ -37,7 +37,7 @@ const indicateExpirationBehavior = (duration: number, entity: PIXI.Container) =>
     && !data.expirationState
     ) {
       data.expirationState = EXPIRATION_STATE_SOON
-      l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+      l2.removeBehavior(`fluctuateOpacity-${l2.getId(entity)}`)
 
       // the duration of "soon" until it's cut off by "imminent"
       const soonDuration = SOON_TIME_LIMIT - IMMINENT_TIME_LIMIT
@@ -47,12 +47,12 @@ const indicateExpirationBehavior = (duration: number, entity: PIXI.Container) =>
     && data.expirationState === EXPIRATION_STATE_SOON
     ) {
       data.expirationState = EXPIRATION_STATE_IMMINENT
-      l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+      l2.removeBehavior(`fluctuateOpacity-${l2.getId(entity)}`)
       l2.addBehavior(fluctuateOpacityBehavior(entity, 20, IMMINENT_TIME_LIMIT))
     }
   },
   onComplete: () => {
-    l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+    l2.removeBehavior(`fluctuateOpacity-${l2.getId(entity)}`)
     entity.alpha = 1
   },
 })

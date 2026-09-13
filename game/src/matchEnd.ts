@@ -1,5 +1,5 @@
+import { sound } from 'l2/sound'
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import type { Behavior } from 'l2'
 import type { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
@@ -27,21 +27,21 @@ export const transitionToMatchEnd = () => {
   // console window. This is already done on round end, this clean up is not
   // necessary during standard game flow
   // TODO consider using event based solution to separate concerns
-  l1.destroy(Scene.GAME)
+  l2.destroy(Scene.GAME)
   l2.getAllBehaviors()
     .forEach(behavior => l2.removeBehavior(behavior))
 
-  l1
+  l2
     .getAll()
-    .filter(e => e.l1.id !== 'background')
+    .filter(e => l2.getId(e) !== 'background')
     .forEach((displayObject) => {
-      if (!displayObject.l1.isDestroyed()) {
-        l1.destroy(displayObject)
+      if (!l2.isDestroyed(displayObject)) {
+        l2.destroy(displayObject)
       }
     })
 
   const matchEnd = new PIXI.Container()
-  l1.add(
+  l2.add(
     matchEnd,
     {
       id: Scene.MATCH_END,
@@ -61,7 +61,7 @@ export const transitionToMatchEnd = () => {
         fill:     Color[color],
       },
     })
-    l1.add(
+    l2.add(
       text,
       {
         parent: matchEnd,
@@ -76,7 +76,7 @@ export const transitionToMatchEnd = () => {
     l2.addBehavior(textMovement(text))
 
     const fireworkCreator = new PIXI.Container()
-    l1.add(
+    l2.add(
       fireworkCreator,
       {
         parent: matchEnd,
@@ -95,7 +95,7 @@ export const transitionToMatchEnd = () => {
         fill:     'white',
       },
     })
-    l1.add(
+    l2.add(
       text,
       {
         parent: matchEnd,
@@ -130,12 +130,12 @@ type FireworksData = { fireWorksSound: Howl | null }
 
 const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => ({
   id:       'createFireworks',
-  duration: l1.getRandomInRange(5, 10),
+  duration: l2.getRandomInRange(5, 10),
   loop:     true,
   data:     { fireWorksSound: null } as FireworksData,
   onInit:   ({ data }: Behavior<FireworksData>) => {
     stopTrack()
-    data.fireWorksSound = l1.sound({
+    data.fireWorksSound = sound({
       src:    Sound.FIREWORK,
       volume: 1,
       loop:   true,
@@ -145,8 +145,8 @@ const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => 
     fireWorksSound?.stop()
   },
   onComplete: () => {
-    const x = l1.getRandomInRange(100, GAME_WIDTH - 100)
-    const y = l1.getRandomInRange(100, GAME_HEIGHT - 100)
+    const x = l2.getRandomInRange(100, GAME_WIDTH - 100)
+    const y = l2.getRandomInRange(100, GAME_HEIGHT - 100)
 
     const {
       textures,
@@ -158,7 +158,7 @@ const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => 
     })
     const fireworkEmitter = emit({
       parent:   creator,
-      textures: textures.map(l1.getTexture),
+      textures: textures.map(l2.getTexture),
       ...config,
     })
     fireworkEmitters = fireworkEmitters.concat(fireworkEmitter)
@@ -186,7 +186,7 @@ const pause = () => ({
     })
     fireworkEmitters = []
 
-    l1.destroy(Scene.MATCH_END)
+    l2.destroy(Scene.MATCH_END)
 
     transitionToLobby(state.gameCode, state.players)
   },

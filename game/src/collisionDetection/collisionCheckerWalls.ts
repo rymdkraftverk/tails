@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 
 import { HEADER_HEIGHT } from '../header'
@@ -17,8 +17,8 @@ export const collisionCheckerWalls = ({
   duration:   2,
   loop:       true,
   onComplete: () => {
-    const x = player.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale()
-    const y = player.toGlobal(new PIXI.Point(0, 0)).y / l1.getScale()
+    const x = player.toGlobal(new PIXI.Point(0, 0)).x / l2.getScale()
+    const y = player.toGlobal(new PIXI.Point(0, 0)).y / l2.getScale()
     const hitArea = player.hitArea as PIXI.Rectangle
     if (
       x < wallThickness

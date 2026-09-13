@@ -1,5 +1,4 @@
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import { Event, Channel } from 'common'
 import * as Sentry from '@sentry/browser'
@@ -35,7 +34,7 @@ const { error, log, warn } = console
 log(`Version: ${VERSION}`)
 
 const turnPlayer = (pId: string, angle: number) => {
-  const player = l1.get(pId)
+  const player = l2.get(pId)
   // This is needed since events might be sent during score screen when player does not exist
   if (!player) {
     return
@@ -94,18 +93,18 @@ const roundStart = (options = { collectMetrics: false }) => {
           'fadeInOut',
           'gameMusic',
         ]
-        l1
+        l2
           .getAll()
-          .filter(e => !entitiesToKeep.includes(e.l1.id))
+          .filter(e => !entitiesToKeep.some(id => id === l2.getId(e)))
           .forEach((displayObject) => {
-            if (!displayObject.l1.isDestroyed()) {
-              l1.destroy(displayObject)
+            if (!l2.isDestroyed(displayObject)) {
+              l2.destroy(displayObject)
             }
           })
 
         transitionToGameScene(MAX_PLAYERS_ALLOWED)
       })
-      .then(() => (collectMetrics ? initMetricsBehavior(app) : Promise.resolve()))
+      .then(() => (collectMetrics ? initMetricsBehavior(l2.getApp()) : Promise.resolve()))
   }
 }
 
@@ -169,7 +168,7 @@ export const onPlayerJoin = ({
     send,
   })
 
-  if (l1.get(Scene.LOBBY)) {
+  if (l2.get(Scene.LOBBY)) {
     const numOfPlayers = playerRepository.count()
     createLobbyPlayer(player, numOfPlayers - 1, { newPlayer: true })
   }
@@ -213,9 +212,9 @@ const onPlayerLeave = (id: string) => {
   playerRepository.remove(id)
 
   if (state.state === State.LOBBY) {
-    l1
+    l2
       .getByLabel('lobby-player')
-      .forEach(displayObject => l1.destroy(displayObject))
+      .forEach(displayObject => l2.destroy(displayObject))
 
     state
       .players
@@ -230,27 +229,21 @@ const onPlayerLeave = (id: string) => {
   })
 }
 
-export const app = new PIXI.Application()
-
 const boot = async () => {
-  await app.init({
-    width:             GAME_WIDTH,
-    height:            GAME_HEIGHT,
-    antialias:         true,
-    clearBeforeRender: false,
-  })
-
   const gameElement = document.getElementById('game')
 
   if (!gameElement) {
     throw new Error('Found no #game element to mount the canvas into')
   }
 
-  gameElement.appendChild(app.canvas)
-
-  l1.init(app, {
-    logging: false,
-    onError: (e: Error) => {
+  await l2.boot({
+    mount:             gameElement,
+    width:             GAME_WIDTH,
+    height:            GAME_HEIGHT,
+    antialias:         true,
+    clearBeforeRender: false,
+    logging:           false,
+    onError:           (e: Error) => {
       Sentry.captureException(e)
     },
   })
@@ -260,13 +253,13 @@ const boot = async () => {
       error('Unable to load font')
     })
 
-  l1.useSpritesheets([await PIXI.Assets.load('assets/spritesheet.json')])
+  l2.useSpritesheets([await PIXI.Assets.load('assets/spritesheet.json')])
 
-  const background = new PIXI.Sprite(l1.getTexture('background'))
+  const background = new PIXI.Sprite(l2.getTexture('background'))
 
   background.scale.set(10)
 
-  l1.add(background, {
+  l2.add(background, {
     id:     'background',
     zIndex: Layer.ABSOLUTE_BACKGROUND,
   })
@@ -284,14 +277,7 @@ const boot = async () => {
       })
     })
 
-  const resizeGame = () => {
-    const screenWidth = window.innerWidth
-    const screenHeight = window.innerHeight
-    l1.resize(screenWidth, screenHeight)
-  }
-  resizeGame()
-
-  window.addEventListener('resize', resizeGame)
+  l2.fitToWindow()
 }
 
 const printBehaviors = () => {
@@ -304,11 +290,11 @@ const printBehaviors = () => {
 }
 
 const start = () => {
-  app.ticker.start()
+  l2.getApp().ticker.start()
 }
 
 const stop = () => {
-  app.ticker.stop()
+  l2.getApp().ticker.stop()
 }
 
 const initMetricsBehavior = (appReference: PIXI.Application) => {
@@ -318,7 +304,7 @@ const initMetricsBehavior = (appReference: PIXI.Application) => {
     onUpdate: () => {
       metrics = metrics.concat({
         pixiElapsedMS:  appReference.ticker.elapsedMS,
-        displayObjects: l1.getAll().length,
+        displayObjects: l2.getAll().length,
         l1LoopDuration: l2.getLoopDuration(),
       })
     },
@@ -379,7 +365,7 @@ window.debug = {
   printBehaviors,
   scenes:            () => Object
     .values(Scene)
-    .filter(scene => l1.get(scene)),
+    .filter(scene => l2.get(scene)),
   start,
   stop,
   state,

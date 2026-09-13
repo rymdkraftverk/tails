@@ -1,5 +1,5 @@
+import { sound } from 'l2/sound'
 import * as l2 from 'l2'
-import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import Bowser from 'bowser'
 import { getUrlParams } from 'common'
@@ -58,7 +58,7 @@ const TextColor = {
   UNSUPPORTED_BROWSER: '#ff5b5b', // light red
 }
 
-const getPlayerPosition = l1.grid({
+const getPlayerPosition = l2.grid({
   x:           1000,
   y:           100,
   marginX:     170,
@@ -84,7 +84,7 @@ const addText = ({
   textObject.x = x
   textObject.y = y
 
-  l1.add(
+  l2.add(
     textObject,
     {
       parent,
@@ -106,16 +106,16 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
 
   const lobbyScene = new PIXI.Container()
 
-  l1.add(
+  l2.add(
     lobbyScene,
     {
       id: Scene.LOBBY,
     },
   )
 
-  const logo = new PIXI.Sprite(l1.getTexture('logo'))
+  const logo = new PIXI.Sprite(l2.getTexture('logo'))
   logo.y = 32
-  l1.add(
+  l2.add(
     logo,
     {
       parent: lobbyScene,
@@ -253,7 +253,7 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
   })
 
   const playersDivider = new PIXI.Graphics()
-  l1.add(
+  l2.add(
     playersDivider,
     {
       id:     'playersDivider',
@@ -307,8 +307,8 @@ const drawInstructionArrow = ({
   angle:   number
   parent?: PIXI.Container
 }) => {
-  const instructionArrowOne = new PIXI.Sprite(l1.getTexture('expand-arrow-one'))
-  l1.add(
+  const instructionArrowOne = new PIXI.Sprite(l2.getTexture('expand-arrow-one'))
+  l2.add(
     instructionArrowOne,
     {
       id: `instruction-arrow-${id}`,
@@ -326,12 +326,12 @@ const drawInstructionArrow = ({
 const createOutline = (index: number) => {
   const { x, y } = getPlayerPosition(index)
 
-  const outline = new PIXI.Sprite(l1.getTexture('square-outline'))
-  l1.add(
+  const outline = new PIXI.Sprite(l2.getTexture('square-outline'))
+  l2.add(
     outline,
     {
       id:     `outline-${index}`,
-      parent: l1.get(Scene.LOBBY),
+      parent: l2.get(Scene.LOBBY),
       zIndex: Layer.BACKGROUND + 10,
     },
   )
@@ -349,13 +349,13 @@ export const createLobbyPlayer = (
 ) => {
   const { x, y } = getPlayerPosition(playerIndex)
 
-  const square = new PIXI.Sprite(l1.getTexture(`square/square-${color}`))
-  l1.add(
+  const square = new PIXI.Sprite(l2.getTexture(`square/square-${color}`))
+  l2.add(
     square,
     {
       id:     `lobby-player-${color}`,
       labels: ['lobby-player'],
-      parent: l1.get(Scene.LOBBY),
+      parent: l2.get(Scene.LOBBY),
     },
   )
 
@@ -371,9 +371,9 @@ export const createLobbyPlayer = (
       Sound.JOIN2,
       Sound.JOIN3,
     ]
-    const joinSound = joinSounds[l1.getRandomInRange(0, 3)]
+    const joinSound = joinSounds[l2.getRandomInRange(0, 3)]
 
-    l1.sound({
+    sound({
       src:    joinSound,
       volume: 0.4,
     })
