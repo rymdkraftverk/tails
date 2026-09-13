@@ -204,8 +204,8 @@ class App extends Component<Record<string, never>, AppStateShape> {
       })
       .then(send => {
         this.setState({
-          sendSteering: send(Channel.RELIABLE_STEERING),
-          sendReliable: send(Channel.RELIABLE),
+          sendSteering: message => send(Channel.RELIABLE_STEERING, message),
+          sendReliable: message => send(Channel.RELIABLE, message),
         })
       })
       .catch((error: { cause?: string }) => {
