@@ -1,5 +1,6 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import { Color } from 'common'
 import { createEaseInAndOut } from './magic'
@@ -42,8 +43,8 @@ export const transitionToRoundEnd = () => {
   roundEndText.y = 200
   roundEndText.anchor.set(0.5)
 
-  l1.addBehavior(roundWinnerTextAnimation(roundEndText))
-  l1.addBehavior(pauseAndTransitionToScoreScene())
+  l2.addBehavior(roundWinnerTextAnimation(roundEndText))
+  l2.addBehavior(pauseAndTransitionToScoreScene())
 }
 
 const pauseAndTransitionToScoreScene = () => ({
@@ -54,8 +55,8 @@ const pauseAndTransitionToScoreScene = () => ({
       .getByLabel('particleContainer')
       .forEach(displayObject => l1.destroy(displayObject, { children: false }))
 
-    l1.getAllBehaviors()
-      .forEach(behavior => l1.removeBehavior(behavior))
+    l2.getAllBehaviors()
+      .forEach(behavior => l2.removeBehavior(behavior))
     l1.destroy(Scene.GAME)
 
     transitionToScoreScene()

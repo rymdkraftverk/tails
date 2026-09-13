@@ -1,3 +1,4 @@
+import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import * as l1 from './l1'
 
@@ -125,7 +126,7 @@ export const emit = (options: EmitOptions) => {
     }
   }
 
-  const behavior = l1.addBehavior({
+  const behavior = l2.addBehavior({
     onUpdate: ({ deltaTime }) => {
       // The parent going away takes every particle in it with it
       if (!options.parent.parent) {
@@ -169,7 +170,7 @@ export const emit = (options: EmitOptions) => {
   const destroy = () => {
     particles.forEach(retire)
     particles.length = 0
-    l1.removeBehavior(behavior)
+    l2.removeBehavior(behavior)
   }
 
   return { destroy }

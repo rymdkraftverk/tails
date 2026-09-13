@@ -1,4 +1,4 @@
-import * as l1 from '../l1'
+import * as l2 from 'l2'
 
 export default () => {
   const div = document.createElement('div')
@@ -9,6 +9,6 @@ export default () => {
   document.body.appendChild(div)
 
   setInterval(() => {
-    div.innerHTML = `b: ${l1.getAllBehaviors().length}`
+    div.innerHTML = `b: ${l2.getAllBehaviors().length}`
   }, 1000)
 }

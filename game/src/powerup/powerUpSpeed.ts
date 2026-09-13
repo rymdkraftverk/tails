@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
 import { createTrail } from '../trail'
@@ -10,11 +11,11 @@ export default {
     speedMultiplier,
     snakeSpeed,
   }: PowerUpOptions) => {
-    l1.addBehavior({
+    l2.addBehavior({
       id:       `speed-${player.id}`,
       duration: PowerUp.DURATION,
       onInit:   () => {
-        l1.addBehavior(createTrail({
+        l2.addBehavior(createTrail({
           player,
           scale:    player.scaleFactor,
           speedMultiplier,
@@ -26,7 +27,7 @@ export default {
         if (player.alive) {
           player.speed = snakeSpeed
 
-          l1.addBehavior(createTrail({
+          l2.addBehavior(createTrail({
             player,
             scale: player.scaleFactor,
             speedMultiplier,

@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 
 const GENERATE_HOLE_MAX_TIME = 300
@@ -18,7 +19,7 @@ export const createHoleMaker = (
     GENERATE_HOLE_MAX_TIME,
   ),
   onComplete: () => {
-    l1.addBehavior(holeMaker(player, speed, speedMultiplier))
+    l2.addBehavior(holeMaker(player, speed, speedMultiplier))
   },
 })
 
@@ -33,6 +34,6 @@ const holeMaker = (player: PIXI.Container, speed: number, speedMultiplier: numbe
   },
   onComplete: () => {
     player.preventTrail -= 1
-    l1.addBehavior(createHoleMaker(player, speed, speedMultiplier))
+    l2.addBehavior(createHoleMaker(player, speed, speedMultiplier))
   },
 })

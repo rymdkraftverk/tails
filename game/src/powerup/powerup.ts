@@ -1,5 +1,6 @@
 import * as l1 from '../l1'
-import type { Behavior } from '../l1'
+import * as l2 from 'l2'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import Scene from '../Scene'
 import Sound from '../constant/sound'
@@ -54,7 +55,7 @@ export const initPowerups = ({
     portalSprite.x = l1.getRandomInRange(100, gameWidth - 100)
     portalSprite.y = l1.getRandomInRange(100, gameHeight - 100)
     portalSprite.anchor.set(0.5)
-    l1.addBehavior(bounce(portalSprite, 0.01))
+    l2.addBehavior(bounce(portalSprite, 0.01))
     l1.add(
       portalSprite,
       {
@@ -83,7 +84,7 @@ export const initPowerups = ({
     const destroy = () => {
       l1.destroy(sprite)
       l1.destroy(hitBox)
-      l1.removeBehavior(collisionCheckerId)
+      l2.removeBehavior(collisionCheckerId)
     }
 
     const collisionCheckerId = crypto.randomUUID()
@@ -109,10 +110,10 @@ export const initPowerups = ({
       },
     }
 
-    l1.addBehavior(collisionChecker)
+    l2.addBehavior(collisionChecker)
 
-    l1.addBehavior(indicateExpiration(powerupDuration, sprite))
-    l1.addBehavior(powerUpSuicideBehavior(powerupDuration, sprite, hitBox, collisionCheckerId))
+    l2.addBehavior(indicateExpiration(powerupDuration, sprite))
+    l2.addBehavior(powerUpSuicideBehavior(powerupDuration, sprite, hitBox, collisionCheckerId))
 
     return {
       collisionChecker,
@@ -167,10 +168,10 @@ export const initPowerups = ({
         powerUpSprite.y = l1.getRandomInRange(100, gameHeight - 100)
         powerUpSprite.scale.set((snakeSpeed / speedMultiplier))
         powerUpSprite.anchor.set(0.5)
-        l1.addBehavior(bounce(powerUpSprite, 0.01))
+        l2.addBehavior(bounce(powerUpSprite, 0.01))
         const onCollision = (collidingPlayer: PIXI.Container) => {
           behaviorsToRemove(collidingPlayer)
-            .forEach(id => l1.removeBehavior(id))
+            .forEach(id => l2.removeBehavior(id))
 
           powerUp({
             player: collidingPlayer, speedMultiplier, snakeSpeed, players,
@@ -183,7 +184,7 @@ export const initPowerups = ({
     },
   })
 
-  l1.addBehavior(generatePowerups())
+  l2.addBehavior(generatePowerups())
 }
 
 const powerUpSuicideBehavior = (
@@ -196,6 +197,6 @@ const powerUpSuicideBehavior = (
   onComplete: () => {
     l1.destroy(powerupSprite)
     l1.destroy(powerupHitbox)
-    l1.removeBehavior(collisionCheckerId)
+    l2.removeBehavior(collisionCheckerId)
   },
 })

@@ -1,5 +1,6 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import type { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
 import { emit } from './particles'
@@ -27,8 +28,8 @@ export const transitionToMatchEnd = () => {
   // necessary during standard game flow
   // TODO consider using event based solution to separate concerns
   l1.destroy(Scene.GAME)
-  l1.getAllBehaviors()
-    .forEach(behavior => l1.removeBehavior(behavior))
+  l2.getAllBehaviors()
+    .forEach(behavior => l2.removeBehavior(behavior))
 
   l1
     .getAll()
@@ -72,7 +73,7 @@ export const transitionToMatchEnd = () => {
     text.y = 200
     text.anchor.set(0.5)
 
-    l1.addBehavior(textMovement(text))
+    l2.addBehavior(textMovement(text))
 
     const fireworkCreator = new PIXI.Container()
     l1.add(
@@ -84,7 +85,7 @@ export const transitionToMatchEnd = () => {
       },
     )
 
-    l1.addBehavior(createFireworks(fireworkCreator, matchWinners[0].color))
+    l2.addBehavior(createFireworks(fireworkCreator, matchWinners[0].color))
   } else {
     const text = new PIXI.Text({
       text:  'It\'s a draw, better luck next time!',
@@ -106,7 +107,7 @@ export const transitionToMatchEnd = () => {
     text.anchor.set(0.5)
   }
 
-  l1.addBehavior(pause())
+  l2.addBehavior(pause())
 }
 
 const textMovement = (text: PIXI.Text) => ({
@@ -175,8 +176,8 @@ const pause = () => ({
 
     playerRepository.resetScores()
 
-    l1.removeBehavior('createFireworks')
-    l1.removeBehavior('textMovement')
+    l2.removeBehavior('createFireworks')
+    l2.removeBehavior('textMovement')
 
     // Fireworks outlive their emitter's lifetime, so stop them before
     // the scene they are drawn into goes away

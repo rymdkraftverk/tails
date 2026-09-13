@@ -1,5 +1,6 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import Layer from './constant/layer'
@@ -17,7 +18,7 @@ export default () => new Promise<void>((resolve) => {
     },
   )
 
-  l1.addBehavior(fadeInOut(fade, DURATION, resolve))
+  l2.addBehavior(fadeInOut(fade, DURATION, resolve))
 })
 
 type FadeData = {

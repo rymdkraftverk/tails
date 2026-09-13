@@ -1,5 +1,5 @@
-import * as l1 from '../l1'
-import type { Behavior } from '../l1'
+import * as l2 from 'l2'
+import type { Behavior } from 'l2'
 import type * as PIXI from 'pixi.js'
 import { createSine } from '../magic'
 
@@ -37,22 +37,22 @@ const indicateExpirationBehavior = (duration: number, entity: PIXI.Container) =>
     && !data.expirationState
     ) {
       data.expirationState = EXPIRATION_STATE_SOON
-      l1.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+      l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
 
       // the duration of "soon" until it's cut off by "imminent"
       const soonDuration = SOON_TIME_LIMIT - IMMINENT_TIME_LIMIT
-      l1.addBehavior(fluctuateOpacityBehavior(entity, 60, soonDuration))
+      l2.addBehavior(fluctuateOpacityBehavior(entity, 60, soonDuration))
     } else if (
       (duration - counter) < IMMINENT_TIME_LIMIT
     && data.expirationState === EXPIRATION_STATE_SOON
     ) {
       data.expirationState = EXPIRATION_STATE_IMMINENT
-      l1.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
-      l1.addBehavior(fluctuateOpacityBehavior(entity, 20, IMMINENT_TIME_LIMIT))
+      l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+      l2.addBehavior(fluctuateOpacityBehavior(entity, 20, IMMINENT_TIME_LIMIT))
     }
   },
   onComplete: () => {
-    l1.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
+    l2.removeBehavior(`fluctuateOpacity-${entity.l1.id}`)
     entity.alpha = 1
   },
 })

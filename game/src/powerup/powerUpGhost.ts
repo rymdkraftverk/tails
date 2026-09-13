@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
@@ -10,7 +11,7 @@ export default {
   powerUp: ({
     player, speedMultiplier,
   }: PowerUpOptions) => {
-    l1.addBehavior({
+    l2.addBehavior({
       id:       `ghost-${player.id}`,
       duration: PowerUp.DURATION,
       onInit:   () => {
@@ -21,9 +22,9 @@ export default {
         const behaviorsToRemove = [
           `collisionCheckerTrail-${player.id}`,
         ]
-        behaviorsToRemove.forEach(id => l1.removeBehavior(id))
+        behaviorsToRemove.forEach(id => l2.removeBehavior(id))
 
-        l1.addBehavior(indicateExpiration(PowerUp.DURATION, player))
+        l2.addBehavior(indicateExpiration(PowerUp.DURATION, player))
       },
       onComplete: () => {
         if (player.alive) {
@@ -35,7 +36,7 @@ export default {
             collisionCheckerTrail(player, speedMultiplier),
           ]
 
-          behaviorsToAdd.forEach(behavior => l1.addBehavior(behavior))
+          behaviorsToAdd.forEach(behavior => l2.addBehavior(behavior))
 
           l1.sound({
             src:    Sound.POWERUP_EXPIRED,

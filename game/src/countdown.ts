@@ -1,5 +1,6 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'
@@ -28,7 +29,7 @@ const sound = (i: number) => (
 export default () => new Promise<void>((resolve) => {
   const countdown = new PIXI.Container()
   l1.add(countdown)
-  l1.addBehavior(countdownBehavior(countdown, resolve))
+  l2.addBehavior(countdownBehavior(countdown, resolve))
 })
 
 type CountdownData = {
@@ -49,7 +50,7 @@ const countdownBehavior = (countdown: PIXI.Container, resolve: () => void) => ({
       l1.destroy(data.text)
     }
     if (isOver(data.index)) {
-      l1.removeBehavior('countdown')
+      l2.removeBehavior('countdown')
       l1.destroy(countdown)
       resolve()
       return
@@ -72,7 +73,7 @@ const countdownBehavior = (countdown: PIXI.Container, resolve: () => void) => ({
     text.x = GAME_WIDTH / 2
     text.y = (GAME_HEIGHT - HEADER_HEIGHT) / 2
     text.anchor.set(0.5)
-    l1.addBehavior(bounce(text, 0.02))
+    l2.addBehavior(bounce(text, 0.02))
     data.text = text
 
     l1.sound({

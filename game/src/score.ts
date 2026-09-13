@@ -1,3 +1,4 @@
+import * as l2 from 'l2'
 import { Event, Color, Channel } from 'common'
 import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
@@ -162,7 +163,7 @@ const createPlayer = (index: number) => {
     y,
   )
 
-  l1.addBehavior(animate({
+  l2.addBehavior(animate({
     head,
     tail,
     fromX: head.toGlobal(new PIXI.Point(0, 0)).x / l1.getScale(),

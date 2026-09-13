@@ -1,3 +1,4 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import { Event, Channel } from 'common'
@@ -295,7 +296,7 @@ const boot = async () => {
 
 const printBehaviors = () => {
   log('BEHAVIORS:')
-  l1.getAllBehaviors()
+  l2.getAllBehaviors()
     .forEach((b) => {
       log(b.id)
     })
@@ -313,12 +314,12 @@ const stop = () => {
 const initMetricsBehavior = (appReference: PIXI.Application) => {
   let metrics: Metric[] = []
 
-  l1.addBehavior({
+  l2.addBehavior({
     onUpdate: () => {
       metrics = metrics.concat({
         pixiElapsedMS:  appReference.ticker.elapsedMS,
         displayObjects: l1.getAll().length,
-        l1LoopDuration: l1.getLoopDuration(),
+        l1LoopDuration: l2.getLoopDuration(),
       })
     },
   })

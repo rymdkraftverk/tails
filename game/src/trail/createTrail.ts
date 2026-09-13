@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import { addEntityToTree, type Tree } from '../kdTree'
 
@@ -78,7 +79,7 @@ export const createTrail = ({
       },
     )
 
-    l1.addBehavior(activate(trailE))
+    l2.addBehavior(activate(trailE))
 
     const options = {
       getCoord: (e: PIXI.Container, dim: string) => (

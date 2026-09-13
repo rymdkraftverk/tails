@@ -1,5 +1,6 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
@@ -113,7 +114,7 @@ export const transitionToGameScene = (maxPlayers: number) => {
 
         behaviorsToAdd
           .filter(behavior => behavior !== null)
-          .forEach(behavior => l1.addBehavior(behavior))
+          .forEach(behavior => l2.addBehavior(behavior))
 
         l1.destroy(`${player.id}:direction`)
       })
@@ -258,7 +259,7 @@ const bouncePlayers = (
       const player = players[data.index]
       player.visible = true
 
-      l1.addBehavior(bounce(player, 0.03))
+      l2.addBehavior(bounce(player, 0.03))
 
       data.index += 1
 
@@ -286,13 +287,13 @@ const bouncePlayers = (
 
       if (data.index === players.length) {
         l1.destroy(bouncer)
-        l1.removeBehavior('bouncePlayers')
+        l2.removeBehavior('bouncePlayers')
         resolve()
       }
     },
   })
 
-  l1.addBehavior(bouncePlayerBehavior())
+  l2.addBehavior(bouncePlayerBehavior())
 })
 
 export const toRadians = (angle: number) => angle * (Math.PI / 180)

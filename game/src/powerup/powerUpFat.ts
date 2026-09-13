@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
 import { createTrail } from '../trail'
@@ -13,7 +14,7 @@ const powerUpBehavior = ({
   onInit:   () => {
     if (player.alive) {
       player.fatLevel += 1
-      l1.addBehavior(createTrail({
+      l2.addBehavior(createTrail({
         player,
         scale: player.scaleFactor * player.fatLevel,
         speedMultiplier,
@@ -25,7 +26,7 @@ const powerUpBehavior = ({
     if (player.alive) {
       player.fatLevel -= 1
       setPlayerSize(player, player.fatLevel)
-      l1.addBehavior(createTrail({
+      l2.addBehavior(createTrail({
         player,
         scale: player.scaleFactor * player.fatLevel,
         speedMultiplier,
@@ -50,7 +51,7 @@ export default {
       if (p.l1.id === player.l1.id) {
         return
       }
-      l1.addBehavior(powerUpBehavior({ player: p, speedMultiplier }))
+      l2.addBehavior(powerUpBehavior({ player: p, speedMultiplier }))
     })
   },
   texture:           () => l1.getTexture('powerup/powerup-sumo'),

@@ -1,5 +1,5 @@
 import type * as PIXI from 'pixi.js'
-import type { Behavior } from './l1'
+import type { Behavior } from 'l2'
 import { createParabola } from './magic'
 
 type BounceData = { animation: ((t: number) => number) | null }

@@ -1,4 +1,4 @@
-import * as l1 from './l1'
+import * as l2 from 'l2'
 
 export default (duration: number) => new Promise<void>((res) => {
   const delayBehavior = () => ({
@@ -7,5 +7,5 @@ export default (duration: number) => new Promise<void>((res) => {
       res()
     },
   })
-  l1.addBehavior(delayBehavior())
+  l2.addBehavior(delayBehavior())
 })

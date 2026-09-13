@@ -1,4 +1,5 @@
 import * as l1 from '../l1'
+import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import { emit } from '../particles'
 
@@ -55,7 +56,7 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
     `pivot-${player.id}`,
   ]
 
-  behaviorsToRemove.forEach(id => l1.removeBehavior(id))
+  behaviorsToRemove.forEach(id => l2.removeBehavior(id))
 
   state.eventEmitter.emit(GameEvent.PLAYER_COLLISION, player.color)
   player.event.emit(GameEvent.PLAYER_COLLISION)
@@ -71,7 +72,7 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
 
   player.sprite.texture = l1.getTexture(`circle-dark/circle-${player.color}-dark`)
 
-  const neonDeath = l1.addBehavior({
+  const neonDeath = l2.addBehavior({
     data: {
       index:          player.trailContainer.children.length - 1,
       initialCounter: 0,
@@ -81,7 +82,7 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
     },
     onUpdate: ({ data, counter }) => {
       if (data.index < 0) {
-        l1.removeBehavior(neonDeath)
+        l2.removeBehavior(neonDeath)
         return
       }
       let trail = player.trailContainer.children[data.index]

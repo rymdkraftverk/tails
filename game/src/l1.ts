@@ -1,44 +1,11 @@
 import { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
+import {
+  settings as schedulerSettings,
+  update as runBehaviors,
+} from 'l2'
 
 type Point = { x: number, y: number }
-
-export type Behavior<Data = never> = {
-  counter:   number
-  data:      Data
-  deltaTime: number
-}
-
-export type BehaviorOptions<Data = never> = {
-  data?:             Data
-  duration?:         number
-  enabled?:          boolean
-  id?:               string
-  labels?:           string[]
-  loop?:             boolean
-  onComplete?:       (behavior: Behavior<Data>) => void
-  onInit?:           (behavior: Behavior<Data>) => void
-  onRemove?:         (behavior: Behavior<Data>) => void
-  onUpdate?:         (behavior: Behavior<Data>) => void
-  removeOnComplete?: boolean
-}
-
-export type BehaviorRecord = {
-  counter:           number
-  data:              unknown
-  duration:          number
-  enabled:           boolean
-  finished:          boolean
-  id:                string
-  initHasBeenCalled: boolean
-  labels:            string[]
-  loop:              boolean
-  onComplete:        ((behavior: Behavior) => void) | null
-  onInit:            ((behavior: Behavior) => void) | null
-  onRemove:          ((behavior: Behavior) => void) | null
-  onUpdate:          ((behavior: Behavior) => void) | null
-  removeOnComplete:  boolean
-}
 
 type AddOptions = {
   parent?: PIXI.Container
@@ -48,21 +15,18 @@ type AddOptions = {
 }
 
 const displayObjects: PIXI.Container[] = []
-const behaviors: BehaviorRecord[] = []
 
 const counters = {
   displayObject: 0,
-  behavior:      0,
 }
 
 const registry = {
-  app:              null as unknown as PIXI.Application,
-  spritesheets:     [] as PIXI.Spritesheet[],
-  ratio:            1,
-  gameWidth:        0,
-  gameHeight:       0,
-  lastLoopDuration: 0,
-  logging:          false,
+  app:          null as unknown as PIXI.Application,
+  spritesheets: [] as PIXI.Spritesheet[],
+  ratio:        1,
+  gameWidth:    0,
+  gameHeight:   0,
+  logging:      false,
 }
 
 const log = (text: string) => {
@@ -132,127 +96,9 @@ const forget = (displayObject: PIXI.Container) => {
   }
 }
 
-export const getBehavior = (id: string) => behaviors.find(behavior => behavior.id === id)
-
-export const getAllBehaviors = () => behaviors.slice()
-
-export const removeBehavior = (behavior: { id: string } | string) => {
-  const id = typeof behavior === 'string' ? behavior : behavior.id
-  const behaviorObject = getBehavior(id)
-
-  if (!behaviorObject) {
-    log(`level1: Tried to remove non-existent behavior: ${behavior}`)
-    return
-  }
-
-  const indexToRemove = behaviors.indexOf(behaviorObject)
-  if (indexToRemove >= 0) {
-    behaviors.splice(indexToRemove, 1)
-  }
-
-  behaviorObject.enabled = false
-
-  if (behaviorObject.onRemove) {
-    behaviorObject.onRemove(toBehavior(behaviorObject, 0))
-  }
-}
-
-export const resetBehavior = (behavior: BehaviorRecord) => {
-  behavior.counter = 0
-  behavior.finished = false
-}
-
-const toBehavior = (behavior: BehaviorRecord, deltaTime: number) => ({
-  counter: behavior.counter,
-  data:    behavior.data,
-  deltaTime,
-} as Behavior)
-
-export const addBehavior = <Data>(options: BehaviorOptions<Data>) => {
-  const {
-    id = `behavior-${(counters.behavior += 1)}`,
-    labels = [],
-    duration = 0,
-    loop = false,
-    removeOnComplete = true,
-    onUpdate = null,
-    onComplete = null,
-    onInit = null,
-    onRemove = null,
-    enabled = true,
-    data,
-  } = options
-
-  if (getBehavior(id)) {
-    log(`level1: Behavior with id ${id} already exists`)
-    removeBehavior(id)
-  }
-
-  if (!duration && onComplete) {
-    log(`level1: behavior "${id}" has an onComplete callback but no duration`)
-  }
-
-  const behavior: BehaviorRecord = {
-    counter:           0,
-    data,
-    duration:          Math.round(duration),
-    enabled,
-    finished:          false,
-    id,
-    initHasBeenCalled: false,
-    labels,
-    loop,
-    onComplete:        onComplete,
-    onInit:            onInit,
-    onRemove:          onRemove,
-    onUpdate:          onUpdate,
-    removeOnComplete,
-  }
-
-  behaviors.push(behavior)
-  return behavior
-}
-
 const update = (onError: (error: Error) => void) => (deltaTime: number) => {
   try {
-    const before = performance.now()
-
-    behaviors
-      .slice()
-      .forEach((behavior) => {
-        if (!behavior.enabled) {
-          return
-        }
-
-        if (!behavior.initHasBeenCalled) {
-          if (behavior.onInit) {
-            behavior.onInit(toBehavior(behavior, deltaTime))
-          }
-          behavior.initHasBeenCalled = true
-        }
-
-        if (behavior.onUpdate) {
-          behavior.onUpdate(toBehavior(behavior, deltaTime))
-        }
-
-        if (behavior.duration > 0 && behavior.counter === behavior.duration && !behavior.finished) {
-          behavior.finished = true
-
-          if (behavior.onComplete) {
-            behavior.onComplete(toBehavior(behavior, deltaTime))
-          }
-
-          if (behavior.loop) {
-            resetBehavior(behavior)
-          } else if (behavior.removeOnComplete && behavior.enabled) {
-            removeBehavior(behavior)
-          }
-        }
-
-        behavior.counter += 1
-      })
-
-    registry.lastLoopDuration = performance.now() - before
+    runBehaviors(deltaTime)
   } catch (error) {
     console.error('l1: Error running behaviors', error)
     onError(error as Error)
@@ -274,6 +120,7 @@ export const init = (
   registry.gameWidth = app.renderer.width
   registry.gameHeight = app.renderer.height
   registry.logging = logging
+  schedulerSettings.logging = logging
 }
 
 export const useSpritesheets = (sheets: PIXI.Spritesheet[]) => {
@@ -426,5 +273,3 @@ export const sound = ({ src, volume, loop }: {
   howl.play()
   return howl
 }
-
-export const getLoopDuration = () => registry.lastLoopDuration

@@ -1,5 +1,6 @@
 import * as l1 from '../l1'
-import type { Behavior } from '../l1'
+import * as l2 from 'l2'
+import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
 import * as TextStyle from '../constant/textStyle'
 import Layer from '../constant/layer'
@@ -29,17 +30,17 @@ const displayGainedPoint = (color: string, player: PIXI.Container) => {
   scoreGainEntity.x = player.x
   scoreGainEntity.y = player.y
 
-  const move = l1.addBehavior({
+  const move = l2.addBehavior({
     onUpdate: ({ counter }: Behavior) => {
       scoreGainEntity.y -= 1
       scoreGainEntity.alpha = 1 - (counter / DURATION)
     },
   })
 
-  l1.addBehavior({
+  l2.addBehavior({
     duration:   DURATION,
     onComplete: () => {
-      l1.removeBehavior(move)
+      l2.removeBehavior(move)
       l1.destroy(scoreGainEntity)
     },
   })

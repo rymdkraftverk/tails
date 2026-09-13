@@ -1,3 +1,4 @@
+import * as l2 from 'l2'
 import * as l1 from './l1'
 import * as PIXI from 'pixi.js'
 import Bowser from 'bowser'
@@ -161,8 +162,8 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
   subheading2.anchor.set(0.5)
 
   // First bounce
-  l1.addBehavior(textBounce(subheading1))
-  l1.addBehavior(textBounce(subheading2))
+  l2.addBehavior(textBounce(subheading1))
+  l2.addBehavior(textBounce(subheading2))
 
   addText({
     x:     TextAnchor.INSTRUCTION_START_X,
@@ -204,7 +205,7 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
   // Second bounce
   delay(TEXT_BOUNCE_INTERVAL / 3)
     .then(() => {
-      l1.addBehavior(textBounce(url))
+      l2.addBehavior(textBounce(url))
     })
 
   addText({
@@ -236,7 +237,7 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
   // Third bounce
   delay((TEXT_BOUNCE_INTERVAL / 3) * 2)
     .then(() => {
-      l1.addBehavior(textBounce(code))
+      l2.addBehavior(textBounce(code))
     })
 
   addText({
@@ -364,7 +365,7 @@ export const createLobbyPlayer = (
   square.anchor.set(0.5)
 
   if (newPlayer) {
-    l1.addBehavior(bounce(square, 0.08))
+    l2.addBehavior(bounce(square, 0.08))
     const joinSounds = [
       Sound.JOIN1,
       Sound.JOIN2,
@@ -400,10 +401,10 @@ const textBounce = (text: PIXI.Text) => ({
   duration:   TEXT_BOUNCE_INTERVAL,
   loop:       true,
   onComplete: () => {
-    l1.addBehavior(bounce(text, 0.003))
+    l2.addBehavior(bounce(text, 0.003))
     delay(20)
       .then(() => {
-        l1.addBehavior(bounce(text, 0.003))
+        l2.addBehavior(bounce(text, 0.003))
       })
   },
 })
