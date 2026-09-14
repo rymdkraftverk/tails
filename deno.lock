@@ -1,0 +1,25 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@std/yaml@*": "1.1.2"
+  },
+  "jsr": {
+    "@std/yaml@1.1.2": {
+      "integrity": "de612653c036749ba2044165e316f52412b0f0698afffb7ee80b5331d6d2abae"
+    }
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@eslint-community/eslint-plugin-eslint-comments@^4.8.0",
+        "npm:@stylistic/eslint-plugin@^5.10.0",
+        "npm:eslint-config-airbnb-extended@^3.2.0",
+        "npm:eslint-config-prettier@^10.1.8",
+        "npm:eslint@^9.39.0",
+        "npm:globals@^16.5.0",
+        "npm:typescript-eslint@^8.70.0",
+        "npm:typescript@^5.9.3"
+      ]
+    }
+  }
+}
