@@ -16,15 +16,10 @@ import GameEvent from './constant/gameEvent'
 import playerDead from './playerDead'
 import * as qrCode from './qrCode'
 
-const ERROR_LOGGING = process.env.ERROR_LOGGING || false
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
 const VERSION = process.env.VERSION || 'N/A'
 
-Sentry.init({
-  dsn: ERROR_LOGGING
-    ? 'https://093af386f1624489a442e1737bf04113@sentry.io/1325311'
-    : '',
-})
+Sentry.init({ dsn: process.env.SENTRY_DSN })
 
 const FORCE_START_DELAY = 10000 // ten seconds
 export const MAX_PLAYERS_ALLOWED = 10

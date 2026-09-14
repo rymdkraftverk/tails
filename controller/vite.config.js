@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 const inlined = [
-  'REACT_APP_ERROR_LOGGING',
+  'REACT_APP_SENTRY_DSN',
   'REACT_APP_VERSION',
   'REACT_APP_WS_ADDRESS',
 ]

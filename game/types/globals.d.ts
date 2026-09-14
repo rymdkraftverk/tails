@@ -1,9 +1,8 @@
 declare namespace NodeJS {
   interface ProcessEnv {
     CONTROLLER_URL?: string
-    ERROR_LOGGING?: string
+    SENTRY_DSN?: string
     HTTP_ADDRESS?: string
-    REACT_APP_ERROR_LOGGING?: string
     REACT_APP_VERSION?: string
     REACT_APP_WS_ADDRESS?: string
     VERSION?: string

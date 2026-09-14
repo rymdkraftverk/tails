@@ -2,7 +2,7 @@ import { Component } from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
 import * as Sentry from '@sentry/browser'
 
-const ERROR_LOGGING = process.env.REACT_APP_ERROR_LOGGING || false
+const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN
 
 type BoundaryProps = { children: ReactNode }
 
@@ -13,10 +13,8 @@ class Boundary extends Component<BoundaryProps, { error: Error | null }> {
   }
 
   componentDidMount() {
-    if (ERROR_LOGGING) {
-      Sentry.init({
-        dsn: 'https://caf6a0992e884f0780da4343bc62e372@sentry.io/1325309',
-      })
+    if (SENTRY_DSN) {
+      Sentry.init({ dsn: SENTRY_DSN })
     }
   }
 
