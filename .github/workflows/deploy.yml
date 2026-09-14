@@ -7,14 +7,13 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  VERSION: ${{ github.event.head_commit.timestamp }}-${{ github.sha }}
-
 jobs:
   controller:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - run: echo "VERSION=$(git show -s --format=%ct-%h)" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
@@ -41,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - run: echo "VERSION=$(git show -s --format=%ct-%h)" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
