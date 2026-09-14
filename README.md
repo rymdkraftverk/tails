@@ -1,8 +1,5 @@
 # tails
 
-## CI status
-[![CircleCI](https://circleci.com/gh/rymdkraftverk/tails/tree/master.svg?style=svg)](https://circleci.com/gh/rymdkraftverk/tails/tree/master)
-
 ## Index
 * [run locally](#run-locally)
 * [npm scripts](#npm-scripts)

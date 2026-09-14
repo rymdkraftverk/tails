@@ -1,14 +1,36 @@
-name: deploy
-on:
-  push:
-    branches: [master]
+name: ci
+on: push
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            game/package-lock.json
+            controller/package-lock.json
+
+      - run: npm ci
+      - run: npm ci
+        working-directory: game
+      - run: npm ci
+        working-directory: controller
+
+      - run: npm run qa
+
   controller:
+    needs: qa
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -37,7 +59,11 @@ jobs:
       - run: fpcloud website deploy tails-controller controller/dist --org rkv --project games
 
   game:
+    needs: qa
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    env:
+      BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
     steps:
       - uses: actions/checkout@v7
 
@@ -65,3 +91,11 @@ jobs:
       - run: curl -fsSL https://raw.githubusercontent.com/fogpipe/cloud-cli/main/install.sh | sh
 
       - run: fpcloud website deploy tails-game game/dist --org rkv --project games
+
+      - name: push to itch
+        if: env.BUTLER_API_KEY != ''
+        run: |
+          curl -fsSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip butler
+          chmod +x butler
+          ./butler push game/dist rymdkraftverk/tails:web --userversion "$VERSION"
