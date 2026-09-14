@@ -3,7 +3,6 @@ import {
   IOSDisableDoubleTap,
   ScrollLock,
 } from 'rkv-signaling/screens'
-import { Component } from 'react'
 import { Color } from 'common'
 import styled, { css } from 'styled-components'
 import Button from './Button'
@@ -71,63 +70,60 @@ type GameLobbyProps = {
   startGame: () => void
 }
 
-class GameLobby extends Component<GameLobbyProps> {
-  getAction = () => {
-    const { playerColor, ready, readyPlayer, startEnabled, startGame } =
-      this.props
-
-    if (!ready) {
-      return <Button onClick={readyPlayer}>Ready!</Button>
-    }
-
-    if (startEnabled) {
-      return <Button onClick={startGame}>Start Game!</Button>
-    }
-
-    return (
-      <AwaitingReadyPlayers
-        style={{ '--player-color': getColorCode(playerColor) }}
-      >
-        All players not ready
-      </AwaitingReadyPlayers>
-    )
+const Action = ({
+  playerColor,
+  ready,
+  readyPlayer,
+  startEnabled,
+  startGame,
+}: Omit<GameLobbyProps, 'playerCount'>) => {
+  if (!ready) {
+    return <Button onClick={readyPlayer}>Ready!</Button>
   }
 
-  render() {
-    const { playerColor, playerCount = 0 } = this.props
-
-    return (
-      <IOSDisableDoubleTap>
-        <FullPage style={{ '--player-color': getColorCode(playerColor) }}>
-          <ScrollLock />
-          {playerCount > 1 ? (
-            <>
-              <Instructions style={{ height: '30dvh' }}>
-                <InstructionsLine>
-                  {`
-                    Phone = controller
-                  `}
-                </InstructionsLine>
-                <InstructionsLine>
-                  {`
-                    Play on the other screen
-                  `}
-                </InstructionsLine>
-              </Instructions>
-              <ActionContainer>{this.getAction()}</ActionContainer>
-            </>
-          ) : (
-            <AwaitingPlayers>
-              <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>
-              <AwaitingPlayersSubtitle>
-                (2 players minimum)
-              </AwaitingPlayersSubtitle>
-            </AwaitingPlayers>
-          )}
-        </FullPage>
-      </IOSDisableDoubleTap>
-    )
+  if (startEnabled) {
+    return <Button onClick={startGame}>Start Game!</Button>
   }
+
+  return (
+    <AwaitingReadyPlayers
+      style={{ '--player-color': getColorCode(playerColor) }}
+    >
+      All players not ready
+    </AwaitingReadyPlayers>
+  )
 }
+
+const GameLobby = ({ playerCount = 0, ...action }: GameLobbyProps) => (
+  <IOSDisableDoubleTap>
+    <FullPage style={{ '--player-color': getColorCode(action.playerColor) }}>
+      <ScrollLock />
+      {playerCount > 1 ? (
+        <>
+          <Instructions style={{ height: '30dvh' }}>
+            <InstructionsLine>
+              {`
+                Phone = controller
+              `}
+            </InstructionsLine>
+            <InstructionsLine>
+              {`
+                Play on the other screen
+              `}
+            </InstructionsLine>
+          </Instructions>
+          <ActionContainer>
+            <Action {...action} />
+          </ActionContainer>
+        </>
+      ) : (
+        <AwaitingPlayers>
+          <AwaitingPlayersTitle>Ask a friend to join!</AwaitingPlayersTitle>
+          <AwaitingPlayersSubtitle>(2 players minimum)</AwaitingPlayersSubtitle>
+        </AwaitingPlayers>
+      )}
+    </FullPage>
+  </IOSDisableDoubleTap>
+)
 
 export default GameLobby

@@ -29,7 +29,7 @@ const handleOrientation =
     setAngle(throttledBeta)
   }
 
-function Gyro({ enabled, send, setAngle }: GyroProps) {
+const Gyro = ({ enabled, send, setAngle }: GyroProps) => {
   useOrientation(handleOrientation({ enabled, send, setAngle }))
 
   return null

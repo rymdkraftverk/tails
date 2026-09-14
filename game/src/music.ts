@@ -5,14 +5,13 @@ export const Track = {
   LOBBY: './sounds/music/lobby_music_64kbps.mp3',
 }
 
-let soundEntity: ReturnType<typeof sound> | undefined
-let currentTrack: string | undefined
+const current: { entity?: ReturnType<typeof sound>, track?: string } = {}
 
 export const playTrack = (
   track: string,
   options: { forceRestart?: boolean, loop?: boolean, volume?: number } = {},
 ) => {
-  if (currentTrack === track && !options.forceRestart) return
+  if (current.track === track && !options.forceRestart) return
 
   const defaultOptions = {
     volume: 0.6,
@@ -24,20 +23,13 @@ export const playTrack = (
     src: track,
   }
 
-  if (soundEntity) {
-    soundEntity.stop()
-  }
-
-  soundEntity = sound(usedOptions)
-
-  currentTrack = track
+  current.entity?.stop()
+  current.entity = sound(usedOptions)
+  current.track = track
 }
 
 export const stopTrack = () => {
-  if (soundEntity) {
-    soundEntity.stop()
-  }
-
-  soundEntity = undefined
-  currentTrack = undefined
+  current.entity?.stop()
+  current.entity = undefined
+  current.track = undefined
 }

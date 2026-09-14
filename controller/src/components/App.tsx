@@ -102,7 +102,7 @@ const eventChange = ({
 
 const merge = (game: Game, change: Partial<Game>) => ({ ...game, ...change })
 
-function App() {
+const App = () => {
   const [game, change] = useReducer(merge, initialGame)
 
   const onData = (message: { event: string; payload: never }) => {

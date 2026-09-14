@@ -19,7 +19,6 @@ const DeadText = styled.div`
   color: gray;
   margin-bottom: 16px;
 
-  /* TODO: Remove this once we fix the issues with it on iOS */
   margin-top: -50px;
 `
 
@@ -46,13 +45,13 @@ navigator.vibrate =
   navigator.msVibrate ||
   noop
 
-function PlayerDead({
+const PlayerDead = ({
   playerColor,
   sendReliable,
 }: {
   playerColor: string
   sendReliable: (message: object) => void
-}) {
+}) => {
   useEffect(() => {
     navigator.vibrate(100)
   }, [])

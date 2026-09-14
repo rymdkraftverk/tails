@@ -2,7 +2,6 @@ import { EventEmitter } from 'eventemitter3'
 import { Color } from 'common'
 import type { initEmptyTree } from './kdTree'
 
-// TODO: Should probably lie elsewhere
 export const State = {
   LOBBY:          'lobby',
   SCORE_OVERVIEW: 'score-overview',

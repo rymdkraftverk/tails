@@ -1,12 +1,18 @@
 import { createRoot } from 'react-dom/client'
 import { createGlobalStyle } from 'styled-components'
+import * as Sentry from '@sentry/browser'
 import Boundary from './components/Boundary'
 import App from './components/App'
 
 const VERSION = process.env.REACT_APP_VERSION || 'N/A'
+const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN
 const { log } = console
 
 log(`Version: ${VERSION}`)
+
+if (SENTRY_DSN) {
+  Sentry.init({ dsn: SENTRY_DSN })
+}
 
 const GlobalStyle = createGlobalStyle`
   @font-face {

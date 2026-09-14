@@ -85,13 +85,14 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
         l2.removeBehavior(neonDeath)
         return
       }
-      let trail = player.trailContainer.children[data.index]
+      const trailAt = () => player.trailContainer.children[data.index]
 
       while (
         data.index >= 0
         && (data.initialCounter - (counter * Trail.CREATE_TRAIL_FREQUENCY * Trail.NEON_DEATH_SPEED))
-        <= trail.counter
+        <= trailAt().counter
       ) {
+        const trail = trailAt()
         const neonDeathParticleContainer = new PIXI.Container()
         neonDeathParticleContainer.position = trail.position
         l2.add(neonDeathParticleContainer, {
@@ -105,7 +106,6 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
         })
         trail.sprite.texture = l2.getTexture(`square-dark/square-${player.color}-dark`)
         data.index -= 1
-        trail = player.trailContainer.children[data.index]
       }
     },
   })

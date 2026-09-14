@@ -46,7 +46,7 @@ type GamePlayingProps = {
   setGyro: (gyro: boolean) => void
 }
 
-function GamePlaying(props: GamePlayingProps) {
+const GamePlaying = (props: GamePlayingProps) => {
   const { angle, gyro, playerColor, send, setGyro } = props
 
   return (

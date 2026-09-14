@@ -7,7 +7,7 @@ const Canvas = styled.canvas`
 
 const getDiff = (height: number, angle: number) => angle * (height / (18 * 2))
 
-function GyroSteering({ angle }: { angle: number }) {
+const GyroSteering = ({ angle }: { angle: number }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)

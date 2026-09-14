@@ -20,13 +20,12 @@ import Sound from './constant/sound'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
-let fireworkEmitters: ReturnType<typeof emit>[] = []
+const fireworkEmitters: ReturnType<typeof emit>[] = []
 
 export const transitionToMatchEnd = () => {
   // this cleans up things to prevent this from crashing when calling from
   // console window. This is already done on round end, this clean up is not
   // necessary during standard game flow
-  // TODO consider using event based solution to separate concerns
   l2.destroy(Scene.GAME)
   l2.getAllBehaviors()
     .forEach(behavior => l2.removeBehavior(behavior))
@@ -161,7 +160,7 @@ const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => 
       textures: textures.map(l2.getTexture),
       ...config,
     })
-    fireworkEmitters = fireworkEmitters.concat(fireworkEmitter)
+    fireworkEmitters.push(fireworkEmitter)
   },
 })
 
@@ -181,10 +180,10 @@ const pause = () => ({
 
     // Fireworks outlive their emitter's lifetime, so stop them before
     // the scene they are drawn into goes away
-    fireworkEmitters.forEach((fireworkEmitter) => {
+    fireworkEmitters.splice(0)
+.forEach((fireworkEmitter) => {
       fireworkEmitter.destroy()
     })
-    fireworkEmitters = []
 
     l2.destroy(Scene.MATCH_END)
 

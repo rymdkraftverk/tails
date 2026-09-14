@@ -16,7 +16,7 @@ const Container = styled(FullHeight)`
 const Text = styled.div`
   font-weight: bold;
 `
-function AwaitingNextRound({ playerColor }: { playerColor: string }) {
+const AwaitingNextRound = ({ playerColor }: { playerColor: string }) => {
   return (
     <IOSDisableDoubleTap>
       <ScrollLock />

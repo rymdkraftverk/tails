@@ -21,7 +21,7 @@ const Button = styled.div`
   font-size: 100pt;
 `
 
-function TapSteering(props: { send: (message: object) => void }) {
+const TapSteering = (props: { send: (message: object) => void }) => {
   const sendCommand = (command: number) => () => {
     props.send({
       event: Event.PLAYER_MOVEMENT,

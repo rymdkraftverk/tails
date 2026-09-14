@@ -293,11 +293,11 @@ const stop = () => {
 }
 
 const initMetricsBehavior = (appReference: PIXI.Application) => {
-  let metrics: Metric[] = []
+  const metrics: Metric[] = []
 
   l2.addBehavior({
     onUpdate: () => {
-      metrics = metrics.concat({
+      metrics.push({
         pixiElapsedMS:  appReference.ticker.elapsedMS,
         displayObjects: l2.getAll().length,
         l1LoopDuration: l2.getLoopDuration(),

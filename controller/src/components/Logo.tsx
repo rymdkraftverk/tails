@@ -18,7 +18,7 @@ const Title = styled.p`
   margin-top: 3vw;
 `
 
-function Logo({ className }: { className?: string }) {
+const Logo = ({ className }: { className?: string }) => {
   return (
     <Container className={className}>
       <Img src={LogoImg} alt="Logo" />

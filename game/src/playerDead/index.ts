@@ -8,25 +8,32 @@ import { HEADER_HEIGHT } from '../header'
 import Scene from '../Scene'
 import { GAME_WIDTH, GAME_HEIGHT } from '../constant/rendering'
 
-let sparkleParticleContainer: PIXI.Container | undefined
+const SPARKLES = 'sparkleParticleContainer'
+
+const createSparkles = () => {
+  const container = new PIXI.Container()
+  l2.add(container, {
+    id:     SPARKLES,
+    parent: l2.get(Scene.GAME),
+    labels: ['particleContainer'],
+    zIndex: Layer.FOREGROUND + 10,
+  })
+  return container
+}
+
 export default (id: string, { x, y }: { x: number, y: number }) => {
   const player = l2.get(id)
 
-  // Create the Container if it hasn't been created before or has been destroyed previous round
-  if (!sparkleParticleContainer
-        || (l2.isDestroyed(sparkleParticleContainer))) {
-    sparkleParticleContainer = new PIXI.Container()
-    l2.add(sparkleParticleContainer, {
-      parent: l2.get(Scene.GAME),
-      labels: ['particleContainer'],
-      zIndex: Layer.FOREGROUND + 10,
-    })
-  }
-
   // This is needed since events might be sent during score screen when player does not exist
-  if (!player || (l2.isDestroyed(sparkleParticleContainer))) {
+  if (!player) {
     return
   }
+
+  // Create the Container if it hasn't been created before or has been destroyed previous round
+  const existing = l2.get(SPARKLES)
+  const sparkleParticleContainer = existing && !l2.isDestroyed(existing)
+    ? existing
+    : createSparkles()
 
   const {
     textures: neonTextures,
