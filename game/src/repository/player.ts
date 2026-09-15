@@ -25,6 +25,8 @@ const find = (id: string) => {
   return player
 }
 
+const has = (id: string) => state.players.some(p => p.id === id)
+
 const getReadyCount = () => state.players.filter(isReady).length
 
 const getWithHighestScores = () => {
@@ -77,6 +79,7 @@ export default {
   find,
   getReadyCount,
   getWithHighestScores,
+  has,
   incrementScores,
   isFirstPlace,
   remove,

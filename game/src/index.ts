@@ -201,6 +201,7 @@ const createNewPlayer = ({ id, send }: Pick<Initiator, 'id' | 'send'>) => {
 
 const onPlayerLeave = (id: string) => {
   log(`[Player Leave] ${id}`)
+  if (!playerRepository.has(id)) return
 
   const player = playerRepository.find(id)
   state.availableColors = [player.color].concat(state.availableColors)
