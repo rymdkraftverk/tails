@@ -22,7 +22,7 @@
     "react-error-boundary": "^6.1.5",
     "react-responsive": "^10.0.1",
     "react-switch": "^7.1.0",
-    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#e4bf096f4c0335b4b34ab24563a0907c41c1e06a",
+    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#f6ef216738fbeb9643351a5d190372c137bd30ac",
     "styled-components": "^6.5.3"
   },
   "devDependencies": {
