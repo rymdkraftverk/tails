@@ -7,6 +7,7 @@
 * [eslint](#eslint)
 * [VS Code](#vs-code)
 * [update protobuf schemas](#update-protobuf-schemas)
+* [bots](#bots)
 * [debugging](#debugging)
 
 ### run locally
@@ -66,6 +67,14 @@ With settings:
 ### Game lobby heading
 Add query params `subheading1` and `subheading2` to game url to display subheadings with dynamic content
 
+### bots
+The lobby has `-` and `+` under `spiral bots` and `smart bots` to remove and add computer players.
+Bots are always ready, so a round starts as soon as every phone is ready.
+Spiral bots curl outward until they crash.
+Smart bots look ahead along a few steering plans, keep the one that stays clear of walls, trails
+and portals longest while heading for open space and powerups, and replan every few frames.
+Their knobs sit at the top of `game/src/bot/smart.ts` and `game/src/bot/space.ts`.
+
 ### debugging
 There are a few functions available to help with debugging from the game view.
 They can be accessed from the console on the `debug` object.
@@ -74,8 +83,9 @@ The following functions and properties are available:
 
 #### Functions
 
-* `debug.addMockPlayers(count)`
-* `debug.addSpiralMockPlayers(count)`
+* `debug.addBot(kind)`, where `kind` is `'spiral'` or `'smart'`
+* `debug.removeBot(kind)`
+* `debug.addMockPlayers(count)`, players without a phone who never turn
 * `debug.roundStart()`
 * `debug.roundStartMetrics()`
 * `debug.transitionToLobby(gameCode)`

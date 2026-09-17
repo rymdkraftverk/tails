@@ -54,6 +54,7 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
     `createTrail-${player.id}`,
     `move-${player.id}`,
     `pivot-${player.id}`,
+    `bot-${player.id}`,
   ]
 
   behaviorsToRemove.forEach(id => l2.removeBehavior(id))

@@ -5,7 +5,7 @@ import EventEmitter from 'eventemitter3'
 import { Event, Channel } from 'common'
 import { initEmptyTree } from './kdTree'
 import { range, shuffle } from './util'
-import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
+import { GAME_WIDTH, GAME_HEIGHT, WALL_THICKNESS } from './constant/rendering'
 import { State, state } from './state'
 import playerRepository from './repository/player'
 import { transitionToRoundEnd } from './roundEnd'
@@ -21,6 +21,7 @@ import { createTrail, createHoleMaker } from './trail'
 import GameEvent from './constant/gameEvent'
 import createHeader, { HEADER_HEIGHT } from './header'
 import getControllerUrl from './getControllerUrl'
+import * as bot from './bot'
 
 window.debug = {
   ...window.debug,
@@ -29,10 +30,8 @@ window.debug = {
 
 const { warn } = console
 
-const TURN_RADIUS = 3
+export const TURN_RADIUS = 3
 export const SPEED_MULTIPLIER = 3.6
-
-const WALL_THICKNESS = 3
 
 const PLAYER_HITBOX_SIZE = 14
 
@@ -83,6 +82,8 @@ export const transitionToGameScene = (maxPlayers: number) => {
     Array.from({ length: maxPlayers }, (_unused, index) => index),
   )
 
+  const bots = state.players.map(player => player.bot)
+
   const players = state
     .players
     .map((player, index) => createPlayer(playerCountFactor, startingPositions[index], player))
@@ -92,7 +93,9 @@ export const transitionToGameScene = (maxPlayers: number) => {
   bouncePlayers(players, playerCountFactor)
     .then(countdown)
     .then(() => {
-      players.forEach((player) => {
+      players.forEach((player, index) => {
+        const kind = bots[index]
+
         const behaviorsToAdd = [
           pivot(player),
           createHoleMaker(player, player.scaleFactor, SPEED_MULTIPLIER),
@@ -108,7 +111,7 @@ export const transitionToGameScene = (maxPlayers: number) => {
             speedMultiplier: SPEED_MULTIPLIER,
             wallThickness:   WALL_THICKNESS,
           }),
-          player.id.startsWith('debugSpiralPlayer') ? performanceTestCurl(player) : null,
+          kind ? bot.behavior(player, kind) : null,
         ]
 
         behaviorsToAdd
@@ -303,16 +306,6 @@ const move = (player: PIXI.Container) => ({
     const radians = toRadians(player.degrees)
     player.x += Math.cos(radians) * player.speed
     player.y += Math.sin(radians) * player.speed
-  },
-})
-
-const performanceTestCurl = (player: PIXI.Container) => ({
-  onUpdate: ({ counter }: Behavior) => {
-    // inverse relationship with square root is chosen with mathematical precision.
-    // factor is chosen by trial and error.
-    // + 1 is to avoid divide by zero
-    const factor = 12.3 / Math.sqrt(counter + 1)
-    player.degrees += (TURN_RADIUS * factor)
   },
 })
 

@@ -50,6 +50,12 @@ test('allReady', () => {
     .toBe(true)
 })
 
+test('bots are always ready', () => {
+  state.players[2].bot = 'smart'
+  expect(repo.allReady())
+    .toBe(true)
+})
+
 test('count', () => {
   expect(repo.count())
     .toBe(4)
@@ -75,6 +81,12 @@ test('find', () => {
 test('getReadyCount', () => {
   expect(repo.getReadyCount())
     .toBe(3)
+})
+
+test('getReadyCount leaves out bots', () => {
+  state.players[0].bot = 'spiral'
+  expect(repo.getReadyCount())
+    .toBe(2)
 })
 
 test('getWithHighestScores', () => {

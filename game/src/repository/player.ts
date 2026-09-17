@@ -4,7 +4,9 @@ const write = (players: Player[]) => {
   state.players = players
 }
 
-const isReady = ({ ready }: Player) => ready === true
+const isHuman = ({ bot }: Player) => bot === undefined
+
+const isReady = (player: Player) => !isHuman(player) || player.ready === true
 
 const getHighestScore = (players: Player[]) => players
   .reduce((highest, { score }) => Math.max(highest, score), 0)
@@ -27,7 +29,9 @@ const find = (id: string) => {
 
 const has = (id: string) => state.players.some(p => p.id === id)
 
-const getReadyCount = () => state.players.filter(isReady).length
+const getReadyCount = () => state.players
+  .filter(player => isHuman(player) && isReady(player))
+  .length
 
 const getWithHighestScores = () => {
   const highest = getHighestScore(state.players)

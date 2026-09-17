@@ -4,7 +4,8 @@ import * as PIXI from 'pixi.js'
 import Bowser from 'bowser'
 import { getUrlParams } from 'common'
 
-import { MAX_PLAYERS_ALLOWED, onPlayerJoin } from '.'
+import { MAX_PLAYERS_ALLOWED } from '.'
+import * as bot from './bot'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import * as TextStyle from './constant/textStyle'
 import { GameColor, toRadians } from './game'
@@ -43,6 +44,14 @@ const TextAnchor = {
   INSTRUCTION_START_Y: 210,
   X_OFFSET:            80,
   Y_OFFSET:            150,
+}
+
+const BotButtons = {
+  START_X:  390,
+  SPACING:  270,
+  Y:        620,
+  OFFSET_X: 50,
+  OFFSET_Y: 50,
 }
 
 const TextSize = {
@@ -295,7 +304,80 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
       createOutline(index)
     })
 
+  createBotButtons(lobbyScene)
+
   playTrack(Track.LOBBY, { loop: true })
+}
+
+const botButton = ({
+  x, y, text, parent, onTap,
+}: {
+  x:      number
+  y:      number
+  text:   string
+  parent: PIXI.Container
+  onTap:  () => void
+}) => {
+  const button = addText({
+    x,
+    y,
+    text,
+    style: {
+      ...TextStyle.SMALL,
+      fill: TextColor.TEXT,
+    },
+    parent,
+  })
+  button.anchor.set(0.5)
+  button.hitArea = new PIXI.Rectangle(
+    -BotButtons.OFFSET_X / 2,
+    -BotButtons.OFFSET_Y / 2,
+    BotButtons.OFFSET_X,
+    BotButtons.OFFSET_Y,
+  )
+  button.eventMode = 'static'
+  button.cursor = 'pointer'
+  button.on('pointerover', () => { button.style.fill = TextColor.HIGHLIGHT })
+  button.on('pointerout', () => { button.style.fill = TextColor.TEXT })
+  button.on('pointertap', onTap)
+}
+
+const createBotButtons = (parent: PIXI.Container) => {
+  const kinds = [
+    { kind: bot.BotKind.SPIRAL, label: 'spiral bots' },
+    { kind: bot.BotKind.SMART, label: 'smart bots' },
+  ]
+
+  kinds.forEach(({ kind, label }, index) => {
+    const x = BotButtons.START_X + (index * BotButtons.SPACING)
+
+    addText({
+      x,
+      y:     BotButtons.Y,
+      text:  label,
+      style: {
+        ...TextStyle.SMALL,
+        fill: TextColor.SUBHEADING,
+      },
+      parent,
+    }).anchor.set(0.5)
+
+    botButton({
+      x:     x - BotButtons.OFFSET_X,
+      y:     BotButtons.Y + BotButtons.OFFSET_Y,
+      text:  '-',
+      parent,
+      onTap: () => bot.remove(kind),
+    })
+
+    botButton({
+      x:     x + BotButtons.OFFSET_X,
+      y:     BotButtons.Y + BotButtons.OFFSET_Y,
+      text:  '+',
+      parent,
+      onTap: () => bot.add(kind),
+    })
+  })
 }
 
 const drawInstructionArrow = ({
@@ -378,23 +460,6 @@ export const createLobbyPlayer = (
       volume: 0.4,
     })
   }
-}
-
-const addMockPlayer = (idPrefix = 'debugPlayer:') => onPlayerJoin({
-  id: `${idPrefix}${Math.random()
-    .toString(36)
-    .substring(7)}`,
-  close:     () => {},
-  send:      () => {},
-  setOnData: () => {},
-})
-
-window.debug = {
-  ...window.debug,
-  addMockPlayers: (count: number) => Array
-    .from({ length: count }, () => addMockPlayer()),
-  addSpiralMockPlayers: (count: number) => Array
-    .from({ length: count }, () => addMockPlayer('debugSpiralPlayer:')),
 }
 
 const textBounce = (text: PIXI.Text) => ({

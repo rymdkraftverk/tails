@@ -58,10 +58,10 @@ const scheduleForceStartEnablement = () => {
 const readyPlayer = (id: string) => {
   playerRepository.find(id).ready = true
 
-  if (playerRepository.getReadyCount() === 1) {
-    scheduleForceStartEnablement()
-  } else if (playerRepository.allReady()) {
+  if (playerRepository.allReady() && playerRepository.count() > 1) {
     roundStart()
+  } else if (playerRepository.getReadyCount() === 1) {
+    scheduleForceStartEnablement()
   }
 }
 
@@ -142,12 +142,12 @@ const broadcast = (message: { event: string, payload?: unknown }) => {
 
 const morePlayersAllowed = () => playerRepository.count() < MAX_PLAYERS_ALLOWED
 
-export const onPlayerJoin = ({
+export const join = ({
   id,
   setOnData,
   send,
   close,
-}: Initiator) => {
+}: Initiator, bot?: BotKind) => {
   if (!morePlayersAllowed()) {
     send(Channel.RELIABLE, {
       event:   Event.GAME_FULL,
@@ -161,6 +161,7 @@ export const onPlayerJoin = ({
   const player = createNewPlayer({
     id,
     send,
+    bot,
   })
 
   if (l2.get(Scene.LOBBY)) {
@@ -185,7 +186,11 @@ export const onPlayerJoin = ({
   setOnData(onPlayerData(id))
 }
 
-const createNewPlayer = ({ id, send }: Pick<Initiator, 'id' | 'send'>) => {
+const onPlayerJoin = (initiator: Initiator) => join(initiator)
+
+const createNewPlayer = ({
+  id, send, bot,
+}: Pick<Initiator, 'id' | 'send'> & { bot?: BotKind }) => {
   const [color] = state.availableColors
   state.availableColors = state.availableColors.filter(c => c !== color)
   const player = {
@@ -193,13 +198,14 @@ const createNewPlayer = ({ id, send }: Pick<Initiator, 'id' | 'send'>) => {
     score: 0,
     color,
     send,
+    bot,
   }
 
   playerRepository.add(player)
   return player
 }
 
-const onPlayerLeave = (id: string) => {
+export const onPlayerLeave = (id: string) => {
   log(`[Player Leave] ${id}`)
   if (!playerRepository.has(id)) return
 

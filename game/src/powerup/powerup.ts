@@ -35,6 +35,7 @@ export const initPowerups = ({
     powerupGenerator,
     {
       parent: l2.get(Scene.GAME),
+      labels: ['powerupGenerator'],
     },
   )
 
@@ -60,6 +61,7 @@ export const initPowerups = ({
       portalSprite,
       {
         parent: powerupGenerator,
+        labels: ['portal'],
       },
     )
     return portalSprite
@@ -162,6 +164,7 @@ export const initPowerups = ({
           powerUpSprite,
           {
             parent: powerupGenerator,
+            labels: ['powerup'],
           },
         )
         powerUpSprite.x = l2.getRandomInRange(100, gameWidth - 100)
