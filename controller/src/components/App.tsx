@@ -1,6 +1,7 @@
 import {
   LockerRoom,
   LockerRoomLoader,
+  RouteIcon,
   Toast,
   TurnPhone,
 } from 'rkv-signaling/screens'
@@ -130,6 +131,7 @@ const App = () => {
     join,
     fail,
     send,
+    route,
   } = useJoin({
     wsAddress: WS_ADDRESS as string,
     channelConfigs,
@@ -237,6 +239,7 @@ const App = () => {
         <TurnPhone gif={turnPhoneGif} sound={turnPhoneSound} logo={<Logo />} />
       </MediaQuery>
       <MediaQuery orientation="landscape">{screen()}</MediaQuery>
+      {status === 'connected' && <RouteIcon route={route} />}
     </>
   )
 }
