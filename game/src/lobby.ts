@@ -16,7 +16,7 @@ import getControllerUrl from './getControllerUrl'
 import { playTrack } from 'l2/sound'
 import Sound, { Track } from './constant/sound'
 import delay from './delay'
-import * as qrCode from './qrCode'
+import { showQrCode } from 'rkv-signaling/game'
 
 const supportedBrowserNames = [
   'Chrome',
@@ -66,6 +66,8 @@ const TextColor = {
   UNSUPPORTED_BROWSER: '#ff5b5b', // light red
 }
 
+const QR_CODE_DARK = '#282828' // Same as background
+
 const getPlayerPosition = l2.grid({
   x:           1000,
   y:           100,
@@ -110,7 +112,12 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
     subheading2: subheading2content,
   } = getUrlParams(window.location.search)
 
-  qrCode.display(controllerUrl, gameCode)
+  showQrCode({
+    controllerHost: controllerUrl,
+    gameCode,
+    mount:          l2.getApp().canvas.parentElement as HTMLElement,
+    dark:           QR_CODE_DARK,
+  })
 
   const lobbyScene = new PIXI.Container()
 

@@ -2,10 +2,10 @@ import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import { Event, Channel } from 'common'
 import * as Sentry from '@sentry/browser'
-import signaling, { type Initiator } from 'rkv-signaling'
+import { type Initiator } from 'rkv-signaling'
+import { host, hideQrCode } from 'rkv-signaling/game'
 import { transitionToGameScene } from './game'
 import { transitionToLobby, createLobbyPlayer } from './lobby'
-import http from './http'
 import Scene from './Scene'
 import Layer from './constant/layer'
 import fullscreenFadeInOut from './fullscreenFadeInOut'
@@ -14,9 +14,9 @@ import playerRepository from './repository/player'
 import { GAME_WIDTH, GAME_HEIGHT } from './constant/rendering'
 import GameEvent from './constant/gameEvent'
 import playerDead from './playerDead'
-import * as qrCode from './qrCode'
 
 const WS_ADDRESS = process.env.WS_ADDRESS || 'ws://localhost:3000'
+const HTTP_ADDRESS = process.env.HTTP_ADDRESS || 'http://localhost:3000'
 const VERSION = process.env.VERSION || 'N/A'
 
 Sentry.init({ dsn: process.env.SENTRY_DSN })
@@ -66,7 +66,7 @@ const readyPlayer = (id: string) => {
 }
 
 const roundStart = (options = { collectMetrics: false }) => {
-  qrCode.hide()
+  hideQrCode()
 
   const { collectMetrics } = options
 
@@ -266,17 +266,15 @@ const boot = async () => {
     zIndex: Layer.ABSOLUTE_BACKGROUND,
   })
 
-  http.createGame()
-    .then(({ gameCode }) => {
+  host({
+    httpAddress:      HTTP_ADDRESS,
+    wsAddress:        WS_ADDRESS,
+    onInitiatorJoin:  onPlayerJoin,
+    onInitiatorLeave: onPlayerLeave,
+  })
+    .then((gameCode) => {
       createGame({ gameCode })
       log(`[Game created] ${gameCode}`)
-
-      signaling.runReceiver({
-        wsAddress:        WS_ADDRESS,
-        receiverId:       gameCode,
-        onInitiatorJoin:  onPlayerJoin,
-        onInitiatorLeave: onPlayerLeave,
-      })
     })
 
   l2.fitToWindow()

@@ -16,10 +16,10 @@
     "common": "file:../common",
     "eventemitter3": "^3.1.0",
     "howler": "^2.2.4",
-    "l2": "github:rymdkraftverk/level2#9d73823b716113393d43b18520c3fcd34bee1c4c",
+    "l2": "github:rymdkraftverk/level2#a5923acab177cc21b43274a1bba66c4dd674abe1",
     "pixi.js": "^8.20.1",
     "qrcode": "^1.3.3",
-    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#5007a7c199a87989f51c7626a0f612fbbe96d263"
+    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#0baa608f81067712623ba609eaad6e02b610cbbb"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

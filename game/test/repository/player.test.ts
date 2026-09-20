@@ -137,12 +137,6 @@ test('add', () => {
   expect(state.players)
     .toEqual([
       {
-        color: 'pink',
-        send,
-        id:    'unique',
-        extra: 'stuff',
-      },
-      {
         color:         'blue',
         send,
         id:            'foo',
@@ -173,6 +167,12 @@ test('add', () => {
         previousScore: 2,
         ready:         true,
         score:         3,
+      },
+      {
+        color: 'pink',
+        send,
+        id:    'unique',
+        extra: 'stuff',
       },
     ])
 })

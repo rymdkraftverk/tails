@@ -1,92 +1,67 @@
+import * as l2 from 'l2'
 import { state } from '../state'
 
-const write = (players: Player[]) => {
-  state.players = players
-}
+const players = l2.repository<Player>({
+  name:  'player',
+  read:  () => state.players,
+  write: (updated) => {
+    state.players = updated
+  },
+})
 
 const isHuman = ({ bot }: Player) => bot === undefined
 
 const isReady = (player: Player) => !isHuman(player) || player.ready === true
 
-const getHighestScore = (players: Player[]) => players
+const getHighestScore = (all: Player[]) => all
   .reduce((highest, { score }) => Math.max(highest, score), 0)
 
-// --- Read ---
+const allReady = () => players
+  .all()
+  .every(isReady)
 
-const allReady = () => state.players.every(isReady)
+const countFactor = () => Math.sqrt(players.count())
 
-const count = () => state.players.length
-
-const countFactor = () => Math.sqrt(count())
-
-const find = (id: string) => {
-  const player = state.players.find(p => p.id === id)
-  if (!player) {
-    throw new Error(`No player with id ${id}`)
-  }
-  return player
-}
-
-const has = (id: string) => state.players.some(p => p.id === id)
-
-const getReadyCount = () => state.players
+const getReadyCount = () => players
+  .all()
   .filter(player => isHuman(player) && isReady(player))
   .length
 
 const getWithHighestScores = () => {
-  const highest = getHighestScore(state.players)
-  return state.players.filter(({ score }) => score === highest)
+  const highest = getHighestScore(players.all())
+  return players
+    .all()
+    .filter(({ score }) => score === highest)
 }
 
 const isFirstPlace = (id: string) => getWithHighestScores()
   .filter(({ score }) => score !== 0)
   .some(player => player.id === id)
 
-const scoreToWin = () => (count() - 1) * 3
+const scoreToWin = () => (players.count() - 1) * 3
 
-// --- Write ---
+const incrementScores = (whitelist: string[]) => players.change(player => (
+  whitelist.includes(player.id)
+    ? { ...player, score: player.score + 1 }
+    : player
+))
 
-const add = (player: Player) => {
-  write([player].concat(state.players))
-  return state.players
-}
+const resetReady = () => players.change(player => ({ ...player, ready: false }))
 
-const incrementScores = (whitelist: string[]) => {
-  write(state.players.map(player => (
-    whitelist.includes(player.id)
-      ? { ...player, score: player.score + 1 }
-      : player
-  )))
-  return state.players
-}
-
-const remove = (id: string) => {
-  write(state.players.filter(player => player.id !== id))
-  return state.players
-}
-
-const resetReady = () => {
-  write(state.players.map(player => ({ ...player, ready: false })))
-  return state.players
-}
-
-const resetScores = () => {
-  write(state.players.map(player => ({ ...player, score: 0, previousScore: 0 })))
-  return state.players
-}
+const resetScores = () => players.change(player => ({
+  ...player,
+  score:         0,
+  previousScore: 0,
+}))
 
 export default {
-  add,
+  ...players,
   allReady,
-  count,
   countFactor,
-  find,
   getReadyCount,
   getWithHighestScores,
-  has,
   incrementScores,
   isFirstPlace,
-  remove,
   resetReady,
   resetScores,
   scoreToWin,
