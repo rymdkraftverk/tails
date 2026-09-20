@@ -1,7 +1,5 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import type { Behavior } from 'l2'
-import type { Howl } from 'howler'
 import * as PIXI from 'pixi.js'
 import { emit } from './particles'
 import { Event, Color, Channel } from 'common'
@@ -15,8 +13,8 @@ import Layer from './constant/layer'
 import Scene from './Scene'
 import { state } from './state'
 import playerRepository from './repository/player'
-import { stopTrack } from './music'
-import Sound from './constant/sound'
+import { playTrack, stopTrack } from 'l2/sound'
+import { Track } from './constant/sound'
 
 const TIME_UNTIL_LOBBY_TRANSITION = 500
 
@@ -125,23 +123,15 @@ const textMovement = (text: PIXI.Text) => ({
   },
 })
 
-type FireworksData = { fireWorksSound: Howl | null }
-
 const createFireworks = (creator: PIXI.Container, color: keyof typeof Color) => ({
   id:       'createFireworks',
   duration: l2.getRandomInRange(5, 10),
   loop:     true,
-  data:     { fireWorksSound: null } as FireworksData,
-  onInit:   ({ data }: Behavior<FireworksData>) => {
-    stopTrack()
-    data.fireWorksSound = sound({
-      src:    Sound.FIREWORK,
-      volume: 1,
-      loop:   true,
-    })
+  onInit:   () => {
+    playTrack(Track.FIREWORKS)
   },
-  onRemove: ({ data: { fireWorksSound } }: Behavior<FireworksData>) => {
-    fireWorksSound?.stop()
+  onRemove: () => {
+    stopTrack()
   },
   onComplete: () => {
     const x = l2.getRandomInRange(100, GAME_WIDTH - 100)

@@ -1,4 +1,3 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import Sound from '../constant/sound'
 import PowerUp from '../constant/powerUp'
@@ -32,10 +31,7 @@ const powerUpBehavior = ({
         speedMultiplier,
       }))
 
-      sound({
-        src:    Sound.POWERUP_EXPIRED,
-        volume: 0.6,
-      })
+      Sound.POWERUP_EXPIRED()
     }
   },
 })

@@ -1,4 +1,3 @@
-import { sound as play } from 'l2/sound'
 import * as l2 from 'l2'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
@@ -76,10 +75,7 @@ const countdownBehavior = (countdown: PIXI.Container, resolve: () => void) => ({
     l2.addBehavior(bounce(text, 0.02))
     data.text = text
 
-    play({
-      src:    sound(data.index),
-      volume: 0.1,
-    })
+    sound(data.index)()
 
     data.index += 1
   },

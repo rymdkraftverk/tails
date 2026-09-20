@@ -1,4 +1,3 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import Bowser from 'bowser'
@@ -14,8 +13,8 @@ import Layer from './constant/layer'
 import bounce from './bounce'
 import Scene from './Scene'
 import getControllerUrl from './getControllerUrl'
-import { Track, playTrack } from './music'
-import Sound from './constant/sound'
+import { playTrack } from 'l2/sound'
+import Sound, { Track } from './constant/sound'
 import delay from './delay'
 import * as qrCode from './qrCode'
 
@@ -306,7 +305,7 @@ export const transitionToLobby = (gameCode: string, players: Player[] = []) => {
 
   createBotButtons(lobbyScene)
 
-  playTrack(Track.LOBBY, { loop: true })
+  playTrack(Track.LOBBY)
 }
 
 const botButton = ({
@@ -455,10 +454,7 @@ export const createLobbyPlayer = (
     ]
     const joinSound = joinSounds[l2.getRandomInRange(0, 3)]
 
-    sound({
-      src:    joinSound,
-      volume: 0.4,
-    })
+    joinSound()
   }
 }
 

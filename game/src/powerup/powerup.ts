@@ -1,4 +1,3 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import type { Behavior } from 'l2'
 import * as PIXI from 'pixi.js'
@@ -101,10 +100,7 @@ export const initPowerups = ({
         const collidingPlayer = players
           .find(player => player.alive && l2.isColliding(hitBox, player))
         if (collidingPlayer) {
-          sound({
-            src:    Sound.JOIN1,
-            volume: 0.6,
-          })
+          Sound.POWERUP_PICKUP()
           onCollision(collidingPlayer)
           data.onCollision()
           destroy()

@@ -15,7 +15,8 @@ import bounce from './bounce'
 import Scene from './Scene'
 import { animateScoreGainOnLivingPlayers, giveLivingPlayersOnePoint } from './scoreGain'
 import { initPowerups } from './powerup'
-import { Track, playTrack } from './music'
+import { playTrack } from 'l2/sound'
+import { Track } from './constant/sound'
 import { collisionCheckerWalls, collisionCheckerTrail } from './collisionDetection'
 import { createTrail, createHoleMaker } from './trail'
 import GameEvent from './constant/gameEvent'
@@ -128,7 +129,7 @@ export const transitionToGameScene = (maxPlayers: number) => {
       })
     })
 
-  playTrack(Track.GAME, { loop: true })
+  playTrack(Track.GAME)
 }
 
 const getStartingPosition = (index: number) => {

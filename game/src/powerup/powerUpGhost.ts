@@ -1,4 +1,3 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import type * as PIXI from 'pixi.js'
 import Sound from '../constant/sound'
@@ -38,10 +37,7 @@ export default {
 
           behaviorsToAdd.forEach(behavior => l2.addBehavior(behavior))
 
-          sound({
-            src:    Sound.POWERUP_EXPIRED,
-            volume: 0.6,
-          })
+          Sound.POWERUP_EXPIRED()
         }
       },
       onRemove: () => {

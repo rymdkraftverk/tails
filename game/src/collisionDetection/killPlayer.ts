@@ -1,4 +1,3 @@
-import { sound } from 'l2/sound'
 import * as l2 from 'l2'
 import * as PIXI from 'pixi.js'
 import { emit } from '../particles'
@@ -39,10 +38,7 @@ const killPlayer = (player: PIXI.Container, speedMultiplier: number) => {
     ...config,
   })
 
-  sound({
-    src:    Sound.DEATH,
-    volume: 0.6,
-  })
+  Sound.DEATH()
 
   player.alive = false
 
