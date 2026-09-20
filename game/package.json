@@ -19,7 +19,7 @@
     "l2": "github:rymdkraftverk/level2#071183017afd20c7f127e3d484209c59adaff1c4",
     "pixi.js": "^8.20.1",
     "qrcode": "^1.3.3",
-    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#dc64824440c0bc3a635353db7a55fbfaeb718680"
+    "rkv-signaling": "github:rymdkraftverk/rkv-signaling#5007a7c199a87989f51c7626a0f612fbbe96d263"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
